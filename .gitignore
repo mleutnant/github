@@ -1,0 +1,29 @@
+# Secrets
+.env
+video-use/.env
+
+# Dependencies
+node_modules/
+__pycache__/
+.venv/
+video-use/.venv/
+*.egg-info/
+
+# Raw video input
+raw/*.mp4
+raw/*.mov
+raw/*.mkv
+
+# Generated project output
+projects/*/renders/*.mp4
+projects/*/previews/*.mp4
+projects/*/transcripts/*.json
+projects/*/_bundle_assets/
+projects/*/assets/speaker.mp4
+
+# Caches
+.hyperframes-cache/
+
+# OS
+.DS_Store
+Thumbs.db

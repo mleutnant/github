@@ -1,0 +1,22 @@
+:root{
+/* The brand is square. No rounded corners anywhere. */
+--radius:0px;
+--radius-pill:0px;
+
+/* Prinzip 1: Rahmen über Fläche, mit Lücke am Schnittpunkt */
+--frame-weight:6px;
+--frame-weight-lg:10px;
+--frame-gap:14px;         /* the gap where frame and surface cross */
+
+--border-width:1px; /* @kind other */
+--shadow-none:none;
+--shadow-card:0 2px 14px rgba(18,52,66,.10);
+--shadow-raised:0 10px 30px rgba(18,52,66,.14);
+
+--dur-fast:140ms; /* @kind other */
+--dur:240ms; /* @kind other */
+--dur-slow:420ms; /* @kind other */
+--ease:cubic-bezier(.2,.6,.2,1); /* @kind other */
+--hover-opacity:.82; /* @kind other */
+--press-scale:.99; /* @kind other */
+}

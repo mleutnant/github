@@ -11,7 +11,7 @@ export function SideRail({ onContact, onTop, contactLabel = 'Kontakt', topLabel 
       <button aria-label={contactLabel} title={contactLabel} onClick={onContact}
         onMouseEnter={e => e.currentTarget.style.background = 'var(--sch-yellow-hover)'}
         onMouseLeave={e => e.currentTarget.style.background = 'var(--sch-yellow)'} style={btn}>
-        <Icon name="beratung" size={26} tone="ink" />
+        <Icon name="chat" size={26} tone="ink" />
       </button>
       <button aria-label={topLabel} title={topLabel} onClick={onTop}
         onMouseEnter={e => e.currentTarget.style.background = 'var(--sch-yellow-hover)'}

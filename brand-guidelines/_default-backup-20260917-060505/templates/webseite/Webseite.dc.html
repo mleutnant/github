@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="SCHMIDT Webseite" description="Website page in the SCHMIDT brand: sticky header, hero with frame accents, icon arguments, blue QuinLine field, footer." -->
+<helmet><script src="./ds-base.js"></script><style>body{margin:0}</style></helmet>
+<div style="font-family:var(--font-core);background:#fff">
+  <x-import component-from-global-scope="SCHMIDTDesignSystem_b5cc27.SiteHeader" hint-size="100%,84px" dc-props="{{ headerProps }}"></x-import>
+
+  <section style="max-width:1280px;margin:0 auto;padding:64px 24px 0">
+    <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:64px;align-items:end">
+      <h1 style="font-size:clamp(44px,5vw,72px);line-height:1.15;letter-spacing:-0.01em;color:#123442;margin:0;max-width:16ch">Funktion &amp; Design in Größe vereint</h1>
+      <p style="font-size:19px;line-height:1.5;font-weight:500;margin:0;padding-bottom:6px;max-width:38ch">QuinLine® Hebeschiebetür-Systeme sind die individuelle Lösung für ein lichtdurchflutetes Zuhause.</p>
+    </div>
+  </section>
+
+  <section style="position:relative;margin-top:32px">
+    <img src="../../assets/img/hero-ausblick.png" alt="Blick durch eine QuinLine® Hebeschiebetür" style="width:100%;height:560px;object-fit:cover;display:block">
+    <span style="position:absolute;right:4%;top:-26px;width:6px;height:200px;background:#f6a206"></span>
+    <span style="position:absolute;right:4%;top:-26px;width:160px;height:6px;background:#f6a206"></span>
+    <span style="position:absolute;right:0;top:120px;width:120px;height:6px;background:#e3002c"></span>
+  </section>
+
+  <section style="max-width:1280px;margin:0 auto;padding:96px 24px">
+    <h2 style="font-size:32px;line-height:1.15;letter-spacing:-0.01em;color:#123442;margin:0;max-width:24ch">Willkommen beim Marktführer für Kunststoff-Hebeschiebetüren</h2>
+    <span style="display:block;width:96px;height:4px;background:#e3002c;margin-top:16px"></span>
+    <p style="font-size:17px;line-height:1.5;font-weight:500;margin:24px 0 0;max-width:62ch;hyphens:auto">Die SCHMIDT GmbH fokussiert sich seit mehr als 50 Jahren auf die Entwicklung und Produktion von Hebeschiebetüren. Zeitgemäßes Design, höchster Komfort, langlebige Funktionalität und zertifizierte Qualität – die QuinLine® Hebeschiebetür bietet individuelle Lösungen für Neubauten wie auch die Haussanierung.</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:40px 24px;margin-top:48px">
+      <sc-for list="{{ arguments }}" as="arg" hint-placeholder-count="4">
+        <x-import component-from-global-scope="SCHMIDTDesignSystem_b5cc27.FeatureIcon" hint-size="100%,110px" name="{{ arg.icon }}" label="{{ arg.label }}" size="52"></x-import>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:0 auto;padding:0 24px 96px">
+    <x-import component-from-global-scope="SCHMIDTDesignSystem_b5cc27.FrameBox" hint-size="100%,420px" surface="blue" frame="yellow" corner="bottom-right" inset="34" min-height="380">
+      <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center">
+        <div>
+          <h2 style="font-size:32px;line-height:1.15;letter-spacing:-0.01em;color:#fff;margin:0">Das System QuinLine®</h2>
+          <span style="display:block;width:96px;height:4px;background:#f6a206;margin-top:16px"></span>
+          <p style="font-size:19px;line-height:1.5;font-weight:500;color:rgba(255,255,255,.92);margin:24px 0 0;max-width:46ch">Das 5-Kammer-Profilsystem QuinLine® ist ein eigenständiges System — technisch bis ins kleinste Detail durchdacht, vielseitig in Sanierung und Neubau.</p>
+          <div style="margin-top:40px">
+            <x-import component-from-global-scope="SCHMIDTDesignSystem_b5cc27.Button" hint-size="160px,48px" variant="outline" on-blue="{{ true }}">Produkte</x-import>
+          </div>
+        </div>
+        <img src="../../assets/img/innenraum-blick.png" alt="QuinLine® Profilsystem" style="width:100%;height:320px;object-fit:cover;display:block">
+      </div>
+    </x-import>
+  </section>
+
+  <x-import component-from-global-scope="SCHMIDTDesignSystem_b5cc27.SiteFooter" hint-size="100%,340px" dc-props="{{ footerProps }}"></x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;argumentCount&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:8,&quot;min&quot;:3,&quot;max&quot;:8,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Inhalt&quot;},&quot;stickyHeader&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Verhalten&quot;},&quot;showSocial&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Inhalt&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const nav = [
+      { id: 'home', label: 'Start' },
+      { id: 'produkte', label: 'Produkte' },
+      { id: 'referenzen', label: 'Referenzen' },
+      { id: 'unternehmen', label: 'Unternehmen' },
+      { id: 'kontakt', label: 'Kontakt' }
+    ];
+    const all = [
+      { icon: 'profilsystem', label: 'Von SCHMIDT entwickeltes, unabhängiges Profilsystem' },
+      { icon: 'barrierefrei', label: 'Barrierefrei durch flache Schwellenlösungen' },
+      { icon: 'zusatzausstattung', label: 'Individualisierbar in Design, Farbe und Ausstattung' },
+      { icon: 'regen', label: 'Hohe Schlagregendichtheit bei erhöhter Windlast' },
+      { icon: 'sicherheit', label: 'Geprüfte Sicherheit RC 1 N bis RC 3' },
+      { icon: 'breite', label: 'Größe bis zu 7 m Breite' },
+      { icon: 'thermostat', label: 'Passivhaustaugliche Wärmedämmung' },
+      { icon: 'tablet-handy', label: 'Smarthomefähig – Öffnen auf Knopfdruck' }
+    ];
+    const count = this.props.argumentCount ?? 8;
+    return {
+      arguments: all.slice(0, count),
+      headerProps: { items: nav, active: 'home', sticky: this.props.stickyHeader ?? true },
+      footerProps: { social: (this.props.showSocial ?? true) ? ['Facebook', 'Instagram', 'LinkedIn'] : [] }
+    };
+  }
+}
+
+</script>
+</body>
+</html>

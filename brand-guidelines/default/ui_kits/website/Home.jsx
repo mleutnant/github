@@ -1,15 +1,15 @@
 const { SectionHeading, FeatureIcon, Button, NewsCard, FrameBox, Rule, StatBlock } = window.SCHMIDTDesignSystem_b5cc27;
 
 const ARGUMENTS = [
-  ['profilsystem', 'Von SCHMIDT entwickeltes, unabhängiges Profilsystem'],
+  ['groesse', 'Von SCHMIDT entwickeltes, unabhängiges Profilsystem'],
   ['barrierefrei', 'Barrierefrei durch flache Schwellenlösungen'],
-  ['zusatzausstattung', 'Individualisierbar in Design, Farbe und Ausstattung'],
+  ['sonderausstattung', 'Individualisierbar in Design, Farbe und Ausstattung'],
   ['regen', 'Hohe Schlagregendichtheit bei erhöhter Windlast'],
-  ['sicherheit', 'Geprüfte Sicherheit RC 1 N bis RC 3'],
+  ['schloss', 'Geprüfte Sicherheit RC 1 N bis RC 3'],
   ['breite', 'Größe bis zu 7 m Breite'],
   ['thermostat', 'Passivhaustaugliche Wärmedämmung'],
   ['tablet-handy', 'Smarthomefähig – Öffnen auf Knopfdruck'],
-  ['schalldaemmung', 'Lärmschutz bis 44 db']
+  ['lautsprecher-aus', 'Lärmschutz bis 44 db']
 ];
 
 const NEWS = [
@@ -74,8 +74,8 @@ function Home({ go }) {
               <SectionHeading tone="on-blue" title="Das System QuinLine®" intro="Das 5-Kammer-Profilsystem QuinLine® ist ein eigenständiges System, das einzig für die Konstruktion der QuinLine® 74 und der QuinLine® 84 eingesetzt wird. Die Sortimentsbreite und -tiefe ist einzigartig für Kunststoff-Hebeschiebetüren." />
               <div style={{ display: 'flex', gap: 'var(--space-7)', marginTop: 'var(--space-7)' }}>
                 <FeatureIcon name="barrierefrei" label="Barrierefrei" tone="on-blue" size={46} />
-                <FeatureIcon name="sicherheit" label="Geprüfte Sicherheit" tone="on-blue" size={46} />
-                <FeatureIcon name="zusatzausstattung" label="Individualisierbar" tone="on-blue" size={46} />
+                <FeatureIcon name="schloss" label="Geprüfte Sicherheit" tone="on-blue" size={46} />
+                <FeatureIcon name="sonderausstattung" label="Individualisierbar" tone="on-blue" size={46} />
                 <FeatureIcon name="breite" label="Bis zu 7 m Breite" tone="on-blue" size={46} />
               </div>
               <div style={{ marginTop: 'var(--space-7)' }}>

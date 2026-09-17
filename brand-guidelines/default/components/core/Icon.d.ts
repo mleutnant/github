@@ -3,7 +3,7 @@
  * Black on white or white on blue; red is permitted on the website only.
  */
 export interface IconProps {
-  /** 'barrierefrei' | 'beratung' | 'breite' | 'kosteneffizienz' | 'leichtlaeufig' | 'montage' | 'nullschwelle' | 'profilsystem' | 'regen' | 'schalldaemmung' | 'sicherheit' | 'tablet-handy' | 'thermostat' | 'witterungsschutz' | 'wohnkomfort' | 'zusatzausstattung' */
+  /** 'barrierefrei' | 'chat' | 'breite' | 'taschenrechner' | 'komfort' | 'renovierung' | 'barrierefrei' | 'groesse' | 'regen' | 'lautsprecher-aus' | 'schloss' | 'tablet-handy' | 'thermostat' | 'sonnenschutz' | 'komfort' | 'sonderausstattung' */
   name: string;
   size?: number | string;
   tone?: 'ink' | 'white' | 'red' | 'blue';

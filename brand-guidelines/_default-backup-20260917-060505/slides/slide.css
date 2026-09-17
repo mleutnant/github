@@ -1,0 +1,18 @@
+.slide{position:relative;width:1280px;height:720px;background:var(--surface-page);overflow:hidden;font-family:var(--font-core);color:var(--text-primary)}
+.slide .logo{position:absolute;top:40px;height:26px}
+.slide .logo.left{left:56px}
+.slide .logo.right{right:56px}
+.slide .foot{position:absolute;left:56px;bottom:22px;font-size:11px;font-weight:500;color:var(--text-primary)}
+.slide h1{font-size:40px;line-height:1.15;letter-spacing:-.01em;color:var(--sch-blue);margin:0}
+.slide h2{font-size:30px;line-height:1.15;margin:0}
+.slide .kicker{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--sch-red)}
+.slide .body{font-size:16px;line-height:1.5}
+.slide .blue{position:absolute;background:var(--sch-blue);color:var(--sch-white)}
+.slide .yrule{position:absolute;background:var(--sch-yellow)}
+.slide .rrule{position:absolute;background:var(--sch-red)}
+.slide ul.b{list-style:none;margin:0;padding:0;font-size:14px;line-height:1.45}
+.slide ul.b li{position:relative;padding-left:14px;margin-bottom:10px}
+.slide ul.b li::before{content:"";position:absolute;left:0;top:4px;width:2px;height:15px;background:currentColor}
+.slide .ic{width:52px;height:52px;background:var(--sch-white);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center}
+.slide .ic.ink{background:var(--sch-black)}
+.slide .cap{font-size:13px;font-weight:500;line-height:1.15;margin-top:10px;max-width:14ch}

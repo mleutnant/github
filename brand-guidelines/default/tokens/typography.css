@@ -1,9 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap");
-/* Hausschrift: Filson Pro (Olivier Gourvat) — commercial licence, no webfont files supplied.
-   SUBSTITUTE IN THIS SYSTEM: Figtree (Google Fonts), the closest free geometric-humanist match.
+/* Hausschrift: Filson Pro — licensed files live in assets/fonts, @font-face in tokens/fonts.css.
    Office documents fall back to Arial Regular/Bold, per guideline p.4. */
 :root{
---font-core:"Filson Pro","Figtree",Arial,Helvetica,sans-serif;
+--font-core:"Filson Pro",Arial,Helvetica,sans-serif;
 --font-office:Arial,Helvetica,sans-serif;
 
 --fw-regular:400; /* @kind font */   /* Randspalte / side column */

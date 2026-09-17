@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"SCHMIDTDesignSystem_b5cc27","components":[{"name":"BulletList","sourcePath":"components/content/BulletList.jsx"},{"name":"FeatureIcon","sourcePath":"components/content/FeatureIcon.jsx"},{"name":"ImageOverlay","sourcePath":"components/content/ImageOverlay.jsx"},{"name":"NewsCard","sourcePath":"components/content/NewsCard.jsx"},{"name":"PullQuote","sourcePath":"components/content/PullQuote.jsx"},{"name":"SectionHeading","sourcePath":"components/content/SectionHeading.jsx"},{"name":"StatBlock","sourcePath":"components/content/StatBlock.jsx"},{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"FrameBox","sourcePath":"components/core/FrameBox.jsx"},{"name":"Icon","sourcePath":"components/core/Icon.jsx"},{"name":"Logo","sourcePath":"components/core/Logo.jsx"},{"name":"Rule","sourcePath":"components/core/Rule.jsx"},{"name":"ICON_NAMES","sourcePath":"components/core/assets.js"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"RadioGroup","sourcePath":"components/forms/RadioGroup.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"SideRail","sourcePath":"components/navigation/SideRail.jsx"},{"name":"SiteFooter","sourcePath":"components/navigation/SiteFooter.jsx"},{"name":"SiteHeader","sourcePath":"components/navigation/SiteHeader.jsx"}],"sourceHashes":{"components/content/BulletList.jsx":"75763488f1f7","components/content/FeatureIcon.jsx":"dc99b66948e2","components/content/ImageOverlay.jsx":"0202669e2833","components/content/NewsCard.jsx":"e0728e07955d","components/content/PullQuote.jsx":"ebff1f27b896","components/content/SectionHeading.jsx":"eb2b1297e391","components/content/StatBlock.jsx":"362884974418","components/core/Button.jsx":"bd39394bdce2","components/core/FrameBox.jsx":"b09c2b32a142","components/core/Icon.jsx":"34ae3f4bec70","components/core/Logo.jsx":"f2a64f179908","components/core/Rule.jsx":"376842908da2","components/core/assets.js":"f3a79e11457b","components/forms/Checkbox.jsx":"f2b773c49cef","components/forms/Input.jsx":"a01b799534ae","components/forms/RadioGroup.jsx":"b464930d1033","components/forms/Select.jsx":"aafdbfd31ad9","components/navigation/SideRail.jsx":"ce0f38b01653","components/navigation/SiteFooter.jsx":"602f5bf2a5de","components/navigation/SiteHeader.jsx":"f9603632c84f","ui_kits/website/App.jsx":"6f3c4646ec97","ui_kits/website/Home.jsx":"f03c4ddf706d","ui_kits/website/Kontakt.jsx":"5e2881f321d0","ui_kits/website/Produkte.jsx":"cd2bbd5b22e4","ui_kits/website/Referenzen.jsx":"876199e12708"},"inlinedExternals":[],"unexposedExports":[{"name":"assetBase","sourcePath":"components/core/assets.js"},{"name":"iconUrl","sourcePath":"components/core/assets.js"}]} */
+/* @ds-bundle: {"format":4,"namespace":"SCHMIDTDesignSystem_b5cc27","components":[{"name":"BulletList","sourcePath":"components/content/BulletList.jsx"},{"name":"FeatureIcon","sourcePath":"components/content/FeatureIcon.jsx"},{"name":"ImageOverlay","sourcePath":"components/content/ImageOverlay.jsx"},{"name":"NewsCard","sourcePath":"components/content/NewsCard.jsx"},{"name":"PullQuote","sourcePath":"components/content/PullQuote.jsx"},{"name":"SectionHeading","sourcePath":"components/content/SectionHeading.jsx"},{"name":"StatBlock","sourcePath":"components/content/StatBlock.jsx"},{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"FrameBox","sourcePath":"components/core/FrameBox.jsx"},{"name":"Icon","sourcePath":"components/core/Icon.jsx"},{"name":"Logo","sourcePath":"components/core/Logo.jsx"},{"name":"Rule","sourcePath":"components/core/Rule.jsx"},{"name":"ICON_NAMES","sourcePath":"components/core/assets.js"},{"name":"Checkbox","sourcePath":"components/forms/Checkbox.jsx"},{"name":"Input","sourcePath":"components/forms/Input.jsx"},{"name":"RadioGroup","sourcePath":"components/forms/RadioGroup.jsx"},{"name":"Select","sourcePath":"components/forms/Select.jsx"},{"name":"SideRail","sourcePath":"components/navigation/SideRail.jsx"},{"name":"SiteFooter","sourcePath":"components/navigation/SiteFooter.jsx"},{"name":"SiteHeader","sourcePath":"components/navigation/SiteHeader.jsx"}],"sourceHashes":{"components/content/BulletList.jsx":"75763488f1f7","components/content/FeatureIcon.jsx":"dc99b66948e2","components/content/ImageOverlay.jsx":"0202669e2833","components/content/NewsCard.jsx":"e0728e07955d","components/content/PullQuote.jsx":"ebff1f27b896","components/content/SectionHeading.jsx":"eb2b1297e391","components/content/StatBlock.jsx":"362884974418","components/core/Button.jsx":"bd39394bdce2","components/core/FrameBox.jsx":"b09c2b32a142","components/core/Icon.jsx":"34ae3f4bec70","components/core/Logo.jsx":"f2a64f179908","components/core/Rule.jsx":"376842908da2","components/core/assets.js":"7fa3ae83082b","components/forms/Checkbox.jsx":"f2b773c49cef","components/forms/Input.jsx":"a01b799534ae","components/forms/RadioGroup.jsx":"b464930d1033","components/forms/Select.jsx":"aafdbfd31ad9","components/navigation/SideRail.jsx":"e3173c7a9d22","components/navigation/SiteFooter.jsx":"602f5bf2a5de","components/navigation/SiteHeader.jsx":"f9603632c84f","ui_kits/website/App.jsx":"6f3c4646ec97","ui_kits/website/Home.jsx":"fd51bed0968b","ui_kits/website/Kontakt.jsx":"5e2881f321d0","ui_kits/website/Produkte.jsx":"a077307873f2","ui_kits/website/Referenzen.jsx":"876199e12708"},"inlinedExternals":[],"unexposedExports":[{"name":"assetBase","sourcePath":"components/core/assets.js"},{"name":"iconUrl","sourcePath":"components/core/assets.js"}]} */
 
 (() => {
 
@@ -575,8 +575,8 @@ Object.assign(__ds_scope, { SectionHeading });
 try { (() => {
 // Resolve brand asset URLs. Consumers may set window.SCHMIDT_ASSET_BASE (default "assets").
 const assetBase = () => typeof window !== 'undefined' && window.SCHMIDT_ASSET_BASE || 'assets';
-const iconUrl = name => `${assetBase()}/icons/${name}.png`;
-const ICON_NAMES = ['barrierefrei', 'beratung', 'breite', 'kosteneffizienz', 'leichtlaeufig', 'montage', 'nullschwelle', 'profilsystem', 'regen', 'schalldaemmung', 'sicherheit', 'tablet-handy', 'thermostat', 'witterungsschutz', 'wohnkomfort', 'zusatzausstattung'];
+const iconUrl = name => `${assetBase()}/icons/${name}.svg`;
+const ICON_NAMES = ['barrierefrei', 'breite', 'chat', 'farbfaecher', 'groesse', 'komfort', 'lautsprecher-aus', 'regen', 'renovierung', 'schloss', 'sonderausstattung', 'sonnenschutz', 'tablet-handy', 'taschenrechner', 'thermostat'];
 Object.assign(__ds_scope, { assetBase, iconUrl, ICON_NAMES });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/assets.js", error: String((e && e.message) || e) }); }
 
@@ -1032,7 +1032,7 @@ function SideRail({
     onMouseLeave: e => e.currentTarget.style.background = 'var(--sch-yellow)',
     style: btn
   }, /*#__PURE__*/React.createElement(__ds_scope.Icon, {
-    name: "beratung",
+    name: "chat",
     size: 26,
     tone: "ink"
   })), /*#__PURE__*/React.createElement("button", {
@@ -1350,7 +1350,7 @@ const {
   Rule,
   StatBlock
 } = window.SCHMIDTDesignSystem_b5cc27;
-const ARGUMENTS = [['profilsystem', 'Von SCHMIDT entwickeltes, unabhängiges Profilsystem'], ['barrierefrei', 'Barrierefrei durch flache Schwellenlösungen'], ['zusatzausstattung', 'Individualisierbar in Design, Farbe und Ausstattung'], ['regen', 'Hohe Schlagregendichtheit bei erhöhter Windlast'], ['sicherheit', 'Geprüfte Sicherheit RC 1 N bis RC 3'], ['breite', 'Größe bis zu 7 m Breite'], ['thermostat', 'Passivhaustaugliche Wärmedämmung'], ['tablet-handy', 'Smarthomefähig – Öffnen auf Knopfdruck'], ['schalldaemmung', 'Lärmschutz bis 44 db']];
+const ARGUMENTS = [['groesse', 'Von SCHMIDT entwickeltes, unabhängiges Profilsystem'], ['barrierefrei', 'Barrierefrei durch flache Schwellenlösungen'], ['sonderausstattung', 'Individualisierbar in Design, Farbe und Ausstattung'], ['regen', 'Hohe Schlagregendichtheit bei erhöhter Windlast'], ['schloss', 'Geprüfte Sicherheit RC 1 N bis RC 3'], ['breite', 'Größe bis zu 7 m Breite'], ['thermostat', 'Passivhaustaugliche Wärmedämmung'], ['tablet-handy', 'Smarthomefähig – Öffnen auf Knopfdruck'], ['lautsprecher-aus', 'Lärmschutz bis 44 db']];
 const NEWS = [['Beitrag zum InScreen in der bauelemente bau', 'In der aktuellen September-Ausgabe berichten wir auf einer Doppelseite über unseren InScreen-Insektenschutz für die QuinLine®-Hebeschiebetür.', '../../assets/img/innenraum-blick.png'], ['SCHMIDT in der Titelstory des „treffpunkt“ Magazins', 'Geschäftsführerin Teresa Schmidt-Bertsch berichtet über die Entwicklung unseres Familienbetriebs und die erfolgreiche Unternehmensnachfolge.', '../../assets/img/terrasse-hebeschiebetuer.png'], ['November-Seminare für Vertrieb und Montage', 'Im November 2026 startet unsere nächste Inhouse-Seminarreihe für Kaufleute und Monteure, abgerundet durch eine Betriebsführung.', '../../assets/img/hero-ausblick.png']];
 function Home({
   go
@@ -1543,12 +1543,12 @@ function Home({
     tone: "on-blue",
     size: 46
   }), /*#__PURE__*/React.createElement(FeatureIcon, {
-    name: "sicherheit",
+    name: "schloss",
     label: "Gepr\xFCfte Sicherheit",
     tone: "on-blue",
     size: 46
   }), /*#__PURE__*/React.createElement(FeatureIcon, {
-    name: "zusatzausstattung",
+    name: "sonderausstattung",
     label: "Individualisierbar",
     tone: "on-blue",
     size: 46
@@ -1835,15 +1835,15 @@ function Produkte({
     label: "W\xE4rmed\xE4mmung",
     size: 46
   }), /*#__PURE__*/React.createElement(FeatureIcon, {
-    name: "sicherheit",
+    name: "schloss",
     label: "RC 1 N bis RC 3",
     size: 46
   }), /*#__PURE__*/React.createElement(FeatureIcon, {
-    name: "nullschwelle",
+    name: "barrierefrei",
     label: "Niedrigschwelle 4,5 mm",
     size: 46
   }), /*#__PURE__*/React.createElement(FeatureIcon, {
-    name: "leichtlaeufig",
+    name: "komfort",
     label: "Leichtl\xE4ufig",
     size: 46
   }))), /*#__PURE__*/React.createElement("img", {

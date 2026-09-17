@@ -1,0 +1,51 @@
+<!-- @dsCard group="Components" viewport="700x400" name="Core" subtitle="Logo, Button, Icon, Rule, FrameBox" -->
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>body{margin:0;padding:20px;background:var(--surface-page);font-family:var(--font-core)}.lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}.grp{display:flex;gap:14px;align-items:center;flex-wrap:wrap}</style>
+<script>window.SCHMIDT_ASSET_BASE='../../assets'</script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { Logo, Button, Icon, Rule, FrameBox } = window.SCHMIDTDesignSystem_b5cc27;
+
+function Demo(){
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:22}}>
+      <div><div className="lbl">Logo</div><div className="grp" style={{gap:28}}>
+        <Logo height={28}/><Logo variant="mark" height={26}/>
+        <span style={{background:'var(--sch-blue)',padding:'10px 16px'}}><Logo theme="negative" height={24}/></span>
+      </div></div>
+      <div><div className="lbl">Button</div><div className="grp">
+        <Button>Kontakt</Button>
+        <Button variant="secondary">Produkte</Button>
+        <Button variant="outline">Downloads</Button>
+        <Button variant="quiet">Alle News</Button>
+        <Button size="sm">Klein</Button>
+        <Button size="lg">Groß</Button>
+        <Button disabled>Disabled</Button>
+      </div></div>
+      <div><div className="lbl">Icon &amp; Rule</div><div className="grp" style={{gap:20}}>
+        <Icon name="sicherheit" size={40}/><Icon name="barrierefrei" size={40}/><Icon name="breite" size={40}/>
+        <span style={{background:'var(--sch-blue)',padding:8,display:'inline-flex',gap:12}}>
+          <Icon name="thermostat" size={32} tone="white"/><Icon name="tablet-handy" size={32} tone="white"/>
+        </span>
+        <Icon name="regen" size={40} tone="red"/>
+        <span style={{display:'inline-flex',flexDirection:'column',gap:6,marginLeft:10}}>
+          <Rule color="red" width="120px"/><Rule color="yellow" width="120px"/><Rule color="blue" weight="body" width="120px"/>
+        </span>
+      </div></div>
+      <div><div className="lbl">FrameBox</div>
+        <FrameBox surface="blue" frame="yellow" minHeight={120} inset={22} style={{maxWidth:420}}>
+          <div style={{fontWeight:700,fontSize:19,color:'var(--text-on-blue)'}}>System QuinLine®</div>
+        </FrameBox>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body></html>

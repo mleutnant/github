@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap");
+/* Hausschrift: Filson Pro (Olivier Gourvat) — commercial licence, no webfont files supplied.
+   SUBSTITUTE IN THIS SYSTEM: Figtree (Google Fonts), the closest free geometric-humanist match.
+   Office documents fall back to Arial Regular/Bold, per guideline p.4. */
+:root{
+--font-core:"Filson Pro","Figtree",Arial,Helvetica,sans-serif;
+--font-office:Arial,Helvetica,sans-serif;
+
+--fw-regular:400; /* @kind font */   /* Randspalte / side column */
+--fw-medium:500; /* @kind font */    /* Fließtext / body copy */
+--fw-bold:700; /* @kind font */      /* Titel */
+
+/* Zeilenabstände, per guideline */
+--lh-title:1.15; /* @kind font */    /* Titel — geringer Zeilenabstand */
+--lh-body:1.5; /* @kind font */      /* Fließtext — erhöhter Zeilenabstand, mit Silbentrennung */
+--lh-side:1.3; /* @kind font */      /* Randspalte — normaler Zeilenabstand */
+--lh-caption:1.15; /* @kind font */  /* Icon-Unterzeile */
+
+--tracking-title:-0.01em; /* @kind font */
+--tracking-eyebrow:0.06em; /* @kind font */
+
+--fs-display:clamp(44px,5vw,72px); /* @kind font */
+--fs-h1:44px; /* @kind font */
+--fs-h2:32px; /* @kind font */
+--fs-h3:24px; /* @kind font */
+--fs-h4:19px; /* @kind font */
+--fs-body-lg:19px; /* @kind font */
+--fs-body:17px; /* @kind font */
+--fs-side:15px; /* @kind font */
+--fs-caption:13px; /* @kind font */
+--fs-eyebrow:12px; /* @kind font */
+
+/* Rule weights are derived from the type, per guideline (Unterlinie / Aufzählung) */
+--rule-title:4px;   /* Unterlinie under a Subtitel */
+--rule-body:2px;    /* vertical bar of a level-1 bullet */
+--bullet-square:7px;/* level-2 bullet */
+}

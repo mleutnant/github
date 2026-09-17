@@ -1,0 +1,18 @@
+/* Hausschrift: Filson Pro (Olivier Gourvat) — licensed desktop files supplied by SCHMIDT.
+   Office documents still fall back to Arial Regular/Bold, per guideline p.4. */
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProThin.otf") format("opentype");font-weight:100;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProThinItalic.otf") format("opentype");font-weight:100;font-style:italic;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProLight.otf") format("opentype");font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProLightItalic.otf") format("opentype");font-weight:300;font-style:italic;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProBook.otf") format("opentype");font-weight:350;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProBookItalic.otf") format("opentype");font-weight:350;font-style:italic;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProRegular.otf") format("opentype");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProRegularItalic.otf") format("opentype");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProMedium.otf") format("opentype");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProMediumItalic.otf") format("opentype");font-weight:500;font-style:italic;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProBold.otf") format("opentype");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProBoldItalic.otf") format("opentype");font-weight:700;font-style:italic;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProHeavy.otf") format("opentype");font-weight:800;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProHeavyItalic.otf") format("opentype");font-weight:800;font-style:italic;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProBlack.otf") format("opentype");font-weight:900;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url("../assets/fonts/FilsonProBlackItalic.otf") format("opentype");font-weight:900;font-style:italic;font-display:swap}

@@ -1,0 +1,49 @@
+/* SCHMIDT — Farben. Values taken verbatim from the Corporate Design Guideline (Stand August 2024), p.3. */
+:root{
+/* Primärfarben */
+--sch-white:#ffffff;            /* Hintergrundflächen, Schrift auf Blau */
+--sch-black:#000000;            /* Wortmarke, Schriftfarbe */
+--sch-blue:#123442;             /* Hintergrundflächen, Rahmen — RAL 5008 */
+--sch-red:#e3002c;              /* Bildmarke, Rahmen — RAL 3020, Pantone 185 C */
+/* Sekundärfarbe */
+--sch-yellow:#f6a206;           /* Rahmen, flächige Akzente */
+
+/* Derived tints (NOT in the guideline — added for screen UI only) */
+--sch-blue-90:#24424f;
+--sch-blue-70:#4b656f;
+--sch-blue-20:#d0d7db;
+--sch-blue-08:#eef1f2;
+--sch-red-hover:#c30026;
+--sch-yellow-hover:#dc9005;
+--sch-grey-05:#f6f6f6;
+--sch-grey-10:#ededed;
+--sch-grey-30:#c9c9c9;
+--sch-grey-60:#6e7478;
+
+/* Semantic aliases */
+--text-primary:var(--sch-black);
+--text-heading:var(--sch-blue);
+--text-muted:var(--sch-grey-60);
+--text-on-blue:var(--sch-white);
+--text-on-red:var(--sch-white);
+--text-link:var(--sch-red);
+--text-link-hover:var(--sch-red-hover);
+
+--surface-page:var(--sch-white);
+--surface-subtle:var(--sch-grey-05);
+--surface-inverse:var(--sch-blue);
+--surface-accent:var(--sch-yellow);
+--surface-brand:var(--sch-red);
+
+--border-hairline:var(--sch-grey-30);
+--border-on-blue:rgba(255,255,255,.28);
+--frame-red:var(--sch-red);
+--frame-yellow:var(--sch-yellow);
+--frame-blue:var(--sch-blue);
+
+--icon-ink:var(--sch-black);
+--icon-on-blue:var(--sch-white);
+--icon-web-accent:var(--sch-red); /* red icons: web only */
+
+--focus-ring:var(--sch-yellow);
+}

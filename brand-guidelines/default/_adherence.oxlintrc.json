@@ -38,8 +38,8 @@
         "message": "Raw px value — use a design-system spacing token via var()."
       },
       {
-        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Figtree))/i]",
-        "message": "Font not provided by the design system. Available: Figtree."
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Filson Pro))/i]",
+        "message": "Font not provided by the design system. Available: Filson Pro."
       },
       {
         "selector": "JSXOpeningElement[name.name='BulletList'] > JSXAttribute > JSXIdentifier[name!=/^(?:items|level|tone|columns|style|key|ref|className|style|children)$/]",
@@ -444,7 +444,7 @@
       "--press-scale": "other"
     },
     "fontFamilies": [
-      "Figtree"
+      "Filson Pro"
     ]
   }
 }

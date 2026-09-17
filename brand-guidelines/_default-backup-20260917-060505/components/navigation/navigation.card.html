@@ -1,0 +1,33 @@
+<!-- @dsCard group="Components" viewport="700x400" name="Navigation" subtitle="SiteHeader, SiteFooter, SideRail" -->
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>body{margin:0;padding:20px;background:var(--surface-page);font-family:var(--font-core)}.lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}.grp{display:flex;gap:14px;align-items:center;flex-wrap:wrap}</style>
+<script>window.SCHMIDT_ASSET_BASE='../../assets'</script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { SiteHeader, SiteFooter, SideRail } = window.SCHMIDTDesignSystem_b5cc27;
+
+function Demo(){
+  const [p,setP]=React.useState('produkte');
+  return (
+    <div style={{display:'flex',flexDirection:'column',gap:18,position:'relative'}}>
+      <div style={{border:'1px solid var(--sch-grey-10)'}}>
+        <SiteHeader sticky={false} active={p} onNavigate={setP}
+          items={[{id:'produkte',label:'Produkte'},{id:'kunde',label:'Kunde'},{id:'referenzen',label:'Referenzen'},{id:'unternehmen',label:'Unternehmen'},{id:'kontakt',label:'Kontakt'}]}/>
+      </div>
+      <div style={{position:'relative',height:96,background:'var(--sch-grey-05)'}}>
+        <div className="lbl" style={{padding:12}}>SideRail</div>
+        <SideRail style={{top:12}}/>
+      </div>
+      <SiteFooter social={['Facebook','Instagram','LinkedIn']}/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body></html>

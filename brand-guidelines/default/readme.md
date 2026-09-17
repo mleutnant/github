@@ -33,7 +33,7 @@ font binaries were provided.
 | `tokens/base.css` | element defaults (body, headings, links, focus) |
 | `assets/logo-schmidt.png` | Wort- und Bildmarke, transparent background |
 | `assets/bildmarke.png` | Bildmarke alone |
-| `assets/icons/*.png` | all 16 brand icons, transparent, 256 px |
+| `assets/icons/*.svg` | the 15 original brand icon SVGs, transparent, `currentColor` |
 | `assets/img/*.png` | three brand photographs |
 | `guidelines/*.card.html` | foundation specimen cards (Colors, Type, Spacing, Brand) |
 | `components/` | React primitives, grouped by concern |
@@ -114,8 +114,7 @@ Red is never a large surface; yellow is never type. A small derived tint ramp (`
 **Type.** Filson Pro (Olivier Gourvat) — a friendly geometric-humanist sans — in three weights:
 Bold for titles (115 % leading), Medium for body (150 % leading, hyphenated), Regular for side columns
 (130 % leading). Icon captions are Medium at 115 %. Kerning is optical everywhere. Arial Regular/Bold is
-the sanctioned Office fallback. **No licensed webfont files were supplied, so this system substitutes
-Figtree from Google Fonts** — see Caveats.
+the sanctioned Office fallback. The licensed Filson Pro files ship with this system in `assets/fonts/`.
 
 **Layout Prinzip 1 — Rahmen und Fläche.** A field (blue, or a photo) is overlaid by an L-shaped frame,
 offset so a gap opens where the two cross, in analogy to the logo. On full-bleed photography the same
@@ -178,22 +177,24 @@ weight is uniform and fairly heavy; there is no filled variant.
 exception is the website, where they may also be played in red. `Icon` enforces exactly these three
 tones.
 
-**What is in `assets/icons/`** — extracted from the guideline page and re-cut as 256 px transparent
-PNGs. The guideline does not name the glyphs, so the file names describe them by use:
+**What is in `assets/icons/`** — the **15 original SCHMIDT icon SVGs**, supplied by the brand and the
+only sanctioned set. Each is a transparent, single-colour outline drawing on a 113.39 × 113.39 artboard;
+`fill="currentColor"` was added to the root `<svg>` so one file serves every tone — black on light
+grounds, white on blue, red on the website. Do not ship coloured or baked-in-black copies.
 
-`schalldaemmung` (muted speaker) · `tablet-handy` (tablet + phone) · `wohnkomfort` (sofa) ·
-`kosteneffizienz` (calculator) · `beratung` (two speech bubbles) · `breite` (double arrow) ·
-`sicherheit` (padlock) · `regen` (cloud with rain) · `witterungsschutz` (sun behind shield) ·
-`zusatzausstattung` (plus in a frame with lines) · `montage` (house with wrench) ·
-`barrierefrei` (wheelchair) · `thermostat` (thermometer on a base) · `profilsystem` (profile sections) ·
-`leichtlaeufig` (crossing diagonal arrows) · `nullschwelle` (threshold with "0 mm")
+`barrierefrei` (wheelchair) · `breite` (double arrow) · `chat` (two speech bubbles) ·
+`farbfaecher` (colour fan) · `groesse` (dimension arrows) · `komfort` (sofa) ·
+`lautsprecher-aus` (muted speaker) · `regen` (cloud with rain) · `renovierung` (house with tool) ·
+`schloss` (padlock) · `sonderausstattung` (plus in a framed list) · `sonnenschutz` (sun) ·
+`tablet-handy` (tablet + phone) · `taschenrechner` (calculator) · `thermostat` (thermometer)
 
-The live website uses the same set as individual SVGs (`icon-sicherheit.svg`, `icon-barrierefrei-1.svg`,
-`icon-profilsystem.svg`, `icon-breite-1.svg`, `icon-thermostat-1.svg`, `icon-tablet-handy-2.svg`,
-`icon-schalldaemmung.svg`, `icon-regen-1.svg`, `icon-design-1.svg`, plus navigation glyphs
-`icon-uebersicht`, `icon-pakete`, `icon-nav-foerderung`, `icon-nav-news`, `icon-nav-downloads`).
-**Those SVG originals are not in this system** — they could not be downloaded — so the PNG re-cuts stand
-in and the five navigation glyphs are missing entirely.
+**Use only these 15.** If a new subject is genuinely needed, draw it in exactly the same style —
+113.39 px artboard, uniform heavy stroke translated to filled outline paths, rounded geometric
+construction, the characteristic breaks in the stroke, no fill variant, `fill="currentColor"` on the
+root — and add it to `ICON_NAMES` in `components/core/assets.js`. Never substitute a third-party glyph.
+
+The live website's navigation glyphs (`icon-uebersicht`, `icon-pakete`, `icon-nav-foerderung`,
+`icon-nav-news`, `icon-nav-downloads`) were not supplied and are not part of this system.
 
 **No third-party icon library is used, and none should be introduced.** No Lucide, no Font Awesome, no
 Material. No emoji. No unicode characters as icons — the only unicode symbols in brand use are the
@@ -208,11 +209,11 @@ context of the brand.
 
 ## Caveats
 
-1. **Fonts.** Filson Pro is a commercial licence and no font files were provided. `--font-core` keeps
-   `"Filson Pro"` first and falls back to **Figtree** (Google Fonts), the closest free
-   geometric-humanist match. Supply the licensed WOFF2 files and the substitution disappears.
-2. **Logo and icons are PNG re-cuts** from the guideline PDF, not the vector originals. They are clean
-   at print resolution, but SVG/EPS originals should replace them.
+1. **Fonts.** The licensed **Filson Pro OTF files are installed** in `assets/fonts/` (Thin→Black,
+   roman + italic) and declared in `tokens/fonts.css`. They are desktop OTFs, not WOFF2 — fine for
+   previews and print, but subset WOFF2 files would be better for production web use.
+2. **Icons and logo are the supplied vector originals** (15 icon SVGs, `logo-schmidt.svg`, `bildmarke.svg`).
+   The PNG copies remain only as raster fallbacks.
 3. **Website assets** (the real SVG icons, the photo library, the mega-menu) could not be fetched from
    schmidt-boke.de; the UI kit uses guideline photography and a flat nav instead.
 4. **Icon names are descriptive guesses** — the guideline does not label them.

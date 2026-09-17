@@ -38,9 +38,9 @@ function Produkte({ go }) {
           ]} />
           <div style={{ display: 'flex', gap: 'var(--space-6)', marginTop: 'var(--space-7)' }}>
             <FeatureIcon name="thermostat" label="Wärmedämmung" size={46} />
-            <FeatureIcon name="sicherheit" label="RC 1 N bis RC 3" size={46} />
-            <FeatureIcon name="nullschwelle" label="Niedrigschwelle 4,5 mm" size={46} />
-            <FeatureIcon name="leichtlaeufig" label="Leichtläufig" size={46} />
+            <FeatureIcon name="schloss" label="RC 1 N bis RC 3" size={46} />
+            <FeatureIcon name="barrierefrei" label="Niedrigschwelle 4,5 mm" size={46} />
+            <FeatureIcon name="komfort" label="Leichtläufig" size={46} />
           </div>
         </div>
         <img src="../../assets/img/terrasse-hebeschiebetuer.png" alt={'QuinLine® ' + system} style={{ width: '100%', height: 420, objectFit: 'cover' }} />

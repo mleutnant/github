@@ -619,7 +619,12 @@ def build_final_composite(
     inputs: list[str] = ["-i", str(base_path)]
     for ov in overlays:
         ov_path = resolve_path(ov["file"], edit_dir)
-        inputs += ["-i", str(ov_path)]
+        if ov_path.suffix.lower() == ".webm":
+            # FFmpeg's default VP9 decoder silently drops the alpha channel;
+            # libvpx-vp9 must be forced to decode alpha-in-WebM overlays correctly.
+            inputs += ["-c:v", "libvpx-vp9", "-i", str(ov_path)]
+        else:
+            inputs += ["-i", str(ov_path)]
 
     filter_parts: list[str] = []
     # PTS-shift every overlay so its frame 0 lands at start_in_output

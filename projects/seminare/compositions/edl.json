@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "sources": {
+    "main": "/home/user/github/projects/seminare/clips/main_graded.mp4",
+    "outro": "/home/user/github/projects/seminare/compositions/animations/slot_outro/render.mp4"
+  },
+  "ranges": [
+    {
+      "source": "main",
+      "start": 0.0,
+      "end": 13.94,
+      "beat": "MAIN",
+      "quote": "Wenn ihr eure Kenntnisse rund um das Thema QuinLine-Hebeschiebetueren in unseren Systemen 74 und 84 auffrischen wollt oder auch vertiefen wollt und auch im Umgang mit der Montage einfach sicher sein wollt, dann sind unsere Seminare im November goldrichtig fuer euch.",
+      "reason": "Einziger durchgehender Take; nur Kopf/Fuss getrimmt (Original 0.12-14.05s -> Output 0-13.94s)."
+    },
+    {
+      "source": "outro",
+      "start": 0.0,
+      "end": 2.5,
+      "beat": "OUTRO",
+      "reason": "CTA-Karte direkt nach dem gesprochenen Payoff-Satz ueber die Seminare im November."
+    }
+  ],
+  "grade": "none",
+  "overlays": [
+    {
+      "file": "/home/user/github/projects/seminare/compositions/animations/slot_lowerthird/render.webm",
+      "start_in_output": 7.08,
+      "duration": 4.5
+    }
+  ],
+  "subtitles": null,
+  "total_duration_s": 16.44
+}

@@ -17,9 +17,19 @@ raw/**/*.mkv
 # Generated project output
 projects/*/renders/*.mp4
 projects/*/previews/*.mp4
+projects/*/previews/verify/
 projects/*/transcripts/*.json
 projects/*/_bundle_assets/
 projects/*/assets/speaker.mp4
+projects/*/clips/*.mp4
+projects/*/compositions/clips_draft/
+projects/*/compositions/clips_preview/
+projects/*/compositions/clips_graded/
+projects/*/compositions/base*.mp4
+projects/*/compositions/*.prenorm.mp4
+projects/*/compositions/_concat.txt
+projects/*/compositions/animations/*/render*.mp4
+projects/*/compositions/animations/*/render*.webm
 
 # Caches
 .hyperframes-cache/

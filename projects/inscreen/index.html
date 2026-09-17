@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      :root {
+        --sch-white: #ffffff;
+        --sch-black: #000000;
+        --sch-blue: #123442;
+        --sch-blue-90: #24424f;
+        --sch-blue-70: #4b656f;
+        --sch-blue-20: #d0d7db;
+        --sch-blue-08: #eef1f2;
+        --sch-red: #e3002c;
+        --sch-red-hover: #c30026;
+        --sch-yellow: #f6a206;
+        --sch-grey-05: #f6f6f6;
+        --sch-grey-30: #c9c9c9;
+        --sch-grey-60: #6e7478;
+      }
+
+      @font-face {
+        font-family: "Filson Pro";
+        src: url("assets/fonts/FilsonProLight.otf") format("opentype");
+        font-weight: 300;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Filson Pro";
+        src: url("assets/fonts/FilsonProBook.otf") format("opentype");
+        font-weight: 350;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Filson Pro";
+        src: url("assets/fonts/FilsonProRegular.otf") format("opentype");
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Filson Pro";
+        src: url("assets/fonts/FilsonProMedium.otf") format("opentype");
+        font-weight: 500;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Filson Pro";
+        src: url("assets/fonts/FilsonProBold.otf") format("opentype");
+        font-weight: 700;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Filson Pro";
+        src: url("assets/fonts/FilsonProHeavy.otf") format("opentype");
+        font-weight: 800;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Filson Pro";
+        src: url("assets/fonts/FilsonProBlack.otf") format("opentype");
+        font-weight: 900;
+        font-style: normal;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--sch-blue);
+        font-family: "Filson Pro", sans-serif;
+      }
+
+      .scene {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+
+      /* ---------- Scene 1: Opening ---------- */
+      #scene1 {
+        z-index: 1;
+        background: var(--sch-blue);
+      }
+      #s1-glow {
+        position: absolute;
+        top: 50%;
+        left: 38%;
+        width: 1400px;
+        height: 1400px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, var(--sch-blue-70) 0%, var(--sch-blue) 62%);
+        opacity: 0.55;
+      }
+      #s1-ghost {
+        position: absolute;
+        left: -60px;
+        bottom: -140px;
+        font-size: 460px;
+        font-weight: 900;
+        color: var(--sch-blue-90);
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+      }
+      .s1-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 170px;
+        gap: 22px;
+      }
+      #s1-eyebrow {
+        font-size: 32px;
+        font-weight: 350;
+        color: var(--sch-white);
+        letter-spacing: 0.02em;
+      }
+      #s1-title {
+        font-size: 176px;
+        font-weight: 900;
+        color: var(--sch-white);
+        line-height: 0.98;
+        letter-spacing: -0.03em;
+      }
+      #s1-yellow-line {
+        position: absolute;
+        left: 170px;
+        top: 340px;
+        width: 640px;
+        height: 6px;
+        background: var(--sch-yellow);
+        transform-origin: left center;
+      }
+      #s1-red-line {
+        position: absolute;
+        left: 170px;
+        top: 346px;
+        width: 6px;
+        height: 300px;
+        background: var(--sch-red);
+        transform-origin: top center;
+      }
+      #s1-mark {
+        position: absolute;
+        right: 150px;
+        bottom: 120px;
+        width: 150px;
+        opacity: 0.9;
+        filter: brightness(0) invert(1);
+      }
+
+      /* ---------- Scene 2: Establishing ---------- */
+      #scene2 {
+        z-index: 2;
+        background: var(--sch-blue);
+        opacity: 0;
+      }
+      #s2-imgwrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      #s2-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1920px;
+        height: 1080px;
+        object-fit: cover;
+      }
+      #s2-scrim {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent 40%, rgba(18, 52, 66, 0.92) 100%);
+      }
+      #s2-badge {
+        position: absolute;
+        top: 90px;
+        right: 150px;
+        background: var(--sch-red);
+        color: var(--sch-white);
+        font-weight: 700;
+        font-size: 26px;
+        letter-spacing: 0.02em;
+        padding: 12px 28px;
+        border-radius: 999px;
+      }
+      .s2-textblock {
+        position: absolute;
+        left: 170px;
+        bottom: 130px;
+        width: 1400px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      #s2-rule {
+        width: 120px;
+        height: 5px;
+        background: var(--sch-red);
+        transform-origin: left center;
+      }
+      #s2-headline {
+        font-size: 92px;
+        font-weight: 800;
+        color: var(--sch-white);
+        letter-spacing: -0.02em;
+        line-height: 1.05;
+      }
+      #s2-sub {
+        font-size: 32px;
+        font-weight: 350;
+        color: var(--sch-white);
+        max-width: 1100px;
+      }
+
+      /* ---------- Scene 3: Perfekte Integration ---------- */
+      #scene3 {
+        z-index: 3;
+        background: var(--sch-grey-05);
+        opacity: 0;
+      }
+      .s3-content {
+        display: flex;
+        width: 100%;
+        height: 100%;
+      }
+      #s3-imgcol {
+        position: relative;
+        width: 46%;
+        height: 100%;
+        overflow: hidden;
+      }
+      #s3-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      #s3-imgline {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 8px;
+        height: 100%;
+        background: var(--sch-yellow);
+        transform-origin: top center;
+      }
+      #s3-textcol {
+        width: 54%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 110px;
+        gap: 34px;
+      }
+      #s3-eyebrow {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--sch-red);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      #s3-headline {
+        font-size: 84px;
+        font-weight: 800;
+        color: var(--sch-blue);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+      #s3-sub {
+        font-size: 30px;
+        font-weight: 350;
+        color: var(--sch-grey-60);
+        max-width: 680px;
+      }
+      .s3-swatches {
+        display: flex;
+        gap: 36px;
+        margin-top: 10px;
+      }
+      .s3-swatch {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+      .s3-chip {
+        width: 110px;
+        height: 110px;
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(18, 52, 66, 0.18);
+      }
+      .s3-chip.oak {
+        background: #a97c50;
+      }
+      .s3-chip.anthracite {
+        background: #383c3f;
+      }
+      .s3-chip.white {
+        background: var(--sch-white);
+        border: 2px solid var(--sch-grey-30);
+      }
+      .s3-swatch-label {
+        font-size: 22px;
+        font-weight: 500;
+        color: var(--sch-blue);
+        text-align: center;
+      }
+
+      /* ---------- Scene 4: Das Plissee ---------- */
+      #scene4 {
+        z-index: 4;
+        background: var(--sch-blue);
+        opacity: 0;
+      }
+      #s4-glow {
+        position: absolute;
+        right: -220px;
+        top: -220px;
+        width: 1100px;
+        height: 1100px;
+        border-radius: 50%;
+        background: radial-gradient(circle, var(--sch-blue-70) 0%, var(--sch-blue) 68%);
+        opacity: 0.6;
+      }
+      .s4-content {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        padding: 0 170px;
+        gap: 130px;
+      }
+      #s4-frame {
+        position: relative;
+        width: 560px;
+        height: 700px;
+        border: 3px solid var(--sch-blue-20);
+        border-radius: 4px;
+        overflow: hidden;
+        background: var(--sch-blue-90);
+        flex-shrink: 0;
+      }
+      #s4-plissee {
+        position: absolute;
+        top: 24px;
+        bottom: 24px;
+        right: 24px;
+        width: 260px;
+        background-image: repeating-linear-gradient(
+          90deg,
+          var(--sch-blue-08) 0px,
+          var(--sch-blue-08) 5px,
+          var(--sch-blue-20) 5px,
+          var(--sch-blue-20) 10px
+        );
+        transform-origin: right center;
+      }
+      #s4-textcol {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      #s4-eyebrow {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--sch-yellow);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      #s4-headline .word {
+        display: inline-block;
+        font-size: 90px;
+        font-weight: 900;
+        color: var(--sch-white);
+        letter-spacing: -0.02em;
+      }
+      #s4-sub {
+        font-size: 30px;
+        font-weight: 350;
+        color: var(--sch-blue-20);
+        max-width: 640px;
+      }
+
+      /* ---------- Scene 5: Barrierefrei ---------- */
+      #scene5 {
+        z-index: 5;
+        background: var(--sch-white);
+        opacity: 0;
+      }
+      .s5-content {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        padding: 0 170px;
+        gap: 110px;
+      }
+      #s5-icon {
+        width: 220px;
+        height: 220px;
+        color: var(--sch-red);
+        flex-shrink: 0;
+      }
+      #s5-icon svg {
+        width: 100%;
+        height: 100%;
+      }
+      #s5-textcol {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      #s5-headline {
+        font-size: 84px;
+        font-weight: 800;
+        color: var(--sch-blue);
+        letter-spacing: -0.02em;
+      }
+      .s5-list {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .s5-item {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        font-size: 32px;
+        font-weight: 400;
+        color: var(--sch-black);
+      }
+      .s5-check {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--sch-red);
+        color: var(--sch-white);
+        font-size: 24px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      /* ---------- Scene 6: Plug & Play ---------- */
+      #scene6 {
+        z-index: 6;
+        background: var(--sch-blue);
+        opacity: 0;
+      }
+      #s6-headline {
+        position: absolute;
+        top: 130px;
+        left: 170px;
+        font-size: 82px;
+        font-weight: 800;
+        color: var(--sch-white);
+        letter-spacing: -0.02em;
+      }
+      #s6-sub {
+        position: absolute;
+        top: 250px;
+        left: 170px;
+        font-size: 30px;
+        font-weight: 350;
+        color: var(--sch-blue-20);
+      }
+      .s6-steps {
+        position: absolute;
+        left: 170px;
+        right: 170px;
+        top: 560px;
+        display: flex;
+        justify-content: space-between;
+      }
+      #s6-connector {
+        position: absolute;
+        left: 250px;
+        right: 250px;
+        top: 636px;
+        height: 3px;
+        background: var(--sch-red);
+        transform-origin: left center;
+      }
+      .s6-step {
+        position: relative;
+        width: 340px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+      }
+      .s6-node {
+        width: 152px;
+        height: 152px;
+        border-radius: 50%;
+        border: 3px solid var(--sch-red);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 56px;
+        font-weight: 900;
+        color: var(--sch-white);
+        background: var(--sch-blue);
+        z-index: 1;
+      }
+      .s6-step:nth-child(2n) .s6-node {
+        border-color: var(--sch-yellow);
+      }
+      .s6-label {
+        font-size: 26px;
+        font-weight: 500;
+        color: var(--sch-white);
+        text-align: center;
+        max-width: 300px;
+      }
+
+      /* ---------- Scene 7: Closing ---------- */
+      #scene7 {
+        z-index: 7;
+        background: var(--sch-blue);
+        opacity: 0;
+      }
+      #s7-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1500px;
+        height: 1500px;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, var(--sch-blue-70) 0%, var(--sch-blue) 62%);
+        opacity: 0.5;
+      }
+      #s7-yellow-line {
+        position: absolute;
+        right: 170px;
+        bottom: 260px;
+        width: 560px;
+        height: 6px;
+        background: var(--sch-yellow);
+        transform-origin: right center;
+      }
+      #s7-red-line {
+        position: absolute;
+        right: 170px;
+        bottom: 260px;
+        width: 6px;
+        height: 260px;
+        background: var(--sch-red);
+        transform-origin: bottom center;
+      }
+      .s7-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 34px;
+      }
+      #s7-mark {
+        width: 170px;
+        filter: brightness(0) invert(1);
+      }
+      #s7-logo {
+        width: 480px;
+        filter: brightness(0) invert(1);
+      }
+      #s7-headline {
+        font-size: 52px;
+        font-weight: 500;
+        color: var(--sch-white);
+        text-align: center;
+        max-width: 1100px;
+      }
+      #s7-cta {
+        font-size: 28px;
+        font-weight: 350;
+        color: var(--sch-blue-20);
+        letter-spacing: 0.04em;
+      }
+      #s7-blackout {
+        position: absolute;
+        inset: 0;
+        background: var(--sch-black);
+        opacity: 0;
+        z-index: 20;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="inscreen"
+      data-width="1920"
+      data-height="1080"
+      data-start="0"
+      data-duration="40"
+    >
+      <!-- Scene 1: Opening -->
+      <div id="scene1" class="scene">
+        <div id="s1-glow" data-layout-allow-overflow></div>
+        <div id="s1-ghost" data-layout-allow-overflow>INSCREEN</div>
+        <div id="s1-yellow-line"></div>
+        <div id="s1-red-line"></div>
+        <div class="s1-content">
+          <div id="s1-eyebrow">Insektenschutz für die Hebeschiebetür</div>
+          <div id="s1-title">InScreen</div>
+        </div>
+        <div id="s1-mark">
+          <img src="assets/bildmarke.svg" crossorigin="anonymous" style="width: 100%; display: block" />
+        </div>
+      </div>
+
+      <!-- Scene 2: Establishing -->
+      <div id="scene2" class="scene">
+        <div id="s2-imgwrap">
+          <img id="s2-img" data-layout-allow-overflow src="assets/images/terrasse-hebeschiebetuer.png" crossorigin="anonymous" />
+        </div>
+        <div id="s2-scrim"></div>
+        <div id="s2-badge">QuinLine®</div>
+        <div class="s2-textblock">
+          <div id="s2-rule"></div>
+          <div id="s2-headline">Nahtlos integriert.</div>
+          <div id="s2-sub">
+            InScreen fügt sich dezent in das Design Ihrer QuinLine® Hebeschiebetür ein.
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 3: Perfekte Integration -->
+      <div id="scene3" class="scene">
+        <div class="s3-content">
+          <div id="s3-imgcol">
+            <img id="s3-img" src="assets/images/innenraum-blick.png" crossorigin="anonymous" />
+            <div id="s3-imgline"></div>
+          </div>
+          <div id="s3-textcol">
+            <div id="s3-eyebrow">Perfekte Integration</div>
+            <div id="s3-headline">Ohne Stolperkante.</div>
+            <div id="s3-sub">
+              Griffleiste und Rahmen farblich exakt auf Ihre Hebeschiebetür abgestimmt.
+            </div>
+            <div class="s3-swatches">
+              <div class="s3-swatch">
+                <div class="s3-chip oak"></div>
+                <div class="s3-swatch-label">Golden Oak</div>
+              </div>
+              <div class="s3-swatch">
+                <div class="s3-chip anthracite"></div>
+                <div class="s3-swatch-label">Anthrazitgrau</div>
+              </div>
+              <div class="s3-swatch">
+                <div class="s3-chip white"></div>
+                <div class="s3-swatch-label">Weiß</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 4: Das Plissee -->
+      <div id="scene4" class="scene">
+        <div id="s4-glow" data-layout-allow-overflow></div>
+        <div class="s4-content">
+          <div id="s4-frame">
+            <div id="s4-plissee"></div>
+          </div>
+          <div id="s4-textcol">
+            <div id="s4-eyebrow">Das Plissee</div>
+            <div id="s4-headline">
+              <span class="word">Leicht.</span>
+              <span class="word">Robust.</span>
+              <span class="word">Nahezu unsichtbar.</span>
+            </div>
+            <div id="s4-sub">
+              Hochwertiges Fiberglas-Plissee — stufenlos zu öffnen, im geöffneten Zustand kaum sichtbar.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 5: Barrierefrei -->
+      <div id="scene5" class="scene">
+        <div class="s5-content">
+          <div id="s5-icon">
+            <svg viewBox="0 0 113.39 113.39" fill="currentColor">
+              <path
+                d="M81.73,79.72l-10.46-21.61c-.42-.86-1.29-1.41-2.25-1.41h-18.91v-19.59c4.77-1.04,8.35-5.3,8.35-10.37,0-5.86-4.77-10.62-10.62-10.62s-10.62,4.77-10.62,10.62c0,4.91,3.36,9.05,7.89,10.25v22.21c0,1.38,1.12,2.5,2.5,2.5h19.84l8.72,18.02,1.74,3.59c.42.86,1.29,1.41,2.25,1.41h3.25s5.55,0,5.55,0v-5s-7.23,0-7.23,0ZM42.22,26.74c0-3.1,2.52-5.62,5.62-5.62s5.62,2.52,5.62,5.62-2.52,5.62-5.62,5.62-5.62-2.52-5.62-5.62Z"
+              ></path>
+              <rect x="53.66" y="42.14" width="12.44" height="5"></rect>
+              <path
+                d="M66.86,79.72c-3.25,6.95-10.28,11.56-18.16,11.56-11.06,0-20.05-9-20.05-20.06,0-8.39,5.23-15.82,12.93-18.74v-5.26c-10.59,3.14-17.93,12.89-17.93,24.01,0,13.82,11.24,25.06,25.05,25.06,10.62,0,20.01-6.69,23.56-16.53l-.02-.03h-5.38Z"
+              ></path>
+            </svg>
+          </div>
+          <div id="s5-textcol">
+            <div id="s5-headline">Barrierefreier Durchgang.</div>
+            <div class="s5-list">
+              <div class="s5-item"><span class="s5-check">✓</span>Führungsschiene in die Schwelle eingelassen</div>
+              <div class="s5-item"><span class="s5-check">✓</span>Keine Stolperkanten im Durchgangsbereich</div>
+              <div class="s5-item"><span class="s5-check">✓</span>Stufenloses Öffnen und Schließen</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 6: Plug & Play -->
+      <div id="scene6" class="scene">
+        <div id="s6-headline">Alles aus einer Hand.</div>
+        <div id="s6-sub">Kein Bohren. Kein Schrauben. Ab Werk oder als Nachrüstlösung.</div>
+        <div id="s6-connector"></div>
+        <div class="s6-steps">
+          <div class="s6-step">
+            <div class="s6-node">1</div>
+            <div class="s6-label">InScreen auswählen</div>
+          </div>
+          <div class="s6-step">
+            <div class="s6-node">2</div>
+            <div class="s6-label">Automatische Systemkonfiguration</div>
+          </div>
+          <div class="s6-step">
+            <div class="s6-node">3</div>
+            <div class="s6-label">Passgenauer Zuschnitt &amp; Produktion</div>
+          </div>
+          <div class="s6-step">
+            <div class="s6-node">4</div>
+            <div class="s6-label">Plug-&amp;-Play-Set zur Auslieferung</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 7: Closing -->
+      <div id="scene7" class="scene">
+        <div id="s7-glow" data-layout-allow-overflow></div>
+        <div id="s7-yellow-line"></div>
+        <div id="s7-red-line"></div>
+        <div class="s7-content">
+          <div id="s7-mark">
+            <img src="assets/bildmarke.svg" crossorigin="anonymous" style="width: 100%; display: block" />
+          </div>
+          <img id="s7-logo" src="assets/logo-schmidt.svg" crossorigin="anonymous" />
+          <div id="s7-headline">InScreen — Insektenschutz für die Hebeschiebetür</div>
+          <div id="s7-cta">schmidt-boke.de</div>
+        </div>
+        <div id="s7-blackout"></div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      // ===== Scene 1: Opening (0 - 4.6s) =====
+      tl.fromTo("#s1-glow", { opacity: 0, scale: 0.85 }, { opacity: 0.55, scale: 1, duration: 1.4, ease: "sine.out" }, 0.1);
+      tl.fromTo("#s1-ghost", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 1.6, ease: "power1.out" }, 0.15);
+      tl.fromTo("#s1-eyebrow", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 0.35);
+      tl.fromTo("#s1-title", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 0.55);
+      tl.fromTo("#s1-yellow-line", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power2.inOut" }, 0.9);
+      tl.fromTo("#s1-red-line", { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: "power2.inOut" }, 1.3);
+      tl.fromTo("#s1-mark", { opacity: 0, scale: 0.7 }, { opacity: 0.9, scale: 1, duration: 0.6, ease: "back.out(1.6)" }, 1.5);
+      tl.to("#s1-glow", { scale: 1.06, duration: 3.1, ease: "sine.inOut" }, 1.5);
+
+      // Transition 1: blur crossfade -> Scene 2, T=4.6
+      tl.to("#scene1", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.5, ease: "power2.inOut" }, 4.6);
+      tl.set("#scene1", { visibility: "hidden" }, 5.4);
+      tl.fromTo(
+        "#scene2",
+        { filter: "blur(10px)", scale: 0.97, opacity: 0 },
+        { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.5, ease: "power2.inOut" },
+        4.7,
+      );
+
+      // ===== Scene 2: Establishing (5.2 - 10.0s) =====
+      tl.fromTo("#s2-img", { scale: 1 }, { scale: 1.05, duration: 5.0, ease: "none" }, 4.7);
+      tl.fromTo("#s2-badge", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.7)" }, 5.0);
+      tl.fromTo("#s2-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.inOut" }, 5.2);
+      tl.fromTo("#s2-headline", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 5.35);
+      tl.fromTo("#s2-sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "sine.out" }, 5.65);
+
+      // Transition 2: blur crossfade -> Scene 3, T=10.0
+      tl.to("#scene2", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.5, ease: "power2.inOut" }, 10.0);
+      tl.set("#scene2", { visibility: "hidden" }, 10.9);
+      tl.fromTo(
+        "#scene3",
+        { filter: "blur(10px)", scale: 0.97, opacity: 0 },
+        { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.5, ease: "power2.inOut" },
+        10.1,
+      );
+
+      // ===== Scene 3: Perfekte Integration (10.6 - 16.5s) =====
+      tl.fromTo("#s3-img", { scale: 1.06 }, { scale: 1, duration: 1.2, ease: "power2.out" }, 10.1);
+      tl.fromTo("#s3-imgline", { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: "power2.inOut" }, 10.3);
+      tl.fromTo("#s3-eyebrow", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }, 10.5);
+      tl.fromTo("#s3-headline", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 10.65);
+      tl.fromTo("#s3-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "sine.out" }, 10.95);
+      tl.fromTo(".s3-chip.oak", { opacity: 0, scale: 0.6, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.8)" }, 11.3);
+      tl.fromTo(".s3-chip.anthracite", { opacity: 0, scale: 0.6, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.8)" }, 11.45);
+      tl.fromTo(".s3-chip.white", { opacity: 0, scale: 0.6, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(1.8)" }, 11.6);
+      tl.fromTo(".s3-swatch-label", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "sine.out", stagger: 0.08 }, 11.8);
+
+      // Transition 3: blur crossfade -> Scene 4, T=16.5
+      tl.to("#scene3", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.5, ease: "power2.inOut" }, 16.5);
+      tl.set("#scene3", { visibility: "hidden" }, 17.3);
+      tl.fromTo(
+        "#scene4",
+        { filter: "blur(10px)", scale: 0.97, opacity: 0 },
+        { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.5, ease: "power2.inOut" },
+        16.6,
+      );
+
+      // ===== Scene 4: Das Plissee (17.1 - 22.5s) =====
+      tl.fromTo("#s4-glow", { opacity: 0 }, { opacity: 0.6, duration: 1.2, ease: "sine.out" }, 16.6);
+      tl.fromTo("#s4-frame", { opacity: 0, x: -50 }, { opacity: 1, x: 0, duration: 0.7, ease: "power3.out" }, 16.8);
+      tl.fromTo("#s4-plissee", { scaleX: 0.08 }, { scaleX: 1, duration: 0.9, ease: "power2.inOut" }, 17.2);
+      tl.to("#s4-plissee", { scaleX: 0.55, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: 2 }, 18.2);
+      tl.fromTo("#s4-eyebrow", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }, 17.0);
+      tl.fromTo(
+        "#s4-headline .word",
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.18 },
+        17.3,
+      );
+      tl.fromTo("#s4-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "sine.out" }, 18.0);
+
+      // Transition 4: blur crossfade -> Scene 5, T=22.5
+      tl.to("#scene4", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.5, ease: "power2.inOut" }, 22.5);
+      tl.set("#scene4", { visibility: "hidden" }, 23.3);
+      tl.fromTo(
+        "#scene5",
+        { filter: "blur(10px)", scale: 0.97, opacity: 0 },
+        { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.5, ease: "power2.inOut" },
+        22.6,
+      );
+
+      // ===== Scene 5: Barrierefrei (23.1 - 28.0s) =====
+      tl.fromTo("#s5-icon", { opacity: 0, scale: 0.7, rotation: -8 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.7, ease: "back.out(1.5)" }, 22.7);
+      tl.fromTo("#s5-headline", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 22.9);
+      tl.fromTo(".s5-item", { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out", stagger: 0.22 }, 23.3);
+
+      // Transition 5: color dip (to blue) -> Scene 6, T=28.0
+      tl.to("#scene5", { opacity: 0, duration: 0.25, ease: "power2.in" }, 28.0);
+      tl.set("#scene5", { visibility: "hidden" }, 28.55);
+      tl.fromTo("#scene6", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.out" }, 28.3);
+
+      // ===== Scene 6: Plug & Play (28.55 - 34.5s) =====
+      tl.fromTo("#s6-headline", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 28.5);
+      tl.fromTo("#s6-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "sine.out" }, 28.75);
+      tl.fromTo("#s6-connector", { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: "power2.inOut" }, 29.1);
+      tl.fromTo(
+        ".s6-node",
+        { opacity: 0, scale: 0.4 },
+        { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)", stagger: 0.28 },
+        29.3,
+      );
+      tl.fromTo(
+        ".s6-label",
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "sine.out", stagger: 0.28 },
+        29.55,
+      );
+
+      // Transition 6: gentle crossfade -> Scene 7, T=34.5
+      tl.to("#scene6", { opacity: 0, duration: 0.6, ease: "sine.inOut" }, 34.5);
+      tl.set("#scene6", { visibility: "hidden" }, 35.4);
+      tl.fromTo("#scene7", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "sine.inOut" }, 34.6);
+
+      // ===== Scene 7: Closing (35.1 - 40.0s) =====
+      tl.fromTo("#s7-glow", { opacity: 0, scale: 0.9 }, { opacity: 0.5, scale: 1, duration: 1.2, ease: "sine.out" }, 34.7);
+      tl.fromTo("#s7-yellow-line", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.inOut" }, 34.9);
+      tl.fromTo("#s7-red-line", { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: "power2.inOut" }, 35.3);
+      tl.fromTo("#s7-mark", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.6)" }, 35.1);
+      tl.fromTo("#s7-logo", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 35.4);
+      tl.fromTo("#s7-headline", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "sine.out" }, 35.7);
+      tl.fromTo("#s7-cta", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "sine.out" }, 36.0);
+
+      // Final fade to black (only scene allowed an exit)
+      tl.to("#s7-blackout", { opacity: 1, duration: 1.0, ease: "power1.in" }, 39.0);
+      tl.set("#scene7", { visibility: "hidden" }, 40.0);
+
+      window.__timelines["inscreen"] = tl;
+    </script>
+  </body>
+</html>

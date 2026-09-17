@@ -10,9 +10,9 @@ video-use/.venv/
 *.egg-info/
 
 # Raw video input
-raw/*.mp4
-raw/*.mov
-raw/*.mkv
+raw/**/*.mp4
+raw/**/*.mov
+raw/**/*.mkv
 
 # Generated project output
 projects/*/renders/*.mp4

@@ -1,0 +1,13 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>pdf page viewer</title><style>html,body{margin:0;background:#fff;overflow:auto}canvas{display:block}</style></head><body>
+<script type="module">
+import * as pdfjsLib from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.min.mjs';
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/pdf.worker.min.mjs';
+const doc=await pdfjsLib.getDocument('../uploads/250917_SCH_Umsetzung_Guideline_X03.pdf').promise;
+const c=document.createElement('canvas');c.id='c';document.body.appendChild(c);
+const sc1=async n=>{const pg=await doc.getPage(n);return {pg,w:pg.getViewport({scale:1}).width};};
+window.renderPage=async(n,fitW)=>{const {pg,w}=await sc1(n);const vp=pg.getViewport({scale:(fitW||900)/w});c.width=vp.width;c.height=vp.height;await pg.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;return [vp.width,vp.height];};
+window.renderCropFit=async(n,fitW,x,y,w,h)=>{const {pg,w:pw}=await sc1(n);const vp=pg.getViewport({scale:fitW/pw});c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.setTransform(1,0,0,1,-x,-y);await pg.render({canvasContext:ctx,viewport:vp}).promise;ctx.setTransform(1,0,0,1,0,0);return [w,h];};
+window.__ready=true;
+await window.renderPage(2,900);
+</script>
+</body></html>

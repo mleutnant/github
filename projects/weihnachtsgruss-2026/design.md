@@ -44,6 +44,13 @@ Ruhig, warm, präzise. Das Motiv der Bildmarke — ein Rahmen, hinter dem ein zw
 - Keine anderen Fonts als Filson Pro (Banned Fonts siehe `docs/motion-philosophy.md`)
 - Logo nicht animiert zerlegen — es blendet als Ganzes ein und aus
 
+## Weihnachtsmann
+
+- Flache Silhouette in SCHMIDT-Blau `#123442`, steht im Raum hinter der Tür und ist nur vor dem warmen Licht sichtbar (Gegenlicht).
+- Details (Mützenrand, Bart, Mittelleiste, Gürtel mit eckiger Schnalle, Fellsaum) sind ausgesparte Linien, durch die das Licht scheint — keine zusätzlichen Farben, kein Comic-Look.
+- Schatten fällt als blaue Fläche in den Lichtkegel am Boden.
+- Bewegung: nur der rechte Arm winkt (`sine.inOut`); die Kamera fährt danach über seinen Kopf hinweg in den Raum.
+
 ## Platzhalter
 
 - „QuinLine®“ ist in Filson Pro Bold gesetzt, bis eine offizielle QuinLine®-Logodatei vorliegt.

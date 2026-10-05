@@ -9,6 +9,7 @@ Werkzeuge:
 
 - **[Video-Use](https://github.com/browser-use/video-use)** — Schnitt, Transkription (ElevenLabs Scribe), Subtitles, Self-Eval
 - **[Hyperframes](https://hyperframes.heygen.com/quickstart)** — HTML-basierte Motion-Graphics-Compositions mit GSAP, Render via FFmpeg
+- **[Remotion](https://www.remotion.dev)** — Motion Graphics als React-Code (`remotion/`, siehe `remotion/README.md`)
 
 ## Voraussetzung
 
@@ -34,7 +35,8 @@ projects/<name>/        Video-Projekte (assets, clips, transcripts, compositions
 brand-guidelines/       Brand-Konventionen pro Kunde/Kanal (default = Fallback)
 docs/                   Motion-Philosophy & Workflow-Referenz
 video-use/              Video-Use (geklont beim Setup)
-.claude/skills/         Verlinkte Skills (hyperframes, gsap, hyperframes-cli, video-use)
+remotion/               Remotion-Workspace (React-Compositions, Brand-Tokens, Render-Script)
+.claude/skills/         Skills (hyperframes, gsap, hyperframes-cli, video-use, remotion-*)
 ```
 
 ## Brand Guidelines

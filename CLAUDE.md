@@ -4,10 +4,12 @@ Dieses Projekt ist ein KI Video Editing Studio mit zwei Werkzeugen:
 
 - **Video-Use** (`./video-use/`) — Schnitt, Transkription (ElevenLabs Scribe), Subtitles, Self-Eval
 - **Hyperframes** — HTML-basierte Motion-Graphics-Compositions mit GSAP, Render via FFmpeg
+- **Remotion** (`./remotion/`) — Motion Graphics als React/TypeScript-Code (Version 4.0.533), ideal für parametrisierte und datengetriebene Videos. Vor der Arbeit den Skill `remotion-best-practices` laden; Details in `remotion/README.md`.
 
 ## Grundregeln
 
-- **Video-Use first:** Schnitt und Transkription immer zuerst über Video-Use, erst danach Motion Graphics mit Hyperframes.
+- **Video-Use first:** Schnitt und Transkription immer zuerst über Video-Use, erst danach Motion Graphics mit Hyperframes oder Remotion.
+- **Remotion-Renders** nur über `npm run render -- <CompositionId> <projekt>` im Ordner `remotion/` — schreibt nach `projects/<projekt>/renders/`.
 - **Plan-Bestätigung auf Deutsch, in Plain Language (keine Markup-Slang):** vor jedem Cut und vor jeder Composition auf User-OK warten, nicht ungefragt rendern.
 - **Output-Pfade:** Ergebnisse landen ausschließlich unter `projects/<name>/renders/` — niemals in Repo-Root oder in `raw/`.
 - **`.env` nie committen.** Secrets bleiben lokal.

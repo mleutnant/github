@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      :root {
+        --sch-white: #ffffff;
+        --sch-black: #000000;
+        --sch-blue: #123442;
+        --sch-red: #e3002c;
+        --sch-yellow: #f6a206;
+      }
+
+      @font-face {
+        font-family: "Filson Pro";
+        src: url("assets/fonts/FilsonProRegular.otf") format("opentype");
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Filson Pro";
+        src: url("assets/fonts/FilsonProMedium.otf") format("opentype");
+        font-weight: 500;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Filson Pro";
+        src: url("assets/fonts/FilsonProBold.otf") format("opentype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--sch-blue);
+        font-family: "Filson Pro", Arial, sans-serif;
+        font-kerning: normal;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #main {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--sch-blue);
+      }
+      .layer {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Warmer Innenraum nach dem Durchgang durch die Tür: Weiß + Gelb 40 % */
+      #warm {
+        background: var(--sch-white);
+        opacity: 0;
+      }
+      #warm-tint {
+        background: var(--sch-yellow);
+        opacity: 0.4;
+      }
+
+      #world-svg {
+        overflow: visible;
+      }
+      #world-svg .ln {
+        fill: none;
+        stroke: var(--sch-white);
+        stroke-linejoin: round;
+        stroke-linecap: butt;
+        vector-effect: non-scaling-stroke;
+      }
+
+      /* Schnee / Lichtpunkte */
+      #snow {
+        pointer-events: none;
+      }
+      .flake {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      .flake-dot {
+        border-radius: 50%;
+        background: var(--sch-white);
+      }
+
+      /* Textebenen */
+      .scene-content {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 140px;
+        box-sizing: border-box;
+      }
+      .line {
+        display: block;
+      }
+      .w {
+        display: inline-block;
+      }
+
+      #s1 {
+        color: var(--sch-white);
+        font-weight: 700;
+        font-size: 78px;
+        line-height: 1.15;
+        letter-spacing: -0.005em;
+      }
+
+      #s2 {
+        color: var(--sch-black);
+        font-weight: 700;
+        font-size: 116px;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+      }
+
+      #s3 {
+        color: var(--sch-black);
+      }
+      #s3 .l1 {
+        font-weight: 700;
+        font-size: 150px;
+        line-height: 1.1;
+        letter-spacing: -0.015em;
+      }
+      #s3 .l2 {
+        font-weight: 500;
+        font-size: 64px;
+        line-height: 1.2;
+        margin-top: 22px;
+      }
+      #s3 .rule {
+        width: 1920px;
+        height: 4px;
+        margin-left: -140px;
+        margin-top: 48px;
+        background: var(--sch-red);
+        transform-origin: left center;
+      }
+
+      #s4 {
+        align-items: center;
+        color: var(--sch-black);
+      }
+      #s4 .lockup {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 56px;
+      }
+      #s4 .logo {
+        display: block;
+        height: 112px;
+        width: auto;
+      }
+      #s4 .divider {
+        width: 2px;
+        height: 120px;
+        background: var(--sch-black);
+      }
+      #s4 .ql {
+        font-weight: 700;
+        font-size: 88px;
+        line-height: 1;
+        letter-spacing: -0.01em;
+      }
+      #s4 .ql sup {
+        font-size: 0.42em;
+        vertical-align: top;
+        position: relative;
+        top: 0.08em;
+        margin-left: 0.04em;
+      }
+      #s4 .sender {
+        margin-top: 76px;
+        font-weight: 500;
+        font-size: 38px;
+        line-height: 1.3;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="main"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="15"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="warm" class="layer"><div id="warm-tint" class="layer"></div></div>
+
+      <!-- Winterabend: Boden, Lichtkegel, Hebeschiebetür als Linienzeichnung -->
+      <svg
+        id="world-svg"
+        class="layer"
+        viewBox="0 0 1920 1080"
+        width="1920"
+        height="1080"
+        data-layout-ignore
+      >
+        <g id="world">
+          <line id="floor" class="ln" x1="0" y1="880" x2="1920" y2="880" stroke-width="2" stroke-opacity="0.45" />
+
+          <g id="wedge">
+            <g opacity="0.8">
+              <polygon points="1103,880 1400,880 1560,1080 860,1080" fill="#ffffff" />
+              <polygon points="1103,880 1400,880 1560,1080 860,1080" fill="#f6a206" fill-opacity="0.4" />
+            </g>
+          </g>
+
+          <!-- Schatten des Weihnachtsmanns im Lichtkegel (Blau = nur auf dem Licht sichtbar) -->
+          <polygon id="santa-shadow" points="1185,882 1318,882 1395,1080 1135,1080" fill="#123442" />
+
+          <g id="gap-light">
+            <rect x="1103" y="203" width="297" height="674" fill="#ffffff" />
+            <rect x="1103" y="203" width="297" height="674" fill="#f6a206" fill-opacity="0.4" />
+          </g>
+
+          <!-- Weihnachtsmann im Gegenlicht: Silhouette in SCHMIDT-Blau, steht im Raum hinter der Tür.
+               Er ist nur vor dem warmen Licht sichtbar; die Tür gibt ihn beim Aufgleiten frei.
+               Die Aussparungen (Gürtel, Fellbesatz, Bart) lassen das Licht durchscheinen. -->
+          <defs>
+            <mask id="santa-cut" maskUnits="userSpaceOnUse" x="-40" y="0" width="360" height="520">
+              <rect x="-40" y="0" width="360" height="520" fill="#ffffff" />
+              <g fill="none" stroke="#000000" stroke-linecap="butt">
+                <line x1="88" y1="92" x2="196" y2="92" stroke-width="4" />
+                <line x1="86" y1="118" x2="198" y2="118" stroke-width="4" />
+                <circle cx="236" cy="98" r="18" stroke-width="4" />
+                <path d="M98,124 C94,182 110,236 142,258 C174,236 190,182 186,124" stroke-width="5" />
+                <path d="M200,196 C226,214 240,262 240,320" stroke-width="4" />
+                <line x1="142" y1="260" x2="142" y2="328" stroke-width="5" />
+                <line x1="142" y1="356" x2="142" y2="424" stroke-width="5" />
+                <line x1="36" y1="424" x2="248" y2="424" stroke-width="5" />
+              </g>
+              <rect x="30" y="336" width="230" height="12" fill="#000000" />
+              <rect x="124" y="328" width="36" height="28" fill="#ffffff" />
+              <rect x="134" y="336" width="16" height="12" fill="#000000" />
+            </mask>
+          </defs>
+          <g id="santa" transform="translate(1110 380)">
+            <g mask="url(#santa-cut)" fill="#123442">
+              <!-- Sack über der Schulter -->
+              <path d="M196,186 C206,150 234,132 256,140 C278,148 282,190 276,236 C270,286 252,320 230,326 L222,300 Z" />
+              <path d="M196,184 C190,170 196,158 206,160 C210,148 224,148 226,160 C234,162 234,174 224,180 Z" />
+              <!-- Mantel -->
+              <path d="M84,196 C104,182 180,182 200,196 C226,214 240,262 240,320 C240,370 232,410 226,448 L58,448 C52,410 44,370 44,320 C44,262 58,214 84,196 Z" />
+              <!-- Beine und Stiefel -->
+              <rect x="92" y="440" width="38" height="30" />
+              <rect x="154" y="440" width="38" height="30" />
+              <path d="M86,462 L132,462 L132,500 L70,500 C66,490 72,478 86,474 Z" />
+              <path d="M152,462 L198,462 L198,474 C212,478 218,490 214,500 L152,500 Z" />
+              <!-- Kopf, Bart, Mütze -->
+              <circle cx="142" cy="140" r="40" />
+              <path d="M98,124 C94,182 110,236 142,258 C174,236 190,182 186,124 Z" />
+              <path d="M98,98 C104,58 128,22 166,16 C204,10 232,42 240,86 L226,90 C216,62 200,46 184,46 C190,64 190,82 190,98 Z" />
+              <rect x="88" y="92" width="108" height="26" rx="13" />
+              <circle cx="236" cy="98" r="16" />
+              <!-- Winkender Arm, Drehpunkt an der Schulter -->
+              <g transform="translate(80 214)">
+                <g id="santa-arm">
+                  <line x1="0" y1="0" x2="-40" y2="-90" stroke="#123442" stroke-width="32" stroke-linecap="round" />
+                  <ellipse cx="-46" cy="-104" rx="18" ry="22" transform="rotate(-22 -46 -104)" />
+                  <ellipse cx="-64" cy="-92" rx="7" ry="11" transform="rotate(-50 -64 -92)" />
+                </g>
+              </g>
+            </g>
+          </g>
+
+          <!-- Schiebeflügel (gleitet hinter das Festfeld) -->
+          <g id="sash">
+            <rect class="ln draw" x="1120" y="220" width="315" height="640" stroke-width="3" />
+            <rect class="ln glaze" x="1142" y="242" width="271" height="596" stroke-width="2" stroke-opacity="0.5" />
+            <rect id="handle" x="1127" y="500" width="8" height="120" fill="#ffffff" />
+          </g>
+
+          <!-- Festfeld -->
+          <g id="fixed">
+            <rect class="ln draw" x="1425" y="220" width="315" height="640" stroke-width="3" fill="#123442" style="fill: #123442" />
+            <rect class="ln glaze" x="1447" y="242" width="271" height="596" stroke-width="2" stroke-opacity="0.5" />
+          </g>
+
+          <!-- Blendrahmen mit Unterbrechungen im Strich, unten bodengleich offen -->
+          <g id="frame">
+            <path class="ln draw" d="M1100,880 V200 H1560" stroke-width="6" />
+            <path class="ln draw" d="M1592,200 H1760 V700" stroke-width="6" />
+            <path class="ln draw" d="M1760,732 V880" stroke-width="6" />
+          </g>
+        </g>
+      </svg>
+
+      <div id="snow" class="layer" data-layout-ignore></div>
+
+      <div id="s1" class="scene-content">
+        <span class="line">Gemeinsam haben wir</span>
+        <span class="line">2026 viel bewegt.</span>
+      </div>
+
+      <div id="s2" class="scene-content">
+        <span class="line"><span class="w s2a">Danke</span> <span class="w s2b">für Ihr Vertrauen.</span></span>
+      </div>
+
+      <div id="s3" class="scene-content">
+        <span class="line l1"><span class="w">Frohe</span> <span class="w">Weihnachten</span></span>
+        <span class="line l2"><span class="w">und</span> <span class="w">ein</span> <span class="w">erfolgreiches</span> <span class="w">Jahr</span> <span class="w">2027.</span></span>
+        <div class="rule" data-layout-allow-overflow></div>
+      </div>
+
+      <div id="s4" class="scene-content">
+        <div class="lockup">
+          <!-- Offizielles SCHMIDT-Logo (10418_SCH_CD_Logo_RGB_Positiv_X01.svg), nur auf die Bildfläche zugeschnitten -->
+          <svg class="logo" viewBox="62 62 397 65" role="img" aria-label="SCHMIDT">
+            <g>
+              <polygon fill="#E4002C" points="142.83,75.14 142.83,83.44 151.26,83.44 151.26,116.95 142.83,116.95 142.83,125.25 159.56,125.25 159.56,75.14" />
+              <polygon fill="#E4002C" points="62.62,62.62 62.62,125.25 79.31,125.25 79.31,116.95 70.92,116.95 70.92,70.92 130.32,70.92 130.33,116.92 91.81,116.92 91.81,83.44 126.11,83.44 126.11,75.14 83.51,75.14 83.51,125.22 138.63,125.22 138.62,62.62" />
+            </g>
+            <path
+              d="M444.22,77.62h-7.06l-1.64,10.03h-6.32v6.99h5.87v18.43c0,10.33,6.17,13,12.41,13c8.1,0,11.89-4.9,11.89-10.4c0-0.67-0.15-2.82-0.82-4.24h-7.5c0.37,0.82,0.52,2.3,0.52,3.12c0,2.3-1.49,3.86-3.71,3.86c-2.68,0-3.64-1.78-3.64-4.09V94.64h11.22v-6.99h-11.22V77.62zM415.76,71.53v21.7c-3.12-4.31-7.8-6.39-12.85-6.39c-11.52,0-18.43,8.84-18.43,19.47c0,11,7.28,19.76,18.35,19.76c5.5,0,10.18-2.38,12.93-6.46v5.65h9.14V71.53H415.76zM393.69,106.38c0-6.46,3.86-11.89,10.77-11.89c6.84,0,11.44,4.98,11.44,12.26c0,7.43-4.9,11.67-11.15,11.67C397.93,118.41,393.69,113.06,393.69,106.38zM369.33,76.5c0,3.27,2.53,5.72,5.95,5.72s6.09-2.45,6.09-5.72c0-3.27-2.67-5.8-6.09-5.8S369.33,73.24,369.33,76.5zM379.81,87.65h-9.14v37.6h9.14V87.65zM331.76,125.25h9.07V106c0.22-8.25,4.31-11.44,8.47-11.44c4.38,0,6.99,3.42,6.99,9.96v20.73h9.14v-20.81c0-10.85-4.23-17.61-13.97-17.61c-4.09,0-9.36,1.04-12.33,7.06c-2.45-5.2-7.06-7.06-11.74-7.06c-4.83,0-9.07,2.53-11.07,7.13v-6.32h-9.14v37.6h9.14V106c0.22-8.25,4.31-11.44,8.47-11.44c4.38,0,6.99,3.42,6.99,9.96V125.25zM266.69,125.25h9.14v-18.8c0-8.55,5.13-11.89,9.59-11.89c4.53,0,7.36,3.42,7.36,9.96v20.73h9.14v-20.81c0-10.85-4.61-17.61-13.97-17.61c-5.35,0-9.73,2.23-12.11,7.13V71.53h-9.14V125.25zM226.3,106.67c0,10.92,8.1,19.39,21.18,19.39c3.64,0,8.69-0.82,14.49-5.13l-4.24-6.47c-3.86,3.12-8.4,3.42-9.81,3.42c-7.28,0-12.41-4.76-12.41-11.44c0-6.76,5.13-11.44,12.41-11.44c1.41,0,5.94,0.22,9.81,3.42l4.24-6.54c-5.8-4.24-10.85-5.05-14.49-5.05C234.18,86.83,226.3,95.53,226.3,106.67zM184.48,111.95c1.41,8.4,9.44,14.12,19.62,14.12c10.03,0,18.58-5.35,18.58-15.38c-0.07-5.13-3.27-11.52-13.38-14.71l-6.69-2.45c-5.65-2.01-6.17-4.68-6.17-6.47c0-4.09,3.49-6.17,7.73-6.17c3.79,0,7.43,1.49,9.21,6.76l8.03-3.34c-2.38-7.36-8.55-11.89-17.24-11.89c-9.51,0-17.24,5.65-17.24,14.79c0,4.38,1.86,11,12.78,14.64l6.69,2.3c4.61,1.63,6.84,3.86,6.84,6.91c0,4.16-3.94,6.61-9.36,6.61c-5.65,0-9.66-3.2-10.77-7.65L184.48,111.95z"
+            />
+          </svg>
+          <div class="divider"></div>
+          <div class="ql">QuinLine<sup>®</sup></div>
+        </div>
+        <div class="sender">Ihr Team von SCHMIDT · schmidt-boke.de</div>
+      </div>
+
+      <script>
+        (function () {
+          // Deterministischer Zufall (kein Math.random im Render)
+          function mulberry32(a) {
+            return function () {
+              a |= 0;
+              a = (a + 0x6d2b79f5) | 0;
+              let t = Math.imul(a ^ (a >>> 15), 1 | a);
+              t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+              return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+            };
+          }
+          const rand = mulberry32(20261224);
+          const R = (a, b) => a + (b - a) * rand();
+
+          const RED = "#e3002c";
+          const FALL = 12; // Sekunden, über die der Schnee fällt (sine.out: wird zum Ende ruhiger)
+          const tl = gsap.timeline({ paused: true });
+
+          /* ---------- Schnee → rote Lichtpunkte ---------- */
+          const snow = document.getElementById("snow");
+          const flakes = [];
+          for (let i = 0; i < 100; i++) {
+            const size = R(5, 11);
+            const k = (size - 5) / 6; // 0 = fern, 1 = nah
+            const f = {
+              size,
+              opacity: 0.45 + 0.5 * k,
+              x0: R(0, 1920),
+              y0: R(-900, 1060),
+              dist: 520 + 600 * k + R(-60, 60),
+              amp: R(8, 26),
+              period: R(2.2, 4.2),
+              dir: rand() < 0.5 ? 1 : -1,
+            };
+            const outer = document.createElement("div");
+            outer.className = "flake";
+            const sway = document.createElement("div");
+            const dot = document.createElement("div");
+            dot.className = "flake-dot";
+            dot.style.width = size + "px";
+            dot.style.height = size + "px";
+            sway.appendChild(dot);
+            outer.appendChild(sway);
+            snow.appendChild(outer);
+            f.outer = outer;
+            f.sway = sway;
+            f.dot = dot;
+            flakes.push(f);
+          }
+          const yAt = (f, t) => f.y0 + f.dist * Math.sin((Math.min(t, FALL) / FALL) * (Math.PI / 2));
+
+          // Ein paar Punkte bleiben in Szene 3 am rechten bzw. oberen Rand stehen
+          let keepers = 0;
+          flakes.forEach((f) => {
+            const ys = [6.5, 9, 11.5].map((t) => yAt(f, t));
+            const inside = ys.every((y) => y > 60 && y < 1020);
+            const rightEdge = f.x0 > 1500 && f.x0 < 1880;
+            const topEdge = f.x0 > 720 && ys.every((y) => y > 40 && y < 300);
+            f.keep = keepers < 14 && inside && (rightEdge || topEdge);
+            if (f.keep) keepers++;
+          });
+
+          flakes.forEach((f) => {
+            tl.fromTo(
+              f.outer,
+              { x: f.x0, y: f.y0 },
+              { x: f.x0, y: f.y0 + f.dist, duration: FALL, ease: "sine.out" },
+              0,
+            );
+            const half = f.period / 2;
+            tl.fromTo(
+              f.sway,
+              { x: -f.amp * f.dir },
+              {
+                x: f.amp * f.dir,
+                duration: half,
+                ease: "sine.inOut",
+                yoyo: true,
+                repeat: Math.floor(15 / half) - 1,
+              },
+              0,
+            );
+            tl.fromTo(f.dot, { opacity: 0 }, { opacity: f.opacity, duration: 0.4, ease: "power1.out" }, 0);
+
+            // Das Licht breitet sich von der Tür aus: Flocken nahe der Mitte färben sich zuerst
+            const yMid = yAt(f, 4.05);
+            const d = Math.hypot(f.x0 - 960, yMid - 540) / 1100;
+            const tc = 3.45 + 1.2 * Math.min(d, 1) + R(0, 0.3);
+            tl.fromTo(
+              f.dot,
+              { backgroundColor: "#ffffff", scale: 1, opacity: f.opacity },
+              { backgroundColor: RED, scale: 0.75, opacity: 1, duration: 0.7, ease: "sine.inOut" },
+              tc,
+            );
+
+            const tOut = f.keep ? 11.15 + R(0, 0.4) : 5.9 + R(0, 1.0);
+            tl.fromTo(f.dot, { opacity: 1 }, { opacity: 0, duration: 0.6, ease: "power2.in", immediateRender: false }, tOut);
+          });
+
+          /* ---------- Szene 1: Winterabend, Tür hebt und gleitet ---------- */
+          tl.fromTo("#floor", { scaleX: 0, svgOrigin: "1430 880" }, { scaleX: 1, svgOrigin: "1430 880", duration: 1.0, ease: "power3.out" }, 0.1);
+          gsap.utils.toArray("#world .draw").forEach((el, i) => {
+            const len = el.getTotalLength();
+            tl.fromTo(
+              el,
+              { strokeDasharray: len + " " + len, strokeDashoffset: len },
+              { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" },
+              0.15 + i * 0.06,
+            );
+          });
+          tl.set("#world .draw", { strokeDasharray: "none" }, 1.3);
+          tl.fromTo("#world .glaze", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "sine.out" }, 0.7);
+          tl.fromTo("#handle", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, 0.9);
+
+          tl.fromTo("#s1 .line:nth-child(1)", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 0.35);
+          tl.fromTo("#s1 .line:nth-child(2)", { opacity: 0, x: -28 }, { opacity: 1, x: 0, duration: 0.8, ease: "expo.out" }, 0.6);
+
+          // Heben …
+          tl.fromTo("#sash", { y: 0 }, { y: -10, duration: 0.3, ease: "power2.out" }, 1.05);
+          tl.fromTo("#gap-light", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "sine.out" }, 1.05);
+          // … schieben …
+          tl.fromTo("#sash", { x: 0 }, { x: 280, duration: 1.1, ease: "power3.inOut" }, 1.35);
+          tl.fromTo(
+            "#gap-light",
+            { scaleX: 17 / 297, svgOrigin: "1103 540" },
+            { scaleX: 1, svgOrigin: "1103 540", duration: 1.1, ease: "power3.inOut" },
+            1.35,
+          );
+          tl.fromTo(
+            "#wedge",
+            { scaleX: 17 / 297, svgOrigin: "1103 880" },
+            { scaleX: 1, svgOrigin: "1103 880", duration: 1.1, ease: "power3.inOut" },
+            1.35,
+          );
+          tl.fromTo("#wedge", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" }, 1.35);
+          // … absetzen
+          tl.to("#sash", { y: 0, duration: 0.2, ease: "sine.inOut" }, 2.45);
+
+          // Der Weihnachtsmann winkt (Drehpunkt = Schulter, lokal 0/0 der Armgruppe)
+          const arm = document.getElementById("santa-arm");
+          const armBox = arm.getBBox();
+          const shoulder = -armBox.x + "px " + -armBox.y + "px";
+          tl.fromTo("#santa-arm", { rotation: 0, transformOrigin: shoulder }, { rotation: -8, transformOrigin: shoulder, duration: 0.2, ease: "sine.inOut" }, 1.7);
+          tl.fromTo(
+            "#santa-arm",
+            { rotation: -8, transformOrigin: shoulder },
+            { rotation: 14, transformOrigin: shoulder, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 3, immediateRender: false },
+            1.9,
+          );
+          tl.to("#santa-arm", { rotation: 0, duration: 0.25, ease: "power2.out" }, 3.1);
+
+          /* ---------- Übergang: durch die offene Tür ins Warme ---------- */
+          // Kamera fährt über den Kopf des Weihnachtsmanns hinweg durch die Öffnung
+          tl.to("#s1 .line", { opacity: 0, y: -20, duration: 0.35, ease: "power2.in", stagger: 0.05 }, 3.1);
+          tl.fromTo(
+            "#world",
+            { scale: 1, x: 0, y: 0, svgOrigin: "1251.5 280" },
+            { scale: 7.5, x: -291.5, y: 260, svgOrigin: "1251.5 280", duration: 1.4, ease: "power3.inOut" },
+            3.1,
+          );
+          tl.set("#warm", { opacity: 1 }, 4.5);
+          tl.set("#world-svg", { opacity: 0, visibility: "hidden" }, 4.5);
+          // Gelb blendet aus, sobald die roten Punkte da sind → reines Weiß
+          tl.fromTo("#warm-tint", { opacity: 0.4 }, { opacity: 0, duration: 1.1, ease: "sine.inOut" }, 4.95);
+
+          /* ---------- Szene 2: Danke für Ihr Vertrauen ---------- */
+          tl.fromTo("#s2 .s2a", { opacity: 0, scale: 0.94, transformOrigin: "0% 60%" }, { opacity: 1, scale: 1, duration: 0.9, ease: "expo.out" }, 4.25);
+          tl.fromTo("#s2 .s2b", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" }, 4.45);
+          tl.to("#s2 .w", { opacity: 0, y: -24, duration: 0.3, ease: "power2.in", stagger: 0.04 }, 6.15);
+          tl.set("#s2", { visibility: "hidden" }, 6.5);
+
+          /* ---------- Szene 3: Wort für Wort, rote Linie zieht durch ---------- */
+          const words = gsap.utils.toArray("#s3 .w");
+          const offsets = [0, 0.26, 0.62, 0.8, 0.98, 1.3, 1.5];
+          words.forEach((w, i) => {
+            tl.fromTo(
+              w,
+              { opacity: 0, y: 40 },
+              { opacity: 1, y: 0, duration: 0.75, ease: i < 2 ? "power3.out" : "expo.out" },
+              6.65 + offsets[i],
+            );
+          });
+          tl.fromTo("#s3 .rule", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 1.5, ease: "power2.inOut" }, 8.1);
+          tl.to(words, { opacity: 0, y: -18, duration: 0.35, ease: "power2.in", stagger: 0.025 }, 11.05);
+          tl.set("#s3 .rule", { transformOrigin: "right center" }, 11.05);
+          tl.to("#s3 .rule", { scaleX: 0, duration: 0.45, ease: "power2.in" }, 11.05);
+          tl.set("#s3", { visibility: "hidden" }, 11.55);
+
+          /* ---------- Szene 4: Logo, Halt, sanftes Ausblenden ---------- */
+          tl.fromTo("#s4 .logo", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" }, 11.6);
+          tl.fromTo("#s4 .divider", { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: "power2.out" }, 11.95);
+          tl.fromTo("#s4 .ql", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.8, ease: "expo.out" }, 12.1);
+          tl.fromTo("#s4 .sender", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease: "sine.out" }, 12.45);
+          tl.fromTo("#s4", { opacity: 1 }, { opacity: 0, duration: 0.85, ease: "sine.inOut", immediateRender: false }, 13.95);
+          tl.set("#s4", { visibility: "hidden" }, 14.85);
+
+          window.__timelines = window.__timelines || {};
+          window.__timelines["main"] = tl;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

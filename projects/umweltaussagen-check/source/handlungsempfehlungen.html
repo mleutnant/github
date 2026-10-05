@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Umweltaussagen auf Website und Broschüre – Handlungsempfehlungen</title>
+<style>
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProRegular.otf") format("opentype");font-weight:400}
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProMedium.otf") format("opentype");font-weight:500}
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProBold.otf") format("opentype");font-weight:700}
+
+:root{
+  --white:#ffffff; --black:#000000; --blue:#123442; --red:#e3002c; --yellow:#f6a206;
+  --blue-70:#4b656f; --blue-20:#d0d7db; --blue-08:#eef1f2;
+  --grey-05:#f6f6f6; --grey-30:#c9c9c9; --grey-60:#6e7478;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Filson Pro",Arial,Helvetica,sans-serif;
+  font-weight:500; font-size:9.6pt; line-height:1.5; color:var(--black);
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  hyphens:auto; -webkit-hyphens:auto;
+  font-kerning:normal;
+}
+p{margin:0 0 2.2mm}
+sub{font-size:70%;vertical-align:-0.25em;line-height:0}
+
+/* ---------- Kopf ---------- */
+.masthead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:7mm}
+.masthead img{height:11mm;display:block}
+.masthead .meta{font-weight:400;font-size:8pt;line-height:1.3;color:var(--grey-60);text-align:right}
+
+.hero{background:var(--blue);color:var(--white);padding:9mm 9mm 8mm;border-bottom:8px solid var(--yellow);margin-bottom:8mm}
+.hero .eyebrow{font-weight:700;font-size:7.5pt;letter-spacing:.06em;text-transform:uppercase;opacity:.92;margin-bottom:3mm}
+.hero h1{font-weight:700;font-size:24pt;line-height:1.15;letter-spacing:-0.01em;margin:0 0 4mm;hyphens:manual}
+.hero .sub{font-size:10.5pt;line-height:1.4;opacity:.92;max-width:150mm}
+
+/* ---------- Überschriften ---------- */
+h2{font-weight:700;font-size:15pt;line-height:1.15;letter-spacing:-0.01em;margin:0 0 2mm;hyphens:manual}
+h2 + .rule{height:4px;width:28mm;background:var(--red);margin:0 0 5mm}
+h2,h2 + .rule,.section-intro{break-after:avoid}
+h3{font-weight:700;font-size:10.5pt;line-height:1.25;margin:0;hyphens:manual}
+.section{margin:0 0 9mm}
+.section-intro{max-width:165mm;margin-bottom:5mm}
+.pagebreak{break-before:page}
+
+/* ---------- Aufzählung (Markenregel: senkrechter Strich, Quadrat) ---------- */
+ul.bar{list-style:none;margin:0 0 3mm;padding:0}
+ul.bar > li{position:relative;padding-left:4.6mm;margin:0 0 1.8mm}
+ul.bar > li::before{content:"";position:absolute;left:0;top:0.32em;width:2px;height:1.05em;background:var(--black)}
+ul.sq{list-style:none;margin:1.2mm 0 0;padding:0}
+ul.sq > li{position:relative;padding-left:4.2mm;margin:0 0 1.2mm}
+ul.sq > li::before{content:"";position:absolute;left:0;top:0.55em;width:5px;height:5px;background:var(--black)}
+
+/* ---------- Kurzfassung ---------- */
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-bottom:7mm}
+.box{border:1px solid var(--grey-30);padding:5mm 5mm 3mm}
+.box h3{margin-bottom:3mm}
+.box.blue{background:var(--blue-08);border-color:var(--blue-08)}
+.small{font-weight:400;font-size:8pt;line-height:1.35;color:var(--grey-60)}
+
+/* ---------- Status-Marken ---------- */
+.tag{display:inline-block;font-weight:700;font-size:6.8pt;letter-spacing:.05em;text-transform:uppercase;line-height:1;padding:1.2mm 1.8mm 1mm;white-space:nowrap;vertical-align:middle}
+.t-sofort{background:var(--red);color:var(--white)}
+.t-zeitnah{background:var(--blue);color:var(--white)}
+.t-auflage{background:var(--blue-20);color:var(--blue)}
+.t-optional{border:1px solid var(--grey-30);color:var(--grey-60);padding:1.1mm 1.7mm 0.9mm}
+.t-nach{border:1px solid var(--blue);color:var(--blue);padding:1.1mm 1.7mm 0.9mm}
+
+/* ---------- Übersichtstabelle ---------- */
+table{border-collapse:collapse;width:100%}
+table.overview{font-size:8.6pt;line-height:1.35}
+table.overview th{font-weight:700;text-align:left;font-size:7.4pt;letter-spacing:.05em;text-transform:uppercase;color:var(--grey-60);padding:0 2mm 2mm;border-bottom:2px solid var(--black)}
+table.overview td{padding:1.45mm 2mm;border-bottom:1px solid var(--grey-30);vertical-align:top}
+table.overview td.nr{font-weight:700;width:8mm}
+table.overview td.med{width:22mm;color:var(--blue-70)}
+table.overview td.where{width:46mm;font-weight:700}
+table.overview td.prio{width:27mm;text-align:right}
+table.overview tr{break-inside:avoid}
+table.overview tr.group td{border-bottom:none;padding-top:3.2mm;font-weight:700;color:var(--blue);font-size:7.4pt;letter-spacing:.05em;text-transform:uppercase}
+
+/* ---------- Einzelmaßnahmen ---------- */
+.item{break-inside:avoid;border-top:1px solid var(--grey-30);padding:4.5mm 0 3mm}
+.item-head{display:flex;align-items:baseline;gap:3mm;margin-bottom:2mm}
+.item-head .num{font-weight:700;font-size:10.5pt;color:var(--red);min-width:7mm}
+.item-head h3{flex:1}
+.item .where{font-weight:400;font-size:8.2pt;color:var(--grey-60);margin:0 0 2.2mm 10mm}
+.item .body{margin-left:10mm}
+.why{margin-bottom:2.6mm}
+.why b{font-weight:700}
+
+.change{display:grid;grid-template-columns:1fr 1fr;gap:3mm;margin:0 0 2.6mm;break-inside:avoid}
+.change > div{padding:2.6mm 3mm 2.2mm;font-size:9pt;line-height:1.42}
+.change .now{background:var(--grey-05);color:#2b2b2b}
+.change .new{border:1px solid var(--blue);border-left:4px solid var(--blue)}
+.change .lbl{display:block;font-weight:700;font-size:6.8pt;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2mm}
+.change .now .lbl{color:var(--grey-60)}
+.change .new .lbl{color:var(--blue)}
+.change .ctx{font-weight:400;color:var(--grey-60);text-transform:none;letter-spacing:0;font-size:7.6pt}
+.fn{font-weight:400;font-size:8pt;color:var(--grey-60);margin:-1mm 0 2.6mm}
+
+/* ---------- Faktentabelle ---------- */
+table.facts{font-size:8.8pt;line-height:1.38;margin-bottom:3mm}
+table.facts th{font-weight:700;text-align:left;font-size:7.4pt;letter-spacing:.05em;text-transform:uppercase;color:var(--grey-60);padding:0 2mm 2mm;border-bottom:2px solid var(--black)}
+table.facts td{padding:2mm;border-bottom:1px solid var(--grey-30);vertical-align:top}
+table.facts td:first-child{font-weight:700;width:48mm}
+table.facts td:nth-child(2){width:46mm;white-space:nowrap}
+table.facts tr{break-inside:avoid}
+
+.closing{border-top:2px solid var(--black);padding-top:4mm;margin-top:6mm;break-inside:avoid}
+</style>
+</head>
+<body>
+
+<!-- ================= SEITE 1 ================= -->
+<div class="masthead">
+  <img src="../../../brand-guidelines/default/assets/logo-schmidt.svg" alt="SCHMIDT">
+  <div class="meta">Interne Arbeitsunterlage<br>Stand: 05.10.2026</div>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">Neue Regeln für Umweltwerbung</div>
+  <h1>Umweltaussagen auf Website und Broschüre</h1>
+  <div class="sub">Handlungsempfehlungen für schmidt-boke.de und die Produktbroschüre QuinLine® nach den neuen Regeln des UWG, gültig seit 27.09.2026</div>
+</div>
+
+<div class="summary">
+  <div class="box">
+    <h3>Das Wichtigste in Kürze</h3>
+    <ul class="bar">
+      <li>Drei Stellen auf der Website sollten <b>sofort</b> geändert werden: die Produktseite QuinLine® 84 (deutsch, englisch, französisch), die Kurztexte im Hauptmenü und der News-Beitrag zum Recycling-Kern.</li>
+      <li>Die <b>Produktbroschüre</b> ist in gutem Zustand. Drei Zusammenfassungen sollten konkreter werden.</li>
+      <li>Die vorhandene <b>Druckauflage</b> kann nach dieser Einschätzung weiter genutzt werden: Die konkreten Werte stehen in derselben Broschüre (Seiten 22, 23 und 30).</li>
+      <li>Grundregel für alle künftigen Texte: <b>Messwert statt Eigenschaftswort</b>, also „Uw bis 0,71 W/(m²K)“ statt „energieeffizient“.</li>
+    </ul>
+  </div>
+  <div class="box blue">
+    <h3>Was die neuen Regeln verlangen</h3>
+    <ul class="bar">
+      <li>Pauschale Begriffe wie „nachhaltig“, „umweltfreundlich“, „grün“ oder „energieeffizient“ sind verboten, wenn sie nicht direkt daneben konkret erklärt und belegt werden.</li>
+      <li>Eine Umweltaussage über das ganze Produkt ist verboten, wenn sie nur einen Teil davon betrifft.</li>
+      <li>„Klimaneutral“ auf Basis von CO<sub>2</sub>-Ausgleichszahlungen ist verboten.</li>
+      <li>Nachhaltigkeitssiegel nur mit unabhängiger Zertifizierung oder staatlicher Vergabe.</li>
+      <li>Zukunftsversprechen nur mit überprüfbarem Umsetzungsplan.</li>
+    </ul>
+    <p class="small">Grundlage: EU-Richtlinie 2024/825, in Deutschland umgesetzt im UWG. Gilt für Werbung gegenüber Verbrauchern, also auch für die Website (Seite „Private Bauherren“) und die Broschüre, die über Fachbetriebe an Bauherren geht.</p>
+  </div>
+</div>
+
+<div class="section pagebreak">
+  <h2>Übersicht aller Maßnahmen</h2>
+  <div class="rule"></div>
+  <table class="overview">
+    <thead><tr><th>Nr.</th><th>Bereich</th><th>Stelle</th><th>Maßnahme</th><th style="text-align:right">Priorität</th></tr></thead>
+    <tbody>
+      <tr class="group"><td colspan="5">Website</td></tr>
+      <tr><td class="nr">1</td><td class="med">Website</td><td class="where">QuinLine® 84, deutsch</td><td>„nachhaltiges Wohnen“ und „perfekte Energiebilanz“ durch Messwerte ersetzen</td><td class="prio"><span class="tag t-sofort">Sofort</span></td></tr>
+      <tr><td class="nr">2</td><td class="med">Website</td><td class="where">QuinLine® 84, englisch und französisch</td><td>Dieselbe Änderung in beiden Sprachen</td><td class="prio"><span class="tag t-sofort">Sofort</span></td></tr>
+      <tr><td class="nr">3</td><td class="med">Website</td><td class="where">Hauptmenü, deutsch und englisch</td><td>Kurztexte mit Uw-Werten statt Schlagworten</td><td class="prio"><span class="tag t-sofort">Sofort</span></td></tr>
+      <tr><td class="nr">4</td><td class="med">Website</td><td class="where">News „… wird nachhaltig(er)“</td><td>Titel, Zitat und Satz zum Recycling-Anteil präzisieren</td><td class="prio"><span class="tag t-sofort">Sofort</span></td></tr>
+      <tr><td class="nr">5</td><td class="med">Website</td><td class="where">Über uns</td><td>„Energieeffizienz“ durch Messwerte ersetzen</td><td class="prio"><span class="tag t-zeitnah">Zeitnah</span></td></tr>
+      <tr><td class="nr">6</td><td class="med">Website</td><td class="where">Produkt-Übersicht</td><td>„energieeffizient“ durch Uw-Wert ersetzen</td><td class="prio"><span class="tag t-zeitnah">Zeitnah</span></td></tr>
+      <tr><td class="nr">7</td><td class="med">Website</td><td class="where">Uw-Angaben</td><td>Glas-Bedingung nennen, „bis“ ergänzen, Einheit korrigieren</td><td class="prio"><span class="tag t-zeitnah">Zeitnah</span></td></tr>
+      <tr><td class="nr">8</td><td class="med">Website</td><td class="where">Englische und französische Seiten</td><td>Punkte 5 bis 7 übertragen</td><td class="prio"><span class="tag t-zeitnah">Zeitnah</span></td></tr>
+      <tr><td class="nr">9</td><td class="med">Website</td><td class="where">Referenz Weingut Bachmann</td><td>„nachhaltigem“ streichen</td><td class="prio"><span class="tag t-optional">Bei Gelegenheit</span></td></tr>
+      <tr><td class="nr">10</td><td class="med">Website</td><td class="where">News-Beitrag, Startseite</td><td>Tippfehler beheben, „Marktführer“ belegen</td><td class="prio"><span class="tag t-optional">Bei Gelegenheit</span></td></tr>
+      <tr class="group"><td colspan="5">Produktbroschüre QuinLine®</td></tr>
+      <tr><td class="nr">11</td><td class="med">Broschüre</td><td class="where">Seite 12</td><td>„Energieeffizienz“ durch Uw-Wert ersetzen</td><td class="prio"><span class="tag t-zeitnah">PDF zeitnah</span></td></tr>
+      <tr><td class="nr">12</td><td class="med">Broschüre</td><td class="where">Seite 5</td><td>Symboltext mit Werten je System</td><td class="prio"><span class="tag t-zeitnah">PDF zeitnah</span></td></tr>
+      <tr><td class="nr">13</td><td class="med">Broschüre</td><td class="where">Seite 30</td><td>„Niedrigenergieeffizient“ umbenennen</td><td class="prio"><span class="tag t-zeitnah">PDF zeitnah</span></td></tr>
+      <tr><td class="nr">14</td><td class="med">Broschüre</td><td class="where">Seiten 4, 11 und 21</td><td>Optionale Präzisierungen</td><td class="prio"><span class="tag t-optional">Bei Gelegenheit</span></td></tr>
+      <tr><td class="nr">15</td><td class="med">Broschüre</td><td class="where">Neuauflage</td><td>Recycling-Kern und Stand-Datum aufnehmen</td><td class="prio"><span class="tag t-auflage">Neuauflage</span></td></tr>
+      <tr class="group"><td colspan="5">Übergreifend</td></tr>
+      <tr><td class="nr">16</td><td class="med">Alle Medien</td><td class="where">Nachweis-Ordner</td><td>Beleg zu jeder Umwelt- und Energieaussage ablegen</td><td class="prio"><span class="tag t-zeitnah">Zeitnah</span></td></tr>
+      <tr><td class="nr">17</td><td class="med">Alle Medien</td><td class="where">Freigabe-Regel</td><td>Kein Umweltbegriff ohne Zahl und Quelle</td><td class="prio"><span class="tag t-zeitnah">Zeitnah</span></td></tr>
+      <tr><td class="nr">18</td><td class="med">Alle Medien</td><td class="where">Weitere Unterlagen</td><td>Noch nicht geprüfte Medien prüfen</td><td class="prio"><span class="tag t-zeitnah">Zeitnah</span></td></tr>
+      <tr><td class="nr">19</td><td class="med">Alle Medien</td><td class="where">Rechtliche Prüfung</td><td>Neue Texte aus 1 bis 4 gegenlesen lassen</td><td class="prio"><span class="tag t-sofort">Sofort</span></td></tr>
+      <tr><td class="nr">20</td><td class="med">Kunden</td><td class="where">Kundenmail an Fachbetriebe</td><td>Versenden, sobald 1 bis 4 online sind</td><td class="prio"><span class="tag t-nach">Nach 1 bis 4</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================= WEBSITE ================= -->
+<div class="section pagebreak">
+  <h2>Website schmidt-boke.de</h2>
+  <div class="rule"></div>
+  <p class="section-intro">Die meisten Seiten nennen bereits konkrete Messwerte. Die folgenden Stellen arbeiten dagegen mit Schlagworten ohne Beleg oder nennen Bestwerte ohne die zugehörige Bedingung.</p>
+
+  <div class="item">
+    <div class="item-head"><span class="num">1</span><h3>QuinLine® 84 – deutsche Produktseite</h3><span class="tag t-sofort">Sofort</span></div>
+    <p class="where">/de/produkte/system-quinline-84/ · Überschrift, erster Absatz und Vorschautext für Google und Social Media</p>
+    <div class="body">
+      <p class="why"><b>Warum:</b> „Nachhaltiges Wohnen“ ist eine pauschale Umweltaussage ohne Erklärung. „Perfekt“ lässt sich nicht messen.</p>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· Überschrift</span></span>Perfekte Energiebilanz in Größe</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· Überschrift</span></span>Passivhaustaugliche Wärmedämmung im Großformat</div>
+      </div>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· Text</span></span>Das 5-Kammer-Profilsystem QuinLine® 84 liefert eine perfekte Energiebilanz und eröffnet durch ein Höchstmaß an Stabilität auch bei deckenhohen Elementen eine neue Dimension des nachhaltigen Wohnens.</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· Text</span></span>Das 5-Kammer-Profilsystem QuinLine® 84 erreicht einen Uw-Wert bis 0,71 W/(m²K)* und ist damit passivhaustauglich. Dank hoher Stabilität sind Elemente bis 7 m Breite und 2,80 m Höhe möglich.</div>
+      </div>
+      <p class="fn">* bei Ug = 0,4 W/(m²K) und warmer Kante, Berechnung nach EN ISO 10077</p>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· Vorschautext Google / Social Media</span></span>Das 5-Kammer-Profilsystem QuinLine® 84 liefert eine perfekte Energiebilanz bis zur Passivhaustauglichkeit und ermöglicht durch ein Höchstmaß an Stabilität neue Dimension bei Hebeschiebetüren. …</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· Vorschautext Google / Social Media</span></span>QuinLine® 84: Uw bis 0,71 W/(m²K), passivhaustauglich. Hebeschiebetüren bis 7 m Breite und 2,80 m Höhe.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">2</span><h3>QuinLine® 84 – englische und französische Produktseite</h3><span class="tag t-sofort">Sofort</span></div>
+    <p class="where">/en/product/system-quinline-84/ · /fr/des-produits/systeme-quinline-84/</p>
+    <div class="body">
+      <p class="why"><b>Warum:</b> Dieselbe Aussage steht übersetzt als „sustainable living“ und „habitat durable“. Die Regeln gelten EU-weit, also auch für die Märkte Benelux und Frankreich.</p>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· englisch</span></span>Perfect energy balance in size<br>… delivers a perfect energy balance and opens up a new dimension of sustainable living …</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· englisch</span></span>Passive-house thermal insulation in large formats<br>The 5-chamber profile system QuinLine® 84 achieves a Uw value of up to 0.71 W/(m²K)* and is therefore suitable for passive houses. Thanks to its high stability, elements up to 7 m wide and 2.80 m high are possible.</div>
+      </div>
+      <p class="fn">* with Ug = 0.4 W/(m²K) and warm-edge spacer, calculated according to EN ISO 10077</p>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· französisch</span></span>Un bilan énergétique parfait en grand format<br>… fournit un bilan énergétique parfait et inaugure une nouvelle génération d'habitat durable …</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· französisch</span></span>Isolation thermique compatible maison passive, en grand format<br>Le système de profilés à 5 chambres QuinLine® 84 atteint un coefficient Uw jusqu'à 0,71 W/(m²K)* et convient ainsi aux maisons passives. Grâce à sa grande stabilité, il permet des éléments jusqu'à 7 m de large et 2,80 m de haut.</div>
+      </div>
+      <p class="fn">* avec Ug = 0,4 W/(m²K) et intercalaire à bords chauds, calcul selon EN ISO 10077</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">3</span><h3>Hauptmenü</h3><span class="tag t-sofort">Sofort</span></div>
+    <p class="where">Kurztexte unter den Produktnamen im Menü „Produkte“, erscheinen auf jeder Seite</p>
+    <div class="body">
+      <p class="why"><b>Warum:</b> Das Menü steht auf jeder Seite, ohne Messwert daneben. „Energieeffizienz“ zählt ausdrücklich zu den pauschalen Umweltaussagen.</p>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· QuinLine® 84, deutsch</span></span>Zukunftsweisend für eine perfekte Energiebilanz</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· QuinLine® 84, deutsch</span></span>Uw bis 0,71 W/(m²K) – passivhaustauglich</div>
+      </div>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· QuinLine® 74, deutsch</span></span>Energieeffizienz für Neubau und Sanierung</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· QuinLine® 74, deutsch</span></span>Uw bis 0,82 W/(m²K) – für Neubau und Sanierung</div>
+      </div>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· QuinLine® 84, englisch</span></span>Pioneering the way to a perfect energy balance</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· QuinLine® 84, englisch</span></span>Uw up to 0.71 W/(m²K) – suitable for passive houses</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">4</span><h3>News-Beitrag zum Recycling-Kern</h3><span class="tag t-sofort">Sofort</span></div>
+    <p class="where">/de/die-schmidt-hebeschiebetuer-wird-nachhaltiger/ · Titel (auch für Google und Social Media), Zitat, Satz zum Recycling-Anteil</p>
+    <div class="body">
+      <p class="why"><b>Warum:</b> Der Inhalt ist konkret und gut. Der Titel bezieht die Verbesserung aber auf die ganze Tür, tatsächlich betrifft der Recycling-Kern die Zargenprofile. Eine Aussage über das Ganze, die nur einen Teil betrifft, ist immer verboten. Der Titel erscheint zudem ohne Erklärung bei Google und in Social Media.</p>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· Titel</span></span>Die SCHMIDT Hebeschiebetür wird nachhaltig(er)</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· Titel</span></span>Erste SCHMIDT Hebeschiebetüren mit Recycling-Kern in den Zargenprofilen</div>
+      </div>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· Zitat</span></span>„Mit der Nutzung von recyceltem PVC senken wir unseren CO2-Fußabruck maßgeblich und leisten somit einen wichtigen Beitrag, die Bauwelt von morgen ein Stück nachhaltiger zu gestalten.“</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· Zitat</span></span><b>Variante A, mit Beleg:</b> „Mit dem Rezyklat-Innenkern senken wir den CO<sub>2</sub>-Ausstoß je Zargenprofil um [x] %.“ (Quelle: [Berechnung])<br><b>Variante B, ohne Beleg:</b> Satz streichen.</div>
+      </div>
+      <ul class="bar">
+        <li>Satz „Somit sind unsere SCHMIDT-QuinLine® Profilsysteme auf der Liste … mit ≥ 55 % Recycling-PVC-Anteil vertreten“: klarstellen, welche Profile genau gelistet sind.</li>
+        <li>Die Webadresse (…-wird-nachhaltiger) kann bleiben.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">5</span><h3>Über uns</h3><span class="tag t-zeitnah">Zeitnah</span></div>
+    <p class="where">/de/unternehmen/ueber-uns/ · zweiter Absatz</p>
+    <div class="body">
+      <p class="why"><b>Warum:</b> „Energieeffizienz“ steht ohne Messwert. Auf der Seite gibt es keine Uw-Werte.</p>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt</span>… hochwertiger Hebeschiebetüren, die nicht nur ästhetisch ansprechend sind, sondern auch höchsten Ansprüchen an Sicherheit und Energieeffizienz gerecht werden.</div>
+        <div class="new"><span class="lbl">Neu</span>… hochwertiger Hebeschiebetüren, die nicht nur ästhetisch ansprechend sind, sondern auch höchsten Ansprüchen an Sicherheit und Wärmedämmung gerecht werden: Einbruchhemmung bis RC 3, Uw bis 0,71 W/(m²K).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">6</span><h3>Produkt-Übersicht</h3><span class="tag t-zeitnah">Zeitnah</span></div>
+    <p class="where">/de/produkte/ · Einleitung und Aufzählung</p>
+    <div class="body">
+      <p class="why"><b>Warum:</b> Die Werte stehen weiter unten auf der Seite. Direkt neben der Aussage sind sie eindeutig.</p>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· Aufzählung</span></span>Energieeffizientes 5-Kammer-Profilsystem</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· Aufzählung</span></span>5-Kammer-Profilsystem mit Uw bis 0,71 W/(m²K)</div>
+      </div>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· Einleitung</span></span>Höchster Wohnkomfort und Energieeffizienz mit Wärmedämmwerten bis zur Passivhaustauglichkeit</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· Einleitung</span></span>Höchster Wohnkomfort und Wärmedämmung mit Uw-Werten bis 0,71 W/(m²K) – passivhaustauglich</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">7</span><h3>Uw-Angaben mit Bedingung</h3><span class="tag t-zeitnah">Zeitnah</span></div>
+    <p class="where">Tabelle „Systemunterschiede“ (auf mehreren Seiten), Seite „Private Bauherren“, Aufzählungen auf den Produktseiten</p>
+    <div class="body">
+      <p class="why"><b>Warum:</b> Die Bestwerte gelten nur mit besonders gut dämmender Verglasung (Broschüre Seite 23). Auf der Website fehlt diese Bedingung, auf „Private Bauherren“ sogar das Wort „bis“.</p>
+      <ul class="bar">
+        <li><b>Tabelle „Systemunterschiede“:</b> Fußnote ergänzen: „Uw-Werte bei Ug = 0,5 W/(m²K) (QuinLine® 74) bzw. Ug = 0,4 W/(m²K) (QuinLine® 84) und warmer Kante, Berechnung nach EN ISO 10077“. Eine Änderung im Baustein genügt.</li>
+      </ul>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt <span class="ctx">· Private Bauherren</span></span>Die QuinLine® 74 Hebeschiebetür von SCHMIDT ist mit einem Uw 0,82 W/(m²K) für Niedrigenergiehäuser geeignet. Die QuinLine® 84 Hebeschiebetür kann höhere Glasdicken aufnehmen und liegt beim U-Wert bei Uw 0,71 W/(m²K) und ist damit Passivhaustauglich.</div>
+        <div class="new"><span class="lbl">Neu <span class="ctx">· Private Bauherren</span></span>Die QuinLine® 74 erreicht Uw-Werte bis 0,82 W/(m²K) und ist für Niedrigenergiehäuser geeignet. Die QuinLine® 84 kann höhere Glasdicken aufnehmen und erreicht Uw-Werte bis 0,71 W/(m²K). Schon mit Ug = 0,5 W/(m²K) und warmer Kante liegt sie bei 0,78 W/(m²K) und damit unter dem Passivhaus-Richtwert von 0,80 W/(m²K).</div>
+      </div>
+      <ul class="bar">
+        <li><b>Bezeichnung in der Tabelle:</b> „Niedrigenergieeffizient“ wird zu „Für Niedrigenergiehäuser“, englisch „Low-energy efficient“ wird zu „Suitable for low-energy houses“.</li>
+        <li><b>Einheit korrigieren:</b> „Uw(m²/K)“ bzw. englisch „W(m²/K)“ wird zu „W/(m²K)“.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">8</span><h3>Übrige englische und französische Seiten</h3><span class="tag t-zeitnah">Zeitnah</span></div>
+    <div class="body">
+      <p>Die Punkte 5 bis 7 auf den englischen und französischen Seiten genauso umsetzen: Über uns, Produkte, Tabelle „Systemunterschiede“, Private Bauherren. Nicht wörtlich übersetzen, sondern dieselben Messwerte verwenden.</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">9</span><h3>Referenz Weingut Bachmann</h3><span class="tag t-optional">Bei Gelegenheit</span></div>
+    <p class="where">/de/referenzen/weingut-bachmann/</p>
+    <div class="body">
+      <p class="why"><b>Warum:</b> Die Aussage betrifft die Einrichtung des Kunden, nicht das eigene Produkt. Geringes Risiko, aber ohne Nutzen.</p>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt</span>… einen harmonischen Rahmen für das Interieur, das vor allem aus nachhaltigem Holz besteht.</div>
+        <div class="new"><span class="lbl">Neu</span>… einen harmonischen Rahmen für das Interieur, das vor allem aus Holz besteht.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">10</span><h3>Kleinigkeiten</h3><span class="tag t-optional">Bei Gelegenheit</span></div>
+    <div class="body">
+      <ul class="bar">
+        <li><b>News-Beitrag:</b> „CO2-Fußabruck“ wird zu „CO<sub>2</sub>-Fußabdruck“, „habe wir“ wird zu „haben wir“.</li>
+        <li><b>Startseite:</b> „Willkommen beim Marktführer für Kunststoff-Hebeschiebetüren“. Eine Spitzenstellung muss im Streitfall belegbar sein, etwa mit Marktdaten. Sonst abschwächen, z. B. „Willkommen beim Spezialisten für Kunststoff-Hebeschiebetüren“.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ================= BROSCHÜRE ================= -->
+<div class="section">
+  <h2>Produktbroschüre QuinLine®</h2>
+  <div class="rule"></div>
+  <p class="section-intro">Geprüft: 11147_SCH_Pros_Produkt_DE_web_ES_X05 (32 Seiten, Stand 06/2024). Die Broschüre enthält keine Begriffe wie „nachhaltig“ oder „umweltfreundlich“, keine Klima- oder CO<sub>2</sub>-Aussagen und keine Umweltsiegel. Die Uw-Werte stehen mit allen Bedingungen auf Seite 23. Weil die Broschüre über Fachbetriebe an Bauherren geht (Feld für den Händlerstempel auf der Rückseite), gelten die Regeln auch hier. Empfehlung: das PDF auf der Website und im Kunden-Login zeitnah aktualisieren, die gedruckte Fassung mit der nächsten Auflage.</p>
+
+  <div class="item">
+    <div class="item-head"><span class="num">11</span><h3>Seite 12 – Einleitung Konfiguration</h3><span class="tag t-zeitnah">PDF zeitnah</span></div>
+    <div class="body">
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt</span>Höchster Wohnkomfort und Energieeffizienz mit Wärmedämmwerten bis zur Passivhaustauglichkeit</div>
+        <div class="new"><span class="lbl">Neu</span>Höchster Wohnkomfort und Wärmedämmung mit Uw-Werten bis 0,71 W/(m²K) – passivhaustauglich (siehe Seite 22–23)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">12</span><h3>Seite 5 – Symbol Wärmedämmung</h3><span class="tag t-zeitnah">PDF zeitnah</span></div>
+    <div class="body">
+      <p class="why"><b>Warum:</b> Der Text fasst beide Systeme zusammen, obwohl nur die QuinLine® 84 passivhaustauglich ist.</p>
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt</span>Passivhaustauglich/Niedrigenergiegebäude: Hervorragende Wärmedämmungseigenschaften durch thermisch getrennte Aluminium-Schwellen und Zargenarmierungen</div>
+        <div class="new"><span class="lbl">Neu</span>QuinLine® 84 passivhaustauglich (Uw bis 0,71 W/(m²K)), QuinLine® 74 für Niedrigenergiehäuser (Uw bis 0,82 W/(m²K)) – durch thermisch getrennte Aluminium-Schwellen und Zargenarmierungen</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">13</span><h3>Seite 30 – Vergleichstabelle</h3><span class="tag t-zeitnah">PDF zeitnah</span></div>
+    <div class="body">
+      <div class="change">
+        <div class="now"><span class="lbl">Jetzt</span>Niedrigenergieeffizient</div>
+        <div class="new"><span class="lbl">Neu</span>Für Niedrigenergiehäuser</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">14</span><h3>Optionale Präzisierungen</h3><span class="tag t-optional">Bei Gelegenheit</span></div>
+    <div class="body">
+      <ul class="bar">
+        <li><b>Seite 4:</b> „… exzellentem Schall- und Wärmeschutz bis hin zur Passivhaustauglichkeit“ wird zu „… Schalldämmung bis 44 dB und Wärmedämmung bis Uw 0,71 W/(m²K) – passivhaustauglich“.</li>
+        <li><b>Seite 11:</b> Das Kundenzitat „… da das Licht mit seiner Wärme auch energiesparend ist“ kann bleiben. Es ist eine persönliche Erfahrung mit Begründung.</li>
+        <li><b>Seite 21:</b> „Lange Lebensdauer“ der Folie mit einer Herstellerangabe belegen, etwa der Garantiedauer, falls vorhanden.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">15</span><h3>Chance für die Neuauflage</h3><span class="tag t-auflage">Neuauflage</span></div>
+    <div class="body">
+      <ul class="bar">
+        <li><b>Recycling-Kern konkret aufnehmen:</b> welches Profil, welcher Anteil, seit wann, mit Quelle. Das ist eine belegbare Umweltaussage und damit erlaubt.</li>
+        <li><b>Stand-Datum auf die Rückseite drucken,</b> z. B. „Stand 01/2027“. So ist später nachweisbar, welche Fassung wann galt.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ÜBERGREIFEND ================= -->
+<div class="section">
+  <h2>Übergreifende Maßnahmen</h2>
+  <div class="rule"></div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">16</span><h3>Nachweis-Ordner anlegen</h3><span class="tag t-zeitnah">Zeitnah</span></div>
+    <div class="body">
+      <p>Zu jeder Umwelt- und Energieaussage den Beleg ablegen und eine verantwortliche Person festlegen. Im Streitfall muss jede Aussage belegbar sein.</p>
+      <ul class="bar">
+        <li>ift-Prüfberichte zu Einbruchhemmung, Schalldämmung und Uf-Wert</li>
+        <li>Uw-Berechnungen nach EN ISO 10077</li>
+        <li>RAL-Gütezeichen und Liste der förderfähigen Profilsysteme (Recycling-PVC-Anteil)</li>
+        <li>gegebenenfalls CO<sub>2</sub>-Berechnung zum Recycling-Kern</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">17</span><h3>Freigabe-Regel für neue Texte</h3><span class="tag t-zeitnah">Zeitnah</span></div>
+    <div class="body">
+      <p><b>Kein Umweltbegriff ohne Zahl und Quelle direkt daneben.</b> Das gilt für Website, Broschüren, Anzeigen, Angebotstexte, Social Media, Messe und Videos, einschließlich Untertiteln und Texteinblendungen. Vier Prüffragen vor jeder Freigabe:</p>
+      <ul class="bar">
+        <li>Ist der Begriff konkret oder ein Schlagwort?</li>
+        <li>Steht der Messwert direkt daneben?</li>
+        <li>Gilt die Aussage für das ganze Produkt oder nur für einen Teil?</li>
+        <li>Liegt der Beleg im Nachweis-Ordner?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">18</span><h3>Noch nicht geprüfte Unterlagen</h3><span class="tag t-zeitnah">Zeitnah</span></div>
+    <div class="body">
+      <ul class="bar">
+        <li>InScreen-Broschüre 2026 und Neuheiten-Broschüre</li>
+        <li>Magazin „Ausblicke“</li>
+        <li>Endkunden-Marketingmaterial im Kunden-Login, das Fachbetriebe an Bauherren weitergeben</li>
+        <li>Social Media (Facebook, Instagram, LinkedIn) und Videos, z. B. der Montagefilm</li>
+        <li>Übrige englische und französische Seiten</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">19</span><h3>Rechtliche Prüfung</h3><span class="tag t-sofort">Sofort</span></div>
+    <div class="body">
+      <p>Die neuen Texte aus den Punkten 1 bis 4 vor der Veröffentlichung kurz von einer Kanzlei für Wettbewerbsrecht gegenlesen lassen.</p>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">20</span><h3>Kundenmail an die Fachbetriebe</h3><span class="tag t-nach">Nach 1 bis 4</span></div>
+    <div class="body">
+      <ul class="bar">
+        <li>Ein Entwurf liegt vor. Erst versenden, wenn die Punkte 1 bis 4 online sind, denn die Mail nennt die Änderungen als erledigt.</li>
+        <li>Für Kunden in der Schweiz eine angepasste Fassung verwenden, weil das EU-Recht dort nicht direkt gilt.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ================= FAKTEN ================= -->
+<div class="section">
+  <h2>Belegte Werte für künftige Texte</h2>
+  <div class="rule"></div>
+  <p class="section-intro">Diese Werte stehen in der Produktbroschüre (Seiten 22, 23 und 30) bzw. auf der Seite „Qualität“ und können in Texten verwendet werden, jeweils mit der genannten Bedingung.</p>
+  <table class="facts">
+    <thead><tr><th>Aussage</th><th>Wert</th><th>Bedingung / Quelle</th></tr></thead>
+    <tbody>
+      <tr><td>Wärmedämmung QuinLine® 74</td><td>Uw bis 0,82 W/(m²K)</td><td>Ug = 0,5 W/(m²K), warme Kante; Berechnung nach EN ISO 10077</td></tr>
+      <tr><td>Wärmedämmung QuinLine® 84</td><td>Uw bis 0,71 W/(m²K)</td><td>Ug = 0,4 W/(m²K), warme Kante; Berechnung nach EN ISO 10077</td></tr>
+      <tr><td>Passivhaustauglich QuinLine® 84</td><td>Uw = 0,78 W/(m²K)</td><td>bereits ab Ug = 0,5 W/(m²K) mit warmer Kante; Passivhaus-Richtwert Uw ≤ 0,80 W/(m²K)</td></tr>
+      <tr><td>Rahmen (Uf-Wert)</td><td>1,5 bzw. 1,3 W/(m²K)</td><td>QuinLine® 74 bzw. QuinLine® 84; Broschüre Seite 23</td></tr>
+      <tr><td>Schalldämmung</td><td>bis 44 dB</td><td>Broschüre Seiten 4 und 30</td></tr>
+      <tr><td>Einbruchhemmung</td><td>RC 1 N bis RC 3</td><td>nach DIN EN 1627, ift-zertifiziert</td></tr>
+      <tr><td>Profilqualität</td><td>RAL-Klasse A</td><td>Profil-Wanddicken nach DIN EN 12608; RAL-Gütezeichen seit 1984</td></tr>
+      <tr><td>Recycling-Kern</td><td>PVC-Rezyklat-Innenkern</td><td>in den Zargenprofilen; Umfang und Recycling-Anteil vor Verwendung prüfen</td></tr>
+    </tbody>
+  </table>
+  <p class="small">Referenzelement laut Broschüre Seite 23: 2-teilige Tür, 3,00 × 2,20 m. Prüfen, ob diese Angabe für beide Systeme gilt. Die Werte können je nach Fabrikat des Randverbundes abweichen.</p>
+
+  <div class="closing">
+    <h3 style="margin-bottom:2mm">Grundlage und Hinweis</h3>
+    <ul class="bar">
+      <li><b>Website:</b> Auswertung des Seobility-Crawls vom 05.10.2026. 32 deutsche Seiten, davon 12 im Volltext und 20 über Textauszüge, sowie die Seite QuinLine® 84 auf Englisch und Französisch. Rechtstexte (Impressum, Datenschutz, AGB) ausgenommen.</li>
+      <li><b>Broschüre:</b> Produktbroschüre QuinLine®, Datei 11147_SCH_Pros_Produkt_DE_web_ES_X05, alle 32 Seiten.</li>
+      <li><b>Rechtsgrundlage:</b> EU-Richtlinie 2024/825 zur Stärkung der Verbraucher für den ökologischen Wandel, in Deutschland umgesetzt durch das Dritte Gesetz zur Änderung des UWG, gültig seit 27.09.2026.</li>
+    </ul>
+    <p class="small">Diese Unterlage ist eine fachliche Einschätzung und keine Rechtsberatung. Bei Zweifeln, vor allem zu den Punkten 1 bis 4, empfiehlt sich die Prüfung durch eine Kanzlei für Wettbewerbsrecht.</p>
+  </div>
+</div>
+
+</body>
+</html>

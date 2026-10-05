@@ -5,6 +5,7 @@ import {
   interpolate,
   staticFile,
   useCurrentFrame,
+  useVideoConfig,
 } from "remotion";
 import { colors, ease, fontFamily } from "../brand/tokens";
 import img1950 from "../../../projects/schmidt-historie/assets/1950.jpg";
@@ -68,11 +69,37 @@ const staticLogo = staticFile("brand/logo-schmidt-negative.svg");
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const fmt = (n: number) => Math.round(n).toLocaleString("de-DE");
 
-const PHOTO = { left: 200, top: 170, size: 620 };
 const FRAME_OFFSET = 36;
+
+// One composition, two layouts: 16:9 side by side, 9:16 stacked.
+const landscape = {
+  photo: { left: 200, top: 170, size: 620 },
+  text: { left: 960, top: 290, width: 780 },
+  year: 220,
+  body: 50,
+  timeline: { x0: 200, x1: 1720, y: 930, label: 30 },
+  introLogo: 820,
+  outroLogo: 1100,
+  claim: { size: 46, width: 1500 },
+};
+const portrait = {
+  photo: { left: 142, top: 260, size: 760 },
+  text: { left: 142, top: 1130, width: 800 },
+  year: 210,
+  body: 52,
+  timeline: { x0: 160, x1: 920, y: 1700, label: 30 },
+  introLogo: 900,
+  outroLogo: 940,
+  claim: { size: 54, width: 760 },
+};
+const useLayout = () => {
+  const { width, height } = useVideoConfig();
+  return height > width ? portrait : landscape;
+};
 
 const Intro: React.FC = () => {
   const frame = useCurrentFrame();
+  const L = useLayout();
   const inP = interpolate(frame, [0, 18], [0, 1], {
     ...clamp,
     easing: ease.reveal,
@@ -94,7 +121,7 @@ const Intro: React.FC = () => {
       <Img
         src={staticLogo}
         style={{
-          width: 820,
+          width: L.introLogo,
           opacity: inP,
           transform: `translateY(${(1 - inP) * 30}px)`,
         }}
@@ -119,6 +146,8 @@ const MilestoneScene: React.FC<{ m: Milestone; prevYear: number }> = ({
   prevYear,
 }) => {
   const frame = useCurrentFrame();
+  const L = useLayout();
+  const PHOTO = L.photo;
 
   // Lift-and-slide motion: panes glide in from the right, out to the left.
   const enter = interpolate(frame, [0, 18], [0, 1], {
@@ -198,16 +227,16 @@ const MilestoneScene: React.FC<{ m: Milestone; prevYear: number }> = ({
       <div
         style={{
           position: "absolute",
-          left: 960,
-          top: 290,
-          width: 780,
+          left: L.text.left,
+          top: L.text.top,
+          width: L.text.width,
           transform: `translateX(${slide * 0.4}px)`,
         }}
       >
         <div
           style={{
             color: colors.white,
-            fontSize: 220,
+            fontSize: L.year,
             fontWeight: 700,
             lineHeight: 1,
             fontVariantNumeric: "tabular-nums",
@@ -219,7 +248,7 @@ const MilestoneScene: React.FC<{ m: Milestone; prevYear: number }> = ({
           style={{
             marginTop: 36,
             color: colors.white,
-            fontSize: 50,
+            fontSize: L.body,
             fontWeight: 500,
             lineHeight: 1.3,
             opacity: textIn,
@@ -248,9 +277,7 @@ const MilestoneScene: React.FC<{ m: Milestone; prevYear: number }> = ({
 // Bottom timeline: six stations, white rule, progress line grows station by station.
 const Timeline: React.FC = () => {
   const frame = useCurrentFrame();
-  const x0 = 200;
-  const x1 = 1720;
-  const y = 930;
+  const { x0, x1, y, label } = useLayout().timeline;
   const gap = (x1 - x0) / (milestones.length - 1);
   const shown = interpolate(frame, [INTRO - 10, INTRO + 10], [0, 1], {
     ...clamp,
@@ -313,7 +340,7 @@ const Timeline: React.FC = () => {
                 top: y + 26,
                 textAlign: "center",
                 color: colors.white,
-                fontSize: 30,
+                fontSize: label,
                 fontWeight: 500,
                 opacity: 0.45 + 0.55 * active,
               }}
@@ -329,6 +356,7 @@ const Timeline: React.FC = () => {
 
 const Outro: React.FC = () => {
   const frame = useCurrentFrame();
+  const L = useLayout();
   const frameIn = interpolate(frame, [0, 20], [0, 1], {
     ...clamp,
     easing: ease.reveal,
@@ -357,7 +385,7 @@ const Outro: React.FC = () => {
         <Img
           src={staticLogo}
           style={{
-            width: 1100,
+            width: L.outroLogo,
             opacity: Math.min(logoIn, 1),
             transform: `scale(${0.9 + 0.1 * logoIn})`,
           }}
@@ -365,7 +393,10 @@ const Outro: React.FC = () => {
         <div
           style={{
             color: colors.white,
-            fontSize: 46,
+            fontSize: L.claim.size,
+            maxWidth: L.claim.width,
+            textAlign: "center",
+            lineHeight: 1.3,
             fontWeight: 500,
             opacity: claimIn,
             transform: `translateY(${(1 - claimIn) * 24}px)`,

@@ -35,6 +35,14 @@ export const RemotionRoot: React.FC = () => {
         width={1920}
         height={1080}
       />
+      <Composition
+        id="SchmidtHistorie-9x16"
+        component={SchmidtHistorie}
+        durationInFrames={HISTORIE_DURATION}
+        fps={HISTORIE_FPS}
+        width={1080}
+        height={1920}
+      />
     </>
   );
 };

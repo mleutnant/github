@@ -175,7 +175,7 @@ def main():
             "end": absw[-1]["e"],
             "words": absw,
         })
-        t = clip_start + speech_end + GAP_AFTER.get(sid, 0.0)
+        t = clip_start + speech_end + GAP_AFTER.get(sid, 0.0) + SYNC_EXTRA.get(sid, 0.0)  # (ohne Sync: Extra-Pausen ebenso)
 
     total = round(segs[-1]["end"] + OUTRO, 3)
     total = round(round(total * FPS) / FPS, 3)

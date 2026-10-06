@@ -343,19 +343,6 @@
       const clipG = S("g", { "clip-path": "url(#acc-lens-clip)" }, st.lens);
       const zoom = S("g", { transform: `scale(${LENS.z}) translate(${-LENS.cx},${-LENS.cy})` }, clipG);
       S("use", { href: "#acc-scene" }, zoom);
-      // Wasserwaage in der Lupe (liegt über der Fuge innen/Schwelle/außen)
-      const fy = (FLOOR - LENS.cy) * LENS.z; // Bodenlinie in Lupen-Koordinaten
-      st.levelTool = G(clipG, { x: 0, y: fy });
-      const lv = st.levelTool;
-      S("rect", { x: -104, y: -38, width: 208, height: 38, rx: 6, fill: C.yellow }, lv);
-      S("rect", { x: -104, y: -38, width: 208, height: 7, rx: 3, fill: "#fff", opacity: 0.3 }, lv);
-      S("rect", { x: -104, y: -38, width: 16, height: 38, rx: 4, fill: C.an1 }, lv);
-      S("rect", { x: 88, y: -38, width: 16, height: 38, rx: 4, fill: C.an1 }, lv);
-      S("rect", { x: -36, y: -31, width: 72, height: 24, rx: 12, fill: "#fff4dc", stroke: C.an1, "stroke-width": 2.5 }, lv);
-      S("rect", { x: -33, y: -28, width: 66, height: 18, rx: 9, fill: C.g4, opacity: 0.75 }, lv);
-      st.bubble = G(lv, { x: 0, y: -19 });
-      S("ellipse", { cx: 0, cy: 0, rx: 10, ry: 6.5, fill: "#fff" }, st.bubble);
-      [-13, 13].forEach((x) => S("line", { x1: x, y1: -30, x2: x, y2: -8, stroke: C.an1, "stroke-width": 2.4 }, lv));
       st.railRing = G(clipG, { x: (PLANE - LENS.cx) * LENS.z, y: (FLOOR + 5 - LENS.cy) * LENS.z });
       S("circle", { cx: 0, cy: 0, r: 30, fill: "none", stroke: C.red, "stroke-width": 4.5 }, st.railRing);
       // Ring + Markenrahmen
@@ -619,18 +606,8 @@
       tl.to(st.lens, Object.assign({ scale: 1, duration: 0.48, ease: "back.out(1.6)" }, O0), tLens + 0.2);
       ANIM.sfx(tLens + 0.16, "whooshSoft", -8);
       tl.fromTo(st.lbl, { opacity: 0, x: 26 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, tLens + 0.42);
-      // Libelle pendelt aus und rastet exakt mittig ein — vor der Durchfahrt wird die Waage weggenommen
-      const tLift = tL - 0.3;
-      const tClick = Math.min(tLens + 0.86, tLift - 0.22);
-      gsap.set(st.bubble, { x: 24 });
-      tl.to(st.bubble, { x: -13, duration: 0.24, ease: "sine.inOut" }, tClick - 0.5);
-      tl.to(st.bubble, { x: 7, duration: 0.2, ease: "sine.inOut" }, tClick - 0.26);
-      tl.to(st.bubble, { x: 0, duration: 0.2, ease: "back.out(3)" }, tClick - 0.06);
-      ANIM.sfx(tClick, "click", -3);
-      tl.fromTo(st.levelTool, { scale: 1 }, { scale: 1.06, duration: 0.08, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 100%", immediateRender: false }, tClick);
-      tl.to(st.levelTool, { y: -260, opacity: 0, duration: 0.36, ease: "power2.in" }, tLift);
-      // danach markiert ein kleiner Ring die eingelassene Schiene
-      tl.to(st.railRing, Object.assign({ scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)" }, O0), tLift + 0.24);
+      // Ring markiert die eingelassene Schiene, sobald die Lupe offen ist
+      tl.to(st.railRing, Object.assign({ scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)" }, O0), tLens + 0.6);
 
     },
   };

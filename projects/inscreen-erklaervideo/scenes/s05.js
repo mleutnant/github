@@ -1,4 +1,4 @@
-// s05 — „Sein Rahmen sitzt im Festflügel und in der Schwelle.“
+// s05 — „Das Plissee ist über ein Integrationsprofil im Festflügel eingelassen – und die untere Führungsschiene in die Schwellenkonstruktion.“
 // Röntgenblick auf DIESELBE QuinLine®-Tür (Bildposition wie im Wohnzimmer): weiße Blueprint-Linien,
 // der InScreen-Rahmen leuchtet gelb auf und zeichnet sich nach, das Profil im Festflügel pulsiert,
 // dann fährt die Kamera auf die Schwelle und eine Lupe zeigt den Schwellen-Querschnitt.
@@ -296,7 +296,8 @@
       const q = R.sets.xray.q;
       const t0 = ctx.t0, t1 = ctx.t1;
       const tScan = t0 - 0.62 * 0.45; // Scan-Übergang aus main.js (Start + Dauer 0,62 s)
-      const tRah = ctx.w("rahmen"), tFest = ctx.w("festflügel"), tSch = ctx.w("schwelle");
+      const tRah = ctx.w("plissee"), tFest = ctx.w("festflügel"), tSch = ctx.w("führungsschiene");
+      const tInt = ctx.w("integrationsprofil"), tSk = ctx.w("schwellenkonstruktion"), tSkE = ctx.w("schwellenkonstruktion", "e");
       const dC = 0.54, tC = Math.max(tFest + 0.8, tSch - 0.47); // Kamera kommt auf „Schwelle“ an
 
       // BASE: Nominal-Tür → Bildposition der Wohnzimmer-Tür am Ende von s04 (letzter Kamera-Tween vor t0)
@@ -332,7 +333,7 @@
       tl.to(q.camT, { x: ax0 * (1 - DRIFT), y: 540 * (1 - DRIFT), duration: tC - (t0 + 0.35), ease: "sine.inOut" }, t0 + 0.35);
       tl.to(q.camS, { scale: DRIFT, svgOrigin: "0 0", duration: tC - (t0 + 0.35), ease: "sine.inOut" }, t0 + 0.35);
 
-      // 2) „Rahmen“: InScreen-Rahmen leuchtet gelb auf und zeichnet sich nach
+      // 2) „Plissee“: InScreen-Rahmen leuchtet gelb auf und zeichnet sich nach
       const yd = (k, t, dur, ease, mid) =>
         tl.fromTo([q.yS[k], q.yG[k]], { drawSVG: mid ? "50% 50%" : "0% 0%" }, { drawSVG: "0% 100%", duration: dur, ease }, t);
       yd("profile", tRah - 0.06, 0.36, "power2.inOut", true);
@@ -351,14 +352,14 @@
       const tB = tRah + 1.45, per = 0.62, nB = Math.floor((t1 - tB) / per);
       if (nB >= 1) tl.to(q.yGlowG, { opacity: 0.85, duration: per, ease: "sine.inOut", yoyo: true, repeat: nB - 1 }, tB);
 
-      // 3) „Festflügel“: Profil pulsiert, Hinweislinie + Label
-      tl.to(q.fixHL, { opacity: 0.08, duration: 0.25, ease: "power2.out" }, tFest - 0.06);
-      tl.to(q.fixHL, { opacity: 0.035, duration: 0.6, ease: "sine.inOut" }, tFest + 0.45);
+      // 3) „Integrationsprofil“: Profil pulsiert — „Festflügel“: Hinweislinie + Label
+      tl.to(q.fixHL, { opacity: 0.08, duration: 0.25, ease: "power2.out" }, tInt - 0.06);
+      tl.to(q.fixHL, { opacity: 0.035, duration: 0.6, ease: "sine.inOut" }, tInt + 0.45);
       [0, 0.32].forEach((dt, i) => {
-        tl.to(q.pFlash, { opacity: 0.85, duration: 0.12, ease: "power2.out" }, tFest - 0.04 + dt);
-        tl.to(q.pFlash, { opacity: 0.25, duration: 0.2, ease: "sine.inOut" }, tFest + 0.08 + dt);
+        tl.to(q.pFlash, { opacity: 0.85, duration: 0.12, ease: "power2.out" }, tInt - 0.04 + dt);
+        tl.to(q.pFlash, { opacity: 0.25, duration: 0.2, ease: "sine.inOut" }, tInt + 0.08 + dt);
         tl.fromTo(q.rings[i], { scaleX: 1, scaleY: 1, opacity: 0.9, svgOrigin: "0 0" },
-          { scaleX: 3.6, scaleY: 1.025, opacity: 0, duration: 0.55, ease: "power2.out", svgOrigin: "0 0", immediateRender: false }, tFest - 0.04 + dt);
+          { scaleX: 3.6, scaleY: 1.025, opacity: 0, duration: 0.55, ease: "power2.out", svgOrigin: "0 0", immediateRender: false }, tInt - 0.04 + dt);
       });
       tl.to(q.fDot, { scale: 1, duration: 0.3, ease: "back.out(2.5)", svgOrigin: "0 0" }, tFest - 0.08);
       tl.set(q.fLine, { opacity: 1 }, tFest - 0.06);
@@ -366,7 +367,7 @@
       tl.fromTo(q.fChip, { opacity: 0, x: 26, scale: 0.85 }, { opacity: 1, x: 0, scale: 1, duration: 0.42, ease: "back.out(1.7)" }, tFest + 0.02);
       ANIM.sfx(tFest, "ding", -4);
 
-      // 4) „Schwelle“: Kamera fährt flott auf die Schwelle, Lupe mit Querschnitt
+      // 4) „Führungsschiene“: Kamera fährt flott auf die Schwelle, Lupe mit Querschnitt
       const eC = "power3.inOut";
       tl.to(q.camT, { x: cX, y: cY, duration: dC, ease: eC }, tC);
       tl.to(q.camS, { scale: cS, svgOrigin: "0 0", duration: dC, ease: eC }, tC);
@@ -386,7 +387,7 @@
       tl.to(q.lens, { scale: 1, opacity: 1, duration: 0.48, ease: "back.out(1.5)", svgOrigin: "0 0" }, tSch - 0.08);
       // Einbau in der Lupe (verlängertes Fenster): Schiene senkt sich bündig in die Schwelle,
       // Niveau-Linie innen = außen, dann fährt das Plissee von oben in die Schiene, zum Schluss Detail-Zoom.
-      const tIn = tSch + 0.5, tClk = tIn + 0.6;
+      const tClk = Math.max(tSch + 1.1, tSkE + 0.1), tIn = tClk - 0.6; // Schiene rastet am Ende von „Schwellenkonstruktion“ ein
       tl.fromTo(q.rail, { y: -64, opacity: 0.5 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.inOut" }, tIn);
       ANIM.sfx(tIn, "whooshSoft", -14);
       ANIM.sfx(tClk, "click", -3);
@@ -402,7 +403,7 @@
       tl.to(q.lensZoom, { scale: 1.32, svgOrigin: "-91 47", duration: 0.9, ease: "power2.inOut" }, tZm);
       tl.set(q.sLine, { opacity: 1 }, tSch - 0.02);
       tl.to(q.sLine, { attr: { x2: S_X - 10 }, duration: 0.28, ease: "expo.out" }, tSch - 0.02);
-      tl.fromTo(q.sChip, { opacity: 0, x: -26, scale: 0.85 }, { opacity: 1, x: 0, scale: 1, duration: 0.42, ease: "back.out(1.7)" }, tSch + 0.02);
+      tl.fromTo(q.sChip, { opacity: 0, x: -26, scale: 0.85 }, { opacity: 1, x: 0, scale: 1, duration: 0.42, ease: "back.out(1.7)" }, tSk + 0.02);
       tl.fromTo(q.sSub, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.36, ease: "power2.out" }, tClk + 0.08);
       tl.fromTo([q.inLbl, q.outLbl], { opacity: 0 }, { opacity: 0.9, duration: 0.3, ease: "power1.out", stagger: 0.05 }, tClk + 0.4);
       ANIM.sfx(tSch, "ding", -3);

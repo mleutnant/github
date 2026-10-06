@@ -214,7 +214,9 @@
       const lg = S("g", { stroke: "#fff", "stroke-width": 1, opacity: 0.07 }, cl);
       for (let v = -240; v <= 240; v += 30) { S("line", { x1: v, y1: -260, x2: v, y2: 260 }, lg); S("line", { x1: -260, y1: v, x2: 260, y2: v }, lg); }
       // Querschnitt vergrößert: Schwellen-Mitte (20|Y0) → Lupen-Mitte, Faktor 1,45
-      const sec = S("g", { transform: "translate(0,22) scale(1.45) translate(-20,-40)" }, cl);
+      // Detail-Zoom auf die Führungsschiene: eigener Knoten nur für scale (svgOrigin), kein x/y
+      q.lensZoom = G(cl, {});
+      const sec = S("g", { transform: "translate(0,22) scale(1.45) translate(-20,-40)" }, q.lensZoom);
       const Y0 = 40, L = -300, T0 = -84, T1 = 124, RR = 300;
       const wl = { fill: "none", stroke: "#fff", "stroke-width": 2 };
       // innen: Bodenbelag, Estrich, Dämmung
@@ -252,10 +254,13 @@
       const tb = S("g", { stroke: "#fff", "stroke-width": 1.1, opacity: 0.6 }, sec);
       hatch(tb, 4, Y0 + 20, 34, Y0 + 100, 9);
       // InScreen-Teile: Führungsschiene gelb, Gleiter rot
-      q.railFill = S("rect", { x: -68, y: Y0 + 1, width: 50, height: 33, fill: Y, opacity: 0.35 }, sec);
-      S("path", { d: `M-68,${Y0} V${Y0 + 34} H-18 V${Y0}`, fill: "none", stroke: Y, "stroke-width": 4, "stroke-linejoin": "round" }, sec);
-      S("path", { d: `M-58,${Y0} V${Y0 + 22} H-28 V${Y0}`, fill: "none", stroke: Y, "stroke-width": 2 }, sec);
-      S("rect", { x: -50, y: Y0 + 6, width: 14, height: 13, rx: 2, fill: C.red }, sec);
+      // (Schiene als eigene Gruppe: senkt sich beim Einbau in die Aussparung der Schwelle)
+      q.rail = S("g", null, sec);
+      q.railFill = S("rect", { x: -68, y: Y0 + 1, width: 50, height: 33, fill: Y, opacity: 0.35 }, q.rail);
+      S("path", { d: `M-68,${Y0} V${Y0 + 34} H-18 V${Y0}`, fill: "none", stroke: Y, "stroke-width": 4, "stroke-linejoin": "round" }, q.rail);
+      S("path", { d: `M-58,${Y0} V${Y0 + 22} H-28 V${Y0}`, fill: "none", stroke: Y, "stroke-width": 2 }, q.rail);
+      q.glider = S("g", null, sec);
+      S("rect", { x: -50, y: Y0 + 6, width: 14, height: 13, rx: 2, fill: C.red }, q.glider);
       // Plissee steht in der Schiene
       let pz = `M-43,${Y0 + 6}`;
       for (let y = Y0 - 3, k = 0; y > -175; y -= 8, k++) pz += ` L${k % 2 ? -43 + 4 : -43 - 4},${y}`;
@@ -379,16 +384,27 @@
       tl.to(q.call, { scale: 1, duration: 0.32, ease: "back.out(2)", svgOrigin: "0 0" }, tSch - 0.12);
       q.tangents.forEach((ln) => tl.to(ln, { attr: { x2: ln._p1.x, y2: ln._p1.y }, duration: 0.3, ease: "power2.out" }, tSch - 0.08));
       tl.to(q.lens, { scale: 1, opacity: 1, duration: 0.48, ease: "back.out(1.5)", svgOrigin: "0 0" }, tSch - 0.08);
-      tl.fromTo(q.zig, { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", duration: 0.42, ease: "power2.out" }, tSch + 0.06);
-      tl.fromTo(q.level, { drawSVG: "50% 50%" }, { drawSVG: "0% 100%", duration: 0.4, ease: "power3.out" }, tSch + 0.14);
-      tl.fromTo(q.levelTri, { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.3, ease: "back.out(2)", stagger: 0.06 }, tSch + 0.28);
-      tl.to(q.railFill, { opacity: 0.85, duration: 0.18, ease: "power2.out" }, tSch + 0.16);
-      tl.to(q.railFill, { opacity: 0.42, duration: 0.4, ease: "sine.inOut" }, tSch + 0.34);
+      // Einbau in der Lupe (verlängertes Fenster): Schiene senkt sich bündig in die Schwelle,
+      // Niveau-Linie innen = außen, dann fährt das Plissee von oben in die Schiene, zum Schluss Detail-Zoom.
+      const tIn = tSch + 0.5, tClk = tIn + 0.6;
+      tl.fromTo(q.rail, { y: -64, opacity: 0.5 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.inOut" }, tIn);
+      ANIM.sfx(tIn, "whooshSoft", -14);
+      ANIM.sfx(tClk, "click", -3);
+      tl.fromTo(q.railFill, { opacity: 0.35 }, { opacity: 0.9, duration: 0.14, ease: "power2.out", immediateRender: false }, tClk);
+      tl.to(q.railFill, { opacity: 0.42, duration: 0.5, ease: "sine.inOut" }, tClk + 0.16);
+      tl.fromTo(q.level, { drawSVG: "50% 50%" }, { drawSVG: "0% 100%", duration: 0.45, ease: "power3.out" }, tClk + 0.3);
+      tl.fromTo(q.levelTri, { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.3, ease: "back.out(2)", stagger: 0.08 }, tClk + 0.48);
+      const tPl = tClk + 0.85;
+      tl.fromTo(q.zig, { drawSVG: "100% 100%" }, { drawSVG: "0% 100%", duration: 0.75, ease: "power2.inOut" }, tPl);
+      tl.fromTo(q.glider, { opacity: 0, y: -26 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, tPl + 0.5);
+      ANIM.sfx(tPl, "slide", -14, { dur: 0.75 });
+      const tZm = Math.min(tPl + 0.95, ctx.t1 - 1.35);
+      tl.to(q.lensZoom, { scale: 1.32, svgOrigin: "-91 47", duration: 0.9, ease: "power2.inOut" }, tZm);
       tl.set(q.sLine, { opacity: 1 }, tSch - 0.02);
       tl.to(q.sLine, { attr: { x2: S_X - 10 }, duration: 0.28, ease: "expo.out" }, tSch - 0.02);
       tl.fromTo(q.sChip, { opacity: 0, x: -26, scale: 0.85 }, { opacity: 1, x: 0, scale: 1, duration: 0.42, ease: "back.out(1.7)" }, tSch + 0.02);
-      tl.fromTo(q.sSub, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.36, ease: "power2.out" }, tSch + 0.14);
-      tl.fromTo([q.inLbl, q.outLbl], { opacity: 0 }, { opacity: 0.9, duration: 0.3, ease: "power1.out", stagger: 0.05 }, tSch + 0.16);
+      tl.fromTo(q.sSub, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.36, ease: "power2.out" }, tClk + 0.08);
+      tl.fromTo([q.inLbl, q.outLbl], { opacity: 0 }, { opacity: 0.9, duration: 0.3, ease: "power1.out", stagger: 0.05 }, tClk + 0.4);
       ANIM.sfx(tSch, "ding", -3);
       // 5) Halten bis ctx.t1 (Glow atmet weiter), danach Scan-Übergang
     },

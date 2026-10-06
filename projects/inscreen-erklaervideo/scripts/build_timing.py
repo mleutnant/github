@@ -32,8 +32,9 @@ GAP_AFTER = {
     "s06": 0.95, "s07": 0.4, "s08": 0.45, "s09": 0.3, "s10": 0.45,
 }
 # Quellsynchron: zusätzliche Pause NACH einem Abschnitt (die Aufnahme wird dort geschnitten und der Rest
-# um diesen Betrag später angelegt) — s06: drei Türfarben sollen jeweils gut zu erkennen sein.
-SYNC_EXTRA = {"s06": 3.0}
+# um diesen Betrag später angelegt) — s05: Einbau der Führungsschiene in die Schwelle,
+# s06: drei Türfarben sollen jeweils gut zu erkennen sein.
+SYNC_EXTRA = {"s05": 3.5, "s06": 3.0}
 VISUAL_LEAD = 0.3  # Bildwechsel kommt so viel früher als das erste Wort des Abschnitts
 
 

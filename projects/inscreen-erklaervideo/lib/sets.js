@@ -1,6 +1,7 @@
 // Kulissen: Wohnzimmer mit Hebeschiebetür (Hauptset mit Kamera) + Helfer für Erklär-Einschübe.
 (function () {
-  const { S, G, C, rng } = window.SVGK;
+  const { S, G, C, rng, F } = window.SVGK;
+  const CX = F.W / 2, CY = F.H / 2;
   const O0 = { svgOrigin: "0 0" };
 
   function defs(svg) {
@@ -23,10 +24,10 @@
 
   // Kamera: translate(960,540) · scale(z) · translate(-x,-y)
   function camera(parent) {
-    const wrap = S("g", null, parent); // GSAP x/y = 960/540 (+ Shake)
+    const wrap = S("g", null, parent); // GSAP x/y = Bildmitte (+ Shake)
     const sc = S("g", null, wrap); // Zoom
     const pos = S("g", null, sc); // Pan
-    gsap.set(wrap, { x: 960, y: 540 });
+    gsap.set(wrap, { x: CX, y: CY });
     gsap.set(pos, { x: -960, y: -540 });
     const cam = { world: pos, sc, pos, wrap };
     cam.to = function (tl, t, p, dur, ease) {
@@ -45,9 +46,9 @@
       const n = Math.max(2, Math.round((dur || 0.3) / 0.05));
       for (let i = 0; i < n; i++) {
         const k = 1 - i / n;
-        tl.to(wrap, { x: 960 + (r() - 0.5) * amp * k, y: 540 + (r() - 0.5) * amp * k, duration: 0.05, ease: "sine.inOut" }, t + i * 0.05);
+        tl.to(wrap, { x: CX + (r() - 0.5) * amp * k, y: CY + (r() - 0.5) * amp * k, duration: 0.05, ease: "sine.inOut" }, t + i * 0.05);
       }
-      tl.to(wrap, { x: 960, y: 540, duration: 0.06, ease: "sine.out" }, t + n * 0.05);
+      tl.to(wrap, { x: CX, y: CY, duration: 0.06, ease: "sine.out" }, t + n * 0.05);
       return cam;
     };
     return cam;
@@ -149,7 +150,7 @@
 
     // ---- Wand mit Öffnung ----
     const wall = S("path", {
-      d: `M-400,-300 H2320 V${DY + DH} H-400 Z M${DX},${DY} V${DY + DH} H${DX + DW} V${DY} Z`,
+      d: `M-400,-1300 H2320 V${DY + DH} H-400 Z M${DX},${DY} V${DY + DH} H${DX + DW} V${DY} Z`,
       "fill-rule": "evenodd", fill: C.cream,
     }, W);
     set.wall = wall;
@@ -169,10 +170,10 @@
     S("rect", { x: 1500, y: 470, width: 34, height: 34, rx: 4, fill: "#fbf8f2", stroke: C.cream3, "stroke-width": 2 }, W);
     // Boden
     const floorG = gradient(svg, "lrFloor", [[0, "#d39a5e"], [1, "#c58a4f"]]);
-    S("rect", { x: -400, y: DY + DH, width: 2720, height: 600, fill: floorG }, W);
+    S("rect", { x: -400, y: DY + DH, width: 2720, height: 1700, fill: floorG }, W);
     for (let i = -12; i <= 30; i++) {
       const xt = 960 + (i - 9) * 70, xb = 960 + (i - 9) * 150;
-      S("line", { x1: xt, y1: DY + DH, x2: xb, y2: 1400, stroke: "#b77b42", "stroke-width": 3, opacity: 0.55 }, W);
+      S("line", { x1: xt, y1: DY + DH, x2: xt + (xb - xt) * 2.6, y2: DY + DH + (1400 - DY - DH) * 2.6, stroke: "#b77b42", "stroke-width": 3, opacity: 0.55 }, W);
     }
     S("rect", { x: -400, y: DY + DH - 6, width: 2720, height: 10, fill: "#e8dcc6" }, W); // Sockelleiste
     S("rect", { x: DX, y: DY + DH - 6, width: DW, height: 10, fill: "#00000000" }, W);
@@ -229,12 +230,12 @@
     const st = {};
     const root = S("g", { id: o.id }, svg);
     st.root = root;
-    S("rect", { x: 0, y: 0, width: 1920, height: 1080, fill: o.bg || C.blue }, root);
+    S("rect", { x: 0, y: 0, width: F.W, height: F.H, fill: o.bg || C.blue }, root);
     // feines Punkt-Raster + große, angeschnittene Bildmarken-Linie als Hintergrund-Ebene
     const dots = S("g", { opacity: o.dotOpacity || 0.08 }, root);
-    for (let y = 40; y < 1080; y += 48) for (let x = 40; x < 1920; x += 48) S("circle", { cx: x, cy: y, r: 2.2, fill: "#fff" }, dots);
+    for (let y = 40; y < F.H; y += 48) for (let x = 40; x < F.W; x += 48) S("circle", { cx: x, cy: y, r: 2.2, fill: "#fff" }, dots);
     const glow = radial(svg, (o.id || "st") + "Glow", [[0, "#2c5a6e", 0.9], [1, "#2c5a6e", 0]]);
-    S("ellipse", { cx: o.gx || 960, cy: o.gy || 560, rx: 900, ry: 620, fill: glow }, root);
+    S("ellipse", { cx: o.gx || CX, cy: o.gy || F.H * 0.52, rx: F.portrait ? 760 : 900, ry: F.portrait ? 1100 : 620, fill: glow }, root);
     st.layer = S("g", null, root);
     return st;
   }

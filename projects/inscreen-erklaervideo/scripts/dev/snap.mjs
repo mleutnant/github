@@ -6,6 +6,7 @@ const p = await b.newPage();
 const errs=[]; p.on('pageerror',e=>errs.push(String(e))); p.on('console',m=>{if(m.type()==='error'||m.type()==='warning')errs.push(m.text())});
 await p.setViewport({width:1920,height:1080,deviceScaleFactor:parseFloat(scale)});
 await p.goto('file://'+html,{waitUntil:'load'});
+const dim = await p.evaluate(()=>{const r=document.querySelector('[data-composition-id]'); return [parseInt(r.getAttribute('data-width')), parseInt(r.getAttribute('data-height'))];}); if (dim[0] && (dim[0]!==1920 || dim[1]!==1080)) await p.setViewport({width:dim[0],height:dim[1],deviceScaleFactor:parseFloat(scale)});
 await new Promise(r=>setTimeout(r,400)); if (errs.length) console.log('ERRORS:\n'+errs.join('\n'));
 for (const t of times.split(',')) {
   if (comp) await p.evaluate((c,t)=>{const tl=window.__timelines[c]; tl.seek(parseFloat(t), false);}, comp, t);

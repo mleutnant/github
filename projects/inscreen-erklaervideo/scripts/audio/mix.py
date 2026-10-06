@@ -105,10 +105,15 @@ def limiter(st, ceiling_db=-1.3, look=0.004, release=0.08):
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--cues", default="script/sfx_cues.json")
+    ap.add_argument("--out", default="assets/audio/mix.wav")
+    args = ap.parse_args()
     timing = json.loads((PROJECT / "script" / "timing.json").read_text(encoding="utf-8"))
     total = timing["total"]
     N = int(round(total * SR))
-    cues_path = PROJECT / "script" / "sfx_cues.json"
+    cues_path = PROJECT / args.cues
     cues = json.loads(cues_path.read_text(encoding="utf-8")) if cues_path.exists() else []
 
     # ---- Stimme
@@ -184,7 +189,7 @@ def main():
     for name, st in [("vo", vo), ("music", music), ("sfx", sfx)]:
         wavfile.write(str(stems / f"{name}.wav"), SR, np.clip(st.T, -1, 1).astype(np.float32))
     pcm = (np.clip(mix.T, -1, 1) * 32767).astype(np.int16)
-    wavfile.write(str(AUD / "mix.wav"), SR, pcm)
+    wavfile.write(str(PROJECT / args.out), SR, pcm)
     (PROJECT / "script" / "loudness.json").write_text(json.dumps(report, indent=1), encoding="utf-8")
     print(json.dumps(report, indent=1))
 

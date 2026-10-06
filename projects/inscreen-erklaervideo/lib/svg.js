@@ -50,5 +50,10 @@
     ink: "#1d2a31", mouth: "#7a2a33", tongue: "#e2706f",
   };
 
-  window.SVGK = { S, G, rng, C, NS };
+  // Bildformat (Querformat Standard; vertical.html setzt window.FORMAT = {W:1080,H:1920})
+  const F = window.FORMAT || { W: 1920, H: 1080 };
+  F.portrait = F.H > F.W;
+  window.FORMAT = F;
+
+  window.SVGK = { S, G, rng, C, NS, F };
 })();

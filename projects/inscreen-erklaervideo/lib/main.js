@@ -1,7 +1,8 @@
 // Baut die Master-Timeline aus timing.js + Szenen-Modulen (scenes/sXX.js).
 (function () {
   const T = window.TIMING;
-  const { S, C } = window.SVGK;
+  const { S, C, F } = window.SVGK;
+  const FW = F.W, FH = F.H;
   const tl = gsap.timeline({ paused: true });
   const svg = document.getElementById("scene");
   const hud = document.getElementById("hud");
@@ -72,19 +73,19 @@
   function maskFor(name) {
     const st = R.sets[name];
     if (st._mask) return st._mask;
-    const m = S("mask", { id: "mask-" + name, maskUnits: "userSpaceOnUse", x: 0, y: 0, width: 1920, height: 1080 }, defs);
-    const rect = S("rect", { x: 0, y: 0, width: 1920, height: 1080, fill: "#fff" }, m);
-    const circ = S("circle", { cx: 960, cy: 540, r: 0, fill: "#fff" }, m);
-    const hole = S("circle", { cx: 960, cy: 540, r: 0, fill: "#000" }, m);
+    const m = S("mask", { id: "mask-" + name, maskUnits: "userSpaceOnUse", x: 0, y: 0, width: FW, height: FH }, defs);
+    const rect = S("rect", { x: 0, y: 0, width: FW, height: FH, fill: "#fff" }, m);
+    const circ = S("circle", { cx: FW / 2, cy: FH / 2, r: 0, fill: "#fff" }, m);
+    const hole = S("circle", { cx: FW / 2, cy: FH / 2, r: 0, fill: "#000" }, m);
     st.root.setAttribute("mask", `url(#mask-${name})`);
     st._mask = { m, rect, circ, hole };
     return st._mask;
   }
   Object.keys(R.sets).forEach(maskFor);
   const trLayer = S("g", { id: "transitions" }, svg);
-  const bars = [C.yellow, C.red].map((col) => S("rect", { x: -60, y: -20, width: 34, height: 1120, fill: col, opacity: 0 }, trLayer));
-  const ring = S("circle", { cx: 960, cy: 540, r: 0, fill: "none", stroke: C.yellow, "stroke-width": 16, opacity: 0 }, trLayer);
-  const scanLine = S("rect", { x: -20, y: -10, width: 1960, height: 10, fill: C.yellow, opacity: 0 }, trLayer);
+  const bars = [C.yellow, C.red].map((col) => S("rect", { x: -60, y: -20, width: 34, height: FH + 40, fill: col, opacity: 0 }, trLayer));
+  const ring = S("circle", { cx: FW / 2, cy: FH / 2, r: 0, fill: "none", stroke: C.yellow, "stroke-width": 16, opacity: 0 }, trLayer);
+  const scanLine = S("rect", { x: -20, y: -10, width: FW + 40, height: 10, fill: C.yellow, opacity: 0 }, trLayer);
 
   // Übergangstypen (eingehende Szene -> Typ)
   const TRANS = {
@@ -112,7 +113,8 @@
       tl.set(hB, { visibility: "visible", opacity: 1 }, tb - 0.12);
       return;
     }
-    const tr = TRANS[id] || { type: "wipe", dir: 1 };
+    const scT = (window.SCENES || {})[id];
+    const tr = (scT && scT.trans) || TRANS[id] || { type: "wipe", dir: 1 };
     const t0 = tb - D * 0.45, t1 = t0 + D;
     const mi = maskFor(b), mo = maskFor(a);
     const E = { duration: D, ease: "power3.inOut" };
@@ -120,17 +122,17 @@
     tl.set(hB, { visibility: "visible", opacity: 1 }, t0);
     if (tr.type === "wipe") {
       const L = tr.dir > 0;
-      tl.fromTo(mi.rect, { attr: { x: L ? 0 : 1920, width: 0 } }, Object.assign({ attr: { x: 0, width: 1920 } }, E, IR), t0);
-      tl.fromTo(mo.rect, { attr: { x: 0, width: 1920 } }, Object.assign({ attr: { x: L ? 1920 : 0, width: 0 } }, E, IR), t0);
+      tl.fromTo(mi.rect, { attr: { x: L ? 0 : FW, width: 0 } }, Object.assign({ attr: { x: 0, width: FW } }, E, IR), t0);
+      tl.fromTo(mo.rect, { attr: { x: 0, width: FW } }, Object.assign({ attr: { x: L ? FW : 0, width: 0 } }, E, IR), t0);
       tl.fromTo(hB, { clipPath: L ? "inset(0% 100% 0% 0%)" : "inset(0% 0% 0% 100%)" }, Object.assign({ clipPath: "inset(0% 0% 0% 0%)" }, E, IR), t0);
       tl.fromTo(hA, { clipPath: "inset(0% 0% 0% 0%)" }, Object.assign({ clipPath: L ? "inset(0% 0% 0% 100%)" : "inset(0% 100% 0% 0%)" }, E, IR), t0);
       bars.forEach((bar, i) => {
         tl.set(bar, { opacity: 1 }, t0);
-        tl.fromTo(bar, { x: L ? -60 - i * 46 : 1980 + i * 46 }, Object.assign({ x: L ? 1980 + i * 46 : -60 - i * 46 }, E, IR, { duration: D + 0.04 }), t0 + i * 0.03);
+        tl.fromTo(bar, { x: L ? -60 - i * 46 : FW + 60 + i * 46 }, Object.assign({ x: L ? FW + 60 + i * 46 : -60 - i * 46 }, E, IR, { duration: D + 0.04 }), t0 + i * 0.03);
         tl.set(bar, { opacity: 0 }, t1 + 0.1);
       });
     } else if (tr.type === "iris") {
-      const rr = Math.hypot(Math.max(tr.cx, 1920 - tr.cx), Math.max(tr.cy, 1080 - tr.cy)) + 20;
+      const rr = Math.hypot(Math.max(tr.cx, FW - tr.cx), Math.max(tr.cy, FH - tr.cy)) + 20;
       const EI = { duration: D + 0.1, ease: "power2.inOut" };
       tl.set(mi.rect, { attr: { width: 0 } }, t0);
       tl.set([mi.circ, mo.hole, ring], { attr: { cx: tr.cx, cy: tr.cy } }, t0);
@@ -142,15 +144,15 @@
       tl.fromTo(hB, { clipPath: `circle(0px at ${tr.cx}px ${tr.cy}px)` }, Object.assign({ clipPath: `circle(${Math.round(rr)}px at ${tr.cx}px ${tr.cy}px)` }, EI, IR), t0);
       tl.set(hB, { clipPath: "none" }, t1 + 0.12);
       tl.to(hA, { opacity: 0, duration: 0.18, ease: "power1.in" }, t0);
-      tl.set(mi.rect, { attr: { width: 1920, x: 0 } }, t1 + 0.12);
+      tl.set(mi.rect, { attr: { width: FW, x: 0 } }, t1 + 0.12);
       tl.set(mi.circ, { attr: { r: 0 } }, t1 + 0.12);
     } else if (tr.type === "scan") {
       const up = !!tr.up;
       const ES = { duration: D, ease: "power2.inOut" };
-      tl.fromTo(mi.rect, { attr: { y: up ? 1080 : 0, height: 0 } }, Object.assign({ attr: { y: 0, height: 1080 } }, ES, IR), t0);
-      tl.fromTo(mo.rect, { attr: { y: 0, height: 1080 } }, Object.assign({ attr: { y: up ? 0 : 1080, height: 0 } }, ES, IR), t0);
+      tl.fromTo(mi.rect, { attr: { y: up ? FH : 0, height: 0 } }, Object.assign({ attr: { y: 0, height: FH } }, ES, IR), t0);
+      tl.fromTo(mo.rect, { attr: { y: 0, height: FH } }, Object.assign({ attr: { y: up ? 0 : FH, height: 0 } }, ES, IR), t0);
       tl.set(scanLine, { opacity: 1 }, t0);
-      tl.fromTo(scanLine, { y: up ? 1080 : -10 }, Object.assign({ y: up ? -10 : 1080 }, ES, IR), t0);
+      tl.fromTo(scanLine, { y: up ? FH : -10 }, Object.assign({ y: up ? -10 : FH }, ES, IR), t0);
       tl.set(scanLine, { opacity: 0 }, t1);
       tl.fromTo(hB, { clipPath: up ? "inset(100% 0% 0% 0%)" : "inset(0% 0% 100% 0%)" }, Object.assign({ clipPath: "inset(0% 0% 0% 0%)" }, ES, IR), t0);
       tl.fromTo(hA, { clipPath: "inset(0% 0% 0% 0%)" }, Object.assign({ clipPath: up ? "inset(0% 0% 100% 0%)" : "inset(100% 0% 0% 0%)" }, ES, IR), t0);
@@ -158,7 +160,7 @@
     // ausgehendes Set verstecken und Maske zurücksetzen
     tl.set(R.sets[a].root, { visibility: "hidden" }, t1 + 0.14);
     tl.set(hA, { visibility: "hidden" }, t1 + 0.14);
-    tl.set(mo.rect, { attr: { x: 0, y: 0, width: 1920, height: 1080 } }, t1 + 0.16);
+    tl.set(mo.rect, { attr: { x: 0, y: 0, width: FW, height: FH } }, t1 + 0.16);
     tl.set(mo.hole, { attr: { r: 0 } }, t1 + 0.16);
     ANIM.sfx(t0 + 0.05, tr.type === "iris" ? "whooshSoft" : "whoosh", -2);
   }
@@ -176,7 +178,5 @@
     if (i > 0) transition(order[i - 1], id);
   });
 
-  window.__timelines = window.__timelines || {};
-  window.__timelines["inscreen-erklaervideo"] = tl;
-  window.MASTER_TL = tl;
+  window.MASTER_TL = tl; // Registrierung in index.html / vertical.html
 })();

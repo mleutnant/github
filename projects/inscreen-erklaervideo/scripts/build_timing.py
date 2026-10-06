@@ -131,8 +131,8 @@ def main():
         encoding="utf-8",
     )
     # Gesamtdauer statisch ins HTML schreiben (der HyperFrames-Compiler liest data-duration statisch)
-    html = PROJECT / "index.html"
-    if html.exists():
+    for html in (PROJECT / "index.html", PROJECT / "vertical.html"):
+      if html.exists():
         h = html.read_text(encoding="utf-8")
         h = re.sub(r'data-start="0" data-duration="[\d.]+"', f'data-start="0" data-duration="{total}"', h, count=1)
         html.write_text(h, encoding="utf-8")

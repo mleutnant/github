@@ -120,7 +120,7 @@
     const tree = S("g", null, out);
     S("rect", { x: 1376, y: 470, width: 26, height: 300, fill: "#6f4a2e" }, tree);
     [[1390, 420, 120, C.g1], [1310, 480, 80, C.g2], [1460, 470, 90, C.g1], [1380, 330, 90, C.g2]].forEach(([x, y, r2, c]) => S("circle", { cx: x, cy: y, r: r2, fill: c }, tree));
-    // Terrasse auf gleicher Höhe wie der Innenboden (barrierefrei)
+    // Terrasse auf gleicher Höhe wie der Innenboden (keine Stolperkante)
     S("rect", { x: DX - 80, y: 780, width: DW + 160, height: 140, fill: "#e6dac6" }, out);
     for (let i = 0; i < 9; i++) S("line", { x1: DX - 80 + i * 130, y1: 780, x2: DX - 160 + i * 150, y2: 920, stroke: "#d2c3aa", "stroke-width": 3 }, out);
     S("line", { x1: DX - 80, y1: 826, x2: DX + DW + 80, y2: 826, stroke: "#d2c3aa", "stroke-width": 3 }, out);

@@ -1,4 +1,4 @@
-// s11 — „Integriert, barrierefrei, schnell montiert: Darum ist InScreen die beste Insektenschutzlösung für Hebeschiebetüren.“
+// s11 — „Integriert, farblich passend, schnell montiert: Darum ist InScreen die beste Insektenschutzlösung für Hebeschiebetüren.“
 // Abenddämmerung, Anna mit Limonade, Mücken schmollen draußen — Vorteils-Trio, dann Marken-Endkarte.
 (window.SCENES = window.SCENES || {}).s11 = {
   set: "lr",
@@ -30,8 +30,8 @@
     document.head.appendChild(css);
     const panel = ANIM.el("div", "s11-panel", h);
     panel.innerHTML = [
-      ["farbfaecher", "Integriert"],
-      ["barrierefrei", "Barrierefrei"],
+      ["sonderausstattung", "Integriert"],
+      ["farbfaecher", "Farblich passend"],
       ["renovierung", "Schnell montiert"],
     ].map(([ic, t]) => `<div class="s11-row"><div class="s11-mark"></div><img src="assets/brand/icons/${ic}.svg" crossorigin="anonymous"><b>${t}</b></div>`).join("");
     const end = ANIM.el("div", "s11-end", h);
@@ -80,7 +80,7 @@
     const k = R._s11;
     const t0 = ctx.t0, tPre = t0 - 0.32;
     const tInt = ctx.w("integriert");
-    const tBar = ctx.w("barrierefrei");
+    const tBar = ctx.w("farblich");
     const tSch = ctx.w("schnell");
     const tDar = ctx.w("darum");
     const tIns = ctx.w("inscreen");

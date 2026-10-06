@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import re
+import statistics
 import subprocess
 from pathlib import Path
 
@@ -79,14 +80,36 @@ def audio_duration(path: Path) -> float:
     return float(out.stdout.strip())
 
 
+def find_vo(sid: str) -> tuple[Path, Path]:
+    meta = VO_DIR / f"{sid}.json"
+    audio = next((VO_DIR / f"{sid}.{ext}" for ext in ("mp3", "wav") if (VO_DIR / f"{sid}.{ext}").exists()), VO_DIR / f"{sid}.mp3")
+    return audio, meta
+
+
+def pace_factor(cfg: dict) -> float:
+    """Sprechtempo der vorhandenen Stimme relativ zur Schätzung (Median über alle Abschnitte mit Aufnahme).
+
+    Wird ein einzelner Abschnitt neu getextet (alte Aufnahme verworfen), wird er damit im Tempo der
+    übrigen Stimme geschätzt statt mit der pauschalen Sprechgeschwindigkeit.
+    """
+    ratios = []
+    for seg in cfg["segments"]:
+        audio, meta = find_vo(seg["id"])
+        if audio.exists() and meta.exists():
+            words = words_from_alignment(seg["text"], json.loads(meta.read_text(encoding="utf-8"))["alignment"])
+            est = words_estimated(seg["text"])
+            ratios.append((words[-1]["e"] - words[0]["s"]) / est[-1]["e"])
+    return statistics.median(ratios) if ratios else 1.0
+
+
 def main():
     cfg = json.loads(SEGMENTS.read_text(encoding="utf-8"))
     t = INTRO
     segs, source = [], "estimated"
+    pace = pace_factor(cfg)
     for seg in cfg["segments"]:
         sid = seg["id"]
-        meta = VO_DIR / f"{sid}.json"
-        mp3 = next((VO_DIR / f"{sid}.{ext}" for ext in ("mp3", "wav") if (VO_DIR / f"{sid}.{ext}").exists()), VO_DIR / f"{sid}.mp3")
+        mp3, meta = find_vo(sid)
         if mp3.exists() and meta.exists():
             source = "elevenlabs"
             data = json.loads(meta.read_text(encoding="utf-8"))
@@ -94,7 +117,7 @@ def main():
             file_dur = audio_duration(mp3)
             file = f"assets/audio/vo/{mp3.name}"
         else:
-            words = words_estimated(seg["text"])
+            words = [{"w": w["w"], "s": round(w["s"] * pace, 3), "e": round(w["e"] * pace, 3)} for w in words_estimated(seg["text"])]
             file_dur = words[-1]["e"] + 0.05
             file = None
         speech_start, speech_end = words[0]["s"], words[-1]["e"]
@@ -136,7 +159,7 @@ def main():
         h = html.read_text(encoding="utf-8")
         h = re.sub(r'data-start="0" data-duration="[\d.]+"', f'data-start="0" data-duration="{total}"', h, count=1)
         html.write_text(h, encoding="utf-8")
-    print(f"Quelle: {source} · Gesamtlänge {total:.2f} s")
+    print(f"Quelle: {source} · Gesamtlänge {total:.2f} s · Schätz-Tempo ×{pace:.3f}")
     for s in segs:
         print(f"  {s['id']}  Fenster {s['winStart']:6.2f}–{s['winEnd']:6.2f}  Sprache {s['start']:6.2f}–{s['end']:6.2f}  {s['scene']}")
 

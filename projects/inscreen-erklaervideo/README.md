@@ -11,7 +11,7 @@ HyperFrames (HTML + SVG + GSAP). Alle Figuren, Kulissen, Musik und Geräusche si
 | `index.html` | Wurzel-Komposition (lädt Timing, Bibliotheken, Szenen) |
 | `timing.js` / `script/timing.json` | Szenenfenster + Wortzeiten (aus ElevenLabs-Zeitstempeln, sonst geschätzt) |
 | `script/vo_segments.json` | Sprechertext in 11 Abschnitten, Stimme, Modell |
-| `lib/` | `svg.js` (Helfer, Palette), `characters.js` (Anna, Mücken, Ben, Kind, Opa, Saugroboter), `door.js` (QuinLine-Hebeschiebetür mit InScreen), `sets.js` (Wohnzimmer, Bühnen, Kamera), `anim.js` (IK, Gehen, SFX-Cues), `main.js` (Master-Timeline, Übergänge) |
+| `lib/` | `svg.js` (Helfer, Palette), `characters.js` (Anna, Mücken, Ben, Kind, Opa, Tablett), `door.js` (QuinLine-Hebeschiebetür mit InScreen), `sets.js` (Wohnzimmer, Bühnen, Kamera), `anim.js` (IK, Gehen, SFX-Cues), `main.js` (Master-Timeline, Übergänge) |
 | `scenes/s01.js … s11.js` | eine Datei pro Szene, Choreografie an Anker-Wörtern |
 | `scripts/vo_elevenlabs.py` | Stimme erzeugen (lokal, Key aus `.env`) |
 | `scripts/build_timing.py` | Timing aus den VO-Dateien bauen |

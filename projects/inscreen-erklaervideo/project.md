@@ -15,7 +15,7 @@ Mix −12 LUFS.
   nicht erreichbar (Policy + kein Key) → `scripts/vo_elevenlabs.py` läuft lokal beim Nutzer.
 - Sprechertext auf ~910 Zeichen gekürzt (11 Abschnitte, `script/vo_segments.json`).
 - Architektur: ein Wohnzimmer-Set mit Kamera (s01, s02, s04, s06, s08, s11) + Erklär-Einschübe
-  (s03 Problem, s05 Röntgen, s07 Barrierefrei, s09/s10 Fachpartner). Alle Bewegungen an Wort-Ankern
+  (s03 Problem, s05 Röntgen, s07 Keine Stolperkante, s09/s10 Fachpartner). Alle Bewegungen an Wort-Ankern
   (`ctx.w`), Timing aus ElevenLabs-Zeichen-Zeitstempeln → echte Stimme verschiebt alles automatisch.
 - Sub-Agents (CLAUDE.md-Regel): s03, s05, s07, s09+s10 parallel; Fundament + Wohnzimmer-Szenen selbst.
 - Marke: Filson Pro, SCHMIDT-Farben, L-Rahmenmotiv, Listen mit `|`; Illustrationspalette als

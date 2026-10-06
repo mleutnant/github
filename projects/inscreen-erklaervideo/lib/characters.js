@@ -1,4 +1,4 @@
-// Figuren-Rigs: Anna, Mücken, Ben, Kind auf Bobbycar, Opa mit Rollator, Saugroboter.
+// Figuren-Rigs: Anna, Mücken, Ben, Kind auf Bobbycar, Opa mit Rollator, Saugroboter (ungenutzt), Tablett.
 // Jede Figur liefert Gruppen mit Drehpunkt im lokalen Ursprung + eine kleine Animations-API,
 // die Tweens immer in eine übergebene GSAP-Timeline an eine feste Zeit schreibt (seekbar).
 (function () {
@@ -529,5 +529,48 @@
     return ch;
   }
 
-  window.CHAR = { makeAnna, makeBen, makeMosquito, makeKid, makeOpa, makeRobot, face, limb, hand, BROWS, O0 };
+  // ---------- Tablett mit Himbeer-Limonade (Requisite für s07, hebt sich vom gelben Kleid ab) ----------
+  // Ursprung = Mitte der Tablett-Oberseite (Gläser stehen auf y = 0), Griffe bei x = ±(w/2 + 6).
+  // ch.levels[i] = Flüssigkeit je Glas (im Glas beschnitten) — darf zum Schwapp-Test leicht kippen.
+  let trayN = 0;
+  function makeTray(parent, o) {
+    o = o || {};
+    const ch = { name: "tray" };
+    const id = `tray${trayN++}`;
+    const root = G(parent, { x: o.x || 0, y: o.y || 0 });
+    ch.root = root;
+    const base = S("g", { transform: `scale(${o.s || 1})` }, root);
+    ch.base = base;
+    const W = o.w || 180;
+    ch.w = W;
+    ch.grip = W / 2 + 6;
+    ch.levels = [];
+    ch.glasses = [];
+    const defs = S("defs", null, base);
+    [-54, 0, 54].forEach((gx, i) => {
+      const g = G(base, { x: gx, y: 0 });
+      const shape = "M-16,-64 L16,-64 L13,0 L-13,0 Z";
+      const cp = S("clipPath", { id: `${id}g${i}` }, defs);
+      S("path", { d: shape }, cp);
+      S("path", { d: shape, fill: C.white, opacity: 0.85 }, g);
+      const clip = S("g", { "clip-path": `url(#${id}g${i})` }, g);
+      const lv = G(clip, { x: 0, y: -44 }); // Drehpunkt Mitte Flüssigkeitsspiegel
+      S("rect", { x: -40, y: 0, width: 80, height: 60, fill: "#e8607a" }, lv);
+      S("rect", { x: -40, y: 0, width: 80, height: 4, fill: "#f6a7b4" }, lv);
+      S("circle", { cx: -5, cy: 18, r: 2.4, fill: "#fbd3da", opacity: 0.9 }, lv);
+      S("circle", { cx: 6, cy: 30, r: 1.8, fill: "#fbd3da", opacity: 0.9 }, lv);
+      S("path", { d: shape, fill: "none", stroke: C.b3, "stroke-width": 2.4, "stroke-linejoin": "round" }, g);
+      S("line", { x1: -6, y1: -86, x2: 3, y2: -30, stroke: C.b2, "stroke-width": 4, "stroke-linecap": "round" }, g);
+      S("circle", { cx: 12, cy: -62, r: 9, fill: C.y2, stroke: C.yDark, "stroke-width": 1.6 }, g);
+      ch.glasses.push(g);
+      ch.levels.push(lv);
+    });
+    S("rect", { x: -W / 2 - 10, y: -3, width: 16, height: 12, rx: 5, fill: C.oak1 }, base);
+    S("rect", { x: W / 2 - 6, y: -3, width: 16, height: 12, rx: 5, fill: C.oak1 }, base);
+    S("rect", { x: -W / 2, y: 0, width: W, height: 12, rx: 6, fill: C.oak2 }, base);
+    S("rect", { x: -W / 2 + 6, y: 8, width: W - 12, height: 5, rx: 2.5, fill: C.oak1 }, base);
+    return ch;
+  }
+
+  window.CHAR = { makeAnna, makeBen, makeMosquito, makeKid, makeOpa, makeRobot, makeTray, face, limb, hand, BROWS, O0 };
 })();

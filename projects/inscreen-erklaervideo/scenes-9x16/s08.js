@@ -59,9 +59,9 @@
     anna.blinks(tl, t0 + 0.2, t1, 23);
 
     // Mücken draußen: warten im Garten (rechts von Anna, im noch offenen Teil der Tür)
-    const wait = [{ x: 1112, y: 690 }, { x: 1300, y: 476 }, { x: 1386, y: 800 }];
+    const wait = [{ x: 1116, y: 762 }, { x: 1300, y: 476 }, { x: 1386, y: 800 }];
     R.mOut.forEach((m, i) => {
-      tl.set(m.root, { x: wait[i].x, y: wait[i].y, scale: 0.42, opacity: 1 }, tPre);
+      tl.set(m.root, { x: wait[i].x, y: wait[i].y, scale: 0.5, opacity: 1 }, tPre);
       tl.set(m.bob, { scaleX: 1, scaleY: 1, x: 0, y: 0, rotation: 0, transformOrigin: "50% 50%" }, tPre);
       m.face_(tl, tPre, -1);
       m.expr(tl, tPre, "smirk", "sly");
@@ -110,7 +110,7 @@
 
     const hit = { x: 1130, y: 540 };
     const m0 = R.mOut[0];
-    tl.to(m0.root, { motionPath: { path: [{ x: 1086, y: 664 }, { x: 1098, y: 596 }, hit], curviness: 1.2 }, scale: 1.05, duration: 0.55, ease: "power3.in" }, tCh);
+    tl.to(m0.root, { motionPath: { path: [{ x: 1090, y: 716 }, { x: 1096, y: 622 }, hit], curviness: 1.2 }, scale: 1.05, duration: 0.55, ease: "power3.in" }, tCh);
     ANIM.sfx(tCh, "buzzShort", -6);
     const tHit = tMue + 0.1;
     tl.to(m0.bob, Object.assign({ scaleX: 0.55, scaleY: 1.3, duration: 0.06, ease: "power4.out" }, { transformOrigin: "50% 50%" }), tHit);
@@ -118,6 +118,8 @@
     ANIM.sfx(tHit, "bonk", -2);
     ANIM.sfx(tHit + 0.02, "boing", -6);
     cam.shake(tl, tHit, 10, 0.25);
+    // Aufprall-Strahlen vor dem Gewebe (im Hochformat deutlicher lesbar)
+    ANIM.burst(tl, lr.fgLayer, hit.x + 6, hit.y, tHit, { n: 8, color: C.yellow, len: 30, r0: 60, w: 5, seed: 12 });
     // Abdruck im Gewebe (kleine Delle)
     const dent = S("ellipse", { cx: hit.x + 8, cy: hit.y, rx: 34, ry: 46, fill: "none", stroke: "#2f353a", "stroke-width": 2, opacity: 0 }, lr.fgLayer);
     tl.to(dent, { opacity: 0.35, duration: 0.05 }, tHit);

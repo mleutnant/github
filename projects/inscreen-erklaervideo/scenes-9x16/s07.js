@@ -496,6 +496,7 @@
       ANIM.sfx(tL - 0.42, "roll", -10, { dur: 0.25 });
       ANIM.sfx(tL, "roll", -3, { dur: Dk });
       ANIM.sfx(tCross - 0.2, "whoosh", -3);
+      ANIM.sfx(tStop - 0.25, "slide", -12, { dur: 0.3 }); // Bremsen (schon außerhalb des Bildes)
 
       // ---------- Opa mit Rollator ----------
       opa.init(tl);

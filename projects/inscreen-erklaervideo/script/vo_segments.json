@@ -1,0 +1,19 @@
+{
+  "voice_id": "g1jpii0iyvtRs8fqXsd1",
+  "voice_name": "ElevenLabs g1jpii0iyvtRs8fqXsd1",
+  "model_preference": ["eleven_v4", "eleven_v3", "eleven_multilingual_v2"],
+  "language_code": "de",
+  "segments": [
+    { "id": "s01", "scene": "Sommerabend", "text": "Ein warmer Sommerabend. Die Hebeschiebetür steht weit offen – herrlich." },
+    { "id": "s02", "scene": "Mücken", "text": "Wären da nur nicht die ungebetenen Gäste." },
+    { "id": "s03", "scene": "Problem", "text": "Klassische Fliegengitter sind meist nachträglich aufgesetzt. Sie fallen auf, bilden eine Stolperkante – und gebohrt wird auch noch." },
+    { "id": "s04", "scene": "Auftritt InScreen", "text": "Genau hier kommt InScreen ins Spiel: der Insektenschutz, der direkt in die QuinLine-Hebeschiebetür integriert ist." },
+    { "id": "s05", "scene": "Integration", "text": "Sein Rahmen sitzt im Festflügel und in der Schwelle." },
+    { "id": "s06", "scene": "Unsichtbar & farbgleich", "text": "Wird das Plissee nicht gebraucht, verschwindet es fast unsichtbar im Profil. Und farblich passt es exakt zur Tür." },
+    { "id": "s07", "scene": "Barrierefrei", "text": "Im Durchgang gibt es keine Stolperkante. Barrierefrei – für Kinder, Großeltern und sogar den Saugroboter." },
+    { "id": "s08", "scene": "Bedienung", "text": "Das Fiberglas-Plissee gleitet stufenlos auf und zu. Und die Mücken? Die bleiben draußen." },
+    { "id": "s09", "scene": "Bestellung", "text": "Für Sie als Fachpartner besonders praktisch: Bestellt wird aus einer Hand, die Maße der Tür liegen ja schon vor." },
+    { "id": "s10", "scene": "Plug & Play", "text": "Ab Werk kommt InScreen als Plug-and-Play-Set: einfach einclipsen – ohne Bohren, ohne Schrauben. Und auch die Nachrüstung ist in wenigen Schritten erledigt." },
+    { "id": "s11", "scene": "Abschluss", "text": "Integriert, barrierefrei und schnell montiert: Darum ist InScreen die beste Insektenschutzlösung für Hebeschiebetüren." }
+  ]
+}

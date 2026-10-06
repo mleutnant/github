@@ -1,6 +1,6 @@
 {
-  "voice_id": "Dm2pqleCzqJpMQglh5nm",
-  "voice_name": "Alex (ElevenLabs)",
+  "voice_id": "g1jpii0iyvtRs8fqXsd1",
+  "voice_name": "ElevenLabs g1jpii0iyvtRs8fqXsd1",
   "model_preference": ["eleven_v4", "eleven_v3", "eleven_multilingual_v2"],
   "language_code": "de",
   "segments": [

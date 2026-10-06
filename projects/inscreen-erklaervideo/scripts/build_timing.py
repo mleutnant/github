@@ -31,6 +31,9 @@ GAP_AFTER = {
     "s01": 0.45, "s02": 0.4, "s03": 0.45, "s04": 0.35, "s05": 0.6,
     "s06": 0.95, "s07": 0.4, "s08": 0.45, "s09": 0.3, "s10": 0.45,
 }
+# Quellsynchron: zusätzliche Pause NACH einem Abschnitt (die Aufnahme wird dort geschnitten und der Rest
+# um diesen Betrag später angelegt) — s06: drei Türfarben sollen jeweils gut zu erkennen sein.
+SYNC_EXTRA = {"s06": 3.0}
 VISUAL_LEAD = 0.3  # Bildwechsel kommt so viel früher als das erste Wort des Abschnitts
 
 
@@ -118,8 +121,19 @@ def source_sync(cfg: dict) -> dict | None:
     if len({m["source"] for m in metas}) != 1:
         return None
     first = metas[0]["source_start"] + metas[0]["alignment"]["character_start_times_seconds"][0]
+    # Schnittpunkte in der Aufnahme: Mitte der Pause zwischen Abschnitt und Nachfolger
+    cuts, extra, shifts = [], 0.0, []
+    for i, (seg, m) in enumerate(zip(cfg["segments"], metas)):
+        shifts.append(extra)
+        add = SYNC_EXTRA.get(seg["id"], 0.0)
+        if add and i + 1 < len(metas):
+            end_src = m["source_start"] + m["alignment"]["character_end_times_seconds"][-1]
+            nxt = metas[i + 1]
+            start_src = nxt["source_start"] + nxt["alignment"]["character_start_times_seconds"][0]
+            cuts.append({"after": seg["id"], "source_t": round((end_src + start_src) / 2, 3), "insert": add})
+            extra += add
     return {"source": metas[0]["source"], "offset": round(max(0.0, INTRO - first), 3),
-            "starts": [m["source_start"] for m in metas]}
+            "starts": [m["source_start"] for m in metas], "shifts": shifts, "cuts": cuts}
 
 
 def main():
@@ -144,7 +158,7 @@ def main():
         speech_start, speech_end = words[0]["s"], words[-1]["e"]
         clip_start = t - speech_start  # Clip so legen, dass das erste Wort exakt bei t liegt
         if sync:  # Lage wie in der Originalaufnahme (natürliche Pausen statt GAP_AFTER)
-            clip_start = sync["offset"] + sync["starts"][len(segs)]
+            clip_start = sync["offset"] + sync["starts"][len(segs)] + sync["shifts"][len(segs)]
         absw = [
             {"w": w["w"], "k": norm(w["w"]).lower(), "s": round(clip_start + w["s"], 3), "e": round(clip_start + w["e"], 3)}
             for w in words
@@ -171,7 +185,7 @@ def main():
 
     timing = {"fps": FPS, "total": total, "source": source, "segments": segs}
     if sync:
-        timing["voSync"] = {"source": sync["source"], "offset": sync["offset"]}
+        timing["voSync"] = {"source": sync["source"], "offset": sync["offset"], "cuts": sync["cuts"]}
     OUT_JSON.write_text(json.dumps(timing, ensure_ascii=False, indent=1), encoding="utf-8")
     OUT_JS.write_text(
         "// Generiert von scripts/build_timing.py — nicht von Hand bearbeiten.\n"
@@ -186,7 +200,9 @@ def main():
         html.write_text(h, encoding="utf-8")
     print(f"Quelle: {source} · Gesamtlänge {total:.2f} s · Schätz-Tempo ×{pace:.3f}")
     if sync:
-        print(f"Quellsynchron zu {sync['source']}: Aufnahme unverändert ab {sync['offset']:.3f} s unter das Video legen")
+        print(f"Quellsynchron zu {sync['source']}: Aufnahme ab {sync['offset']:.3f} s unter das Video legen")
+        for c in sync["cuts"]:
+            print(f"  Schnitt nach {c['after']} bei Aufnahme-Zeit {c['source_t']:.3f} s, Rest +{c['insert']:.2f} s später")
     for s in segs:
         print(f"  {s['id']}  Fenster {s['winStart']:6.2f}–{s['winEnd']:6.2f}  Sprache {s['start']:6.2f}–{s['end']:6.2f}  {s['scene']}")
 

@@ -70,9 +70,17 @@ def main():
         "Bewegungen auf den richtigen Wörtern. Kleine Abweichungen (± 0,3 s) sind unkritisch.",
         "",
         *([
-            f"**Eigene Aufnahme anlegen:** `{T['voSync']['source']}` unverändert (kein Tempo, kein Schnitt) bei "
+            f"**Eigene Aufnahme anlegen:** `{T['voSync']['source']}` ohne Tempoänderung bei "
             f"**{dec3(T['voSync']['offset'])} s** (Timecode {srt_tc(T['voSync']['offset'])}) auf die Tonspur legen — "
             "dann sitzt jedes Wort auf der Animation.",
+            "",
+            *[
+                f"**Schnitt nach Abschnitt {int(c['after'][1:])}:** Aufnahme bei **{dec3(c['source_t'])} s** (Aufnahme-Zeit) "
+                f"schneiden und den Rest **{dec(c['insert'])} s später** anlegen — also ab Video-Zeit "
+                f"**{dec3(T['voSync']['offset'] + c['source_t'] + sum(x['insert'] for x in T['voSync']['cuts'][:k + 1]))} s**."
+                for k, c in enumerate(T["voSync"].get("cuts", []))
+            ],
+            *(["", "Sonst nichts schneiden oder verschieben."] if T["voSync"].get("cuts") else []),
             "",
         ] if T.get("voSync") else []),
         "| Nr. | Einsatz | Ende | Sprechdauer | Pause danach | Text |",

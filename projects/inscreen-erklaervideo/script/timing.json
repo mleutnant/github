@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "total": 70.733,
+ "total": 73.733,
  "source": "elevenlabs",
  "segments": [
   {
@@ -433,483 +433,490 @@
     }
    ],
    "winStart": 25.6,
-   "winEnd": 31.83
+   "winEnd": 34.83
   },
   {
    "id": "s07",
    "scene": "Keine Stolperkante",
    "text": "Keine Stolperkante im Durchgangsbereich: bequem für Kinder, Großeltern – und das volle Tablett.",
    "file": "assets/audio/vo/s07.wav",
-   "clipStart": 32.07,
+   "clipStart": 35.07,
    "fileDur": 6.83,
-   "start": 32.13,
-   "end": 38.76,
+   "start": 35.13,
+   "end": 41.76,
    "words": [
     {
      "w": "Keine",
      "k": "keine",
-     "s": 32.13,
-     "e": 32.467
+     "s": 35.13,
+     "e": 35.467
     },
     {
      "w": "Stolperkante",
      "k": "stolperkante",
-     "s": 32.487,
-     "e": 33.21
+     "s": 35.487,
+     "e": 36.21
     },
     {
      "w": "im",
      "k": "im",
-     "s": 33.23,
-     "e": 33.402
+     "s": 36.23,
+     "e": 36.402
     },
     {
      "w": "Durchgangsbereich:",
      "k": "durchgangsbereich",
-     "s": 33.422,
-     "e": 34.42
+     "s": 36.422,
+     "e": 37.42
     },
     {
      "w": "bequem",
      "k": "bequem",
-     "s": 34.68,
-     "e": 35.185
+     "s": 37.68,
+     "e": 38.185
     },
     {
      "w": "für",
      "k": "für",
-     "s": 35.205,
-     "e": 35.5
+     "s": 38.205,
+     "e": 38.5
     },
     {
      "w": "Kinder,",
      "k": "kinder",
-     "s": 35.52,
-     "e": 36.026
+     "s": 38.52,
+     "e": 39.026
     },
     {
      "w": "Großeltern",
      "k": "großeltern",
-     "s": 36.046,
-     "e": 36.852
+     "s": 39.046,
+     "e": 39.852
     },
     {
      "w": "–",
      "k": "",
-     "s": 36.872,
-     "e": 36.96
+     "s": 39.872,
+     "e": 39.96
     },
     {
      "w": "und",
      "k": "und",
-     "s": 37.2,
-     "e": 37.476
+     "s": 40.2,
+     "e": 40.476
     },
     {
      "w": "das",
      "k": "das",
-     "s": 37.496,
-     "e": 37.772
+     "s": 40.496,
+     "e": 40.772
     },
     {
      "w": "volle",
      "k": "volle",
-     "s": 37.792,
-     "e": 38.2
+     "s": 40.792,
+     "e": 41.2
     },
     {
      "w": "Tablett.",
      "k": "tablett",
-     "s": 38.22,
-     "e": 38.76
+     "s": 41.22,
+     "e": 41.76
     }
    ],
-   "winStart": 31.83,
-   "winEnd": 38.83
+   "winStart": 34.83,
+   "winEnd": 41.83
   },
   {
    "id": "s08",
    "scene": "Bedienung",
    "text": "Das Fiberglas-Plissee gleitet stufenlos auf und zu. Die Mücken? Bleiben draußen.",
    "file": "assets/audio/vo/s08.wav",
-   "clipStart": 39.07,
+   "clipStart": 42.07,
    "fileDur": 5.86,
-   "start": 39.13,
-   "end": 44.79,
+   "start": 42.13,
+   "end": 47.79,
    "words": [
     {
      "w": "Das",
      "k": "das",
-     "s": 39.13,
-     "e": 39.409
+     "s": 42.13,
+     "e": 42.409
     },
     {
      "w": "Fiberglas-Plissee",
      "k": "fiberglas-plissee",
-     "s": 39.429,
-     "e": 40.574
+     "s": 42.429,
+     "e": 43.574
     },
     {
      "w": "gleitet",
      "k": "gleitet",
-     "s": 40.594,
-     "e": 41.14
+     "s": 43.594,
+     "e": 44.14
     },
     {
      "w": "stufenlos",
      "k": "stufenlos",
-     "s": 41.16,
-     "e": 41.838
+     "s": 44.16,
+     "e": 44.838
     },
     {
      "w": "auf",
      "k": "auf",
-     "s": 41.858,
-     "e": 42.138
+     "s": 44.858,
+     "e": 45.138
     },
     {
      "w": "und",
      "k": "und",
-     "s": 42.158,
-     "e": 42.437
+     "s": 45.158,
+     "e": 45.437
     },
     {
      "w": "zu.",
      "k": "zu",
-     "s": 42.457,
-     "e": 42.67
+     "s": 45.457,
+     "e": 45.67
     },
     {
      "w": "Die",
      "k": "die",
-     "s": 43.05,
-     "e": 43.229
+     "s": 46.05,
+     "e": 46.229
     },
     {
      "w": "Mücken?",
      "k": "mücken",
-     "s": 43.249,
-     "e": 43.56
+     "s": 46.249,
+     "e": 46.56
     },
     {
      "w": "Bleiben",
      "k": "bleiben",
-     "s": 43.88,
-     "e": 44.325
+     "s": 46.88,
+     "e": 47.325
     },
     {
      "w": "draußen.",
      "k": "draußen",
-     "s": 44.345,
-     "e": 44.79
+     "s": 47.345,
+     "e": 47.79
     }
    ],
-   "winStart": 38.83,
-   "winEnd": 44.92
+   "winStart": 41.83,
+   "winEnd": 47.92
   },
   {
    "id": "s09",
    "scene": "Bestellung",
    "text": "Für Sie als Fachpartner: Bestellt wird aus einer Hand, die Maße liegen schon vor.",
    "file": "assets/audio/vo/s09.wav",
-   "clipStart": 45.16,
+   "clipStart": 48.16,
    "fileDur": 4.99,
-   "start": 45.22,
-   "end": 50.01,
+   "start": 48.22,
+   "end": 53.01,
    "words": [
     {
      "w": "Für",
      "k": "für",
-     "s": 45.22,
-     "e": 45.441
+     "s": 48.22,
+     "e": 48.441
     },
     {
      "w": "Sie",
      "k": "sie",
-     "s": 45.461,
-     "e": 45.681
+     "s": 48.461,
+     "e": 48.681
     },
     {
      "w": "als",
      "k": "als",
-     "s": 45.701,
-     "e": 45.922
+     "s": 48.701,
+     "e": 48.922
     },
     {
      "w": "Fachpartner:",
      "k": "fachpartner",
-     "s": 45.942,
-     "e": 46.59
+     "s": 48.942,
+     "e": 49.59
     },
     {
      "w": "Bestellt",
      "k": "bestellt",
-     "s": 46.85,
-     "e": 47.335
+     "s": 49.85,
+     "e": 50.335
     },
     {
      "w": "wird",
      "k": "wird",
-     "s": 47.355,
-     "e": 47.627
+     "s": 50.355,
+     "e": 50.627
     },
     {
      "w": "aus",
      "k": "aus",
-     "s": 47.647,
-     "e": 47.866
+     "s": 50.647,
+     "e": 50.866
     },
     {
      "w": "einer",
      "k": "einer",
-     "s": 47.886,
-     "e": 48.211
+     "s": 50.886,
+     "e": 51.211
     },
     {
      "w": "Hand,",
      "k": "hand",
-     "s": 48.231,
-     "e": 48.504
+     "s": 51.231,
+     "e": 51.504
     },
     {
      "w": "die",
      "k": "die",
-     "s": 48.524,
-     "e": 48.742
+     "s": 51.524,
+     "e": 51.742
     },
     {
      "w": "Maße",
      "k": "maße",
-     "s": 48.762,
-     "e": 49.032
+     "s": 51.762,
+     "e": 52.032
     },
     {
      "w": "liegen",
      "k": "liegen",
-     "s": 49.052,
-     "e": 49.429
+     "s": 52.052,
+     "e": 52.429
     },
     {
      "w": "schon",
      "k": "schon",
-     "s": 49.449,
-     "e": 49.772
+     "s": 52.449,
+     "e": 52.772
     },
     {
      "w": "vor.",
      "k": "vor",
-     "s": 49.792,
-     "e": 50.01
+     "s": 52.792,
+     "e": 53.01
     }
    ],
-   "winStart": 44.92,
-   "winEnd": 50.11
+   "winStart": 47.92,
+   "winEnd": 53.11
   },
   {
    "id": "s10",
    "scene": "Plug & Play",
    "text": "Ab Werk kommt InScreen als Plug-and-Play-Set: einclipsen, fertig – ohne Bohren und Schrauben. Nachrüsten? Auch unkompliziert.",
    "file": "assets/audio/vo/s10.wav",
-   "clipStart": 50.35,
+   "clipStart": 53.35,
    "fileDur": 9.21,
-   "start": 50.41,
-   "end": 59.42,
+   "start": 53.41,
+   "end": 62.42,
    "words": [
     {
      "w": "Ab",
      "k": "ab",
-     "s": 50.41,
-     "e": 50.623
+     "s": 53.41,
+     "e": 53.623
     },
     {
      "w": "Werk",
      "k": "werk",
-     "s": 50.643,
-     "e": 50.99
+     "s": 53.643,
+     "e": 53.99
     },
     {
      "w": "kommt",
      "k": "kommt",
-     "s": 51.01,
-     "e": 51.423
+     "s": 54.01,
+     "e": 54.423
     },
     {
      "w": "InScreen",
      "k": "inscreen",
-     "s": 51.443,
-     "e": 52.057
+     "s": 54.443,
+     "e": 55.057
     },
     {
      "w": "als",
      "k": "als",
-     "s": 52.077,
-     "e": 52.357
+     "s": 55.077,
+     "e": 55.357
     },
     {
      "w": "Plug-and-Play-Set:",
      "k": "plug-and-play-set",
-     "s": 52.377,
-     "e": 53.39
+     "s": 55.377,
+     "e": 56.39
     },
     {
      "w": "einclipsen,",
      "k": "einclipsen",
-     "s": 53.67,
-     "e": 54.524
+     "s": 56.67,
+     "e": 57.524
     },
     {
      "w": "fertig",
      "k": "fertig",
-     "s": 54.544,
-     "e": 55.071
+     "s": 57.544,
+     "e": 58.071
     },
     {
      "w": "–",
      "k": "",
-     "s": 55.091,
-     "e": 55.18
+     "s": 58.091,
+     "e": 58.18
     },
     {
      "w": "ohne",
      "k": "ohne",
-     "s": 55.43,
-     "e": 55.699
+     "s": 58.43,
+     "e": 58.699
     },
     {
      "w": "Bohren",
      "k": "bohren",
-     "s": 55.719,
-     "e": 56.092
+     "s": 58.719,
+     "e": 59.092
     },
     {
      "w": "und",
      "k": "und",
-     "s": 56.113,
-     "e": 56.329
+     "s": 59.113,
+     "e": 59.329
     },
     {
      "w": "Schrauben.",
      "k": "schrauben",
-     "s": 56.349,
-     "e": 56.88
+     "s": 59.349,
+     "e": 59.88
     },
     {
      "w": "Nachrüsten?",
      "k": "nachrüsten",
-     "s": 57.28,
-     "e": 58.01
+     "s": 60.28,
+     "e": 61.01
     },
     {
      "w": "Auch",
      "k": "auch",
-     "s": 58.27,
-     "e": 58.572
+     "s": 61.27,
+     "e": 61.572
     },
     {
      "w": "unkompliziert.",
      "k": "unkompliziert",
-     "s": 58.592,
-     "e": 59.42
+     "s": 61.592,
+     "e": 62.42
     }
    ],
-   "winStart": 50.11,
-   "winEnd": 59.51
+   "winStart": 53.11,
+   "winEnd": 62.51
   },
   {
    "id": "s11",
    "scene": "Abschluss",
    "text": "Integriert, farblich passend, schnell montiert: Darum ist InScreen die beste Insektenschutzlösung für Hebeschiebetüren.",
    "file": "assets/audio/vo/s11.wav",
-   "clipStart": 59.75,
+   "clipStart": 62.75,
    "fileDur": 8.24,
-   "start": 59.81,
-   "end": 67.85,
+   "start": 62.81,
+   "end": 70.85,
    "words": [
     {
      "w": "Integriert,",
      "k": "integriert",
-     "s": 59.81,
-     "e": 60.582
+     "s": 62.81,
+     "e": 63.582
     },
     {
      "w": "farblich",
      "k": "farblich",
-     "s": 60.602,
-     "e": 61.257
+     "s": 63.602,
+     "e": 64.257
     },
     {
      "w": "passend,",
      "k": "passend",
-     "s": 61.277,
-     "e": 61.771
+     "s": 64.277,
+     "e": 64.771
     },
     {
      "w": "schnell",
      "k": "schnell",
-     "s": 61.791,
-     "e": 62.37
+     "s": 64.791,
+     "e": 65.37
     },
     {
      "w": "montiert:",
      "k": "montiert",
-     "s": 62.39,
-     "e": 62.96
+     "s": 65.39,
+     "e": 65.96
     },
     {
      "w": "Darum",
      "k": "darum",
-     "s": 63.3,
-     "e": 63.668
+     "s": 66.3,
+     "e": 66.668
     },
     {
      "w": "ist",
      "k": "ist",
-     "s": 63.688,
-     "e": 63.937
+     "s": 66.688,
+     "e": 66.937
     },
     {
      "w": "InScreen",
      "k": "inscreen",
-     "s": 63.957,
-     "e": 64.505
+     "s": 66.957,
+     "e": 67.505
     },
     {
      "w": "die",
      "k": "die",
-     "s": 64.525,
-     "e": 64.773
+     "s": 67.525,
+     "e": 67.773
     },
     {
      "w": "beste",
      "k": "beste",
-     "s": 64.793,
-     "e": 65.162
+     "s": 67.793,
+     "e": 68.162
     },
     {
      "w": "Insektenschutzlösung",
      "k": "insektenschutzlösung",
-     "s": 65.182,
-     "e": 66.536
+     "s": 68.182,
+     "e": 69.536
     },
     {
      "w": "für",
      "k": "für",
-     "s": 66.556,
-     "e": 66.805
+     "s": 69.556,
+     "e": 69.805
     },
     {
      "w": "Hebeschiebetüren.",
      "k": "hebeschiebetüren",
-     "s": 66.825,
-     "e": 67.85
+     "s": 69.825,
+     "e": 70.85
     }
    ],
-   "winStart": 59.51,
-   "winEnd": 70.733
+   "winStart": 62.51,
+   "winEnd": 73.733
   }
  ],
  "voSync": {
   "source": "ElevenLabs_2026-10-06T10_03_53_German_Epic_Trailer_Voice_-_Helmut_pvc_sp100_s50_sb75_v4.mp3",
-  "offset": 0.83
+  "offset": 0.83,
+  "cuts": [
+   {
+    "after": "s06",
+    "source_t": 31.115,
+    "insert": 3.0
+   }
+  ]
  }
 }

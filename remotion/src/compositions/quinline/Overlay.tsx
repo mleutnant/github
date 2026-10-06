@@ -19,18 +19,12 @@ const COUNT_FROM = T.titel + 6;
 const COUNT_TO = T.titel + 36;
 const SHRINK_FROM = T.groesse - 12;
 const SHRINK_TO = T.groesse + TRANSITION + 2;
-const HIDE_FROM = T.outro;
-const HIDE_TO = T.outro + 14;
 
 const ColumnHeader: React.FC<{ system: 74 | 84 }> = ({ system }) => {
   const frame = useCurrentFrame();
   const small = interpolate(frame, [SHRINK_FROM, SHRINK_TO], [0, 1], {
     ...clamp,
     easing: ease.slide,
-  });
-  const hide = interpolate(frame, [HIDE_FROM, HIDE_TO], [0, 1], {
-    ...clamp,
-    easing: ease.move,
   });
   const count = interpolate(frame, [COUNT_FROM, COUNT_TO], [0, system], {
     ...clamp,
@@ -43,10 +37,6 @@ const ColumnHeader: React.FC<{ system: 74 | 84 }> = ({ system }) => {
   const numSize = interpolate(small, [0, 1], [400, 92]);
   const numTop = interpolate(small, [0, 1], [372, GRID.headerTop + 40]);
 
-  if (hide === 1) {
-    return null;
-  }
-
   return (
     <div
       style={{
@@ -56,8 +46,6 @@ const ColumnHeader: React.FC<{ system: 74 | 84 }> = ({ system }) => {
         top: 0,
         textAlign: "center",
         color: colors.white,
-        opacity: 1 - hide,
-        translate: `0 ${-hide * 40}px`,
       }}
     >
       <div
@@ -98,11 +86,7 @@ const Logo: React.FC = () => {
     [0, 1],
     { ...clamp, easing: ease.reveal },
   );
-  const outP = interpolate(frame, [HIDE_FROM, HIDE_TO], [0, 1], {
-    ...clamp,
-    easing: ease.move,
-  });
-  if (inP === 0 || outP === 1) {
+  if (inP === 0) {
     return null;
   }
   return (
@@ -114,7 +98,7 @@ const Logo: React.FC = () => {
         left: 50,
         top: 22,
         height: 90,
-        opacity: inP * (1 - outP),
+        opacity: inP,
         translate: `${(1 - inP) * -30}px 0`,
       }}
     />
@@ -148,23 +132,35 @@ const ProgressRule: React.FC = () => {
   );
 };
 
-// The headers are painted onto the title scene's sash: while it slides in they
-// share its clip edge and parallax (see paneSlide.tsx).
-const Headers: React.FC = () => {
+// Headers and logo are painted onto the comparison "sashes": they ride in on
+// the title scene's pane and ride out with the last data scene when the outro
+// pane covers it — same clip edge and parallax as paneSlide.tsx.
+const PROFILE = 26;
+const Riding: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const frame = useCurrentFrame();
-  if (frame < T.titel) {
+  if (frame < T.titel || frame >= T.outro + TRANSITION) {
     return null;
   }
-  const p = interpolate(frame, [T.titel, T.titel + TRANSITION], [0, 1], {
+  const pIn = interpolate(frame, [T.titel, T.titel + TRANSITION], [0, 1], {
     ...clamp,
     easing: ease.slide,
   });
-  const edge = (1 - p) * (1920 + 26);
+  const pOut = interpolate(frame, [T.outro, T.outro + TRANSITION], [0, 1], {
+    ...clamp,
+    easing: ease.slide,
+  });
+  const inEdge = (1 - pIn) * (1920 + PROFILE);
+  const outEdge = (1 - pOut) * (1920 + PROFILE) - PROFILE;
   return (
-    <AbsoluteFill style={{ clipPath: `inset(0 0 0 ${edge}px)` }}>
-      <AbsoluteFill style={{ translate: `${(1 - p) * 320}px 0` }}>
-        <ColumnHeader system={74} />
-        <ColumnHeader system={84} />
+    <AbsoluteFill
+      style={{
+        clipPath: `inset(0 ${1920 - outEdge}px 0 ${inEdge}px)`,
+      }}
+    >
+      <AbsoluteFill
+        style={{ translate: `${(1 - pIn) * 320 - pOut * 260}px 0` }}
+      >
+        {children}
       </AbsoluteFill>
     </AbsoluteFill>
   );
@@ -172,8 +168,11 @@ const Headers: React.FC = () => {
 
 export const Overlay: React.FC = () => (
   <AbsoluteFill style={{ pointerEvents: "none" }}>
-    <Headers />
-    <Logo />
+    <Riding>
+      <ColumnHeader system={74} />
+      <ColumnHeader system={84} />
+      <Logo />
+    </Riding>
     <ProgressRule />
   </AbsoluteFill>
 );

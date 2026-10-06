@@ -1,6 +1,6 @@
 {
  "fps": 30,
- "total": 87.067,
+ "total": 85.733,
  "source": "elevenlabs",
  "segments": [
   {
@@ -9,987 +9,1003 @@
    "text": "Sommerabend. Die Hebeschiebetür steht weit offen – herrlich.",
    "file": "assets/audio/vo/s01.wav",
    "clipStart": 0.84,
-   "fileDur": 4.97,
+   "fileDur": 4.98,
    "start": 0.9,
-   "end": 5.67,
+   "end": 5.68,
    "words": [
     {
      "w": "Sommerabend.",
      "k": "sommerabend",
      "s": 0.9,
-     "e": 1.91
+     "e": 1.95
     },
     {
      "w": "Die",
      "k": "die",
-     "s": 2.35,
-     "e": 2.588
+     "s": 2.36,
+     "e": 2.592
     },
     {
      "w": "Hebeschiebetür",
      "k": "hebeschiebetür",
-     "s": 2.608,
-     "e": 3.475
+     "s": 2.612,
+     "e": 3.46
     },
     {
      "w": "steht",
      "k": "steht",
-     "s": 3.495,
-     "e": 3.847
+     "s": 3.48,
+     "e": 3.824
     },
     {
      "w": "weit",
      "k": "weit",
-     "s": 3.867,
-     "e": 4.162
+     "s": 3.844,
+     "e": 4.132
     },
     {
      "w": "offen",
      "k": "offen",
-     "s": 4.182,
-     "e": 4.534
+     "s": 4.152,
+     "e": 4.496
     },
     {
      "w": "–",
      "k": "",
-     "s": 4.554,
-     "e": 4.62
+     "s": 4.516,
+     "e": 4.58
     },
     {
      "w": "herrlich.",
      "k": "herrlich",
-     "s": 4.95,
-     "e": 5.67
+     "s": 4.97,
+     "e": 5.68
     }
    ],
    "winStart": 0.0,
-   "winEnd": 5.82
+   "winEnd": 5.79
   },
   {
    "id": "s02",
    "scene": "Mücken",
    "text": "Wären da nur nicht die ungebetenen Gäste.",
    "file": "assets/audio/vo/s02.wav",
-   "clipStart": 6.06,
-   "fileDur": 2.58,
-   "start": 6.12,
-   "end": 8.5,
+   "clipStart": 6.03,
+   "fileDur": 2.72,
+   "start": 6.09,
+   "end": 8.61,
    "words": [
     {
      "w": "Wären",
      "k": "wären",
-     "s": 6.12,
-     "e": 6.451
+     "s": 6.09,
+     "e": 6.441
     },
     {
      "w": "da",
      "k": "da",
-     "s": 6.471,
-     "e": 6.639
+     "s": 6.461,
+     "e": 6.641
     },
     {
      "w": "nur",
      "k": "nur",
-     "s": 6.659,
-     "e": 6.882
+     "s": 6.661,
+     "e": 6.898
     },
     {
      "w": "nicht",
      "k": "nicht",
-     "s": 6.902,
-     "e": 7.233
+     "s": 6.918,
+     "e": 7.269
     },
     {
      "w": "die",
      "k": "die",
-     "s": 7.253,
-     "e": 7.475
+     "s": 7.289,
+     "e": 7.526
     },
     {
      "w": "ungebetenen",
      "k": "ungebetenen",
-     "s": 7.495,
-     "e": 8.149
+     "s": 7.546,
+     "e": 8.239
     },
     {
      "w": "Gäste.",
      "k": "gäste",
-     "s": 8.169,
-     "e": 8.5
+     "s": 8.259,
+     "e": 8.61
     }
    ],
-   "winStart": 5.82,
-   "winEnd": 8.6
+   "winStart": 5.79,
+   "winEnd": 8.8
   },
   {
    "id": "s03",
    "scene": "Problem",
    "text": "Klassische Fliegengitter: aufgesetzt, auffällig, mit Stolperkante – und gebohrt wird auch noch.",
    "file": "assets/audio/vo/s03.wav",
-   "clipStart": 8.84,
-   "fileDur": 6.86,
-   "start": 8.9,
-   "end": 15.56,
+   "clipStart": 9.04,
+   "fileDur": 6.94,
+   "start": 9.1,
+   "end": 15.84,
    "words": [
     {
      "w": "Klassische",
      "k": "klassische",
-     "s": 8.9,
-     "e": 9.521
+     "s": 9.1,
+     "e": 9.695
     },
     {
      "w": "Fliegengitter:",
      "k": "fliegengitter",
-     "s": 9.541,
-     "e": 10.33
+     "s": 9.715,
+     "e": 10.47
     },
     {
      "w": "aufgesetzt,",
      "k": "aufgesetzt",
-     "s": 10.63,
-     "e": 11.473
+     "s": 10.86,
+     "e": 11.69
     },
     {
      "w": "auffällig,",
      "k": "auffällig",
-     "s": 11.493,
-     "e": 12.264
+     "s": 11.93,
+     "e": 12.647
     },
     {
      "w": "mit",
      "k": "mit",
-     "s": 12.284,
-     "e": 12.718
+     "s": 12.667,
+     "e": 12.941
     },
     {
      "w": "Stolperkante",
      "k": "stolperkante",
-     "s": 12.738,
-     "e": 13.539
+     "s": 12.961,
+     "e": 13.822
     },
     {
      "w": "–",
      "k": "",
-     "s": 13.559,
-     "e": 13.63
+     "s": 13.842,
+     "e": 13.92
     },
     {
      "w": "und",
      "k": "und",
-     "s": 13.97,
-     "e": 14.196
+     "s": 14.28,
+     "e": 14.501
     },
     {
      "w": "gebohrt",
      "k": "gebohrt",
-     "s": 14.216,
-     "e": 14.659
+     "s": 14.521,
+     "e": 14.956
     },
     {
      "w": "wird",
      "k": "wird",
-     "s": 14.679,
-     "e": 14.96
+     "s": 14.976,
+     "e": 15.251
     },
     {
      "w": "auch",
      "k": "auch",
-     "s": 14.98,
-     "e": 15.26
+     "s": 15.271,
+     "e": 15.545
     },
     {
      "w": "noch.",
      "k": "noch",
-     "s": 15.28,
-     "e": 15.56
+     "s": 15.565,
+     "e": 15.84
     }
    ],
-   "winStart": 8.6,
-   "winEnd": 15.71
+   "winStart": 8.8,
+   "winEnd": 16.05
   },
   {
    "id": "s04",
    "scene": "Auftritt InScreen",
    "text": "Hier kommt InScreen: der Insektenschutz, integriert in die QuinLine-Hebeschiebetür.",
    "file": "assets/audio/vo/s04.wav",
-   "clipStart": 15.95,
-   "fileDur": 5.97,
-   "start": 16.01,
-   "end": 21.78,
+   "clipStart": 16.29,
+   "fileDur": 5.91,
+   "start": 16.35,
+   "end": 22.06,
    "words": [
     {
      "w": "Hier",
      "k": "hier",
-     "s": 16.01,
-     "e": 16.387
+     "s": 16.35,
+     "e": 16.696
     },
     {
      "w": "kommt",
      "k": "kommt",
-     "s": 16.407,
-     "e": 16.955
+     "s": 16.716,
+     "e": 17.218
     },
     {
      "w": "InScreen:",
      "k": "inscreen",
-     "s": 16.975,
-     "e": 17.64
+     "s": 17.238,
+     "e": 17.85
     },
     {
      "w": "der",
      "k": "der",
-     "s": 17.94,
-     "e": 18.196
+     "s": 18.15,
+     "e": 18.411
     },
     {
      "w": "Insektenschutz,",
      "k": "insektenschutz",
-     "s": 18.216,
-     "e": 19.145
+     "s": 18.431,
+     "e": 19.378
     },
     {
      "w": "integriert",
      "k": "integriert",
-     "s": 19.165,
-     "e": 19.85
+     "s": 19.398,
+     "e": 20.095
     },
     {
      "w": "in",
      "k": "in",
-     "s": 19.87,
-     "e": 20.064
+     "s": 20.115,
+     "e": 20.313
     },
     {
      "w": "die",
      "k": "die",
-     "s": 20.084,
-     "e": 20.34
+     "s": 20.333,
+     "e": 20.594
     },
     {
      "w": "QuinLine-Hebeschiebetür.",
      "k": "quinline-hebeschiebetür",
-     "s": 20.36,
-     "e": 21.78
+     "s": 20.614,
+     "e": 22.06
     }
    ],
-   "winStart": 15.71,
-   "winEnd": 21.83
+   "winStart": 16.05,
+   "winEnd": 22.22
   },
   {
    "id": "s05",
    "scene": "Integration",
    "text": "Das Plissee ist über ein Integrationsprofil im Festflügel eingelassen – und die untere Führungsschiene in die Schwellenkonstruktion.",
    "file": "assets/audio/vo/s05.wav",
-   "clipStart": 22.07,
-   "fileDur": 7.85,
-   "start": 22.13,
-   "end": 29.78,
+   "clipStart": 22.46,
+   "fileDur": 7.66,
+   "start": 22.52,
+   "end": 29.98,
    "words": [
     {
      "w": "Das",
      "k": "das",
-     "s": 22.13,
-     "e": 22.364
+     "s": 22.52,
+     "e": 22.742
     },
     {
      "w": "Plissee",
      "k": "plissee",
-     "s": 22.384,
-     "e": 22.844
+     "s": 22.762,
+     "e": 23.2
     },
     {
      "w": "ist",
      "k": "ist",
-     "s": 22.864,
-     "e": 23.098
+     "s": 23.22,
+     "e": 23.442
     },
     {
      "w": "über",
      "k": "über",
-     "s": 23.118,
-     "e": 23.408
+     "s": 23.462,
+     "e": 23.738
     },
     {
      "w": "ein",
      "k": "ein",
-     "s": 23.428,
-     "e": 23.662
+     "s": 23.758,
+     "e": 23.98
     },
     {
      "w": "Integrationsprofil",
      "k": "integrationsprofil",
-     "s": 23.682,
-     "e": 24.763
+     "s": 24.0,
+     "e": 25.029
     },
     {
      "w": "im",
      "k": "im",
-     "s": 24.783,
-     "e": 24.961
+     "s": 25.049,
+     "e": 25.218
     },
     {
      "w": "Festflügel",
      "k": "festflügel",
-     "s": 24.981,
-     "e": 25.61
+     "s": 25.238,
+     "e": 25.837
     },
     {
      "w": "eingelassen",
      "k": "eingelassen",
-     "s": 25.63,
-     "e": 26.315
+     "s": 25.857,
+     "e": 26.509
     },
     {
      "w": "–",
      "k": "",
-     "s": 26.335,
-     "e": 26.4
+     "s": 26.529,
+     "e": 26.59
     },
     {
      "w": "und",
      "k": "und",
-     "s": 26.67,
-     "e": 26.872
+     "s": 26.91,
+     "e": 27.109
     },
     {
      "w": "die",
      "k": "die",
-     "s": 26.892,
-     "e": 27.094
+     "s": 27.129,
+     "e": 27.328
     },
     {
      "w": "untere",
      "k": "untere",
-     "s": 27.114,
-     "e": 27.463
+     "s": 27.348,
+     "e": 27.693
     },
     {
      "w": "Führungsschiene",
      "k": "führungsschiene",
-     "s": 27.483,
-     "e": 28.277
+     "s": 27.713,
+     "e": 28.496
     },
     {
      "w": "in",
      "k": "in",
-     "s": 28.297,
-     "e": 28.449
+     "s": 28.516,
+     "e": 28.666
     },
     {
      "w": "die",
      "k": "die",
-     "s": 28.469,
-     "e": 28.671
+     "s": 28.686,
+     "e": 28.885
     },
     {
      "w": "Schwellenkonstruktion.",
      "k": "schwellenkonstruktion",
-     "s": 28.691,
-     "e": 29.78
+     "s": 28.905,
+     "e": 29.98
     }
    ],
-   "winStart": 21.83,
-   "winEnd": 33.58
+   "winStart": 22.22,
+   "winEnd": 33.61
   },
   {
    "id": "s06",
    "scene": "Unsichtbar & farbgleich",
    "text": "Zurückgeschoben verschwindet das Plissee fast unsichtbar im Profil. Griffleiste und Rahmen der Plisseekassette sind farblich passend foliert oder pulverbeschichtet.",
-   "file": null,
-   "clipStart": 33.88,
-   "fileDur": 10.58,
-   "start": 33.88,
-   "end": 44.41,
+   "file": "assets/audio/vo/s06.wav",
+   "clipStart": 33.85,
+   "fileDur": 10.09,
+   "start": 33.91,
+   "end": 43.8,
    "words": [
     {
      "w": "Zurückgeschoben",
      "k": "zurückgeschoben",
-     "s": 33.88,
-     "e": 34.814
+     "s": 33.91,
+     "e": 34.782
     },
     {
      "w": "verschwindet",
      "k": "verschwindet",
-     "s": 34.876,
-     "e": 35.623
+     "s": 34.802,
+     "e": 35.513
     },
     {
      "w": "das",
      "k": "das",
-     "s": 35.685,
-     "e": 35.873
+     "s": 35.533,
+     "e": 35.756
     },
     {
      "w": "Plissee",
      "k": "plissee",
-     "s": 35.934,
-     "e": 36.371
+     "s": 35.776,
+     "e": 36.216
     },
     {
      "w": "fast",
      "k": "fast",
-     "s": 36.432,
-     "e": 36.681
+     "s": 36.236,
+     "e": 36.593
     },
     {
      "w": "unsichtbar",
      "k": "unsichtbar",
-     "s": 36.744,
-     "e": 37.366
+     "s": 36.613,
+     "e": 37.295
     },
     {
      "w": "im",
      "k": "im",
-     "s": 37.428,
-     "e": 37.563
+     "s": 37.315,
+     "e": 37.484
     },
     {
      "w": "Profil.",
      "k": "profil",
-     "s": 37.626,
-     "e": 38.062
+     "s": 37.504,
+     "e": 37.89
     },
     {
      "w": "Griffleiste",
      "k": "griffleiste",
-     "s": 38.433,
-     "e": 39.118
+     "s": 38.31,
+     "e": 38.969
     },
     {
      "w": "und",
      "k": "und",
-     "s": 39.18,
-     "e": 39.367
+     "s": 38.989,
+     "e": 39.213
     },
     {
      "w": "Rahmen",
      "k": "rahmen",
-     "s": 39.428,
-     "e": 39.802
+     "s": 39.233,
+     "e": 39.62
     },
     {
      "w": "der",
      "k": "der",
-     "s": 39.865,
-     "e": 40.051
+     "s": 39.64,
+     "e": 39.864
     },
     {
      "w": "Plisseekassette",
      "k": "plisseekassette",
-     "s": 40.114,
-     "e": 41.048
+     "s": 39.884,
+     "e": 40.76
     },
     {
      "w": "sind",
      "k": "sind",
-     "s": 41.109,
-     "e": 41.358
+     "s": 40.78,
+     "e": 41.059
     },
     {
      "w": "farblich",
      "k": "farblich",
-     "s": 41.421,
-     "e": 41.919
+     "s": 41.079,
+     "e": 41.574
     },
     {
      "w": "passend",
      "k": "passend",
-     "s": 41.981,
-     "e": 42.417
+     "s": 41.594,
+     "e": 42.036
     },
     {
      "w": "foliert",
      "k": "foliert",
-     "s": 42.48,
-     "e": 42.915
+     "s": 42.056,
+     "e": 42.497
     },
     {
      "w": "oder",
      "k": "oder",
-     "s": 42.978,
-     "e": 43.227
+     "s": 42.517,
+     "e": 42.796
     },
     {
      "w": "pulverbeschichtet.",
      "k": "pulverbeschichtet",
-     "s": 43.288,
-     "e": 44.41
+     "s": 42.816,
+     "e": 43.8
     }
    ],
-   "winStart": 33.58,
-   "winEnd": 48.06
+   "winStart": 33.61,
+   "winEnd": 46.88
   },
   {
    "id": "s07",
    "scene": "Keine Stolperkante",
    "text": "Keine Stolperkante im Durchgangsbereich: bequem für Kinder, Großeltern – und das volle Tablett.",
    "file": "assets/audio/vo/s07.wav",
-   "clipStart": 48.3,
-   "fileDur": 6.74,
-   "start": 48.36,
-   "end": 54.9,
+   "clipStart": 47.12,
+   "fileDur": 6.8,
+   "start": 47.18,
+   "end": 53.78,
    "words": [
     {
      "w": "Keine",
      "k": "keine",
-     "s": 48.36,
-     "e": 48.743
+     "s": 47.18,
+     "e": 47.513
     },
     {
      "w": "Stolperkante",
      "k": "stolperkante",
-     "s": 48.763,
-     "e": 49.579
+     "s": 47.533,
+     "e": 48.246
     },
     {
      "w": "im",
      "k": "im",
-     "s": 49.599,
-     "e": 49.796
+     "s": 48.266,
+     "e": 48.436
     },
     {
      "w": "Durchgangsbereich:",
      "k": "durchgangsbereich",
-     "s": 49.816,
-     "e": 51.142
+     "s": 48.456,
+     "e": 49.44
     },
     {
      "w": "bequem",
      "k": "bequem",
-     "s": 51.162,
-     "e": 51.572
+     "s": 49.73,
+     "e": 50.251
     },
     {
      "w": "für",
      "k": "für",
-     "s": 51.592,
-     "e": 51.83
+     "s": 50.271,
+     "e": 50.575
     },
     {
      "w": "Kinder,",
      "k": "kinder",
-     "s": 51.85,
-     "e": 52.44
+     "s": 50.595,
+     "e": 51.116
     },
     {
      "w": "Großeltern",
      "k": "großeltern",
-     "s": 52.46,
-     "e": 53.226
+     "s": 51.136,
+     "e": 51.967
     },
     {
      "w": "–",
      "k": "",
-     "s": 53.246,
-     "e": 53.328
+     "s": 51.987,
+     "e": 52.078
     },
     {
      "w": "und",
      "k": "und",
-     "s": 53.348,
-     "e": 53.623
+     "s": 52.098,
+     "e": 52.397
     },
     {
      "w": "das",
      "k": "das",
-     "s": 53.643,
-     "e": 53.918
+     "s": 52.417,
+     "e": 52.716
     },
     {
      "w": "volle",
      "k": "volle",
-     "s": 53.938,
-     "e": 54.343
+     "s": 52.736,
+     "e": 53.177
     },
     {
      "w": "Tablett.",
      "k": "tablett",
-     "s": 54.363,
-     "e": 54.9
+     "s": 53.197,
+     "e": 53.78
     }
    ],
-   "winStart": 48.06,
-   "winEnd": 55.0
+   "winStart": 46.88,
+   "winEnd": 53.88
   },
   {
    "id": "s08",
    "scene": "Bedienung",
    "text": "Das Fiberglas-Plissee gleitet stufenlos auf und zu. Die Mücken? Bleiben draußen.",
    "file": "assets/audio/vo/s08.wav",
-   "clipStart": 55.24,
-   "fileDur": 5.91,
-   "start": 55.3,
-   "end": 61.01,
+   "clipStart": 54.12,
+   "fileDur": 6.0,
+   "start": 54.18,
+   "end": 59.98,
    "words": [
     {
      "w": "Das",
      "k": "das",
-     "s": 55.3,
-     "e": 55.575
+     "s": 54.18,
+     "e": 54.464
     },
     {
      "w": "Fiberglas-Plissee",
      "k": "fiberglas-plissee",
-     "s": 55.595,
-     "e": 56.723
+     "s": 54.484,
+     "e": 55.644
     },
     {
      "w": "gleitet",
      "k": "gleitet",
-     "s": 56.743,
-     "e": 57.281
+     "s": 55.664,
+     "e": 56.218
     },
     {
      "w": "stufenlos",
      "k": "stufenlos",
-     "s": 57.301,
-     "e": 58.04
+     "s": 56.238,
+     "e": 57.007
     },
     {
      "w": "auf",
      "k": "auf",
-     "s": 58.06,
-     "e": 58.335
+     "s": 57.027,
+     "e": 57.31
     },
     {
      "w": "und",
      "k": "und",
-     "s": 58.355,
-     "e": 58.63
+     "s": 57.33,
+     "e": 57.614
     },
     {
      "w": "zu.",
      "k": "zu",
-     "s": 58.65,
-     "e": 58.86
+     "s": 57.634,
+     "e": 57.85
     },
     {
      "w": "Die",
      "k": "die",
-     "s": 59.27,
-     "e": 59.456
+     "s": 58.27,
+     "e": 58.452
     },
     {
      "w": "Mücken?",
      "k": "mücken",
-     "s": 59.476,
-     "e": 59.8
+     "s": 58.472,
+     "e": 58.79
     },
     {
      "w": "Bleiben",
      "k": "bleiben",
-     "s": 60.12,
-     "e": 60.555
+     "s": 59.17,
+     "e": 59.565
     },
     {
      "w": "draußen.",
      "k": "draußen",
-     "s": 60.575,
-     "e": 61.01
+     "s": 59.585,
+     "e": 59.98
     }
    ],
-   "winStart": 55.0,
-   "winEnd": 61.16
+   "winStart": 53.88,
+   "winEnd": 60.13
   },
   {
    "id": "s09",
    "scene": "Bestellung",
    "text": "Für Sie als Fachpartner: Bestellt wird aus einer Hand, die Maße liegen schon vor.",
    "file": "assets/audio/vo/s09.wav",
-   "clipStart": 61.4,
-   "fileDur": 5.25,
-   "start": 61.46,
-   "end": 66.51,
+   "clipStart": 60.37,
+   "fileDur": 5.15,
+   "start": 60.43,
+   "end": 65.38,
    "words": [
     {
      "w": "Für",
      "k": "für",
-     "s": 61.46,
-     "e": 61.693
+     "s": 60.43,
+     "e": 60.668
     },
     {
      "w": "Sie",
      "k": "sie",
-     "s": 61.713,
-     "e": 61.945
+     "s": 60.688,
+     "e": 60.926
     },
     {
      "w": "als",
      "k": "als",
-     "s": 61.965,
-     "e": 62.198
+     "s": 60.946,
+     "e": 61.184
     },
     {
      "w": "Fachpartner:",
      "k": "fachpartner",
-     "s": 62.218,
-     "e": 62.9
+     "s": 61.204,
+     "e": 61.9
     },
     {
      "w": "Bestellt",
      "k": "bestellt",
-     "s": 63.18,
-     "e": 63.692
+     "s": 62.2,
+     "e": 62.688
     },
     {
      "w": "wird",
      "k": "wird",
-     "s": 63.712,
-     "e": 64.0
+     "s": 62.708,
+     "e": 62.982
     },
     {
      "w": "aus",
      "k": "aus",
-     "s": 64.02,
-     "e": 64.251
+     "s": 63.002,
+     "e": 63.223
     },
     {
      "w": "einer",
      "k": "einer",
-     "s": 64.271,
-     "e": 64.615
+     "s": 63.243,
+     "e": 63.57
     },
     {
      "w": "Hand,",
      "k": "hand",
-     "s": 64.635,
-     "e": 64.923
+     "s": 63.59,
+     "e": 63.864
     },
     {
      "w": "die",
      "k": "die",
-     "s": 64.943,
-     "e": 65.174
+     "s": 63.884,
+     "e": 64.104
     },
     {
      "w": "Maße",
      "k": "maße",
-     "s": 65.194,
-     "e": 65.48
+     "s": 64.124,
+     "e": 64.396
     },
     {
      "w": "liegen",
      "k": "liegen",
-     "s": 65.5,
-     "e": 65.898
+     "s": 64.416,
+     "e": 64.795
     },
     {
      "w": "schon",
      "k": "schon",
-     "s": 65.918,
-     "e": 66.259
+     "s": 64.815,
+     "e": 65.141
     },
     {
      "w": "vor.",
      "k": "vor",
-     "s": 66.279,
-     "e": 66.51
+     "s": 65.161,
+     "e": 65.38
     }
    ],
-   "winStart": 61.16,
-   "winEnd": 66.51
+   "winStart": 60.13,
+   "winEnd": 65.49
   },
   {
    "id": "s10",
    "scene": "Plug & Play",
    "text": "Ab Werk kommt InScreen als Plug-and-Play-Set: einclipsen, fertig – ohne Bohren und Schrauben. Nachrüsten? Auch unkompliziert.",
    "file": "assets/audio/vo/s10.wav",
-   "clipStart": 66.75,
-   "fileDur": 9.15,
-   "start": 66.81,
-   "end": 75.76,
+   "clipStart": 65.73,
+   "fileDur": 9.02,
+   "start": 65.79,
+   "end": 74.61,
    "words": [
     {
      "w": "Ab",
      "k": "ab",
-     "s": 66.81,
-     "e": 67.012
+     "s": 65.79,
+     "e": 66.0
     },
     {
      "w": "Werk",
      "k": "werk",
-     "s": 67.032,
-     "e": 67.432
+     "s": 66.02,
+     "e": 66.362
     },
     {
      "w": "kommt",
      "k": "kommt",
-     "s": 67.452,
-     "e": 67.845
+     "s": 66.382,
+     "e": 66.79
     },
     {
      "w": "InScreen",
      "k": "inscreen",
-     "s": 67.865,
-     "e": 68.449
+     "s": 66.81,
+     "e": 67.414
     },
     {
      "w": "als",
      "k": "als",
-     "s": 68.469,
-     "e": 68.735
+     "s": 67.434,
+     "e": 67.71
     },
     {
      "w": "Plug-and-Play-Set:",
      "k": "plug-and-play-set",
-     "s": 68.755,
-     "e": 69.72
+     "s": 67.73,
+     "e": 68.73
     },
     {
      "w": "einclipsen,",
      "k": "einclipsen",
-     "s": 70.01,
-     "e": 70.847
+     "s": 69.03,
+     "e": 69.856
     },
     {
      "w": "fertig",
      "k": "fertig",
-     "s": 70.867,
-     "e": 71.383
+     "s": 69.876,
+     "e": 70.384
     },
     {
      "w": "–",
      "k": "",
-     "s": 71.403,
-     "e": 71.49
+     "s": 70.404,
+     "e": 70.49
     },
     {
      "w": "ohne",
      "k": "ohne",
-     "s": 71.79,
-     "e": 72.057
+     "s": 70.76,
+     "e": 71.011
     },
     {
      "w": "Bohren",
      "k": "bohren",
-     "s": 72.077,
-     "e": 72.448
+     "s": 71.031,
+     "e": 71.381
     },
     {
      "w": "und",
      "k": "und",
-     "s": 72.468,
-     "e": 72.683
+     "s": 71.401,
+     "e": 71.603
     },
     {
      "w": "Schrauben.",
      "k": "schrauben",
-     "s": 72.703,
-     "e": 73.23
+     "s": 71.623,
+     "e": 72.12
     },
     {
      "w": "Nachrüsten?",
      "k": "nachrüsten",
-     "s": 73.61,
-     "e": 74.38
+     "s": 72.52,
+     "e": 73.23
     },
     {
      "w": "Auch",
      "k": "auch",
-     "s": 74.62,
-     "e": 74.919
+     "s": 73.53,
+     "e": 73.813
     },
     {
      "w": "unkompliziert.",
      "k": "unkompliziert",
-     "s": 74.939,
-     "e": 75.76
+     "s": 73.832,
+     "e": 74.61
     }
    ],
-   "winStart": 66.51,
-   "winEnd": 75.91
+   "winStart": 65.49,
+   "winEnd": 74.74
   },
   {
    "id": "s11",
    "scene": "Abschluss",
    "text": "Integriert, farblich passend, schnell montiert: Darum ist InScreen die beste Insektenschutzlösung für Hebeschiebetüren.",
    "file": "assets/audio/vo/s11.wav",
-   "clipStart": 76.15,
-   "fileDur": 8.16,
-   "start": 76.21,
-   "end": 84.17,
+   "clipStart": 74.98,
+   "fileDur": 8.0,
+   "start": 75.04,
+   "end": 82.84,
    "words": [
     {
      "w": "Integriert,",
      "k": "integriert",
-     "s": 76.21,
-     "e": 76.97
+     "s": 75.04,
+     "e": 75.79
     },
     {
      "w": "farblich",
      "k": "farblich",
-     "s": 76.99,
-     "e": 77.625
+     "s": 75.81,
+     "e": 76.437
     },
     {
      "w": "passend,",
      "k": "passend",
-     "s": 77.645,
-     "e": 78.14
+     "s": 76.457,
+     "e": 76.945
     },
     {
      "w": "schnell",
      "k": "schnell",
-     "s": 78.16,
-     "e": 78.692
+     "s": 76.965,
+     "e": 77.527
     },
     {
      "w": "montiert:",
      "k": "montiert",
-     "s": 78.712,
-     "e": 79.31
+     "s": 77.547,
+     "e": 78.1
     },
     {
      "w": "Darum",
      "k": "darum",
-     "s": 79.6,
-     "e": 79.971
+     "s": 78.43,
+     "e": 78.785
     },
     {
      "w": "ist",
      "k": "ist",
-     "s": 79.991,
-     "e": 80.241
+     "s": 78.805,
+     "e": 79.045
     },
     {
      "w": "InScreen",
      "k": "inscreen",
-     "s": 80.261,
-     "e": 80.813
+     "s": 79.065,
+     "e": 79.594
     },
     {
      "w": "die",
      "k": "die",
-     "s": 80.833,
-     "e": 81.083
+     "s": 79.614,
+     "e": 79.853
     },
     {
      "w": "beste",
      "k": "beste",
-     "s": 81.103,
-     "e": 81.474
+     "s": 79.873,
+     "e": 80.229
     },
     {
      "w": "Insektenschutzlösung",
      "k": "insektenschutzlösung",
-     "s": 81.494,
-     "e": 82.847
+     "s": 80.249,
+     "e": 81.57
     },
     {
      "w": "für",
      "k": "für",
-     "s": 82.867,
-     "e": 83.118
+     "s": 81.59,
+     "e": 81.83
     },
     {
      "w": "Hebeschiebetüren.",
      "k": "hebeschiebetüren",
-     "s": 83.138,
-     "e": 84.17
+     "s": 81.85,
+     "e": 82.84
     }
    ],
-   "winStart": 75.91,
-   "winEnd": 87.067
+   "winStart": 74.74,
+   "winEnd": 85.733
   }
- ]
+ ],
+ "voSync": {
+  "source": "ElevenLabs_2026-10-06T13_13_44_German_Epic_Trailer_Voice_-_Helmut_pvc_sp100_s50_sb75_v4.mp3",
+  "offset": 0.83,
+  "cuts": [
+   {
+    "after": "s05",
+    "source_t": 29.365,
+    "insert": 3.5
+   },
+   {
+    "after": "s06",
+    "source_t": 39.66,
+    "insert": 3.0
+   }
+  ]
+ }
 }

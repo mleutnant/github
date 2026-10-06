@@ -1,18 +1,27 @@
-// s03 — „Klassische Fliegengitter: aufgesetzt, auffällig, mit Stolperkante – und gebohrt wird auch noch.“
-// Eigenes Set „problem“ (SCHMIDT-Blau): Wandausschnitt mit generischer Schiebetür. Ein klobiges,
-// aufgesetztes Fliegengitter fällt auf die Tür, Anna erlebt die typischen Nachteile, am Ende ein rotes Kreuz.
+// s03 (9:16) — „Klassische Fliegengitter: aufgesetzt, auffällig, mit Stolperkante – und gebohrt wird auch noch.“
+// Hochformat-Neukomposition: Titel oben, darunter Wandausschnitt mit hoher Schiebetür, Anna rechts daneben,
+// vier Labels als 2×2-Raster über der Untertitel-Zone. Stolpern als Nahaufnahme auf die Bodenschiene,
+// danach Rückzug (Reveal mit Sternchen), beim Bohren ein langsamer Push-in.
+// Weltkoordinaten = Bildkoordinaten in der Totale (Kamera {x:540, y:960, z:1}).
 // Regel: x/y immer auf äußeren Gruppen, Rotation/Skalierung (svgOrigin "0 0") auf inneren Gruppen ohne x/y.
 (function () {
-  const FY = 880; // Bodenlinie (Weltkoordinaten)
-  const AS = 0.86; // Anna-Skalierung
-  const AX0 = 1130; // Anna Start (Füße)
-  const AXT = 1012; // Anna am Stolperpunkt
-  const AXR = 1018; // Anna nach dem Fangen
-  const FX = 600; // Gitter-Mitte
-  const DOOR = { x: 320, y: 262, w: 560, h: FY - 262 };
-  const FR = { hw: 310, h: 648, bar: 42, rail: 54, railHW: 332 }; // lokal, Ursprung unten Mitte
-  const DRILL = { x: 322, y: 432 }; // Bohrspitze am ersten Loch (Welt)
-  const HOLES = [{ x: 311, y: 432 }, { x: 311, y: 612 }];
+  const FY = 1120; // Bodenlinie (Welt = Bild in der Totale)
+  const AS = 0.88; // Anna-Skalierung
+  const AX0 = 880; // Anna Start (Füße)
+  const AXT = 840; // Anna am Stolperpunkt
+  const AXR = 830; // Anna nach dem Fangen
+  const FX = 500; // Gitter-Mitte
+  const DOOR = { x: 290, y: 528, w: 420, h: FY - 528 };
+  const FR = { hw: 244, h: 622, bar: 40, rail: 52, railHW: 262 }; // lokal, Ursprung unten Mitte
+  const HX = FX - FR.hw + FR.bar / 2; // Mitte des linken Rahmenholms
+  const HOLES = [{ x: HX, y: FY - 432 }, { x: HX, y: FY - 262 }];
+  const DRILL = { x: HX + 11, y: HOLES[0].y }; // Bohrspitze am ersten Loch (Welt)
+  const DS = 0.64; // Bohrmaschinen-Skalierung
+  const WL = 70, WR = 1010, WT = 440; // Wandausschnitt
+  const HDR = { solid: 392, fade: 430 }; // Kopfband hinter dem Titel (deckt die Welt bei Zooms ab)
+  const CAM0 = { x: 540, y: 960, z: 1 }; // Totale
+  const CAM_TRIP = { x: 792, y: 1060, z: 1.9 }; // Nahaufnahme Bodenschiene
+  const CAM_DRILL = { x: 520, y: 956, z: 1.06 }; // langsamer Push-in beim Bohren
   const O0 = { svgOrigin: "0 0" };
   const o0 = (v) => Object.assign(v, O0);
 
@@ -26,21 +35,26 @@
   }
 
   function setup(R, ctx) {
-    const { S, G, C, rng } = SVGK;
+    const { S, G, C, F, rng } = SVGK;
     const svg = R.svg;
     const defs = svg.querySelector("defs") || S("defs", null, svg);
-    const st = SETS.makeStage(svg, { id: "set-problem", gx: 820, gy: 560 });
+    const GX = 540, GY = 820;
+    const st = SETS.makeStage(svg, { id: "set-problem", gx: GX, gy: GY });
     R.sets.problem = st;
     const cam = SETS.camera(st.layer);
     st.cam = cam;
     const W = cam.world;
     const P = (st.p = {});
 
-    // ---------- Boden + Wandausschnitt ----------
-    S("rect", { x: -700, y: FY, width: 3320, height: 800, fill: "#0d2733" }, W);
-    for (let i = -6; i <= 14; i++) S("line", { x1: 960 + (i - 4) * 150, y1: FY, x2: 960 + (i - 4) * 260, y2: 1500, stroke: C.b1, "stroke-width": 3, opacity: 0.6 }, W);
-    S("rect", { x: -700, y: FY - 3, width: 3320, height: 7, fill: C.b2 }, W);
-    const WL = 150, WR = 1050, WT = 160;
+    // ---------- Boden ----------
+    S("rect", { x: -900, y: FY, width: 2880, height: 1700, fill: "#0d2733" }, W);
+    for (let i = -9; i <= 9; i++) S("line", { x1: 540 + i * 120, y1: FY, x2: 540 + i * 330, y2: FY + 1300, stroke: C.b1, "stroke-width": 3, opacity: 0.6 }, W);
+    S("rect", { x: -900, y: FY - 3, width: 2880, height: 7, fill: C.b2 }, W);
+    // Lichtschein aus der Tür auf dem Boden
+    const beam = SETS.gradient(svg, "s03Beam", [[0, "#fbd27f", 0.16], [1, "#fbd27f", 0]]);
+    S("path", { d: `M${DOOR.x + 10},${FY + 4} H${DOOR.x + DOOR.w - 10} L${DOOR.x + DOOR.w + 120},${FY + 170} H${DOOR.x - 130} Z`, fill: beam }, W);
+
+    // ---------- Wandausschnitt mit Türöffnung ----------
     S("path", { d: `M${WR},${WT + 14} L${WR + 20},${WT + 30} V${FY} H${WR} Z`, fill: "#163b4b" }, W); // Wandstärke rechts
     S("path", {
       d: `M${WL},${FY} V${WT + 18} Q${WL},${WT} ${WL + 18},${WT} H${WR - 18} Q${WR},${WT} ${WR},${WT + 18} V${FY} Z M${DOOR.x},${DOOR.y} V${FY} H${DOOR.x + DOOR.w} V${DOOR.y} Z`,
@@ -52,31 +66,34 @@
     S("rect", { x: DOOR.x + DOOR.w + 14, y: FY - 16, width: WR - DOOR.x - DOOR.w - 14, height: 16, fill: C.b2 }, W);
 
     // ---------- Außenblick (warm) ----------
+    const ox = (f) => DOOR.x + f * DOOR.w, oy = (f) => DOOR.y + f * DOOR.h;
     const cpo = S("clipPath", { id: "s03-out" }, defs);
     S("rect", { x: DOOR.x, y: DOOR.y, width: DOOR.w, height: DOOR.h }, cpo);
     const out = S("g", { "clip-path": "url(#s03-out)" }, W);
     const sky = SETS.gradient(svg, "s03Sky", [[0, "#fff4dc"], [0.5, "#fde6b5"], [1, "#fbd27f"]]);
     S("rect", { x: DOOR.x, y: DOOR.y, width: DOOR.w, height: DOOR.h, fill: sky }, out);
-    S("circle", { cx: 735, cy: 560, r: 120, fill: "#fff4dc", opacity: 0.55 }, out);
-    S("circle", { cx: 735, cy: 560, r: 54, fill: "#fff8e8" }, out);
-    const cl = S("g", { transform: "translate(470,380) scale(0.7)" }, out);
-    S("path", { d: "M-90,20 Q-90,-10 -60,-12 Q-50,-44 -14,-40 Q10,-66 44,-44 Q84,-46 88,-10 Q112,-4 108,20 Z", fill: "#fff", opacity: 0.8 }, cl);
-    S("path", { d: `M${DOOR.x},690 Q450,630 600,660 T880,640 V${FY} H${DOOR.x} Z`, fill: C.g4 }, out);
-    S("rect", { x: 780, y: 470, width: 18, height: 230, fill: "#6f4a2e" }, out);
-    [[790, 450, 70, C.g1], [740, 500, 46, C.g2], [840, 500, 50, C.g1]].forEach(([x, y, r, c]) => S("circle", { cx: x, cy: y, r, fill: c }, out));
-    for (let i = 0; i < 9; i++) S("circle", { cx: DOOR.x + 10 + i * 70, cy: 740 + (i % 3) * 6, r: 48 + (i % 2) * 8, fill: i % 2 ? C.g2 : C.g3 }, out);
-    S("rect", { x: DOOR.x, y: 760, width: DOOR.w, height: 40, fill: C.g2 }, out);
-    S("rect", { x: DOOR.x, y: 800, width: DOOR.w, height: 90, fill: "#e6dac6" }, out);
-    for (let i = 0; i < 6; i++) S("line", { x1: DOOR.x + i * 110, y1: 800, x2: DOOR.x - 60 + i * 130, y2: FY, stroke: "#d2c3aa", "stroke-width": 3 }, out);
+    S("circle", { cx: ox(0.7), cy: oy(0.5), r: 100, fill: "#fff4dc", opacity: 0.55 }, out);
+    S("circle", { cx: ox(0.7), cy: oy(0.5), r: 44, fill: "#fff8e8" }, out);
+    [[0.27, 0.16, 0.62, 0.8], [0.78, 0.07, 0.42, 0.65]].forEach(([fx, fy, s, op]) => {
+      const cl = S("g", { transform: `translate(${ox(fx)},${oy(fy)}) scale(${s})` }, out);
+      S("path", { d: "M-90,20 Q-90,-10 -60,-12 Q-50,-44 -14,-40 Q10,-66 44,-44 Q84,-46 88,-10 Q112,-4 108,20 Z", fill: "#fff", opacity: op }, cl);
+    });
+    S("path", { d: `M${DOOR.x},${oy(0.69)} Q${ox(0.23)},${oy(0.6)} ${ox(0.5)},${oy(0.645)} T${ox(1)},${oy(0.61)} V${FY} H${DOOR.x} Z`, fill: C.g4 }, out);
+    S("rect", { x: ox(0.8) - 8, y: oy(0.36), width: 16, height: oy(0.71) - oy(0.36), fill: "#6f4a2e" }, out);
+    [[0.82, 0.31, 56, C.g1], [0.7, 0.385, 38, C.g2], [0.93, 0.38, 42, C.g1]].forEach(([fx, fy, r, c]) => S("circle", { cx: ox(fx), cy: oy(fy), r, fill: c }, out));
+    for (let i = 0; i < 8; i++) S("circle", { cx: DOOR.x + 8 + i * 60, cy: oy(0.77) + (i % 3) * 6, r: 40 + (i % 2) * 7, fill: i % 2 ? C.g2 : C.g3 }, out);
+    S("rect", { x: DOOR.x, y: oy(0.8), width: DOOR.w, height: oy(0.87) - oy(0.8), fill: C.g2 }, out);
+    S("rect", { x: DOOR.x, y: oy(0.87), width: DOOR.w, height: FY - oy(0.87) + 10, fill: "#e6dac6" }, out);
+    for (let i = 0; i < 6; i++) S("line", { x1: DOOR.x + i * 84, y1: oy(0.87), x2: DOOR.x - 50 + i * 100, y2: FY, stroke: "#d2c3aa", "stroke-width": 3 }, out);
 
     // ---------- Generische Schiebetür (hellgrau) ----------
     const df = S("g", null, W);
-    const ft = 22, th = 14, x = DOOR.x, y = DOOR.y, w = DOOR.w, mid = x + w / 2;
+    const ft = 20, th = 14, x = DOOR.x, y = DOOR.y, w = DOOR.w, mid = x + w / 2;
     const sash = (sx, sy, sw, sh, p, front) => {
       const g = S("g", null, df);
       S("rect", { x: sx + p, y: sy + p, width: sw - 2 * p, height: sh - 2 * p, fill: "#d8e6ea", opacity: 0.2 }, g);
-      S("path", { d: `M${sx + p + (sw - 2 * p) * 0.2},${sy + p} h${(sw - 2 * p) * 0.2} L${sx + p + (sw - 2 * p) * 0.1},${sy + sh - p} h${-(sw - 2 * p) * 0.2} Z`, fill: "#fff", opacity: 0.16 }, g);
-      S("path", { d: `M${sx + p + (sw - 2 * p) * 0.55},${sy + p} h${(sw - 2 * p) * 0.08} L${sx + p + (sw - 2 * p) * 0.35},${sy + sh - p} h${-(sw - 2 * p) * 0.08} Z`, fill: "#fff", opacity: 0.12 }, g);
+      S("path", { d: `M${sx + p + (sw - 2 * p) * 0.2},${sy + p} h${(sw - 2 * p) * 0.22} L${sx + p + (sw - 2 * p) * 0.05},${sy + sh - p} h${-(sw - 2 * p) * 0.22} Z`, fill: "#fff", opacity: 0.16 }, g);
+      S("path", { d: `M${sx + p + (sw - 2 * p) * 0.6},${sy + p} h${(sw - 2 * p) * 0.1} L${sx + p + (sw - 2 * p) * 0.32},${sy + sh - p} h${-(sw - 2 * p) * 0.1} Z`, fill: "#fff", opacity: 0.12 }, g);
       S("path", { d: `M${sx},${sy} H${sx + sw} V${sy + sh} H${sx} Z M${sx + p},${sy + p} V${sy + sh - p} H${sx + sw - p} V${sy + p} Z`, "fill-rule": "evenodd", fill: C.b5 }, g);
       S("rect", { x: sx + p - 4, y: sy + p - 4, width: sw - 2 * p + 8, height: 4, fill: C.b4 }, g);
       S("rect", { x: sx + sw - p, y: sy + p, width: 4, height: sh - 2 * p, fill: C.b4, opacity: 0.6 }, g);
@@ -86,9 +103,9 @@
     S("path", { d: `M${x},${y} H${x + w} V${FY} H${x} Z M${x + ft},${y + ft} V${FY - th} H${x + w - ft} V${y + ft} Z`, "fill-rule": "evenodd", fill: C.b5 }, df);
     S("rect", { x, y: FY - th, width: w, height: th, fill: C.b4 }, df);
     S("rect", { x: x + ft, y: y + ft, width: w - 2 * ft, height: 4, fill: C.b4 }, df);
-    sash(x + ft, y + ft, mid + 6 - (x + ft), FY - th - (y + ft), 26, false);
-    sash(mid - 6, y + ft, x + w - ft - (mid - 6), FY - th - (y + ft), 30, true);
-    S("rect", { x: mid + 2, y: y + 300, width: 12, height: 74, rx: 6, fill: C.b3 }, df);
+    sash(x + ft, y + ft, mid + 6 - (x + ft), FY - th - (y + ft), 24, false);
+    sash(mid - 6, y + ft, x + w - ft - (mid - 6), FY - th - (y + ft), 27, true);
+    S("rect", { x: mid + 2, y: y + DOOR.h * 0.47, width: 11, height: 68, rx: 5.5, fill: C.b3 }, df);
 
     // ---------- Klobiges, aufgesetztes Fliegengitter ----------
     const { hw, h, bar, rail, railHW } = FR;
@@ -105,7 +122,7 @@
     const mesh = S("g", { stroke: "#2f353a", "stroke-width": 1.5, opacity: 0.42 }, fb);
     for (let xx = ix0 + 12; xx < ix1; xx += 12) S("line", { x1: xx, y1: iy0, x2: xx, y2: iy1 }, mesh);
     for (let yy = iy0 + 12; yy < iy1; yy += 12) S("line", { x1: ix0, y1: yy, x2: ix1, y2: yy }, mesh);
-    S("path", { d: `M${ix0 + 40},${iy1} Q${ix0 + 120},${(iy0 + iy1) / 2} ${ix0 + 60},${iy0}`, stroke: "#fff", "stroke-width": 10, fill: "none", opacity: 0.08 }, fb); // Netz-Glanz
+    S("path", { d: `M${ix0 + 36},${iy1} Q${ix0 + 110},${(iy0 + iy1) / 2} ${ix0 + 54},${iy0}`, stroke: "#fff", "stroke-width": 10, fill: "none", opacity: 0.08 }, fb); // Netz-Glanz
     S("path", { d: `M${ix0},${iy0 + 4} H${ix1}`, stroke: "#2f353a", "stroke-width": 7, opacity: 0.3 }, fb);
     // Rahmen (Alu-Optik)
     S("path", { d: barsD, "fill-rule": "evenodd", fill: C.b6, stroke: C.b3, "stroke-width": 4, "stroke-linejoin": "round" }, fb);
@@ -127,7 +144,7 @@
       const a = rs() * Math.PI;
       S("line", { x1: sx - Math.cos(a) * 6, y1: sy - Math.sin(a) * 6, x2: sx + Math.cos(a) * 6, y2: sy + Math.sin(a) * 6, stroke: C.b3, "stroke-width": 2.8, "stroke-linecap": "round" }, fb);
     };
-    [[-hw + 21, -h + 21], [hw - 21, -h + 21], [0, -h + 21], [-hw + 21, -h * 0.52], [hw - 21, -h * 0.52], [-hw + 21, -rail - 26], [hw - 21, -rail - 26], [-200, -rail / 2 - 6], [0, -rail / 2 - 6], [200, -rail / 2 - 6]].forEach(([a, b]) => screw(a, b));
+    [[-hw + 20, -h + 20], [hw - 20, -h + 20], [0, -h + 20], [-hw + 20, -h * 0.52], [hw - 20, -h * 0.52], [-hw + 20, -rail - 26], [hw - 20, -rail - 26], [-160, -rail / 2 - 6], [0, -rail / 2 - 6], [160, -rail / 2 - 6]].forEach(([a, b]) => screw(a, b));
     // Bohrlöcher (erscheinen beim Bohren)
     P.holes = HOLES.map((ho) => {
       const g = G(fb, { x: ho.x - FX, y: ho.y - FY });
@@ -143,7 +160,7 @@
     S("rect", { x: -railHW, y: -rail, width: railHW * 2, height: rail }, cpf);
     const gl = S("g", { "clip-path": "url(#s03-fclip)" }, fb);
     P.glare = S("path", { d: `M-40,${-h - 60} h70 L-150,40 h-70 Z`, fill: "#fff", opacity: 0.85 }, gl);
-    gsap.set(P.glare, { x: -560 });
+    gsap.set(P.glare, { x: -480 });
     // Aufmerksamkeits-Striche („schreit“)
     P.att = [];
     const attG = S("g", { stroke: C.yellow, "stroke-width": 9, "stroke-linecap": "round", fill: "none" }, fb);
@@ -153,10 +170,10 @@
       gsap.set(p, { drawSVG: "0% 0%", opacity: 0 });
       return p;
     };
-    P.att.push([ray(-hw, -h, -160, 26, 78), ray(-hw, -h, -132, 26, 86), ray(-hw, -h, -104, 26, 78)]);
-    P.att.push([ray(hw, -h, -20, 26, 78), ray(hw, -h, -48, 26, 86), ray(hw, -h, -76, 26, 78)]);
+    P.att.push([ray(-hw, -h, -160, 26, 78), ray(-hw, -h, -132, 26, 84), ray(-hw, -h, -104, 26, 72)]);
+    P.att.push([ray(hw, -h, -20, 26, 78), ray(hw, -h, -48, 26, 84), ray(hw, -h, -76, 26, 72)]);
     P.att.push([ray(-hw, -h * 0.55, 180, 22, 66), ray(-hw, -h * 0.55, 205, 22, 60), ray(hw, -h * 0.55, 0, 22, 66), ray(hw, -h * 0.55, -25, 22, 60)]);
-    gsap.set(P.fWrap, { y: -1150 });
+    gsap.set(P.fWrap, { y: -1220 });
     gsap.set(P.fShadow, { x: 8, y: 6, opacity: 0 });
 
     // ---------- Ebenen ----------
@@ -165,10 +182,11 @@
     P.fx = S("g", null, W);
     P.drL = S("g", null, W);
 
-    // Rotes Kreuz
+    // Rotes Kreuz (über der Türöffnung)
+    const cx0 = DOOR.x + 30, cx1 = DOOR.x + DOOR.w - 30, cy0 = DOOR.y + 36, cy1 = FY - 56;
     P.cross = [
-      S("path", { d: "M352,300 Q590,548 850,826", stroke: C.red, "stroke-width": 26, "stroke-linecap": "round", fill: "none" }, P.crossL),
-      S("path", { d: "M850,300 Q620,552 352,826", stroke: C.red, "stroke-width": 26, "stroke-linecap": "round", fill: "none" }, P.crossL),
+      S("path", { d: `M${cx0},${cy0} Q${(cx0 + cx1) / 2 - 10},${(cy0 + cy1) / 2 + 6} ${cx1},${cy1}`, stroke: C.red, "stroke-width": 26, "stroke-linecap": "round", fill: "none" }, P.crossL),
+      S("path", { d: `M${cx1},${cy0} Q${(cx0 + cx1) / 2 + 14},${(cy0 + cy1) / 2 + 10} ${cx0},${cy1}`, stroke: C.red, "stroke-width": 26, "stroke-linecap": "round", fill: "none" }, P.crossL),
     ];
     P.cross.forEach((p) => gsap.set(p, { drawSVG: "0% 0%", opacity: 0 }));
 
@@ -179,7 +197,7 @@
       return { sd, arr };
     }));
     // Bohrstaub + Häufchen
-    P.heap = S("ellipse", { cx: 262, cy: FY, rx: 0, ry: 0, fill: C.b5 }, P.fx);
+    P.heap = S("ellipse", { cx: HX - 49, cy: FY, rx: 0, ry: 0, fill: C.b5 }, P.fx);
     P.dust = [];
     for (let i = 0; i < 22; i++) P.dust.push(S("circle", { cx: 0, cy: 0, r: 4 + (i % 3) * 1.5, fill: [C.b6, C.b5, "#fff"][i % 3], opacity: 0 }, P.fx));
 
@@ -212,11 +230,11 @@
     P.drFly = S("g", null, P.drWrap); // Flug (x/y)
     P.drRot = G(P.drFly, {}); // Neigung (svgOrigin = Spitze)
     P.drVib = S("g", null, P.drRot); // Vibration / Schweben (x/y)
-    const dg = S("g", { transform: "scale(0.8)" }, P.drVib);
-    // Vibrations-Bögen
+    const dg = S("g", { transform: `scale(${DS})` }, P.drVib);
+    // Vibrations-Bögen (über und unter dem Gehäuse, damit nichts links aus dem Bild ragt)
     P.vib = [];
-    [["M-300,-92 q-22,40 0,80", 0], ["M-330,-112 q-34,60 0,120", 1], ["M-200,-92 q30,-26 70,-10", 2]].forEach(([d]) => {
-      P.vib.push(S("path", { d, stroke: "#fff", "stroke-width": 6, fill: "none", "stroke-linecap": "round", opacity: 0 }, dg));
+    ["M-290,-86 q40,-30 90,-14", "M-250,-110 q50,-34 110,-14", "M-100,60 q30,26 70,10"].forEach((d) => {
+      P.vib.push(S("path", { d, stroke: "#fff", "stroke-width": 7, fill: "none", "stroke-linecap": "round", opacity: 0 }, dg));
     });
     // Akku + Griff
     S("path", { d: "M-262,30 L-196,30 L-212,162 L-284,162 Z", fill: C.b2 }, dg);
@@ -242,13 +260,35 @@
     const bitG = S("g", { "clip-path": "url(#s03-bit)" }, dg);
     P.bitStripes = S("g", null, bitG);
     for (let xx = -90; xx <= 30; xx += 16) S("line", { x1: xx, y1: 10, x2: xx + 12, y2: -10, stroke: C.b4, "stroke-width": 5 }, P.bitStripes);
-    gsap.set(P.drFly, { x: -620, y: -180 });
+    gsap.set(P.drFly, { x: -560, y: -170 });
     gsap.set(P.drRot, o0({ rotation: -28 }));
+
+    // ---------- Kopfband hinter dem Titel ----------
+    // Exakte Kopie des Bühnen-Hintergrunds (Farbe, Punktraster, Glow) oberhalb der Welt, weich ausgeblendet:
+    // in der Totale unsichtbar, bei Zooms verdeckt es die Welt hinter dem Titel.
+    const hm = S("mask", { id: "s03-hdrMask", maskUnits: "userSpaceOnUse", x: 0, y: 0, width: F.W, height: HDR.fade + 10 }, defs);
+    const hg = SETS.gradient(svg, "s03HdrGrad", [[0, "#fff"], [HDR.solid / HDR.fade, "#fff"], [1, "#000"]]);
+    S("rect", { x: 0, y: 0, width: F.W, height: HDR.fade, fill: hg }, hm);
+    const hdr = S("g", { mask: "url(#s03-hdrMask)" }, st.root);
+    S("rect", { x: 0, y: 0, width: F.W, height: HDR.fade + 10, fill: C.blue }, hdr);
+    const hd = S("g", { opacity: 0.08 }, hdr);
+    for (let yy = 40; yy < HDR.fade + 10; yy += 48) for (let xx = 40; xx < F.W; xx += 48) S("circle", { cx: xx, cy: yy, r: 2.2, fill: "#fff" }, hd);
+    S("ellipse", { cx: GX, cy: GY, rx: 760, ry: 1100, fill: "url(#set-problemGlow)" }, hdr);
+    // weicher Auslauf darunter — nur in der Nahaufnahme eingeblendet (kein harter Schnitt durch Anna)
+    const SOFT = 610;
+    const sm = S("mask", { id: "s03-softMask", maskUnits: "userSpaceOnUse", x: 0, y: 0, width: F.W, height: SOFT + 10 }, defs);
+    const sg = SETS.gradient(svg, "s03SoftGrad", [[0, "#fff"], [HDR.fade / SOFT, "#fff"], [(HDR.fade + 60) / SOFT, "#fff", 0.55], [1, "#000"]]);
+    S("rect", { x: 0, y: 0, width: F.W, height: SOFT, fill: sg }, sm);
+    P.soft = S("g", { mask: "url(#s03-softMask)", opacity: 0 }, st.root);
+    S("rect", { x: 0, y: 0, width: F.W, height: SOFT + 10, fill: C.blue }, P.soft);
+    const sd = S("g", { opacity: 0.08 }, P.soft);
+    for (let yy = 40; yy < SOFT + 10; yy += 48) for (let xx = 40; xx < F.W; xx += 48) S("circle", { cx: xx, cy: yy, r: 2.2, fill: "#fff" }, sd);
+    S("ellipse", { cx: GX, cy: GY, rx: 760, ry: 1100, fill: "url(#set-problemGlow)" }, P.soft);
 
     // ---------- Texte (HUD) ----------
     const hud = R.huds[ctx.id];
     const title = ANIM.el("div", "t-title", hud);
-    title.style.cssText = "left:1330px; top:226px; font-size:64px;";
+    title.style.cssText = "left:0; top:222px; width:1080px; text-align:center; font-size:80px;";
     P.title = ["Klassische", "Fliegengitter"].map((t) => {
       const sp = ANIM.el("span", null, title, t);
       sp.style.display = "block";
@@ -256,14 +296,15 @@
       return sp;
     });
     P.tbar = ANIM.el("div", null, hud);
-    P.tbar.style.cssText = "position:absolute; left:1333px; top:372px; width:96px; height:8px; background:#f6a206;";
-    gsap.set(P.tbar, { scaleX: 0, transformOrigin: "0% 50%" });
+    P.tbar.style.cssText = "position:absolute; left:492px; top:400px; width:96px; height:8px; background:#f6a206;";
+    gsap.set(P.tbar, { scaleX: 0, transformOrigin: "50% 50%" });
+    // 2×2-Raster über der Untertitel-Zone
     P.chips = ["aufgesetzt", "auffällig", "Stolperkante", "Bohren nötig"].map((t, i) => {
       const el = ANIM.el("div", "chip", hud, `<span class="bar"></span>${t}`);
-      el.style.left = "1330px";
-      el.style.top = 428 + i * 94 + "px";
+      el.style.cssText = `left:${i % 2 ? 550 : 90}px; top:${i < 2 ? 1160 : 1252}px; width:440px; font-size:42px; padding:12px 24px 12px 22px;`;
       const bar = el.querySelector(".bar");
-      gsap.set(el, { opacity: 0, transformOrigin: "0% 50%" });
+      bar.style.height = "42px";
+      gsap.set(el, { opacity: 0, transformOrigin: "50% 50%" });
       gsap.set(bar, { scaleY: 0 });
       return { el, bar };
     });
@@ -293,6 +334,7 @@
     };
 
     // ================= Startzustand (ab t0 - 0.3 sichtbar) =================
+    cam.to(tl, 0, CAM0, 0);
     anna.init(tl);
     anna.mouth(tl, 0, "smirk").look(tl, 0, -5, -1, 0);
     anna.pose(tl, 0, { armL: [28, -118], head: 5, lean: 0 }, 0);
@@ -308,10 +350,10 @@
     tl.to(anna.head, o0({ rotation: 9, duration: 0.4, ease: "sine.inOut" }), tK + 0.1);
     anna.look(tl, tK + 0.15, -6, -4, 0.2);
 
-    // ================= „Fliegengitter“ — fällt von oben, federt =================
+    // ================= „Fliegengitter“ — fällt von oben (hinter dem Titelband hervor), federt =================
     const tFall = tFl - 0.44;
     ANIM.sfx(tFall - 0.02, "whoosh", -4);
-    tl.fromTo(P.fWrap, { y: -1150 }, { y: 0, duration: 0.44, ease: "power2.in" }, tFall);
+    tl.fromTo(P.fWrap, { y: -1220 }, { y: 0, duration: 0.44, ease: "power2.in" }, tFall);
     tl.fromTo(P.fSq, o0({ scaleX: 1, scaleY: 1 }), o0({ scaleX: 0.93, scaleY: 1.1, duration: 0.42, ease: "sine.in" }), tFall);
     tl.to(P.fShadow, { opacity: 1, duration: 0.12, ease: "power1.out" }, tFl - 0.03);
     tl.to(P.fSq, o0({ scaleX: 1.08, scaleY: 0.8, duration: 0.07, ease: "power2.out" }), tFl);
@@ -330,7 +372,7 @@
         const cx = FX + sd * (FR.railHW - 6), cy = FY - 8;
         arr.forEach((c, i) => {
           const a = (-10 - i * 22) * (Math.PI / 180);
-          const dx = sd * Math.cos(a) * (70 + i * 16) * k, dy = Math.sin(a) * (40 + i * 12) * k;
+          const dx = sd * Math.cos(a) * (64 + i * 14) * k, dy = Math.sin(a) * (40 + i * 12) * k;
           tl.fromTo(c, { x: cx, y: cy, attr: { r: 8 }, opacity: 1 }, { x: cx + dx, y: cy + dy, attr: { r: (22 + i * 5) * k }, duration: 0.5, ease: "power2.out", immediateRender: false }, t + i * 0.015);
           tl.to(c, { opacity: 0, duration: 0.32, ease: "power1.in" }, t + 0.36 + i * 0.015);
         });
@@ -353,7 +395,7 @@
     // ================= „aufgesetzt“ — steht sichtbar vor der Tür =================
     const tA0 = tA - 0.14;
     tl.to(P.fBody, { y: -18, duration: 0.16, ease: "power2.out" }, tA0);
-    tl.to(P.fShadow, { x: 24, y: 17, duration: 0.36, ease: "back.out(2)" }, tA0 + 0.04);
+    tl.to(P.fShadow, { x: 22, y: 16, duration: 0.36, ease: "back.out(2)" }, tA0 + 0.04);
     tl.to(P.fBody, { y: 0, duration: 0.13, ease: "power2.in" }, tA0 + 0.18);
     ANIM.sfx(tA0 + 0.31, "clunk", -7);
     anna.pose(tl, tA - 0.12, { armL: [100, -12], head: -4 }, 0.26, "back.out(1.8)");
@@ -362,7 +404,7 @@
     // ================= „auffällig“ — der Rahmen schreit =================
     tl.to(P.fSq, o0({ scaleX: 1.035, scaleY: 1.05, duration: 0.12, ease: "power2.out" }), tF - 0.06);
     tl.to(P.fSq, o0({ scaleX: 1, scaleY: 1, duration: 0.6, ease: "elastic.out(1, 0.4)" }), tF + 0.06);
-    tl.to(P.glare, { x: 600, duration: 0.62, ease: "power2.inOut" }, tF - 0.1);
+    tl.to(P.glare, { x: 520, duration: 0.62, ease: "power2.inOut" }, tF - 0.1);
     const rays = (grp, t) => grp.forEach((p, i) => {
       tl.set(p, { opacity: 1 }, t + i * 0.035);
       tl.set(p, { opacity: 0 }, t + 0.57 + i * 0.02);
@@ -382,10 +424,11 @@
     tl.to(f.eyes, o0({ scaleY: 0.5, duration: 0.1, ease: "power2.out" }), tF);
     tl.to(f.eyes, o0({ scaleY: 1, duration: 0.14, ease: "power2.out" }), tF + 0.42);
 
-    // ================= „mit Stolperkante“ — Zoom, Anlauf, Stolpern =================
+    // ================= „mit Stolperkante“ — Nahaufnahme Bodenschiene, Anlauf, Stolpern =================
     const tW0 = Math.max(tF + 0.46, tS - 0.68);
     const nSt = 4, step = (tS - tW0) / nSt;
-    cam.to(tl, tW0 - 0.04, { x: 905, y: 655, z: 1.34 }, Math.min(0.62, tS - tW0 + 0.04), "power2.inOut");
+    cam.to(tl, tW0 - 0.04, CAM_TRIP, Math.min(0.62, tS - tW0 + 0.02), "power2.inOut");
+    tl.to(P.soft, { opacity: 1, duration: 0.5, ease: "power1.inOut" }, tW0 + 0.04);
     ANIM.sfx(tW0 - 0.04, "whooshSoft", -11);
     anna.pose(tl, tW0 - 0.08, { armL: [16, -10], armR: [-16, 10], head: -2 }, 0.2, "power2.out");
     tl.to(anna.lean, o0({ rotation: -6, duration: 0.25, ease: "power2.inOut" }), tW0 - 0.06);
@@ -406,7 +449,7 @@
     }
     // Stolpern: Fuß hängt an der Schiene, Oberkörper kippt, Arme rudern
     ANIM.sfx(tS, "trip", -2);
-    ANIM.burst(tl, P.fx, FX + FR.railHW + 6, FY - 30, tS, { n: 7, len: 30, r0: 16, w: 6, color: C.yellow, seed: 77 });
+    ANIM.burst(tl, P.fx, FX + FR.railHW + 4, FY - 30, tS, { n: 7, len: 26, r0: 14, w: 5, color: C.yellow, seed: 77 });
     tl.to(anna.root, { x: AXT - 30, duration: 0.26, ease: "power2.out" }, tS);
     tl.to(anna.lean, o0({ rotation: -21, duration: 0.24, ease: "power2.out" }), tS);
     anna.pose(tl, tS, { legL: [-8, 10], legR: [-38, -52] }, 0.16, "power2.out");
@@ -420,9 +463,9 @@
     const tB = tS + 0.27;
     ANIM.sfx(tB, "bonk", -2);
     ANIM.sfx(tB + 0.06, "stars", -6);
-    tl.to(P.fSq, o0({ rotation: -1.4, duration: 0.07, ease: "power2.out" }), tB);
+    tl.to(P.fSq, o0({ rotation: -1.6, duration: 0.07, ease: "power2.out" }), tB);
     tl.to(P.fSq, o0({ rotation: 0, duration: 0.7, ease: "elastic.out(1.2, 0.3)" }), tB + 0.07);
-    cam.shake(tl, tB, 8, 0.2);
+    cam.shake(tl, tB, 10, 0.2);
     tl.to(anna.lean, o0({ rotation: 4, duration: 0.18, ease: "power2.out" }), tB);
     tl.to(anna.lean, o0({ rotation: 0, duration: 0.5, ease: "back.out(2.6)" }), tB + 0.18);
     tl.to(anna.root, { x: AXR, duration: 0.32, ease: "power2.out" }, tB);
@@ -441,7 +484,7 @@
     ANIM.reach(tl, tS + 0.44, anna, "armR", L(AXR, 34, -548), { x: AXR, y: FY }, AS, -1, 0.22, "back.out(1.6)");
     anna.pose(tl, tS + 0.44, { armL: [22, -16] }, 0.3, "power2.out");
     // Sternchen kreisen
-    const tSt0 = tB + 0.04, tSt1 = Math.min(tG - 0.15, tSt0 + 1.05);
+    const tSt0 = tB + 0.04, tSt1 = Math.min(tG - 0.12, tSt0 + 1.1);
     tl.to(P.stars, { opacity: 1, duration: 0.1, ease: "power1.out" }, tSt0);
     P.orbit.forEach((o, i) => {
       const a0 = i / P.orbit.length;
@@ -449,18 +492,22 @@
       tl.fromTo(o.spin, o0({ rotation: 0, scale: 0.4 }), o0({ rotation: 300, scale: 1, duration: tSt1 - tSt0, ease: "power1.out", immediateRender: false }), tSt0);
     });
     tl.to(P.stars, { opacity: 0, duration: 0.16, ease: "power1.in" }, tSt1 - 0.12);
-    // Kamera zurück
-    const tZo = Math.min(tS + 0.85, tG - 0.62);
-    cam.to(tl, tZo, { x: 960, y: 540, z: 1 }, 0.5, "power3.inOut");
+    // Kamera zieht nach dem Bonk zurück — Reveal: Anna mit Sternchen
+    const tZo = tB + 0.05;
+    cam.to(tl, tZo, CAM0, Math.min(0.5, tG - 0.55 - tZo), "power3.inOut");
+    tl.to(P.soft, { opacity: 0, duration: 0.3, ease: "power1.in" }, tZo);
     ANIM.sfx(tZo, "whooshSoft", -12);
-    tl.to(f.pupils, { x: -3, y: 0, duration: 0.18, ease: "power2.out" }, tZo + 0.05);
-    anna.mouth(tl, tZo + 0.05, "frown").brows(tl, tZo + 0.05, "annoyed", 0.18);
-    anna.pose(tl, tZo + 0.1, { armR: [-16, 10], armL: [16, -10] }, 0.3, "power2.inOut");
+    const tRec = Math.min(tS + 0.85, tG - 0.62);
+    tl.to(f.pupils, { x: -3, y: 0, duration: 0.18, ease: "power2.out" }, tRec + 0.05);
+    anna.mouth(tl, tRec + 0.05, "frown").brows(tl, tRec + 0.05, "annoyed", 0.18);
+    anna.pose(tl, tRec + 0.1, { armR: [-16, 10], armL: [16, -10] }, 0.3, "power2.inOut");
 
     // ================= „gebohrt“ — die Bohrmaschine =================
     const tDi = tG - 0.52;
     const tEnd = Math.max(tG + 0.55, tAuch - 0.08);
     const tMid = tG + (tEnd - tG) * 0.45;
+    // langsamer Push-in, bleibt bis zum Szenenende
+    cam.to(tl, tG - 0.2, CAM_DRILL, Math.max(0.6, t1 - (tG - 0.2)), "sine.inOut");
     ANIM.sfx(tDi, "swish", -5);
     tl.to(P.drFly, { x: -42, duration: 0.42, ease: "power3.out" }, tDi);
     tl.to(P.drFly, { y: 0, duration: 0.42, ease: "back.out(1.6)" }, tDi);
@@ -474,7 +521,7 @@
     tl.to(P.drVib, { x: 0, y: 0, duration: 0.05, ease: "power1.out" }, tG + (nv + 1) * 0.035);
     P.vib.forEach((v, i) => tl.fromTo(v, { opacity: 0 }, { opacity: 0.8, duration: 0.06, ease: "sine.inOut", yoyo: true, repeat: Math.max(1, 2 * Math.floor((tEnd - tG) / 0.12) - 1), immediateRender: false }, tG + i * 0.03));
     // zum zweiten Loch
-    tl.to(P.drFly, { x: -26, duration: 0.08, ease: "power2.out" }, tMid);
+    tl.to(P.drFly, { x: -22, duration: 0.08, ease: "power2.out" }, tMid);
     tl.to(P.drFly, { y: HOLES[1].y - HOLES[0].y, duration: 0.16, ease: "power2.inOut" }, tMid + 0.04);
     tl.to(P.drFly, { x: 0, duration: 0.08, ease: "power2.in" }, tMid + 0.18);
     tl.to(P.holes[0], o0({ scale: 1, duration: tMid - tG - 0.06, ease: "power1.out" }), tG + 0.06);
@@ -485,7 +532,7 @@
         const c = P.dust[idx0 + i];
         const t = tA_ + ((tB_ - tA_) * (i + r() * 0.6)) / n;
         const sx = ho.x + 4, sy = ho.y + (r() - 0.5) * 8;
-        const dx = -(18 + r() * 70), up = -(8 + r() * 26), down = 60 + r() * (FY - sy - 40);
+        const dx = -(16 + r() * 60), up = -(8 + r() * 26), down = 60 + r() * (FY - sy - 40);
         tl.fromTo(c, { x: sx, opacity: 1 }, { x: sx + dx, duration: 0.55, ease: "power2.out", immediateRender: false }, t);
         tl.fromTo(c, { y: sy }, { y: sy + up, duration: 0.14, ease: "power2.out", immediateRender: false }, t);
         tl.to(c, { y: Math.min(FY - 6, sy + down), duration: 0.42, ease: "power2.in" }, t + 0.14);
@@ -494,9 +541,9 @@
     };
     spawn(tG + 0.03, tMid - 0.02, HOLES[0], 0, 11);
     spawn(tMid + 0.26, tEnd - 0.04, HOLES[1], 11, 11);
-    tl.to(P.heap, { attr: { rx: 30, ry: 11 }, duration: tEnd - tG, ease: "power1.out" }, tG + 0.3);
-    // wegschweben, dann schweben
-    tl.to(P.drFly, { x: -30, y: 272, duration: 0.45, ease: "back.out(1.7)" }, tEnd + 0.03);
+    tl.to(P.heap, { attr: { rx: 28, ry: 10 }, duration: tEnd - tG, ease: "power1.out" }, tG + 0.3);
+    // wegschweben (leicht abgesetzt, nach unten), dann schweben
+    tl.to(P.drFly, { x: -10, y: 236, duration: 0.45, ease: "back.out(1.7)" }, tEnd + 0.03);
     tl.to(P.drRot, o0({ rotation: -9, duration: 0.45, ease: "back.out(2)" }), tEnd + 0.03);
     const tHov = tEnd + 0.48, nh = Math.max(1, 2 * Math.ceil((t1 - tHov) / 0.9) - 1);
     tl.fromTo(P.drVib, { y: 0 }, { y: -9, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: nh, immediateRender: false }, tHov);
@@ -523,15 +570,15 @@
     squint(tHd, false);
     anna.mouth(tl, tHd, "flat").brows(tl, tHd, "annoyed", 0.15).look(tl, tHd, -7, 1, 0.14);
     const tSh = Math.max(tC2 + 0.12, tNoch - 0.05, tHd + 0.32);
-    anna.pose(tl, tSh, { armL: [32, 74], armR: [-32, -74], head: 8 }, 0.32, "back.out(2)");
+    anna.pose(tl, tSh, { armL: [8, 112], armR: [-8, -112], head: 8 }, 0.32, "back.out(2)"); // kompaktes Schulterzucken (bleibt im Bild)
     tl.to(anna.lean, o0({ scaleY: 1.025, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }), tSh);
     anna.mouth(tl, tSh, "smirk").look(tl, tSh + 0.05, 2, -2, 0.15);
     browsAsym(tSh, 0.2);
 
-    // ================= Labels (Spalte rechts) =================
+    // ================= Labels (2×2-Raster) =================
     const chip = (i, t) => {
       const c = P.chips[i];
-      tl.fromTo(c.el, { opacity: 0, scale: 0.55, x: -26 }, { opacity: 1, scale: 1, x: 0, duration: 0.42, ease: "back.out(2.2)", immediateRender: false }, t - 0.05);
+      tl.fromTo(c.el, { opacity: 0, scale: 0.6, y: 22 }, { opacity: 1, scale: 1, y: 0, duration: 0.42, ease: "back.out(2.2)", immediateRender: false }, t - 0.05);
       tl.to(c.bar, { scaleY: 1, duration: 0.3, ease: "power3.out" }, t + 0.06);
       ANIM.sfx(t - 0.04, "pop", -6);
     };

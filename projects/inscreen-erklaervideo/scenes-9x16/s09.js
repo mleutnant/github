@@ -2,6 +2,8 @@
 // Set „partner“ (Neubau, weiße QuinLine®-Hebeschiebetür). Ben winkt, bestellt per Tablet
 // (Panel mit Schalter + vier Schritten), will messen — „Maße liegen vor“ — Maßband schnappt zurück.
 // Das Set + Ben + Halte-Helfer werden hier angelegt und von s10 weiterbenutzt (R.partner).
+// 9:16: erst Ben groß in der Mitte (Winken), dann kippt die Kamera hoch: Ben unten links, das
+// Bestell-Panel füllt oben y 236–895, „Maße liegen vor“ als Hinweis-Karte neben dem Maßband.
 (function () {
   const SC = (window.SCENES = window.SCENES || {});
 
@@ -71,7 +73,7 @@
 
     // ---- Wand mit Öffnung, Laibung, Boden ----
     const W = L.wall;
-    S("path", { d: `M-600,-400 H3600 V${FL} H-600 Z M${DX},${DY} V${FL} H${DX + DW} V${DY} Z`, "fill-rule": "evenodd", fill: C.cream }, W);
+    S("path", { d: `M-600,-1500 H3600 V${FL} H-600 Z M${DX},${DY} V${FL} H${DX + DW} V${DY} Z`, "fill-rule": "evenodd", fill: C.cream }, W);
     const glow = SETS.radial(svg, "ptGlow", [[0, "#fff4dc", 0.9], [1, "#fff4dc", 0]]);
     S("ellipse", { cx: Cx, cy: DY + DH * 0.55, rx: 820, ry: 520, fill: glow, opacity: 0.55 }, W);
     S("path", { d: `M${DX - 26},${DY - 22} H${DX + DW + 26} L${DX + DW},${DY} H${DX} Z`, fill: C.cream3 }, W);
@@ -79,7 +81,7 @@
     S("path", { d: `M${DX + DW + 26},${DY - 22} L${DX + DW},${DY} V${FL} L${DX + DW + 26},${FL} Z`, fill: C.cream3 }, W);
     // Boden (Estrich, hell) + Fuge + Sonnenfleck
     const floorG = SETS.gradient(svg, "ptFloor", [[0, "#dcd6cc"], [1, "#cbc3b6"]]);
-    S("rect", { x: -600, y: FL, width: 4200, height: 600, fill: floorG }, W);
+    S("rect", { x: -600, y: FL, width: 4200, height: 1400, fill: floorG }, W);
     for (let i = -6; i <= 6; i++) S("line", { x1: Cx + i * 330, y1: FL, x2: Cx + i * 560, y2: FL + 300, stroke: "#bfb6a7", "stroke-width": 2.5, opacity: 0.6 }, W);
     S("line", { x1: -600, y1: FL + 110, x2: 3600, y2: FL + 110, stroke: "#bfb6a7", "stroke-width": 2.5, opacity: 0.45 }, W);
     S("path", { d: `M${DX + 40},${FL} H${DX + DW - 30} L${DX + DW + 260},${FL + 230} H${DX - 180} Z`, fill: "#fff4dc", opacity: 0.5 }, W);
@@ -105,7 +107,7 @@
     S("path", { d: `M${px - 38},${py - 88} Q${px},${py - 140} ${px + 38},${py - 88}`, stroke: C.an3, "stroke-width": 4, fill: "none" }, pail);
     S("path", { d: `M${px - 37},${py - 52} H${px + 37}`, stroke: C.b5, "stroke-width": 8 }, pail);
     const tb = S("g", null, pr);
-    const tx = DX - 80, ty = FL + 64;
+    const tx = DX - 50, ty = FL + 64; // 9:16: nicht als Streifen am Bildrand
     S("ellipse", { cx: tx, cy: ty + 2, rx: 92, ry: 10, fill: C.blue, opacity: 0.14 }, tb);
     S("rect", { x: tx - 80, y: ty - 74, width: 160, height: 74, rx: 8, fill: C.an2 }, tb);
     S("rect", { x: tx - 84, y: ty - 92, width: 168, height: 26, rx: 7, fill: C.b3 }, tb);
@@ -113,7 +115,7 @@
     S("rect", { x: tx - 10, y: ty - 72, width: 20, height: 12, rx: 3, fill: C.red }, tb);
     const bulb = S("g", null, pr);
     const bx = DX - 220;
-    S("line", { x1: bx, y1: -400, x2: bx, y2: 92, stroke: C.an2, "stroke-width": 4 }, bulb);
+    S("line", { x1: bx, y1: -1500, x2: bx, y2: 92, stroke: C.an2, "stroke-width": 4 }, bulb);
     S("rect", { x: bx - 9, y: 88, width: 18, height: 20, rx: 3, fill: C.an3 }, bulb);
     S("circle", { cx: bx, cy: 128, r: 34, fill: "#fff4dc", opacity: 0.6 }, bulb);
     S("ellipse", { cx: bx, cy: 126, rx: 17, ry: 21, fill: C.y3 }, bulb);
@@ -206,37 +208,44 @@
       ben.breathe(tl, a, b, 0.013, (b - a) / n - 0.001);
     };
     // Welt -> Bildschirm für eine Kamera-Einstellung
-    P.toScreen = (pt, c) => ({ x: (pt.x - c.x) * c.z + 960, y: (pt.y - c.y) * c.z + 540 });
-    P.CAM9 = { x: Bx + 395, y: 690, z: 1.3 };
+    const F = SVGK.F;
+    P.toScreen = (pt, c) => ({ x: (pt.x - c.x) * c.z + F.W / 2, y: (pt.y - c.y) * c.z + F.H / 2 });
+    // Kamera-Einstellungen 9:16 (Weltpunkt x/y in Bildmitte 540/960)
+    P.CAM0 = { x: Bx + 10, y: 668, z: 1.3 }; // Ben groß, ganze Figur, Füße knapp über den Untertiteln
+    P.CAM9 = { x: Bx + 236, y: 408, z: 1.12 }; // Ben unten links, Panel oben
+    P.panelBox = { left: 72, top: 236, width: 916 };
 
-    // ---- HUD: Tablet-/Bestell-Panel ----
+    // ---- HUD: Tablet-/Bestell-Panel (oben, y 236–895) + Hinweis-Karte (neben dem Maßband) ----
     const h = R.huds[ctx.id];
+    const PB = P.panelBox;
     const css = document.createElement("style");
     css.textContent = `
-      .p9-panel { position:absolute; left:892px; top:122px; width:940px; background:#fff; box-shadow:0 26px 64px rgba(18,52,66,.30); opacity:0; }
+      .p9-panel { position:absolute; left:${PB.left}px; top:${PB.top}px; width:${PB.width}px; background:#fff; box-shadow:0 28px 70px rgba(18,52,66,.32); opacity:0; }
       .p9-l { position:absolute; }
-      .p9-ly { left:-24px; top:-24px; width:250px; height:190px; border-left:12px solid var(--sch-yellow); border-top:12px solid var(--sch-yellow); }
-      .p9-lr { right:-26px; bottom:-26px; width:220px; height:170px; border-right:12px solid var(--sch-red); border-bottom:12px solid var(--sch-red); }
-      .p9-head { position:relative; height:94px; background:var(--sch-blue); color:#fff; font-weight:800; font-size:40px; display:flex; align-items:center; padding:0 40px; white-space:nowrap; }
-      .p9-head sup { font-size:22px; margin-right:10px; }
-      .p9-dots { position:absolute; right:34px; top:38px; display:flex; gap:10px; }
-      .p9-dots i { display:block; width:14px; height:14px; border-radius:50%; background:#4b6f80; }
-      .p9-row { display:flex; align-items:center; padding:24px 40px 22px; }
-      .p9-name { font-weight:900; font-size:60px; color:var(--sch-blue); letter-spacing:-.01em; line-height:1; }
-      .p9-state { margin-left:auto; margin-right:22px; font-weight:700; font-size:32px; color:#4b6f80; opacity:0; }
-      .p9-tog { position:relative; width:132px; height:70px; border-radius:35px; background:#b9cad1; flex:none; }
-      .p9-knob { position:absolute; left:7px; top:7px; width:56px; height:56px; border-radius:50%; background:#fff; box-shadow:0 3px 8px rgba(18,52,66,.28); }
-      .p9-ring { position:absolute; left:-4px; top:-4px; width:78px; height:78px; border-radius:50%; border:5px solid var(--sch-red); opacity:0; }
-      .p9-sep { height:3px; background:#e3ebee; margin:0 40px; }
-      .p9-steps { padding:20px 40px 8px; }
-      .p9-step { position:relative; display:flex; align-items:center; height:102px; }
-      .p9-ic { width:82px; height:82px; border-radius:50%; border:4px solid var(--sch-blue); background:#fff; display:flex; align-items:center; justify-content:center; flex:none; opacity:0; }
-      .p9-ic svg { width:52px; height:52px; overflow:visible; }
-      .p9-lbl { margin-left:28px; font-weight:700; font-size:36px; color:var(--sch-blue); white-space:nowrap; opacity:0; }
-      .p9-con { position:absolute; left:39px; top:-10px; width:5px; height:20px; background:var(--sch-red); transform-origin:50% 0%; transform:scaleY(0); }
-      .p9-note { display:flex; align-items:center; gap:20px; margin:10px 40px 34px; padding:16px 26px; background:#e3ebee; font-weight:800; font-size:44px; color:var(--sch-blue); white-space:nowrap; opacity:0; }
-      .p9-note .bar { width:7px; height:46px; background:var(--sch-red); flex:none; }
-      .p9-note svg { width:66px; height:48px; margin-left:auto; overflow:visible; }
+      .p9-ly { left:-12px; top:-12px; width:230px; height:180px; border-left:12px solid var(--sch-yellow); border-top:12px solid var(--sch-yellow); }
+      .p9-lr { right:-12px; bottom:-12px; width:210px; height:160px; border-right:12px solid var(--sch-red); border-bottom:12px solid var(--sch-red); }
+      .p9-head { position:relative; height:100px; background:var(--sch-blue); color:#fff; font-weight:800; font-size:46px; display:flex; align-items:center; padding:0 34px; white-space:nowrap; }
+      .p9-head sup { font-size:26px; margin-right:10px; }
+      .p9-dots { position:absolute; right:36px; top:42px; display:flex; gap:11px; }
+      .p9-dots i { display:block; width:16px; height:16px; border-radius:50%; background:#4b6f80; }
+      .p9-row { display:flex; align-items:center; padding:24px 34px 22px; }
+      .p9-name { font-weight:900; font-size:80px; color:var(--sch-blue); letter-spacing:-.01em; line-height:1; }
+      .p9-state { margin-left:auto; margin-right:24px; font-weight:700; font-size:38px; color:#4b6f80; opacity:0; }
+      .p9-tog { position:relative; width:146px; height:78px; border-radius:39px; background:#b9cad1; flex:none; }
+      .p9-knob { position:absolute; left:8px; top:8px; width:62px; height:62px; border-radius:50%; background:#fff; box-shadow:0 3px 8px rgba(18,52,66,.28); }
+      .p9-ring { position:absolute; left:-4px; top:-4px; width:86px; height:86px; border-radius:50%; border:5px solid var(--sch-red); opacity:0; }
+      .p9-sep { height:3px; background:#e3ebee; margin:0 34px; }
+      .p9-steps { padding:16px 34px 20px; }
+      .p9-step { position:relative; display:flex; align-items:center; height:96px; }
+      .p9-ic { width:84px; height:84px; border-radius:50%; border:4px solid var(--sch-blue); background:#fff; display:flex; align-items:center; justify-content:center; flex:none; opacity:0; }
+      .p9-ic svg { width:54px; height:54px; overflow:visible; }
+      .p9-lbl { margin-left:24px; font-weight:700; font-size:38px; color:var(--sch-blue); white-space:nowrap; opacity:0; }
+      .p9-con { position:absolute; left:40px; top:-8px; width:5px; height:16px; background:var(--sch-red); transform-origin:50% 0%; transform:scaleY(0); }
+      .p9-note { position:absolute; display:flex; align-items:center; gap:16px; width:532px; height:90px; padding:0 28px 0 26px; background:#fff; box-shadow:0 18px 44px rgba(18,52,66,.26);
+        font-weight:800; font-size:46px; color:var(--sch-blue); white-space:nowrap; opacity:0; }
+      .p9-note .bar { width:8px; height:50px; background:var(--sch-red); flex:none; }
+      .p9-note svg.tp { width:64px; height:46px; margin-left:auto; overflow:visible; }
+      .p9-note .tail { position:absolute; width:34px; height:34px; background:#fff; transform:rotate(45deg); }
     `;
     document.head.appendChild(css);
     const ln = 'fill="none" stroke="#123442" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"';
@@ -260,10 +269,13 @@
       <div class="p9-head">QuinLine<sup>®</sup> 74 · Auftrag<div class="p9-dots"><i></i><i></i><i></i></div></div>
       <div class="p9-row"><div class="p9-name">InScreen</div><div class="p9-state">bestellt</div><div class="p9-tog"><div class="p9-ring"></div><div class="p9-knob"></div></div></div>
       <div class="p9-sep"></div>
-      <div class="p9-steps">${labels.map((l, i) => `<div class="p9-step">${i ? '<div class="p9-con"></div>' : ""}<div class="p9-ic">${icons[i]}</div><div class="p9-lbl">${l}</div></div>`).join("")}</div>
-      <div class="p9-note"><div class="bar"></div>Maße liegen vor<svg viewBox="0 0 66 48"><path d="M2 40 L56 6 L64 18 L10 46 Z" ${ln}/><path d="M14 33 l3 5 M24 27 l4 6 M34 21 l3 5 M44 15 l4 6" ${ln} stroke-width="3"/></svg></div>`;
+      <div class="p9-steps">${labels.map((l, i) => `<div class="p9-step">${i ? '<div class="p9-con"></div>' : ""}<div class="p9-ic">${icons[i]}</div><div class="p9-lbl">${l}</div></div>`).join("")}</div>`;
     P.panel = panel;
-    P.q = (sel) => panel.querySelector(sel);
+    // Hinweis-Karte „Maße liegen vor“ — eigene Karte über dem Maßband (Position in build)
+    const note = ANIM.el("div", "p9-note", h);
+    note.innerHTML = `<div class="tail"></div><div class="bar"></div>Maße liegen vor<svg class="tp" viewBox="0 0 66 48"><path d="M2 40 L56 6 L64 18 L10 46 Z" ${ln}/><path d="M14 33 l3 5 M24 27 l4 6 M34 21 l3 5 M44 15 l4 6" ${ln} stroke-width="3"/></svg>`;
+    P.note = note;
+    P.q = (sel) => (sel === ".p9-note" ? note : panel.querySelector(sel));
     P.qa = (sel) => panel.querySelectorAll(sel);
   }
 
@@ -287,8 +299,8 @@
 
     // ---- Startzustand ----
     ben.init(tl);
-    // Kamera: erst Ben mittig (Winken), dann Platz fürs Panel, danach sanftes Driften
-    cam.to(tl, 0, { x: Bx + 190, y: P.CAM9.y + 8, z: 1.28 }, 0);
+    // Kamera: erst Ben groß in der Bildmitte (Winken), dann Tilt nach oben -> Platz fürs Panel
+    cam.to(tl, 0, P.CAM0, 0);
     P.armTo(tl, 0, "armL", [10, -8], 0, null, { angle: 88 });
     P.armTo(tl, 0, "armR", [-10, 8], 0, null, { angle: 0 });
     ben.pose(tl, 0, { head: 0 }, 0).look(tl, 0, 0, 1, 0).brows(tl, 0, "neutral", 0).mouth(tl, 0, "smile");
@@ -297,6 +309,7 @@
     P.breathe(tl, tPre, t1);
     ben.blinks(tl, tPre, tMasse - 0.2, 21);
     P.clouds.forEach((c, i) => tl.fromTo(c, { x: 0 }, { x: 40 + i * 18, duration: 16, ease: "sine.inOut" }, tPre));
+    cam.to(tl, tPre + 0.3, { x: P.CAM0.x - 6, y: P.CAM0.y - 4, z: 1.32 }, tFach - 0.12 - (tPre + 0.3), "sine.inOut");
 
     // ---- „Für Sie als Fachpartner“: Winken ----
     const tUp = tFuer - 0.12;
@@ -314,7 +327,7 @@
     tl.to(ben.head, Object.assign({ rotation: 0, duration: 0.4, ease: "power2.inOut" }, O0), tFach + 0.5);
     ANIM.sfx(tUp + 0.05, "swish", -10);
 
-    // ---- Tablet hoch, Panel springt heraus ----
+    // ---- Tablet hoch, Panel springt nach oben heraus ----
     const tTab = tUp + 0.34 + nW * per - 0.06;
     const tabHand = { x: Bx - 52, y: BY - 300 };
     P.armTo(tl, tTab, "armL", tabHand, 0.36, "power3.out", { angle: -6 });
@@ -326,16 +339,19 @@
     const tabC = { x: hp.x + P.tabCenter.x * Math.cos(a) - P.tabCenter.y * Math.sin(a), y: hp.y + P.tabCenter.x * Math.sin(a) + P.tabCenter.y * Math.cos(a) };
     P.tabC = tabC;
     const tPan = tTab + 0.14;
-    cam.to(tl, tFach - 0.12, P.CAM9, tPan + 0.12 - (tFach - 0.12), "power2.inOut");
-    cam.to(tl, tPan + 0.12, { x: P.CAM9.x - 12, y: P.CAM9.y + 4, z: 1.325 }, t1 - (tPan + 0.12), "sine.inOut");
-    const scr = P.toScreen(tabC, P.CAM9);
-    const panel = P.panel;
-    gsap.set(panel, { transformOrigin: `${(scr.x - 892).toFixed(0)}px ${(scr.y - 122).toFixed(0)}px` });
+    const CAM9 = P.CAM9;
+    const CAM9b = { x: CAM9.x - 6, y: CAM9.y - 4, z: CAM9.z + 0.025 };
+    cam.to(tl, tFach - 0.12, CAM9, tPan + 0.12 - (tFach - 0.12), "power2.inOut");
+    cam.to(tl, tPan + 0.12, CAM9b, t1 - (tPan + 0.12), "sine.inOut");
+    const scr = P.toScreen(tabC, CAM9);
+    const panel = P.panel, PB = P.panelBox;
+    gsap.set(panel, { transformOrigin: `${(scr.x - PB.left).toFixed(0)}px ${(scr.y - PB.top).toFixed(0)}px` });
     tl.fromTo(panel, { scale: 0.07, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.25)" }, tPan);
     tl.fromTo(P.q(".p9-ly"), { scaleX: 0, scaleY: 0, transformOrigin: "0% 0%" }, { scaleX: 1, scaleY: 1, duration: 0.45, ease: "power3.out" }, tPan + 0.32);
     tl.fromTo(P.q(".p9-lr"), { scaleX: 0, scaleY: 0, transformOrigin: "100% 100%" }, { scaleX: 1, scaleY: 1, duration: 0.45, ease: "power3.out" }, tPan + 0.4);
     ANIM.sfx(tPan, "whooshSoft", -6);
     ANIM.sfx(tPan + 0.38, "pop", -10);
+    ben.look(tl, tPan + 0.12, 3, -8, 0.2).brows(tl, tPan + 0.12, "happy", 0.2);
 
     // ---- „Bestellt“: Tipp aufs Tablet, Schalter springt um ----
     const tapPt = { x: tabC.x + 26, y: tabC.y - 12 };
@@ -345,7 +361,7 @@
     P.armTo(tl, tTap + 0.02, "armR", { x: tapPt.x + 8, y: tapPt.y - 26 }, 0.2, "power2.out", { bend: 1 });
     ben.look(tl, tTap - 0.3, -1, 6, 0.15).brows(tl, tTap - 0.3, "neutral", 0.2);
     const tSw = tTap + 0.03;
-    tl.to(P.q(".p9-knob"), { x: 62, duration: 0.26, ease: "back.out(2.4)" }, tSw);
+    tl.to(P.q(".p9-knob"), { x: 68, duration: 0.26, ease: "back.out(2.4)" }, tSw);
     tl.to(P.q(".p9-tog"), { backgroundColor: "#e3002c", duration: 0.16, ease: "power1.out" }, tSw);
     const ring = P.q(".p9-ring");
     tl.set(ring, { opacity: 0.9, scale: 0.7 }, tSw);
@@ -356,16 +372,16 @@
     ANIM.sfx(tTap, "tap", -6);
     ANIM.sfx(tSw + 0.02, "click", -4);
     ben.mouth(tl, tSw + 0.06, "grin").brows(tl, tSw + 0.04, "happy", 0.2);
-    // zum Panel schauen, Nicken bei „wird“
-    ben.look(tl, tSw + 0.35, 6, -1, 0.2);
+    // hoch zum Panel schauen, Nicken bei „wird“
+    ben.look(tl, tSw + 0.35, 4, -8, 0.2);
     tl.to(ben.head, Object.assign({ rotation: 5, duration: 0.18, ease: "power2.out" }, O0), tWird - 0.05);
     tl.to(ben.head, Object.assign({ rotation: 0, duration: 0.3, ease: "back.out(2)" }, O0), tWird + 0.13);
     const dRel = Math.min(0.4, tAus - 0.07 - (tSw + 0.3));
     if (dRel > 0.12) P.armTo(tl, tSw + 0.3, "armR", [-18, 14], dRel, "power2.inOut");
 
-    // ---- „aus einer Hand“: Ben präsentiert mit offener Hand, Schritte poppen auf ----
+    // ---- „aus einer Hand“: Ben präsentiert mit offener Hand nach oben, Schritte poppen auf ----
     const tPres = tAus - 0.05;
-    P.armTo(tl, tPres, "armR", { x: Bx + 214, y: BY - 424 }, 0.38, "back.out(1.6)");
+    P.armTo(tl, tPres, "armR", { x: Bx + 132, y: BY - 536 }, 0.38, "back.out(1.6)");
     ben.mouth(tl, tPres + 0.1, "smile");
     const steps = P.qa(".p9-step");
     const tS0 = tHand - 0.42;
@@ -378,7 +394,7 @@
       tl.to(P["tabRow" + i], { opacity: 1, duration: 0.12, ease: "power1.out" }, ts);
       ANIM.sfx(ts, "pop", -7 - i);
     });
-    ben.look(tl, tS0, 6, 1, 0.2).look(tl, tS0 + 0.45, 6, 3, 0.25);
+    ben.look(tl, tS0, 4, -9, 0.2).look(tl, tS0 + 0.45, 3, -6, 0.25);
 
     // ---- „die Maße“: Maßband ziehen ----
     const pouch = { x: Bx + P.s * 43, y: BY - P.s * 250 };
@@ -388,7 +404,8 @@
     tl.set(P.tape, { opacity: 1 }, tGrab + 0.26);
     ANIM.sfx(tGrab + 0.24, "swish", -9);
     const tPoint = tGrab + 0.32;
-    P.armTo(tl, tPoint, "armR", { x: Bx + 128, y: BY - 318 }, tMasse + 0.05 - tPoint, "back.out(1.5)");
+    const tapeHand = { x: Bx + 128, y: BY - 318 };
+    P.armTo(tl, tPoint, "armR", tapeHand, tMasse + 0.05 - tPoint, "back.out(1.5)");
     const tOut = tMasse + 0.02;
     tl.to(P.blade, Object.assign({ scaleX: 1, duration: 0.3, ease: "power3.out" }, O0), tOut);
     tl.to(P.hook, { x: 0, duration: 0.3, ease: "power3.out" }, tOut);
@@ -396,12 +413,24 @@
     ben.look(tl, tOut + 0.05, 7, 3, 0.2).brows(tl, tOut, "annoyed", 0.2).mouth(tl, tOut + 0.05, "flat");
     tl.to(ben.head, Object.assign({ rotation: 4, duration: 0.3, ease: "power2.out" }, O0), tOut);
 
-    // ---- „liegen“: Hinweis „Maße liegen vor“ ----
+    // ---- „liegen“: Hinweis-Karte „Maße liegen vor“ über dem ausgezogenen Maßband ----
     const tNote = tLieg + 0.02;
-    const note = P.q(".p9-note");
-    tl.fromTo(note, { opacity: 0, scale: 0.7, y: 18 }, { opacity: 1, scale: 1, y: 0, duration: 0.42, ease: "back.out(2.2)" }, tNote);
+    const note = P.note;
+    const zN = CAM9.z + (CAM9b.z - CAM9.z) * 0.8;
+    const camN = { x: CAM9.x + (CAM9b.x - CAM9.x) * 0.8, y: CAM9.y + (CAM9b.y - CAM9.y) * 0.8, z: zN };
+    const bladeEnd = P.toScreen({ x: tapeHand.x + 20 + P.tapeL, y: tapeHand.y + 12 }, camN);
+    const nW2 = 532, nH = 90, nRight = 958;
+    const nLeft = nRight - nW2, nTop = Math.round(bladeEnd.y - 118 - nH);
+    note.style.left = nLeft + "px";
+    note.style.top = nTop + "px";
+    const tail = note.querySelector(".tail");
+    const tailX = Math.round(Math.min(nW2 - 60, Math.max(40, bladeEnd.x - 40 - nLeft)));
+    tail.style.left = tailX - 17 + "px";
+    tail.style.top = nH - 19 + "px";
+    gsap.set(note, { transformOrigin: `${tailX}px ${nH + 20}px` });
+    tl.fromTo(note, { opacity: 0, scale: 0.6, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.42, ease: "back.out(2.2)" }, tNote);
     ANIM.sfx(tNote, "ding", -3);
-    ben.look(tl, tNote + 0.1, 7, -2, 0.12).brows(tl, tNote + 0.1, "surprised", 0.14).mouth(tl, tNote + 0.12, "O");
+    ben.look(tl, tNote + 0.1, 7, -5, 0.12).brows(tl, tNote + 0.1, "surprised", 0.14).mouth(tl, tNote + 0.12, "O");
     tl.to(ben.head, Object.assign({ rotation: -3, duration: 0.25, ease: "back.out(2)" }, O0), tNote + 0.1);
 
     // ---- „schon“: grinsendes Schulterzucken ----
@@ -411,11 +440,18 @@
     tl.to(ben.lean, { y: 0, duration: 0.4, ease: "back.out(2)" }, tSh + 0.26);
     P.armTo(tl, tSh, "armR", { x: Bx + 150, y: BY - 360 }, 0.22, "power2.out");
     P.armTo(tl, tSh, "armL", { x: Bx - 74, y: BY - 336 }, 0.22, "power2.out");
-    P.armTo(tl, tSh + 0.26, "armR", { x: Bx + 128, y: BY - 318 }, dBack, "back.out(1.6)");
+    P.armTo(tl, tSh + 0.26, "armR", tapeHand, dBack, "back.out(1.6)");
     P.armTo(tl, tSh + 0.26, "armL", tabHand, dBack, "back.out(1.6)");
     tl.to(ben.head, Object.assign({ rotation: 9, duration: 0.22, ease: "power2.out" }, O0), tSh + 0.04);
     tl.to(ben.head, Object.assign({ rotation: 2, duration: Math.min(0.45, t1 - tSh - 0.45), ease: "power2.inOut" }, O0), tSh + 0.42);
     ben.mouth(tl, tSh + 0.02, "grin").brows(tl, tSh, "happy", 0.18).look(tl, tSh + 0.05, -2, 0, 0.18);
+    // kleiner Puls auf „schon“ (erst nach dem Auftritt, fertig bevor s10 die Karte einzieht)
+    const tPulse = Math.max(tSh + 0.04, tNote + 0.44);
+    const dPulse = Math.min(0.36, t1 - 0.14 - (tPulse + 0.14));
+    if (dPulse > 0.12) {
+      tl.to(note, { scale: 1.06, duration: 0.14, ease: "power2.out" }, tPulse);
+      tl.to(note, { scale: 1, duration: dPulse, ease: "back.out(2)" }, tPulse + 0.14);
+    }
 
     // ---- „vor“: Maßband schnappt zurück ----
     const tSnap = tVor;

@@ -3,6 +3,8 @@
 // Gleiches Set wie s09 (R.partner): Kamera zieht von Ben+Tablet auf die Tür, der Karton landet,
 // Ben hebt die Plissee-Kassette heraus, clipst sie ins Profil (Klick), Plissee gleitet zu, Daumen hoch.
 // Bohrmaschine + Schrauben werden durchgestrichen, Chips „Ab Werk“ | „Nachrüstung“, Ben zwinkert.
+// 9:16: Karton flacher und weiter hinten (bleibt über den Untertiteln), Kamera-Einstellungen fürs
+// Hochformat; Bohrmaschine (links, zeigt nach innen) + Schrauben (rechts) über der Tür, Chips oben groß.
 (function () {
   const SC = (window.SCENES = window.SCENES || {});
 
@@ -27,11 +29,12 @@
     const P = R.partner;
     if (!P) return;
     const L = P.L, Cx = P.Cx;
+    P.BOXDROP = 1180; // Fallhöhe: Start knapp über dem Bildrand der Weit-Einstellung (bis dahin unsichtbar)
 
     // ---- Karton (vor der Tür, landet bei „InScreen“) ----
-    const BW = 690, BH = 170, bxc = Cx - 50, byb = 1045;
+    const BW = 690, BH = 150, bxc = Cx - 40, byb = 1000;
     P.box = { w: BW, h: BH, x: bxc, y: byb };
-    P.boxShadow = S("ellipse", { cx: bxc, cy: byb + 4, rx: BW / 2 + 40, ry: 20, fill: C.blue, opacity: 0.16 }, L.front);
+    P.boxShadow = S("ellipse", { cx: bxc, cy: byb + 2, rx: BW / 2 + 36, ry: 14, fill: C.blue, opacity: 0.16 }, L.front);
     const mv = S("g", null, L.front);
     P.boxMv = mv;
     const sq = G(mv, { x: bxc, y: byb });
@@ -52,7 +55,7 @@
     // Marken-Rahmenlinien + Aufschrift
     S("path", { d: `M${-BW / 2 + 40},-56 V-100 H${-BW / 2 + 150}`, stroke: C.yellow, "stroke-width": 8, fill: "none" }, sq);
     S("path", { d: `M${BW / 2 - 150},-16 H${BW / 2 - 40} V-60`, stroke: C.red, "stroke-width": 8, fill: "none" }, sq);
-    const tx = S("text", { x: 0, y: -40, "text-anchor": "middle", fill: C.blue, style: "font-family:'Filson Pro',sans-serif;font-weight:800;font-size:42px;" }, sq);
+    const tx = S("text", { x: 0, y: -38, "text-anchor": "middle", fill: C.blue, style: "font-family:'Filson Pro',sans-serif;font-weight:800;font-size:40px;" }, sq);
     tx.innerHTML = 'InScreen<tspan fill="#e3002c" dx="16" font-weight="700">|</tspan><tspan dx="16" font-weight="700">Plug-&amp;-Play-Set</tspan>';
     // Vorderlasche: geschlossen = Deckel (flach, nach oben), offen = hängt vorne herunter
     const flap = G(sq, { x: 0, y: -BH });
@@ -62,7 +65,7 @@
     S("rect", { x: -24, y: 0, width: 48, height: 52, fill: "#efe5d3", opacity: 0.5 }, flap);
     gsap.set(flap, { scaleY: -0.26, svgOrigin: "0 0" });
     gsap.set(P.ears, { scale: 0, svgOrigin: "0 0" });
-    gsap.set(mv, { y: -1100 });
+    gsap.set(mv, { y: -P.BOXDROP, opacity: 0 }); // in s09 sonst über dem Panel sichtbar
     gsap.set(P.boxShadow, { opacity: 0 });
 
     // ---- Kassette im Karton (Welt) + in Bens rechter Hand ----
@@ -82,12 +85,14 @@
     [0, 8, 16].forEach((y) => S("path", { d: `M-2,${y} h16`, stroke: C.skin3, "stroke-width": 2.6, "stroke-linecap": "round" }, fist));
 
     // ---- Bohrmaschine (mit beleidigtem Gesicht) + Schrauben ----
-    const DXd = Cx + 765, DYd = 410;
+    // 9:16: steht links oben auf der Türlaibung (Welt-y 178), gespiegelt (Bohrer zeigt nach innen)
+    const DS = 0.95, DXd = 1141, DYd = 178 - 152 * DS;
     const dmv = S("g", null, L.fx);
     P.drill = { mv: dmv };
-    const pop = G(dmv, { x: DXd, y: DYd });
+    const pop = G(dmv, { x: DXd, y: DYd, s: DS });
     P.drill.pop = pop;
-    const dsq = G(pop, { x: 0, y: 150 });
+    const flip = S("g", { transform: "scale(-1,1)" }, pop);
+    const dsq = G(flip, { x: 0, y: 150 });
     P.drill.sq = dsq;
     const dc = S("g", { transform: "translate(0,-150)" }, dsq);
     S("ellipse", { cx: 18, cy: 152, rx: 70, ry: 8, fill: C.blue, opacity: 0.12 }, dc);
@@ -120,16 +125,17 @@
     Object.keys(df.mouths).forEach((k) => gsap.set(df.mouths[k], { opacity: k === "grin" ? 1 : 0 }));
     gsap.set(df.pupils, { x: -4 });
     P.drill.strikes = [
-      "M-205,-95 Q-20,40 140,175",
-      "M130,-105 Q-30,20 -195,170",
+      "M-112,-78 Q30,40 205,168",
+      "M190,-86 Q30,24 -106,163",
     ].map((d) => S("path", { d, stroke: C.red, "stroke-width": 12, fill: "none", "stroke-linecap": "round" }, pop));
     gsap.set(pop, { scale: 0, svgOrigin: "0 0" });
     gsap.set(P.drill.strikes, { drawSVG: "0% 0%" });
 
     const smv = S("g", null, L.fx);
     P.screws = { mv: smv, items: [] };
-    [[Cx + 610, 690, -16], [Cx + 770, 700, 14]].forEach(([x, y, r]) => {
-      const sp = G(smv, { x, y, rot: r });
+    const SS = 1.12, SCX = 1700, SCY = 178 - 84 * SS; // rechts, Spitzen auf der Türlaibung
+    [[SCX - 80, SCY - 2, -12], [SCX + 80, SCY + 2, 12]].forEach(([x, y, r]) => {
+      const sp = G(smv, { x, y, rot: r, s: SS });
       const fall = G(sp, {});
       S("path", { d: "M-24,-74 H24 L13,-56 H-13 Z", fill: C.b4 }, fall);
       S("rect", { x: -24, y: -80, width: 48, height: 8, rx: 3, fill: C.b4 }, fall);
@@ -140,8 +146,8 @@
       P.screws.items.push(fall);
     });
     P.screws.strikes = [
-      `M${Cx + 540},${600} Q${Cx + 690},${690} ${Cx + 845},${806}`,
-      `M${Cx + 845},${598} Q${Cx + 690},${700} ${Cx + 535},${800}`,
+      `M${SCX - 160},${SCY - 100} Q${SCX},${SCY - 4} ${SCX + 165},${SCY + 116}`,
+      `M${SCX + 165},${SCY - 102} Q${SCX},${SCY + 6} ${SCX - 165},${SCY + 110}`,
     ].map((d) => S("path", { d, stroke: C.red, "stroke-width": 12, fill: "none", "stroke-linecap": "round" }, smv));
     gsap.set(P.screws.strikes, { drawSVG: "0% 0%" });
 
@@ -167,11 +173,11 @@
     // ---- HUD: Chips ----
     const h = R.huds[ctx.id];
     const row = ANIM.el("div", "p10-chips", h);
-    row.style.cssText = "position:absolute;left:0;top:56px;width:1920px;display:flex;justify-content:center;gap:34px;";
+    row.style.cssText = `position:absolute;left:0;top:226px;width:${SVGK.F.W}px;display:flex;justify-content:center;gap:26px;`;
     P.chips = ["Ab Werk", "Nachrüstung"].map((t) => {
       const c = ANIM.el("div", "chip", row, `<div class="bar"></div>${t}`);
-      c.style.position = "relative";
-      c.style.opacity = "0";
+      c.style.cssText = "position:relative;opacity:0;font-size:64px;gap:20px;padding:22px 36px 24px 28px;line-height:1.2;box-shadow:0 16px 40px rgba(18,52,66,.24);";
+      c.querySelector(".bar").style.cssText = "width:9px;height:66px;";
       return c;
     });
   }
@@ -186,11 +192,15 @@
     const tKommt = w("kommt"), tIn = w("inscreen"), tPlug = w("plug");
     const tClip = w("einclipsen"), tFertig = w("fertig"), tOhne = w("ohne"), tBohr = w("bohren");
     const tUnd = w("und"), tSchr = w("schrauben"), tNach = w("nachrüsten"), tUnk = w("unkompliziert");
-    const WIDE = { x: Cx, y: 560, z: 1.0 };
-    const PUSH = { x: Cx - 40, y: 552, z: 1.36 };
+    // 9:16-Einstellungen (Karton-Unterkante bleibt über der Untertitel-Zone y 1350)
+    const WIDE = { x: Cx + 45, y: 694, z: 1.18 }; // Tür + Ben groß, Karton landet unten
+    const PUSH = { x: Cx + 40, y: 732, z: 1.3 }; // Ben + Integrationsprofil beim Einclipsen
+    const OPEN = { x: Cx, y: 620, z: 0.95 }; // Platz über der Tür für Bohrmaschine + Schrauben
+    const FINAL = { x: Cx + 40, y: 707, z: 1.2 }; // Ben groß, Chips oben
 
     // ---- Übergang: Panel schrumpft ins Tablet, Kamera zieht auf die Tür ----
     tl.to(P.panel, { scale: 0.45, duration: 0.28, ease: "power2.in" }, t0 - 0.12);
+    if (P.note) tl.to(P.note, { scale: 0.6, duration: 0.28, ease: "power2.in" }, t0 - 0.12);
     cam.to(tl, t0 + 0.02, WIDE, tIn + 0.06 - (t0 + 0.02), "power2.inOut");
     ANIM.sfx(t0 + 0.02, "whooshSoft", -10);
     // Maßband zurück in die Tasche, Tablet an die Seite
@@ -205,7 +215,8 @@
 
     // ---- „kommt InScreen“: Karton fällt herein ----
     const tFall = tKommt - 0.02, tLand = tIn;
-    tl.fromTo(P.boxMv, { y: -1100 }, { y: 0, duration: tLand - tFall, ease: "power2.in" }, tFall);
+    tl.set(P.boxMv, { opacity: 1 }, tFall);
+    tl.fromTo(P.boxMv, { y: -P.BOXDROP }, { y: 0, duration: tLand - tFall, ease: "power2.in" }, tFall);
     tl.fromTo(P.boxShadow, { opacity: 0, scale: 0.4, transformOrigin: "50% 50%" }, { opacity: 0.16, scale: 1, duration: tLand - tFall, ease: "power2.in" }, tFall);
     ANIM.sfx(tFall, "whooshSoft", -8);
     tl.to(P.boxSq, Object.assign({ scaleY: 0.86, scaleX: 1.06, duration: 0.07, ease: "power2.out" }, O0), tLand);
@@ -291,7 +302,10 @@
     ben.look(tl, tThumb, 0, 0, 0.2).mouth(tl, tThumb + 0.04, "grin").brows(tl, tThumb, "happy", 0.18);
     tl.to(ben.head, Object.assign({ rotation: -6, duration: 0.3, ease: "back.out(2)" }, O0), tThumb + 0.04);
     ANIM.sfx(tThumb + 0.2, "pop", -9);
-    cam.to(tl, tFertig - 0.05, WIDE, 0.8, "power2.inOut");
+    cam.to(tl, tFertig - 0.05, OPEN, 0.8, "power2.inOut");
+    // langsames Nachdriften in der offenen Einstellung (bis die Final-Kamera übernimmt)
+    const tDrift = tFertig + 0.75, tDriftEnd = Math.min(tNach + 0.3, t1 - 1.2);
+    if (tDriftEnd - tDrift > 0.3) cam.to(tl, tDrift, { x: OPEN.x + 6, y: OPEN.y + 8, z: OPEN.z + 0.02 }, tDriftEnd - tDrift, "sine.inOut");
 
     // ---- „ohne Bohren und Schrauben“ ----
     const D = P.drill;
@@ -341,18 +355,24 @@
     tl.to(D.face.eyes, Object.assign({ scaleX: 1, scaleY: 0.62, duration: 0.2, ease: "power2.out" }, O0), tSulk);
     tl.to(D.sq, Object.assign({ scaleY: 0.8, scaleX: 1.08, rotation: -6, duration: 0.32, ease: "power2.out" }, O0), tSulk);
     tl.to(D.nose, Object.assign({ rotation: -26, duration: 0.42, ease: "back.out(1.6)" }, O0), tSulk);
-    const tOff = tSulk + 0.42;
+    // 9:16: Schrauben kippen zuerst und rollen nach rechts raus (vor dem Chip „Nachrüstung“ —
+    // durchgestrichene Schrauben dürfen nicht neben „Nachrüstung“ stehen), dann hüpft die Bohrmaschine
+    // beleidigt nach links weg (unter dem Chip „Ab Werk“).
+    const tScrOff = tSulk + 0.08;
+    P.screws.items.forEach((s, i) => tl.to(s, Object.assign({ rotation: i ? 150 : 120, duration: 0.42, ease: "power2.in" }, O0), tScrOff + i * 0.05));
+    tl.to(P.screws.mv, { x: 900, duration: 0.42, ease: "power2.in" }, tScrOff + 0.04);
+    tl.to(P.screws.mv, { y: 60, duration: 0.42, ease: "power1.in" }, tScrOff + 0.04);
+    ANIM.sfx(tScrOff + 0.06, "swish", -10);
+    const tOff = tSulk + 0.3;
     tl.to(D.sq, Object.assign({ scaleY: 1.1, scaleX: 0.94, duration: 0.12, ease: "power2.out" }, O0), tOff);
-    tl.to(D.mv, { x: 820, duration: 0.55, ease: "power3.in" }, tOff + 0.06);
-    tl.to(D.mv, { y: -40, duration: 0.2, ease: "power2.out" }, tOff + 0.06);
-    tl.to(D.mv, { y: 30, duration: 0.35, ease: "power2.in" }, tOff + 0.26);
+    tl.to(D.mv, { x: -900, duration: 0.42, ease: "power2.in" }, tOff + 0.06);
+    tl.to(D.mv, { y: -40, duration: 0.18, ease: "power2.out" }, tOff + 0.06);
+    tl.to(D.mv, { y: 30, duration: 0.26, ease: "power2.in" }, tOff + 0.24);
     ANIM.sfx(tOff, "boing", -5);
-    P.screws.items.forEach((s, i) => tl.to(s, Object.assign({ rotation: i ? 120 : -100, duration: 0.5, ease: "power2.in" }, O0), tOff + 0.08 + i * 0.06));
-    tl.to(P.screws.mv, { y: 520, duration: 0.5, ease: "power2.in" }, tOff + 0.08);
-    ANIM.sfx(tOff + 0.12, "swish", -10);
     // Ben lacht
     ben.mouth(tl, tOff + 0.05, "grin").eyesClosed(tl, tOff + 0.05, true).eyesClosed(tl, tOff + 0.42, false);
-    P.armTo(tl, tOff, "armR", [-14, 10], Math.max(0.15, Math.min(0.4, tNach - 0.05 - tOff)), "power2.inOut", { angle: 0 });
+    const dLaugh = Math.min(0.4, tNach - 0.05 - tOff);
+    if (dLaugh > 0.15) P.armTo(tl, tOff, "armR", [-14, 10], dLaugh, "power2.inOut", { angle: 0 });
     tl.to(ben.lean, { y: -6, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 3 }, tOff + 0.05);
 
     // ---- „Nachrüsten?“: Chips ----
@@ -365,7 +385,9 @@
     ben.look(tl, tNach + 0.05, 4, -8, 0.2).brows(tl, tNach + 0.05, "surprised", 0.2).mouth(tl, tNach + 0.1, "o");
     tl.to(ben.head, Object.assign({ rotation: -5, duration: 0.35, ease: "power2.inOut" }, O0), tNach + 0.05);
 
-    cam.to(tl, tNach - 0.1, { x: Cx - 50, y: 548, z: 1.09 }, t1 - (tNach - 0.1), "sine.inOut");
+    // erst nach dem Abgang von Bohrmaschine + Schrauben nachziehen (sonst wandern sie in die Chip-Zeile)
+    const tCamF = Math.min(tNach + 0.3, t1 - 1.2);
+    cam.to(tl, tCamF, FINAL, t1 - tCamF, "sine.inOut");
 
     // ---- „unkompliziert“: Zwinkern + Funkeln ----
     const tWink = tUnk + 0.02;

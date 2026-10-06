@@ -14,17 +14,19 @@
       .s11-row b { font-weight:900; font-size:62px; color:var(--sch-blue); white-space:nowrap; letter-spacing:-.01em; }
       .s11-mark { width:8px; height:62px; background:var(--sch-red); }
       .s11-end { position:absolute; inset:0; background:#fff; overflow:hidden; }
-      .s11-ly { position:absolute; left:60px; top:250px; width:640px; height:760px; border-left:24px solid var(--sch-yellow); border-top:24px solid var(--sch-yellow); }
-      .s11-lr { position:absolute; right:60px; bottom:560px; width:560px; height:620px; border-right:24px solid var(--sch-red); border-bottom:24px solid var(--sch-red); }
-      .s11-copy { position:absolute; left:132px; top:350px; width:880px; }
-      .s11-pre { font-weight:700; font-size:56px; color:var(--sch-blue); }
-      .s11-title { font-weight:900; font-size:194px; line-height:.95; color:var(--sch-blue); letter-spacing:-.025em; margin-top:6px; }
-      .s11-claim { font-weight:700; font-size:72px; line-height:1.16; color:var(--sch-blue); margin-top:30px; max-width:840px; }
-      .s11-foot { position:absolute; left:132px; right:132px; top:1230px; display:flex; align-items:center; justify-content:space-between; }
-      .s11-ql { display:flex; align-items:center; gap:16px; font-weight:800; font-size:44px; color:var(--sch-blue); }
-      .s11-ql .b { background:var(--sch-red); color:#fff; padding:6px 18px 8px; }
-      .s11-ql sup { font-size:20px; }
-      .s11-logo { width:380px; height:auto; }
+      /* Prinzip „Rahmen und Fläche“: blaue Fläche läuft unten aus dem Bild, ein roter L-Rahmen mit Lücke an der Ecke */
+      .s11-field { position:absolute; left:0; top:600px; width:960px; height:1320px; background:var(--sch-blue); }
+      .s11-fh { position:absolute; left:620px; top:542px; width:398px; height:18px; background:var(--sch-red); }
+      .s11-fv { position:absolute; left:1000px; top:542px; width:18px; height:438px; background:var(--sch-red); }
+      .s11-copy { position:absolute; left:96px; top:690px; width:840px; color:#fff; }
+      .s11-pre { font-weight:700; font-size:58px; }
+      .s11-title { font-weight:900; font-size:188px; line-height:.95; letter-spacing:-.025em; margin-top:4px; }
+      .s11-rule { width:150px; height:16px; background:var(--sch-yellow); margin:34px 0 30px; }
+      .s11-claim { font-weight:700; font-size:70px; line-height:1.14; max-width:840px; }
+      .s11-ql { display:flex; align-items:center; gap:18px; font-weight:800; font-size:48px; color:#fff; margin-top:62px; }
+      .s11-ql .b { background:var(--sch-red); color:#fff; padding:6px 20px 10px; }
+      .s11-ql sup { font-size:22px; }
+      .s11-logo { position:absolute; left:40px; top:220px; width:520px; height:auto; }
       .s11-svg { position:absolute; inset:0; width:1080px; height:1920px; }
       .s11-fade { position:absolute; inset:0; background:#fff; opacity:0; }
     `;
@@ -37,29 +39,33 @@
     ].map(([ic, t]) => `<div class="s11-row"><div class="s11-mark"></div><img src="assets/brand/icons/${ic}.svg" crossorigin="anonymous"><b>${t}</b></div>`).join("");
     const end = ANIM.el("div", "s11-end", h);
     end.innerHTML = `
-      <div class="s11-ly"></div><div class="s11-lr"></div>
+      <img class="s11-logo" src="assets/brand/logo-schmidt-color.svg" crossorigin="anonymous">
+      <div class="s11-field"></div><div class="s11-fh"></div><div class="s11-fv"></div>
       <div class="s11-copy">
         <div class="s11-pre">Darum ist</div>
         <div class="s11-title">InScreen</div>
-        <div class="s11-claim"></div>
-      </div>
-      <div class="s11-foot">
+        <div class="s11-rule"></div>
+        <div class="s11-claim"><span class="l"></span><br><span class="l"></span><br><span class="l"></span></div>
         <div class="s11-ql"><span class="b">QuinLine<sup>®</sup></span><span>74 | 84</span></div>
-        <img class="s11-logo" src="assets/brand/logo-schmidt-color.svg" crossorigin="anonymous">
       </div>`;
-    const claimWords = ANIM.words(end.querySelector(".s11-claim"), "die beste Insektenschutzlösung für Hebeschiebetüren.");
+    const lines = end.querySelectorAll(".s11-claim .l");
+    const claimWords = [
+      ...ANIM.words(lines[0], "die beste"),
+      ...ANIM.words(lines[1], "Insektenschutzlösung"),
+      ...ANIM.words(lines[2], "für Hebeschiebetüren."),
+    ];
     // Mini-Gag auf der Endkarte: SVG-Ebene mit Mücke + kleinem Plissee
     const svg = document.createElementNS(SVGK.NS, "svg");
     svg.setAttribute("class", "s11-svg");
     svg.setAttribute("viewBox", "0 0 1080 1920");
     end.appendChild(svg);
-    const mini = G(svg, { x: 836, y: 900 });
+    const mini = G(svg, { x: 790, y: 1290 });
     const miniPl = G(mini, {});
-    S("rect", { x: 0, y: 0, width: 46, height: 214, fill: "#3a4147", opacity: 0.16 }, miniPl);
-    for (let i = 0; i <= 8; i++) S("line", { x1: i * 5.75, y1: 0, x2: i * 5.75, y2: 214, stroke: i % 2 ? "#2f353a" : "#9aa6ad", "stroke-width": 1.6, opacity: 0.6, "vector-effect": "non-scaling-stroke" }, miniPl);
-    S("rect", { x: -6, y: -8, width: 58, height: 10, rx: 3, fill: "#2f353a" }, mini);
-    S("rect", { x: -6, y: 212, width: 58, height: 10, rx: 3, fill: "#2f353a" }, mini);
-    const mq = CHAR.makeMosquito(svg, { tone: C.b3, mouth: "smirk" });
+    S("rect", { x: 0, y: 0, width: 46, height: 214, fill: C.b5, opacity: 0.35 }, miniPl);
+    for (let i = 0; i <= 8; i++) S("line", { x1: i * 5.75, y1: 0, x2: i * 5.75, y2: 214, stroke: i % 2 ? C.b6 : "#9aa6ad", "stroke-width": 1.6, opacity: 0.7, "vector-effect": "non-scaling-stroke" }, miniPl);
+    S("rect", { x: -6, y: -8, width: 58, height: 10, rx: 3, fill: C.b6 }, mini);
+    S("rect", { x: -6, y: 212, width: 58, height: 10, rx: 3, fill: C.b6 }, mini);
+    const mq = CHAR.makeMosquito(svg, { tone: C.b4, mouth: "smirk" });
     const fade = ANIM.el("div", "s11-fade", h);
     // Limonade in Annas Hand
     const glass = G(R.anna.armR.h, { x: 0, y: 2 });
@@ -155,26 +161,31 @@
     tl.fromTo(k.end, { clipPath: "inset(0% 0% 0% 100%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power3.inOut" }, tE);
     ANIM.sfx(tE, "whoosh", -4);
     tl.to("#vignette", { opacity: 0, duration: 0.5, ease: "sine.inOut" }, tE + 0.1);
-    tl.fromTo(k.end.querySelector(".s11-ly"), { clipPath: "inset(0 100% 100% 0)" }, { clipPath: "inset(0 0% 0% 0)", duration: 0.7, ease: "power3.out" }, tE + 0.35);
-    tl.fromTo(k.end.querySelector(".s11-lr"), { clipPath: "inset(100% 0 0 100%)" }, { clipPath: "inset(0% 0 0 0%)", duration: 0.7, ease: "power3.out" }, tE + 0.5);
-    tl.fromTo(k.end.querySelector(".s11-pre"), { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, tDar);
-    tl.fromTo(k.end.querySelector(".s11-title"), { opacity: 0, scale: 0.72, transformOrigin: "0% 85%" }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(2)" }, tIns - 0.06);
+    const q = (sel) => k.end.querySelector(sel);
+    // blaue Fläche fährt wie ein Plissee von oben herunter, Rahmen zeichnet sich an der Ecke
+    tl.fromTo(q(".s11-field"), { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.75, ease: "power3.inOut" }, tE + 0.2);
+    ANIM.sfx(tE + 0.2, "slide", -14, { dur: 0.75 });
+    tl.fromTo(q(".s11-fh"), { scaleX: 0, transformOrigin: "100% 50%" }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, tE + 0.6);
+    tl.fromTo(q(".s11-fv"), { scaleY: 0, transformOrigin: "50% 0%" }, { scaleY: 1, duration: 0.5, ease: "power3.out" }, tE + 0.72);
+    tl.fromTo(q(".s11-logo"), { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, tE + 0.45);
+    tl.fromTo(q(".s11-pre"), { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, tDar);
+    tl.fromTo(q(".s11-title"), { opacity: 0, scale: 0.72, transformOrigin: "0% 85%" }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(2)" }, tIns - 0.06);
     ANIM.sfx(tIns - 0.06, "sparkle", -4);
+    tl.fromTo(q(".s11-rule"), { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, tIns + 0.3);
     tl.fromTo(k.claimWords, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.34, ease: "power3.out", stagger: 0.11 }, tBes - 0.32);
-    tl.fromTo(k.end.querySelector(".s11-ql"), { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" }, tHeb + 0.5);
-    tl.fromTo(k.end.querySelector(".s11-logo"), { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.6)" }, tHeb + 0.65);
-    ANIM.sfx(tHeb + 0.65, "ding", -6);
+    tl.fromTo(q(".s11-ql"), { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.45, ease: "back.out(1.6)" }, tHeb + 0.5);
+    ANIM.sfx(tHeb + 0.5, "ding", -6);
 
     // Schlussgag: Mücke will zum Titel — Mini-Plissee fährt dazwischen
     const tG = tHeb + 1.1;
-    tl.set(k.mq.root, { x: 1250, y: 760, scale: 1.35, opacity: 1 }, tE);
+    tl.set(k.mq.root, { x: 1220, y: 1150, scale: 1.35, opacity: 1 }, tE);
     k.mq.face_(tl, tE, -1);
     k.mq.init(tl);
     k.mq.buzz(tl, tE, T1);
     tl.fromTo(k.miniPl, Object.assign({ scaleY: 0 }, O0), Object.assign({ scaleY: 1, duration: 0.35, ease: "power3.out" }, O0), tG + 0.15);
     tl.fromTo(k.mini, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, tG + 0.1);
     ANIM.sfx(tG + 0.15, "zip", -8);
-    tl.to(k.mq.root, { motionPath: { path: [{ x: 1100, y: 820 }, { x: 990, y: 980 }, { x: 930, y: 1010 }], curviness: 1.3 }, duration: 0.75, ease: "power2.in" }, tG - 0.1);
+    tl.to(k.mq.root, { motionPath: { path: [{ x: 1060, y: 1210 }, { x: 950, y: 1370 }, { x: 884, y: 1400 }], curviness: 1.3 }, duration: 0.75, ease: "power2.in" }, tG - 0.1);
     k.mq.expr(tl, tG - 0.1, "smirk", "sly");
     tl.to(k.mq.bob, { scaleX: 0.6, scaleY: 1.25, duration: 0.06, ease: "power4.out", transformOrigin: "50% 50%" }, tG + 0.65);
     tl.to(k.mq.bob, { scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1,0.4)", transformOrigin: "50% 50%" }, tG + 0.72);
@@ -183,7 +194,7 @@
     ANIM.sfx(tG + 0.68, "boing", -9);
     k.mq.expr(tl, tG + 1.1, "frown", "sad");
     k.mq.face_(tl, tG + 1.3, 1);
-    tl.to(k.mq.root, { motionPath: { path: [{ x: 1000, y: 1060 }, { x: 1120, y: 900 }, { x: 1260, y: 760 }], curviness: 1.2 }, duration: 1.1, ease: "power1.in" }, tG + 1.35);
+    tl.to(k.mq.root, { motionPath: { path: [{ x: 954, y: 1450 }, { x: 1080, y: 1290 }, { x: 1230, y: 1150 }], curviness: 1.2 }, duration: 1.1, ease: "power1.in" }, tG + 1.35);
     ANIM.sfx(tG + 1.35, "buzzShort", -12);
 
     // Ende: sanft ausblenden (nur hier erlaubt)

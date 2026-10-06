@@ -109,6 +109,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cues", default="script/sfx_cues.json")
     ap.add_argument("--out", default="assets/audio/mix.wav")
+    ap.add_argument("--no-vo", action="store_true",
+                    help="nur Musik + Geräusche (ohne Sprecher, ohne Ducking) — Pegel bleiben so, dass eine eigene Stimme "
+                         "mit -14 LUFS darüber passt")
     args = ap.parse_args()
     timing = json.loads((PROJECT / "script" / "timing.json").read_text(encoding="utf-8"))
     total = timing["total"]
@@ -120,7 +123,7 @@ def main():
     vo = np.zeros((2, N))
     have_vo = False
     for s in timing["segments"]:
-        if s.get("file"):
+        if s.get("file") and not args.no_vo:
             x = decode(PROJECT / s["file"])
             synth.place(vo, x, s["clipStart"], 1.0, 0.0)
             have_vo = True
@@ -130,8 +133,9 @@ def main():
     if music.shape[1] < N:
         music = np.pad(music, ((0, 0), (0, N - music.shape[1])))
     speech = [(s["start"] - 0.05, s["end"] + 0.1) for s in timing["segments"]]
-    duck = 1 - (1 - db(DUCK_DB)) * smooth_gate(N, speech)
-    music *= duck[None, :]
+    if not args.no_vo:
+        duck = 1 - (1 - db(DUCK_DB)) * smooth_gate(N, speech)
+        music *= duck[None, :]
     # ---- Geräusche
     sfx = np.zeros((2, N))
     for c in cues:
@@ -177,12 +181,18 @@ def main():
             mix *= db(TARGET_MIX - li)
             mix = limiter(mix, -1.8)
         li, tp = measure(mix)
+    elif args.no_vo:
+        # Bett für eine eigene Stimme: Musik/Geräusche exakt auf Vorgabe (-36 / -25 LUFS), keine Anhebung.
+        # Eigene Stimme mit -14 LUFS dazu, dann den Gesamtmix auf -12 LUFS -> wie der Original-Mix.
+        mix = limiter(mix, -1.4)
+        li, tp = measure(mix)
+        print("  Hinweis: Mix ohne Stimme (Musik + Geräusche auf Vorgabe-Pegel).")
     else:
         # Vorschau ohne Stimme: gleicher Verstärkungsweg, als wäre die Stimme da (+2 dB)
         mix *= db(TARGET_MIX - TARGET_VO)
         mix = limiter(mix, -1.4)
         li, tp = measure(mix)
-        print("  Hinweis: keine ElevenLabs-Dateien gefunden — Vorschau-Mix ohne Stimme.")
+        print("  Hinweis: Mix ohne Stimme (Musik + Geräusche).")
     report["mix"] = {"lufs": li, "true_peak_dbtp": tp, "with_vo": have_vo}
     stems = AUD / "stems"
     stems.mkdir(exist_ok=True)

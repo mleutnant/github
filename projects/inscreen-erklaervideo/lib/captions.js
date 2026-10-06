@@ -6,6 +6,10 @@
   const F = window.FORMAT;
   const host = document.getElementById("captions");
   if (!tl || !T || !host) return;
+  // Abschaltbar beim Rendern: npx hyperframes render -c vertical.html --variables '{"captions":false}'
+  const HF = window.__hyperframes;
+  const vars = Object.assign({}, HF && HF.getVariables ? HF.getVariables() : {}, window.__hfVariables || {});
+  if (vars.captions === false) return;
 
   const css = document.createElement("style");
   css.textContent = `

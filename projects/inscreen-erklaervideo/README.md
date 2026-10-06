@@ -37,6 +37,12 @@ python projects/inscreen-erklaervideo/scripts/vo_elevenlabs.py
 uv run projects/inscreen-erklaervideo/scripts/vo_from_single.py <datei.mp3> --tempo 1.06 --max-pause 0.3
 
 bash projects/inscreen-erklaervideo/scripts/build_all.sh high beide   # Timing, Musik, Cues, Mix, Render (16:9 + 9:16)
+
+# Ohne Sprecher (nur Musik −36 LUFS + Geräusche −25 LUFS, kein Ducking) für eine eigene Sprachaufnahme;
+# 9:16 wahlweise ohne eingebrannte Untertitel
+STIMME=aus bash projects/inscreen-erklaervideo/scripts/build_all.sh high beide
+STIMME=aus UNTERTITEL=aus bash projects/inscreen-erklaervideo/scripts/build_all.sh high 9x16
+python3 projects/inscreen-erklaervideo/scripts/sprechertext_export.py  # Sprechertext mit Zeitmarken + SRT-Führungsspur
 ```
 
 Die Animation hängt an den Wort-Zeitstempeln: Mit der echten Stimme verschieben sich alle Szenen

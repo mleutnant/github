@@ -1,5 +1,6 @@
-// s06 — „Zurückgeschoben verschwindet das Plissee fast unsichtbar im Profil – farblich passend zur Tür.“
-// Anna schiebt die Griffleiste zurück, Lupe aufs Integrationsprofil, dann Farbwechsel der ganzen Tür.
+// s06 — „Zurückgeschoben verschwindet das Plissee fast unsichtbar im Profil. Griffleiste und Rahmen der Plisseekassette sind farblich passend foliert oder pulverbeschichtet.“
+// Anna schiebt die Griffleiste zurück, Lupe aufs Integrationsprofil, Griffleiste + Kassettenrahmen leuchten
+// auf, dann Farbwechsel der ganzen Tür (Palette: foliert oder pulverbeschichtet).
 (window.SCENES = window.SCENES || {}).s06 = {
   set: "lr",
   setup(R, ctx) {
@@ -11,6 +12,7 @@
       .s06-tag span { font-weight:500; font-size:30px; color:var(--sch-blue); white-space:nowrap; }
       .s06-pal { position:absolute; right:70px; top:250px; width:380px; padding:30px 30px 18px; background:#fff; box-shadow:0 18px 50px rgba(18,52,66,.22); }
       .s06-pal h3 { font-weight:800; font-size:38px; color:var(--sch-blue); margin-bottom:14px; white-space:nowrap; }
+      .s06-pal p { font-weight:600; font-size:26px; line-height:1.2; color:var(--sch-blue); margin:-4px 0 14px; opacity:0; }
       .s06-sw { display:flex; align-items:center; gap:20px; padding:12px 0; }
       .s06-dot { width:64px; height:64px; border-radius:50%; box-shadow: inset 0 0 0 3px rgba(18,52,66,.15); }
       .s06-sw span { font-weight:700; font-size:34px; color:var(--sch-blue); white-space:nowrap; }
@@ -24,22 +26,27 @@
     tag2.style.left = "1180px"; tag2.style.top = "430px";
     const pal = ANIM.el("div", "s06-pal", h);
     const V = DOOR.VARIANTS;
-    pal.innerHTML = `<h3>Farblich passend</h3>` + ["weiss", "oak", "anthrazit"].map((k) =>
+    pal.innerHTML = `<h3>Farblich passend</h3><p>Griffleiste &amp; Kassettenrahmen<br>foliert oder pulverbeschichtet</p>` + ["weiss", "oak", "anthrazit"].map((k) =>
       `<div class="s06-sw" data-k="${k}"><div class="s06-dotwrap"><div class="s06-dot" style="background:${V[k].frame}"></div><div class="s06-ring"></div></div><span>${V[k].label}</span></div>`).join("");
-    R._s06 = { tag, tag2, pal };
+    const tag3 = ANIM.el("div", "s06-tag", h, "<b>Griffleiste</b>");
+    tag3.style.left = "1180px"; tag3.style.top = "250px";
+    const tag4 = ANIM.el("div", "s06-tag", h, "<b>Griffleiste &amp; Rahmen</b><span>der Plisseekassette</span>");
+    tag4.style.left = "100px"; tag4.style.top = "250px";
+    gsap.set([tag3, tag4], { opacity: 0 });
+    R._s06 = { tag, tag2, tag3, tag4, pal };
   },
   build(ctx, tl, R) {
     const { S, C, G } = SVGK;
     const lr = R.sets.lr, door = lr.door, anna = R.anna, cam = lr.cam;
     const O0 = CHAR.O0;
-    const { tag, tag2, pal } = R._s06;
+    const { tag, tag2, tag3, tag4, pal } = R._s06;
     const t0 = ctx.t0, tPre = t0 - 0.32;
     const tZur = ctx.w("zurückgeschoben");
     const tVer = ctx.w("verschwindet");
     const tFast = ctx.w("fast");
     const tFarb = ctx.w("farblich");
     const tPas = ctx.w("passend");
-    const tTuer = ctx.w("tür");
+    const tGr = ctx.w("griffleiste"), tRa = ctx.w("rahmen"), tFol = ctx.w("foliert");
     const FY = 952, s = 0.92;
 
     // Startzustand (passend zum Röntgenbild: Tür zentriert, Plissee zu)
@@ -92,15 +99,32 @@
     tl.fromTo(tag2, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, tFast + 0.1);
     ANIM.sfx(tFast + 0.05, "sparkle", -8);
 
-    // Farbe: Kamera zurück, Palette, Tür wechselt Farbe (Rahmen, Profil, Griffleiste gleichzeitig)
-    const tBack = tFarb - 0.35;
+    // „Griffleiste“: noch nah am Profil — die zurückgeschobene Griffleiste leuchtet gelb auf
+    const g = door.geo, bx = lr.doorBox.x, by = lr.doorBox.y, hh = lr.doorBox.h - g.th - g.ft;
+    const gx = bx + g.sx0 + 14 + g.plW * 0.015;
+    const gripHL = S("rect", { x: gx - 5, y: by + g.ft + 4, width: g.gripW + 10, height: hh - 2, rx: 6, fill: C.yellow, opacity: 0 }, lr.fgLayer);
+    tl.to([tag, tag2], { opacity: 0, duration: 0.22, ease: "power1.in" }, tGr - 0.2);
+    tl.fromTo(tag3, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "back.out(1.7)" }, tGr + 0.02);
+    tl.to(gripHL, { opacity: 0.8, duration: 0.18, ease: "power2.out" }, tGr);
+    tl.to(gripHL, { opacity: 0.45, duration: 0.5, ease: "sine.inOut" }, tGr + 0.25);
+    ANIM.sfx(tGr, "pop", -8);
+
+    // „Rahmen der Plisseekassette“: Kamera zurück auf die ganze Tür, Kassettenrahmen zeichnet sich gelb nach
+    const tBack = tRa - 0.3;
     cam.to(tl, tBack, { x: 1010, y: 525, z: 1.0 }, 0.7, "power3.inOut");
-    tl.to(lupe, { opacity: 0, duration: 0.25, ease: "power1.in" }, tBack);
-    tl.to([tag, tag2], { opacity: 0, duration: 0.25, ease: "power1.in" }, tBack);
+    tl.to([lupe, tag3], { opacity: 0, duration: 0.25, ease: "power1.in" }, tBack);
     tl.set(lupe, { visibility: "hidden" }, tBack + 0.3);
     ANIM.sfx(tBack, "whooshSoft", -10);
+    const frameHL = S("rect", { x: bx + g.sx0 + 3, y: by + g.ft + 3, width: g.sx1 - g.sx0 - 6, height: hh - 3, rx: 5, fill: "none", stroke: C.yellow, "stroke-width": 9, "stroke-linejoin": "round", opacity: 0.95 }, lr.fgLayer);
+    tl.fromTo(frameHL, { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.7, ease: "power2.inOut" }, tRa + 0.1);
+    tl.fromTo(tag4, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "back.out(1.7)" }, tRa + 0.05);
+    ANIM.sfx(tRa + 0.1, "sparkle", -10);
+    // vor den Farbwechseln: Markierungen ausblenden, damit die Farben klar zu sehen sind
+    tl.to([frameHL, gripHL, tag4], { opacity: 0, duration: 0.3, ease: "power1.in" }, tFarb + 0.05);
+
     tl.fromTo(pal, { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.45, ease: "back.out(1.6)" }, tFarb - 0.05);
     const sws = pal.querySelectorAll(".s06-sw");
+    tl.fromTo(pal.querySelector("p"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, Math.max(tFarb + 0.2, tFol - 0.1));
     tl.fromTo(sws, { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: 0.3, ease: "power2.out", stagger: 0.08 }, tFarb + 0.1);
     ANIM.sfx(tFarb, "pop", -8);
     anna.look(tl, tFarb, 6, 0).mouth(tl, tFarb + 0.2, "grin").brows(tl, tFarb + 0.2, "happy");

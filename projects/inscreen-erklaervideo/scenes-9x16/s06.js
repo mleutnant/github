@@ -1,7 +1,8 @@
-// s06 (9:16) — „Zurückgeschoben verschwindet das Plissee fast unsichtbar im Profil – farblich passend zur Tür.“
+// s06 (9:16) — „Zurückgeschoben verschwindet das Plissee fast unsichtbar im Profil. Griffleiste und Rahmen der Plisseekassette sind farblich passend foliert oder pulverbeschichtet.“
 // Anna schiebt die Griffleiste zurück (Totale), die Kamera zoomt hochkant aufs Integrationsprofil
 // (Profil als senkrechte Bildachse links, Lupe unten, Labels gestapelt oben), dann zurück in die
-// Totale: Farbpalette als breite Karte oben, die Tür wechselt darunter die Farbe.
+// Totale: Griffleiste + Kassettenrahmen leuchten auf, dann Farbpalette als breite Karte oben
+// (foliert oder pulverbeschichtet), die Tür wechselt darunter die Farbe.
 (window.SCENES = window.SCENES || {}).s06 = {
   set: "lr",
   setup(R, ctx) {
@@ -13,6 +14,7 @@
       .s06v-tag span { font-weight:500; font-size:38px; line-height:1.1; color:var(--sch-blue); white-space:nowrap; }
       .s06v-pal { position:absolute; left:80px; right:80px; top:232px; padding:28px 34px 30px; background:#fff; box-shadow:0 18px 50px rgba(18,52,66,.24); border-left:8px solid var(--sch-red); }
       .s06v-pal h3 { font-weight:900; font-size:56px; line-height:1; color:var(--sch-blue); margin-bottom:26px; white-space:nowrap; }
+      .s06v-pal p { font-weight:600; font-size:34px; line-height:1.18; color:var(--sch-blue); margin:-10px 0 22px; opacity:0; }
       .s06v-row { display:flex; justify-content:space-between; }
       .s06v-sw { display:flex; flex-direction:column; align-items:center; gap:14px; width:33%; }
       .s06v-dot { width:96px; height:96px; border-radius:50%; box-shadow: inset 0 0 0 3px rgba(18,52,66,.15); }
@@ -27,23 +29,27 @@
     tag2.style.left = "420px"; tag2.style.top = "418px";
     const pal = ANIM.el("div", "s06v-pal", h);
     const V = DOOR.VARIANTS;
-    pal.innerHTML = `<h3>Farblich passend</h3><div class="s06v-row">` + ["weiss", "oak", "anthrazit"].map((k) =>
+    pal.innerHTML = `<h3>Farblich passend</h3><p>Griffleiste &amp; Kassettenrahmen:<br>foliert oder pulverbeschichtet</p><div class="s06v-row">` + ["weiss", "oak", "anthrazit"].map((k) =>
       `<div class="s06v-sw" data-k="${k}"><div class="s06v-dotwrap"><div class="s06v-dot" style="background:${V[k].frame}"></div><div class="s06v-ring"></div></div><span>${V[k].label}</span></div>`).join("") + `</div>`;
-    gsap.set([tag, tag2, pal], { opacity: 0 });
-    R._s06 = { tag, tag2, pal };
+    const tag3 = ANIM.el("div", "s06v-tag", h, "<b>Griffleiste</b>");
+    tag3.style.left = "420px"; tag3.style.top = "236px";
+    const tag4 = ANIM.el("div", "s06v-tag", h, "<b>Griffleiste &amp; Rahmen</b><span>der Plisseekassette</span>");
+    tag4.style.left = "80px"; tag4.style.top = "236px";
+    gsap.set([tag, tag2, tag3, tag4, pal], { opacity: 0 });
+    R._s06 = { tag, tag2, tag3, tag4, pal };
   },
   build(ctx, tl, R) {
     const { S, C } = SVGK;
     const lr = R.sets.lr, door = lr.door, anna = R.anna, cam = lr.cam;
     const O0 = CHAR.O0;
-    const { tag, tag2, pal } = R._s06;
+    const { tag, tag2, tag3, tag4, pal } = R._s06;
     const t0 = ctx.t0, tPre = t0 - 0.32;
     const tZur = ctx.w("zurückgeschoben");
     const tVer = ctx.w("verschwindet");
     const tFast = ctx.w("fast");
     const tFarb = ctx.w("farblich");
     const tPas = ctx.w("passend");
-    const tTuer = ctx.w("tür");
+    const tGr = ctx.w("griffleiste"), tRa = ctx.w("rahmen"), tFol = ctx.w("foliert");
     const FY = 952, s = 0.92;
     // Kameras (Hochformat: Weltpunkt x/y landet in Bildmitte 540/960)
     const CAM_TOT = { x: 1080, y: 720, z: 1.15 }; // nah an Anna + Griffleiste (Tür y ≈ 323–1128, Füße ≈ 1227)
@@ -114,14 +120,32 @@
     tl.fromTo(tag2, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, tFast + 0.1);
     ANIM.sfx(tFast + 0.05, "sparkle", -8);
 
-    // Farbe: Kamera zurück in die Totale (Tür unter der Palette), Palette oben, Tür wechselt Farbe
-    const tBack = tFarb - 0.42;
+    // „Griffleiste“: noch nah am Profil — die zurückgeschobene Griffleiste leuchtet gelb auf
+    const g = door.geo, bx = lr.doorBox.x, by = lr.doorBox.y, hh = lr.doorBox.h - g.th - g.ft;
+    const gx = bx + g.sx0 + 14 + g.plW * 0.015;
+    const gripHL = S("rect", { x: gx - 5, y: by + g.ft + 4, width: g.gripW + 10, height: hh - 2, rx: 6, fill: C.yellow, opacity: 0 }, lr.fgLayer);
+    tl.to([tag, tag2], { opacity: 0, y: -16, duration: 0.25, ease: "power1.in" }, tGr - 0.2);
+    tl.fromTo(tag3, { opacity: 0, y: 24, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: "back.out(1.7)" }, tGr + 0.02);
+    tl.to(gripHL, { opacity: 0.8, duration: 0.18, ease: "power2.out" }, tGr);
+    tl.to(gripHL, { opacity: 0.45, duration: 0.5, ease: "sine.inOut" }, tGr + 0.25);
+    ANIM.sfx(tGr, "pop", -8);
+
+    // „Rahmen der Plisseekassette“: zurück in die Totale (Tür unter der Palette), Kassettenrahmen zeichnet sich nach
+    const tBack = tRa - 0.35;
     cam.to(tl, tBack, CAM_PAL, 0.7, "power3.inOut");
-    tl.to(lupe, { opacity: 0, duration: 0.3, ease: "power1.in" }, tBack + 0.05);
-    tl.to([tag, tag2], { opacity: 0, y: -16, duration: 0.3, ease: "power1.in" }, tBack + 0.05);
+    tl.to([lupe, tag3], { opacity: 0, duration: 0.3, ease: "power1.in" }, tBack + 0.05);
     tl.set(lupe, { visibility: "hidden" }, tBack + 0.4);
     ANIM.sfx(tBack, "whooshSoft", -10);
+    const frameHL = S("rect", { x: bx + g.sx0 + 3, y: by + g.ft + 3, width: g.sx1 - g.sx0 - 6, height: hh - 3, rx: 5, fill: "none", stroke: C.yellow, "stroke-width": 10, "stroke-linejoin": "round", opacity: 0.95 }, lr.fgLayer);
+    tl.fromTo(frameHL, { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.7, ease: "power2.inOut" }, tRa + 0.1);
+    tl.fromTo(tag4, { opacity: 0, y: -24 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.7)" }, tRa + 0.05);
+    ANIM.sfx(tRa + 0.1, "sparkle", -10);
+    // Palette übernimmt den Platz oben; Markierungen weg, damit die Farben klar zu sehen sind
+    tl.to(tag4, { opacity: 0, y: -16, duration: 0.25, ease: "power1.in" }, tFarb - 0.3);
+    tl.to([frameHL, gripHL], { opacity: 0, duration: 0.3, ease: "power1.in" }, tFarb + 0.05);
+
     tl.fromTo(pal, { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 0.45, ease: "back.out(1.6)" }, tFarb - 0.05);
+    tl.fromTo(pal.querySelector("p"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, Math.max(tFarb + 0.2, tFol - 0.1));
     const sws = pal.querySelectorAll(".s06v-sw");
     tl.fromTo(sws, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", stagger: 0.08 }, tFarb + 0.1);
     ANIM.sfx(tFarb, "pop", -8);

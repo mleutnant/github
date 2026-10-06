@@ -19,7 +19,7 @@ import {
 const SCALE = 600;
 /** Content block inside the 720 px column: 600 px wide, centred on the column axis. */
 const BLOCK_LEFT = (GRID.colWidth - SCALE) / 2;
-const DIVIDER_BOTTOM = 850;
+const DIVIDER_BOTTOM = 860;
 
 /** Subscript (U_w) set smaller and lower without disturbing the line box. */
 const Sub: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -107,11 +107,11 @@ const UValueColumn: React.FC<ColumnProps> = ({
     ...clamp,
     easing: ease.reveal,
   });
-  const ratingIn = interpolate(frame, [46 + d, 61 + d], [0, 1], {
+  const ratingIn = interpolate(frame, [47 + d, 62 + d], [0, 1], {
     ...clamp,
     easing: ease.reveal,
   });
-  const rule = interpolate(frame, [57, 75], [0, 1], {
+  const rule = interpolate(frame, [60, 78], [0, 1], {
     ...clamp,
     easing: ease.snap,
   });
@@ -129,7 +129,7 @@ const UValueColumn: React.FC<ColumnProps> = ({
         {/* U_w bis */}
         <RiseText
           progress={captionIn}
-          style={{ position: "absolute", top: 22, left: 4 }}
+          style={{ position: "absolute", top: 32, left: 4 }}
         >
           <div
             style={{
@@ -148,7 +148,7 @@ const UValueColumn: React.FC<ColumnProps> = ({
         <div
           style={{
             position: "absolute",
-            top: 64,
+            top: 72,
             left: 0,
             width: SCALE + 60,
             overflow: "hidden",
@@ -159,12 +159,12 @@ const UValueColumn: React.FC<ColumnProps> = ({
             style={{
               display: "flex",
               alignItems: "baseline",
-              gap: 22,
+              gap: 18,
             }}
           >
             <div
               style={{
-                fontSize: 216,
+                fontSize: 206,
                 fontWeight: 700,
                 lineHeight: 1,
                 letterSpacing: "-0.03em",
@@ -187,39 +187,34 @@ const UValueColumn: React.FC<ColumnProps> = ({
           </div>
         </div>
 
-        {/* Rating */}
-        <RiseText
-          progress={ratingIn}
-          style={{ position: "absolute", top: 318, left: 2, paddingBottom: 22 }}
-        >
-          <div
-            style={{
-              position: "relative",
-              display: "inline-block",
-              fontSize: 50,
-              fontWeight: 700,
-              lineHeight: 1.15,
-              whiteSpace: "nowrap",
-            }}
-          >
-            {rating}
-            {accent ? (
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  bottom: -12,
-                  height: 8,
-                  width: `${rule * 100}%`,
-                  backgroundColor: colors.yellow,
-                }}
-              />
-            ) : null}
-          </div>
-        </RiseText>
+        {/* Rating — the 84's advantage gets the yellow rule drawn under it */}
+        <div style={{ position: "absolute", top: 322, left: 2 }}>
+          <RiseText progress={ratingIn}>
+            <div
+              style={{
+                fontSize: 50,
+                fontWeight: 700,
+                lineHeight: 1.15,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {rating}
+            </div>
+          </RiseText>
+          {accent ? (
+            <div
+              style={{
+                marginTop: 4,
+                height: 8,
+                width: `${rule * 100}%`,
+                backgroundColor: colors.yellow,
+              }}
+            />
+          ) : null}
+        </div>
 
         {/* Bar on the shared 0 … 1,0 scale */}
-        <div style={{ position: "absolute", top: 454, left: 0 }}>
+        <div style={{ position: "absolute", top: 460, left: 0 }}>
           <div
             style={{
               position: "absolute",
@@ -318,7 +313,7 @@ export const WaermeScene: React.FC = () => {
         progress={footer}
         style={{
           position: "absolute",
-          top: 892,
+          top: 905,
           left: GRID.center - 700,
           width: 1400,
           textAlign: "center",

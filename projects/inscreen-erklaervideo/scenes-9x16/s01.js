@@ -72,7 +72,12 @@
     const X1 = X0 - door.sashTravel;
     door.slide(tl, tOpen, 1, slideDur, "power2.inOut");
     tl.to(anna.root, { x: X1, duration: slideDur, ease: "power2.inOut" }, tOpen);
-    anna.pose(tl, tOpen - 0.15, { lean: -5 }, 0.25);
+    // Lehnen in die Schubrichtung — Arm per IK nachgeführt, damit die Hand im Nah-Bild am Griff bleibt
+    const LEAN = -5;
+    const rr = ANIM.RIG.anna.armR, la = (LEAN * Math.PI) / 180;
+    const shL = { x: X0 + s * (rr.sx * Math.cos(la) - rr.sy * Math.sin(la)), y: FY + s * (rr.sx * Math.sin(la) + rr.sy * Math.cos(la)) };
+    const [uL, fL] = ANIM.ik(shL, door.handleWorld(0), rr.l1 * s, rr.l2 * s, -1);
+    anna.pose(tl, tOpen - 0.15, { lean: LEAN, armR: [uL - LEAN, fL] }, 0.25);
     ANIM.walk(tl, anna, tOpen + 0.05, slideDur - 0.1, { step: 0.29, swing: 15 });
     ANIM.sfx(tOpen, "slide", -6, { dur: slideDur });
     anna.mouth(tl, tOpen + 0.2, "smile").look(tl, tOpen + 0.1, -3, 0);

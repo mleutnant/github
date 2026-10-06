@@ -21,11 +21,22 @@ HyperFrames (HTML + SVG + GSAP). Alle Figuren, Kulissen, Musik und Geräusche si
 | `scripts/build_all.sh` | alles in einem Rutsch inkl. Render |
 | `design.md`, `docs/fakten.md` | Gestaltungsregeln, belegte Produktaussagen (Broschüre 2026) |
 
-## Finale Stimme einbinden (ein Befehl nach dem VO-Skript)
+## Formate
+
+| Datei | Format | Szenen |
+|---|---|---|
+| `index.html` | 16:9, 1920×1080 | `scenes/` |
+| `vertical.html` | 9:16, 1080×1920 (Social, mit wortgenauen Untertiteln aus `lib/captions.js`) | `scenes-9x16/` |
+
+## Stimme einbinden und rendern
 
 ```bash
-python projects/inscreen-erklaervideo/scripts/vo_elevenlabs.py        # lokal, braucht ELEVENLABS_API_KEY in .env
-bash   projects/inscreen-erklaervideo/scripts/build_all.sh high       # Timing, Cues, Musik, Mix, Render
+# Variante A: Stimme per API (lokal, ELEVENLABS_API_KEY in .env) — liefert exakte Wort-Zeitstempel
+python projects/inscreen-erklaervideo/scripts/vo_elevenlabs.py
+# Variante B: eine komplette MP3 von der ElevenLabs-Website zerlegen (Pausen-Zuordnung, Tempo optional)
+uv run projects/inscreen-erklaervideo/scripts/vo_from_single.py <datei.mp3> --tempo 1.06 --max-pause 0.3
+
+bash projects/inscreen-erklaervideo/scripts/build_all.sh high beide   # Timing, Musik, Cues, Mix, Render (16:9 + 9:16)
 ```
 
 Die Animation hängt an den Wort-Zeitstempeln: Mit der echten Stimme verschieben sich alle Szenen

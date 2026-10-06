@@ -1,30 +1,31 @@
-// s11 — „Integriert, barrierefrei, schnell montiert: Darum ist InScreen die beste Insektenschutzlösung für Hebeschiebetüren.“
+// s11 (9:16) — „Integriert, barrierefrei, schnell montiert: Darum ist InScreen die beste Insektenschutzlösung für Hebeschiebetüren.“
 // Abenddämmerung, Anna mit Limonade, Mücken schmollen draußen — Vorteils-Trio, dann Marken-Endkarte.
 (window.SCENES = window.SCENES || {}).s11 = {
   set: "lr",
+  trans: { type: "iris", cx: 470, cy: 900 },
   setup(R, ctx) {
     const { S, G, C } = SVGK;
     const h = R.huds[ctx.id];
     const css = document.createElement("style");
     css.textContent = `
-      .s11-panel { position:absolute; left:64px; top:190px; width:650px; padding:34px 40px 30px 40px; background:#fff; box-shadow:0 20px 56px rgba(18,52,66,.25); }
-      .s11-row { display:flex; align-items:center; gap:22px; padding:16px 0; }
-      .s11-row img { width:76px; height:76px; }
-      .s11-row b { font-weight:900; font-size:52px; color:var(--sch-blue); white-space:nowrap; letter-spacing:-.01em; }
+      .s11-panel { position:absolute; left:60px; top:214px; width:960px; padding:26px 44px 22px 44px; background:#fff; box-shadow:0 20px 56px rgba(18,52,66,.25); }
+      .s11-row { display:flex; align-items:center; gap:24px; padding:10px 0; }
+      .s11-row img { width:84px; height:84px; }
+      .s11-row b { font-weight:900; font-size:62px; color:var(--sch-blue); white-space:nowrap; letter-spacing:-.01em; }
       .s11-mark { width:8px; height:62px; background:var(--sch-red); }
       .s11-end { position:absolute; inset:0; background:#fff; overflow:hidden; }
-      .s11-ly { position:absolute; left:110px; top:96px; width:820px; height:560px; border-left:24px solid var(--sch-yellow); border-top:24px solid var(--sch-yellow); }
-      .s11-lr { position:absolute; right:110px; bottom:96px; width:700px; height:440px; border-right:24px solid var(--sch-red); border-bottom:24px solid var(--sch-red); }
-      .s11-copy { position:absolute; left:230px; top:196px; width:1400px; }
-      .s11-pre { font-weight:700; font-size:50px; color:var(--sch-blue); }
-      .s11-title { font-weight:900; font-size:224px; line-height:.95; color:var(--sch-blue); letter-spacing:-.025em; margin-top:6px; }
-      .s11-claim { font-weight:700; font-size:66px; line-height:1.18; color:var(--sch-blue); margin-top:26px; max-width:1180px; }
-      .s11-foot { position:absolute; left:230px; right:230px; bottom:178px; display:flex; align-items:center; justify-content:space-between; }
-      .s11-ql { display:flex; align-items:center; gap:18px; font-weight:800; font-size:40px; color:var(--sch-blue); }
+      .s11-ly { position:absolute; left:60px; top:250px; width:640px; height:760px; border-left:24px solid var(--sch-yellow); border-top:24px solid var(--sch-yellow); }
+      .s11-lr { position:absolute; right:60px; bottom:560px; width:560px; height:620px; border-right:24px solid var(--sch-red); border-bottom:24px solid var(--sch-red); }
+      .s11-copy { position:absolute; left:132px; top:350px; width:880px; }
+      .s11-pre { font-weight:700; font-size:56px; color:var(--sch-blue); }
+      .s11-title { font-weight:900; font-size:194px; line-height:.95; color:var(--sch-blue); letter-spacing:-.025em; margin-top:6px; }
+      .s11-claim { font-weight:700; font-size:72px; line-height:1.16; color:var(--sch-blue); margin-top:30px; max-width:840px; }
+      .s11-foot { position:absolute; left:132px; right:132px; top:1230px; display:flex; align-items:center; justify-content:space-between; }
+      .s11-ql { display:flex; align-items:center; gap:16px; font-weight:800; font-size:44px; color:var(--sch-blue); }
       .s11-ql .b { background:var(--sch-red); color:#fff; padding:6px 18px 8px; }
       .s11-ql sup { font-size:20px; }
-      .s11-logo { width:400px; height:auto; }
-      .s11-svg { position:absolute; inset:0; width:1920px; height:1080px; }
+      .s11-logo { width:380px; height:auto; }
+      .s11-svg { position:absolute; inset:0; width:1080px; height:1920px; }
       .s11-fade { position:absolute; inset:0; background:#fff; opacity:0; }
     `;
     document.head.appendChild(css);
@@ -50,9 +51,9 @@
     // Mini-Gag auf der Endkarte: SVG-Ebene mit Mücke + kleinem Plissee
     const svg = document.createElementNS(SVGK.NS, "svg");
     svg.setAttribute("class", "s11-svg");
-    svg.setAttribute("viewBox", "0 0 1920 1080");
+    svg.setAttribute("viewBox", "0 0 1080 1920");
     end.appendChild(svg);
-    const mini = G(svg, { x: 1330, y: 236 });
+    const mini = G(svg, { x: 836, y: 900 });
     const miniPl = G(mini, {});
     S("rect", { x: 0, y: 0, width: 46, height: 214, fill: "#3a4147", opacity: 0.16 }, miniPl);
     for (let i = 0; i <= 8; i++) S("line", { x1: i * 5.75, y1: 0, x2: i * 5.75, y2: 214, stroke: i % 2 ? "#2f353a" : "#9aa6ad", "stroke-width": 1.6, opacity: 0.6, "vector-effect": "non-scaling-stroke" }, miniPl);
@@ -91,7 +92,7 @@
 
     // Startzustand: Plissee zu, Anna mit Limonade links der Öffnung
     door.screen(tl, tPre, 1, 0);
-    cam.to(tl, tPre, { x: 870, y: 540, z: 1.0 }, 0);
+    cam.to(tl, tPre, { x: 1010, y: 530, z: 1.0 }, 0);
     tl.set(anna.root, { x: AX, y: FY }, tPre);
     tl.set(anna.lean, Object.assign({ scaleX: 1, scaleY: 1, y: 0, rotation: 0 }, O0), tPre);
     anna.pose(tl, tPre, { armL: [60, -113], armR: [-34, -70], legL: [0, 0], legR: [0, 0], head: 0 }, 0);
@@ -146,10 +147,11 @@
       tl.fromTo(rows[i].querySelector("img"), { scale: 0.4, rotation: -20 }, { scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2.2)" }, t);
       ANIM.sfx(t - 0.05, "pop", -7);
     });
-    cam.to(tl, t0 + 0.3, { x: 905, y: 548, z: 1.05 }, tDar - t0 - 0.3, "sine.inOut");
+    cam.to(tl, t0 + 0.3, { x: 990, y: 540, z: 1.06 }, tDar - t0 - 0.3, "sine.inOut");
 
     // Endkarte: Wisch mit Marken-Balken
     const tE = tDar - 0.3;
+    window.CAPTION_MUTE = [[tE + 0.15, 1e9]]; // Endkarte zeigt den Claim selbst wortgenau
     tl.fromTo(k.end, { clipPath: "inset(0% 0% 0% 100%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power3.inOut" }, tE);
     ANIM.sfx(tE, "whoosh", -4);
     tl.to("#vignette", { opacity: 0, duration: 0.5, ease: "sine.inOut" }, tE + 0.1);
@@ -165,14 +167,14 @@
 
     // Schlussgag: Mücke will zum Titel — Mini-Plissee fährt dazwischen
     const tG = tHeb + 1.1;
-    tl.set(k.mq.root, { x: 2050, y: 260, scale: 1.25, opacity: 1 }, tE);
+    tl.set(k.mq.root, { x: 1250, y: 760, scale: 1.35, opacity: 1 }, tE);
     k.mq.face_(tl, tE, -1);
     k.mq.init(tl);
     k.mq.buzz(tl, tE, T1);
     tl.fromTo(k.miniPl, Object.assign({ scaleY: 0 }, O0), Object.assign({ scaleY: 1, duration: 0.35, ease: "power3.out" }, O0), tG + 0.15);
     tl.fromTo(k.mini, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power1.out" }, tG + 0.1);
     ANIM.sfx(tG + 0.15, "zip", -8);
-    tl.to(k.mq.root, { motionPath: { path: [{ x: 1700, y: 300 }, { x: 1560, y: 330 }, { x: 1420, y: 350 }], curviness: 1.3 }, duration: 0.75, ease: "power2.in" }, tG - 0.1);
+    tl.to(k.mq.root, { motionPath: { path: [{ x: 1100, y: 820 }, { x: 990, y: 980 }, { x: 930, y: 1010 }], curviness: 1.3 }, duration: 0.75, ease: "power2.in" }, tG - 0.1);
     k.mq.expr(tl, tG - 0.1, "smirk", "sly");
     tl.to(k.mq.bob, { scaleX: 0.6, scaleY: 1.25, duration: 0.06, ease: "power4.out", transformOrigin: "50% 50%" }, tG + 0.65);
     tl.to(k.mq.bob, { scaleX: 1, scaleY: 1, duration: 0.45, ease: "elastic.out(1,0.4)", transformOrigin: "50% 50%" }, tG + 0.72);
@@ -181,7 +183,7 @@
     ANIM.sfx(tG + 0.68, "boing", -9);
     k.mq.expr(tl, tG + 1.1, "frown", "sad");
     k.mq.face_(tl, tG + 1.3, 1);
-    tl.to(k.mq.root, { motionPath: { path: [{ x: 1520, y: 380 }, { x: 1780, y: 300 }, { x: 2080, y: 240 }], curviness: 1.2 }, duration: 1.1, ease: "power1.in" }, tG + 1.35);
+    tl.to(k.mq.root, { motionPath: { path: [{ x: 1000, y: 1060 }, { x: 1120, y: 900 }, { x: 1260, y: 760 }], curviness: 1.2 }, duration: 1.1, ease: "power1.in" }, tG + 1.35);
     ANIM.sfx(tG + 1.35, "buzzShort", -12);
 
     // Ende: sanft ausblenden (nur hier erlaubt)

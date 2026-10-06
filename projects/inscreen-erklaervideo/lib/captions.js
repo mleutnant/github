@@ -34,7 +34,10 @@
     if (cur.length) groups.push(cur);
   });
 
+  const mute = window.CAPTION_MUTE || [];
+  const muted = (t) => mute.some(([a, b]) => t >= a && t <= b);
   groups.forEach((g, gi) => {
+    if (muted(g[0].s)) return;
     const el = document.createElement("div");
     el.className = "cap";
     const spans = g.map((w) => {
@@ -47,7 +50,8 @@
     host.appendChild(el);
     const t0 = g[0].s - 0.06;
     const next = groups[gi + 1];
-    const tEnd = Math.min(g[g.length - 1].e + 0.45, next ? next[0].s - 0.08 : g[g.length - 1].e + 0.8);
+    let tEnd = Math.min(g[g.length - 1].e + 0.45, next ? next[0].s - 0.08 : g[g.length - 1].e + 0.8);
+    mute.forEach(([a]) => { if (a > t0 && a < tEnd) tEnd = a; });
     tl.fromTo(el, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.16, ease: "power2.out" }, t0);
     tl.to(el, { opacity: 0, duration: 0.1, ease: "power1.in" }, tEnd);
     tl.set(el, { visibility: "hidden" }, tEnd + 0.12);

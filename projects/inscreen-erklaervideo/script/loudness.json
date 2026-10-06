@@ -6,8 +6,8 @@
   "sfx": -25.0
  },
  "mix": {
-  "lufs": -12.0,
-  "true_peak_dbtp": -1.2,
+  "lufs": -12.1,
+  "true_peak_dbtp": -1.8,
   "with_vo": true
  }
 }

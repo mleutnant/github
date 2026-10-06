@@ -175,7 +175,7 @@ def main():
         for _ in range(4):
             li, _ = measure(mix)
             mix *= db(TARGET_MIX - li)
-            mix = limiter(mix, -1.25)
+            mix = limiter(mix, -1.8)
         li, tp = measure(mix)
     else:
         # Vorschau ohne Stimme: gleicher Verstärkungsweg, als wäre die Stimme da (+2 dB)

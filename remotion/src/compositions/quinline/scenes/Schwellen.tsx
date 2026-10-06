@@ -148,7 +148,7 @@ const TableRow: React.FC<{ row: Row; index: number }> = ({ row, index }) => {
           position: "absolute",
           left: GRID.center - 360,
           width: 720,
-          top: y - 30,
+          top: y - 28,
           height: 60,
           display: "flex",
           justifyContent: "center",

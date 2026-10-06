@@ -58,6 +58,15 @@ def decode(path):
     return np.frombuffer(raw, dtype=np.float32).astype(np.float64)
 
 
+def loudest_rms(x, win=0.25):
+    """RMS des lautesten 250-ms-Fensters — kurze Klicks und lange Ausklinger klingen gleich laut."""
+    n = max(1, int(win * SR))
+    if len(x) <= n:
+        return float(np.sqrt(np.mean(x ** 2)))
+    c = np.cumsum(np.concatenate([[0.0], x ** 2]))
+    return float(np.sqrt(np.max(c[n:] - c[:-n]) / n))
+
+
 def smooth_gate(n, intervals, att=0.12, rel=0.45):
     g = np.zeros(n)
     for a, b in intervals:
@@ -126,13 +135,10 @@ def main():
             continue
         x = np.asarray(x)
         if x.ndim == 1:
-            act = np.abs(x) > 0.05 * np.max(np.abs(x))
-            rms = np.sqrt(np.mean(x[act] ** 2)) if act.any() else 1.0
-            x = x * (0.1 / max(rms, 1e-9))  # alle One-Shots auf gleiche Grundlautheit
+            x = x * (0.1 / max(loudest_rms(x), 1e-9))  # gleiche wahrgenommene Spitzenlautheit
             synth.place(sfx, x, c["t"], db(c.get("gain", 0)), c.get("pan", 0.0))
         else:
-            rms = np.sqrt(np.mean(x ** 2))
-            x = x * (0.1 / max(rms, 1e-9)) * db(c.get("gain", 0))
+            x = x * (0.1 / max(loudest_rms(x.mean(axis=0)), 1e-9)) * db(c.get("gain", 0))
             i = int(c["t"] * SR)
             n = min(x.shape[1], N - i)
             if n > 0:

@@ -66,18 +66,21 @@
   });
   Object.values(R.sets).forEach((st) => gsap.set(st.root, { visibility: "hidden" }));
 
-  // Clip-Pfade für Übergänge
+  // Masken für Übergänge: eingehendes und ausgehendes Set werden gegenläufig maskiert,
+  // dadurch ist die Ebenen-Reihenfolge der Sets egal.
   const defs = svg.querySelector("defs") || S("defs", null, svg);
-  function clipFor(name) {
+  function maskFor(name) {
     const st = R.sets[name];
-    if (st._clip) return st._clip;
-    const cp = S("clipPath", { id: "clip-" + name }, defs);
-    const rect = S("rect", { x: 0, y: 0, width: 1920, height: 1080 }, cp);
-    const circ = S("circle", { cx: 960, cy: 540, r: 0 }, cp);
-    st.root.setAttribute("clip-path", `url(#clip-${name})`);
-    st._clip = { cp, rect, circ };
-    return st._clip;
+    if (st._mask) return st._mask;
+    const m = S("mask", { id: "mask-" + name, maskUnits: "userSpaceOnUse", x: 0, y: 0, width: 1920, height: 1080 }, defs);
+    const rect = S("rect", { x: 0, y: 0, width: 1920, height: 1080, fill: "#fff" }, m);
+    const circ = S("circle", { cx: 960, cy: 540, r: 0, fill: "#fff" }, m);
+    const hole = S("circle", { cx: 960, cy: 540, r: 0, fill: "#000" }, m);
+    st.root.setAttribute("mask", `url(#mask-${name})`);
+    st._mask = { m, rect, circ, hole };
+    return st._mask;
   }
+  Object.keys(R.sets).forEach(maskFor);
   const trLayer = S("g", { id: "transitions" }, svg);
   const bars = [C.yellow, C.red].map((col) => S("rect", { x: -60, y: -20, width: 34, height: 1120, fill: col, opacity: 0 }, trLayer));
   const ring = S("circle", { cx: 960, cy: 540, r: 0, fill: "none", stroke: C.yellow, "stroke-width": 16, opacity: 0 }, trLayer);
@@ -90,13 +93,13 @@
     s09: { type: "wipe", dir: 1 }, s11: { type: "iris", cx: 960, cy: 560 },
   };
   const D = 0.62; // Dauer eines Set-Wechsels
+  const IR = { immediateRender: false };
 
   function transition(prevId, id) {
     const a = sceneSet[prevId], b = sceneSet[id];
     const tb = byId[id].winStart;
     const hA = R.huds[prevId], hB = R.huds[id];
     if (!a || !b) {
-      // Szene fehlt (noch) — HUD-Ebenen trotzdem sauber umschalten
       tl.set(hB, { visibility: "visible", opacity: 1 }, tb - 0.3);
       tl.set(hA, { visibility: "hidden" }, tb);
       if (b && R.sets[b]) tl.set(R.sets[b].root, { visibility: "visible" }, tb - 0.3);
@@ -111,42 +114,52 @@
     }
     const tr = TRANS[id] || { type: "wipe", dir: 1 };
     const t0 = tb - D * 0.45, t1 = t0 + D;
-    const clip = clipFor(b);
+    const mi = maskFor(b), mo = maskFor(a);
+    const E = { duration: D, ease: "power3.inOut" };
     tl.set(R.sets[b].root, { visibility: "visible" }, t0);
     tl.set(hB, { visibility: "visible", opacity: 1 }, t0);
     if (tr.type === "wipe") {
       const L = tr.dir > 0;
-      tl.fromTo(clip.rect, { attr: { x: L ? 0 : 1920, width: 0 } }, { attr: { x: 0, width: 1920 }, immediateRender: false, duration: D, ease: "power3.inOut" }, t0);
-      tl.fromTo(hB, { clipPath: L ? "inset(0% 100% 0% 0%)" : "inset(0% 0% 0% 100%)" }, { clipPath: "inset(0% 0% 0% 0%)", immediateRender: false, duration: D, ease: "power3.inOut" }, t0);
-      tl.to(hA, { clipPath: L ? "inset(0% 0% 0% 100%)" : "inset(0% 100% 0% 0%)", duration: D, ease: "power3.inOut" }, t0);
+      tl.fromTo(mi.rect, { attr: { x: L ? 0 : 1920, width: 0 } }, Object.assign({ attr: { x: 0, width: 1920 } }, E, IR), t0);
+      tl.fromTo(mo.rect, { attr: { x: 0, width: 1920 } }, Object.assign({ attr: { x: L ? 1920 : 0, width: 0 } }, E, IR), t0);
+      tl.fromTo(hB, { clipPath: L ? "inset(0% 100% 0% 0%)" : "inset(0% 0% 0% 100%)" }, Object.assign({ clipPath: "inset(0% 0% 0% 0%)" }, E, IR), t0);
+      tl.fromTo(hA, { clipPath: "inset(0% 0% 0% 0%)" }, Object.assign({ clipPath: L ? "inset(0% 0% 0% 100%)" : "inset(0% 100% 0% 0%)" }, E, IR), t0);
       bars.forEach((bar, i) => {
         tl.set(bar, { opacity: 1 }, t0);
-        tl.fromTo(bar, { x: L ? -60 - i * 46 : 1980 + i * 46 }, { x: L ? 1980 + i * 46 : -60 - i * 46, immediateRender: false, duration: D + 0.04, ease: "power3.inOut" }, t0 + i * 0.03);
+        tl.fromTo(bar, { x: L ? -60 - i * 46 : 1980 + i * 46 }, Object.assign({ x: L ? 1980 + i * 46 : -60 - i * 46 }, E, IR, { duration: D + 0.04 }), t0 + i * 0.03);
         tl.set(bar, { opacity: 0 }, t1 + 0.1);
       });
     } else if (tr.type === "iris") {
       const rr = Math.hypot(Math.max(tr.cx, 1920 - tr.cx), Math.max(tr.cy, 1080 - tr.cy)) + 20;
-      tl.set(clip.circ, { attr: { cx: tr.cx, cy: tr.cy } }, t0);
-      tl.set(clip.rect, { attr: { width: 0 } }, t0);
-      tl.fromTo(clip.circ, { attr: { r: 0 } }, { attr: { r: rr }, immediateRender: false, duration: D + 0.1, ease: "power2.inOut" }, t0);
-      tl.set(ring, { attr: { cx: tr.cx, cy: tr.cy }, opacity: 1 }, t0);
-      tl.fromTo(ring, { attr: { r: 0 } }, { attr: { r: rr }, immediateRender: false, duration: D + 0.1, ease: "power2.inOut" }, t0);
+      const EI = { duration: D + 0.1, ease: "power2.inOut" };
+      tl.set(mi.rect, { attr: { width: 0 } }, t0);
+      tl.set([mi.circ, mo.hole, ring], { attr: { cx: tr.cx, cy: tr.cy } }, t0);
+      tl.fromTo(mi.circ, { attr: { r: 0 } }, Object.assign({ attr: { r: rr } }, EI, IR), t0);
+      tl.fromTo(mo.hole, { attr: { r: 0 } }, Object.assign({ attr: { r: rr } }, EI, IR), t0);
+      tl.set(ring, { opacity: 1 }, t0);
+      tl.fromTo(ring, { attr: { r: 0 } }, Object.assign({ attr: { r: rr } }, EI, IR), t0);
       tl.set(ring, { opacity: 0 }, t1 + 0.12);
-      tl.fromTo(hB, { opacity: 0 }, { opacity: 1, immediateRender: false, duration: 0.3, ease: "sine.out" }, t0 + D * 0.5);
-      tl.to(hA, { opacity: 0, duration: 0.3, ease: "sine.in" }, t0);
-      tl.set(clip.rect, { attr: { width: 1920, x: 0 } }, t1 + 0.12);
-      tl.set(clip.circ, { attr: { r: 0 } }, t1 + 0.12);
+      tl.fromTo(hB, { clipPath: `circle(0px at ${tr.cx}px ${tr.cy}px)` }, Object.assign({ clipPath: `circle(${Math.round(rr)}px at ${tr.cx}px ${tr.cy}px)` }, EI, IR), t0);
+      tl.set(hB, { clipPath: "none" }, t1 + 0.12);
+      tl.to(hA, { opacity: 0, duration: 0.3, ease: "sine.in" }, t0 + D * 0.3);
+      tl.set(mi.rect, { attr: { width: 1920, x: 0 } }, t1 + 0.12);
+      tl.set(mi.circ, { attr: { r: 0 } }, t1 + 0.12);
     } else if (tr.type === "scan") {
       const up = !!tr.up;
-      tl.fromTo(clip.rect, { attr: { y: up ? 1080 : 0, height: 0 } }, { attr: { y: 0, height: 1080 }, immediateRender: false, duration: D, ease: "power2.inOut" }, t0);
+      const ES = { duration: D, ease: "power2.inOut" };
+      tl.fromTo(mi.rect, { attr: { y: up ? 1080 : 0, height: 0 } }, Object.assign({ attr: { y: 0, height: 1080 } }, ES, IR), t0);
+      tl.fromTo(mo.rect, { attr: { y: 0, height: 1080 } }, Object.assign({ attr: { y: up ? 0 : 1080, height: 0 } }, ES, IR), t0);
       tl.set(scanLine, { opacity: 1 }, t0);
-      tl.fromTo(scanLine, { y: up ? 1080 : -10 }, { y: up ? -10 : 1080, immediateRender: false, duration: D, ease: "power2.inOut" }, t0);
+      tl.fromTo(scanLine, { y: up ? 1080 : -10 }, Object.assign({ y: up ? -10 : 1080 }, ES, IR), t0);
       tl.set(scanLine, { opacity: 0 }, t1);
-      tl.fromTo(hB, { clipPath: up ? "inset(100% 0% 0% 0%)" : "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", immediateRender: false, duration: D, ease: "power2.inOut" }, t0);
-      tl.to(hA, { clipPath: up ? "inset(0% 0% 100% 0%)" : "inset(100% 0% 0% 0%)", duration: D, ease: "power2.inOut" }, t0);
+      tl.fromTo(hB, { clipPath: up ? "inset(100% 0% 0% 0%)" : "inset(0% 0% 100% 0%)" }, Object.assign({ clipPath: "inset(0% 0% 0% 0%)" }, ES, IR), t0);
+      tl.fromTo(hA, { clipPath: "inset(0% 0% 0% 0%)" }, Object.assign({ clipPath: up ? "inset(0% 0% 100% 0%)" : "inset(100% 0% 0% 0%)" }, ES, IR), t0);
     }
+    // ausgehendes Set verstecken und Maske zurücksetzen
     tl.set(R.sets[a].root, { visibility: "hidden" }, t1 + 0.14);
     tl.set(hA, { visibility: "hidden" }, t1 + 0.14);
+    tl.set(mo.rect, { attr: { x: 0, y: 0, width: 1920, height: 1080 } }, t1 + 0.16);
+    tl.set(mo.hole, { attr: { r: 0 } }, t1 + 0.16);
     ANIM.sfx(t0 + 0.05, tr.type === "iris" ? "whooshSoft" : "whoosh", -2);
   }
 

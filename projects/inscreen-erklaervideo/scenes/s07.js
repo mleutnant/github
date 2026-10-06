@@ -1,14 +1,15 @@
-// s07 — „Keine Stolperkante: barrierefrei für Kinder, Großeltern – und sogar den Saugroboter.“
+// s07 — „Keine Stolperkante im Durchgangsbereich: bequem für Kinder, Großeltern – und das volle Tablett.“
 // Warme Seitenansicht (Schnitt) durch die bündige Schwelle: links innen, rechts Terrasse.
-// Das Kind saust auf dem Bobbycar durch, Opa geht mit Rollator hinterher, der Saugroboter gleitet nach.
-// Eine Lupe zeigt live die in die Schwelle eingelassene Führungsschiene (inkl. Räder, die drüberrollen).
+// Das Kind saust auf dem Bobbycar durch, Opa geht mit Rollator hinterher, Anna trägt ein volles Tablett
+// Limonade nach draußen — nichts schwappt. Eine Lupe zeigt live die in die Schwelle eingelassene
+// Führungsschiene (inkl. Räder und Schuhe, die drübergehen).
 (function () {
   const FLOOR = 820; // Bodenlinie innen = Terrasse außen
   const TH = { x0: 926, x1: 994, y1: 870 }; // Schwellenprofil (Welt)
   const PLANE = 941; // Türebene / Plissee-Linie
   const PAN = 60; // leichte Kamerafahrt nach rechts (Vordergrund)
   const LENS = { x: 1590, y: 300, r: 160, z: 2.8, cx: 960, cy: 830 };
-  const S_OPA = 0.8, S_KID = 0.9, S_ROB = 0.8;
+  const S_OPA = 0.8, S_KID = 0.9, S_ANNA = 0.74;
   const KID_WAIT = 805, KID_PARK = 1720;
   const OPA = { v: 200, T: 1.0, beta: 0.62, alpha: 5, rdx: 42 }; // Gehtempo (px/s), Zyklus (s), Standphase, Vorlage (°), Rollator-Versatz
   const GRIP = { x: 82 + 42, y: -257 }; // Griffmitte im Opa-Basisraum (inkl. Rollator-Versatz)
@@ -279,7 +280,8 @@
       st.chars = S("g", null, fg);
       st.fx = S("g", null, fg);
       st.kid = CHAR.makeKid(st.chars, { s: S_KID });
-      st.robot = CHAR.makeRobot(st.chars, { s: S_ROB });
+      st.anna = CHAR.makeAnna(st.chars, { s: S_ANNA });
+      st.tray = CHAR.makeTray(st.anna.lean, { x: 0, y: -262 });
       st.opa = CHAR.makeOpa(st.chars, { s: S_OPA });
 
       // Opa: Rollator aus der Körpergruppe lösen (bleibt am Boden, wippt nicht mit), Körper leicht vorgebeugt
@@ -302,10 +304,6 @@
       kid.root.insertBefore(st.kidLines, kid.root.firstChild);
       st.speed = [[-118, -48, 120], [-128, -98, 150], [-112, -150, 96]].map(([x, y, l]) =>
         S("path", { d: `M${x},${y} H${x - l}`, stroke: "#fff", "stroke-width": 7, "stroke-linecap": "round", fill: "none", opacity: 0.9 }, st.kidLines));
-
-      // Roboter: „glückliche“ Display-Augen
-      const rob = st.robot;
-      st.robHappy = [-14, 14].map((x) => S("path", { d: `M${x - 5},-53 Q${x},-63 ${x + 5},-53`, stroke: "#7fe0ff", "stroke-width": 3, fill: "none", "stroke-linecap": "round", opacity: 0 }, rob.bounce));
 
       // Stolperkante (Geister-Absatz, wird plattgedrückt) + Null-Niveau-Linie
       st.bump = G(st.fx, { x: 960, y: FLOOR });
@@ -352,19 +350,19 @@
       const h = R.huds[ctx.id];
       const css = document.createElement("style");
       css.textContent = `
-        .s07-head { font-size: 64px; padding: 16px 34px 18px 24px; gap: 18px; }
-        .s07-head .bar { width: 8px; height: 60px; }
+        .s07-head { font-size: 64px; padding: 16px 34px 18px 24px; gap: 18px; align-items: stretch; }
+        .s07-head .bar { width: 8px; height: auto; }
+        .s07-head .ht { line-height: 1.04; }
+        .s07-head .ht span { font-size: 46px; }
         .s07-lbl { font-size: 34px; padding: 12px 24px 12px 18px; gap: 12px; }
         .s07-lbl .bar { height: 36px; }
       `;
       document.head.appendChild(css);
-      st.chip1 = ANIM.el("div", "chip s07-head", h, '<div class="bar"></div>Keine Stolperkante');
+      st.chip1 = ANIM.el("div", "chip s07-head", h, '<div class="bar"></div><div class="ht">Keine Stolperkante<br><span>im Durchgangsbereich</span></div>');
       st.chip1.style.left = "80px"; st.chip1.style.top = "76px";
-      st.chip2 = ANIM.el("div", "chip", h, '<div class="bar"></div>Barrierefreier Durchgang');
-      st.chip2.style.left = "80px"; st.chip2.style.top = "202px";
       st.lbl = ANIM.el("div", "chip s07-lbl", h, '<div class="bar"></div>Führungsschiene eingelassen');
       st.lbl.style.left = LENS.x + "px"; st.lbl.style.top = "58px";
-      gsap.set([st.chip1, st.chip2], { opacity: 0, transformOrigin: "0% 50%" });
+      gsap.set(st.chip1, { opacity: 0, transformOrigin: "0% 50%" });
       gsap.set(st.lbl, { opacity: 0, xPercent: -50, transformOrigin: "50% 100%" });
     },
 
@@ -376,11 +374,11 @@
       const tA = t0 - 0.6, tB = t1 + 1.5, DUR = tB - tA; // Dauerbewegungen laufen über das Fenster hinaus
       const tKeine = ctx.w("keine");
       const tStol = ctx.w("stolperkante"), tStolE = ctx.w("stolperkante", "e");
-      const tBarr = ctx.w("barrierefrei");
+      const tDurch = ctx.w("durchgangsbereich");
       const tKind = ctx.w("kinder");
       const tGross = ctx.w("großeltern");
-      const tSaug = ctx.w("saugroboter");
-      const kid = st.kid, opa = st.opa, rob = st.robot;
+      const tTab = ctx.w("tablett");
+      const kid = st.kid, opa = st.opa, anna = st.anna;
 
       // ---------- Kamera-Parallaxe ----------
       const panE = "sine.inOut";
@@ -417,7 +415,7 @@
       tl.fromTo(st.kidHead, Object.assign({ rotation: 0 }, O0), Object.assign({ rotation: -3, duration: 0.42, ease: "sine.inOut", yoyo: true, repeat: Math.max(1, Math.floor((tL - 0.5 - tA) / 0.42)) - 1 }, O0), tA);
       kid.look(tl, 0, 3, 0, 0).brows(tl, 0, "happy", 0);
       kid.look(tl, tStol + 0.2, -5, 1, 0.18);
-      kid.look(tl, tBarr - 0.1, 4, 0, 0.16).brows(tl, tBarr - 0.1, "sly");
+      kid.look(tl, tDurch - 0.1, 4, 0, 0.16).brows(tl, tDurch - 0.1, "sly");
       kid.look(tl, tL - 0.75, -5, 1, 0.16);
       kid.look(tl, tL - 0.35, 5, -1, 0.14).brows(tl, tL - 0.35, "angry", 0.14);
       kid.blinks(tl, tA, tL - 0.5, 4);
@@ -452,7 +450,7 @@
       });
       // Geparkt: zurückschauen, wippen
       kid.look(tl, tStop + 0.25, -5, 0, 0.18).brows(tl, tStop + 0.25, "happy", 0.15);
-      kid.look(tl, tSaug - 0.2, -5, 2, 0.2);
+      kid.look(tl, tTab - 0.2, -5, 2, 0.2);
       kid.blinks(tl, tStop + 0.3, tB, 12);
       const nP = Math.max(1, Math.floor((tB - tStop - 0.4) / 0.9));
       tl.fromTo(kid.root, { y: FLOOR }, { y: FLOOR - 3, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: nP * 2 - 1, immediateRender: false }, tStop + 0.4);
@@ -468,7 +466,8 @@
       const frontOff = S_OPA * (150 + 16 + OPA.rdx); // vorderste Rollatorkante relativ zum Fußpunkt
       const wheelOff = S_OPA * (150 + OPA.rdx);
       // Vorderrad über die Schwelle auf „Großeltern“, aber nie ins wartende Kind laufen
-      const Tc = Math.max(tGross + 0.45, tL + (960 - wheelOff + frontOff - (kidRear - 42)) / OPA.v);
+      // (früh genug, dass Anna mit dem Tablett mit Abstand folgen kann)
+      const Tc = Math.max(tGross + 0.08, tL + (960 - wheelOff + frontOff - (kidRear - 42)) / OPA.v);
       const rootC = 960 - wheelOff;
       // Gangphase so wählen, dass ein Fuß flach auf der Schwelle steht (Lupe!)
       let tRef = Tc, best = 1e9;
@@ -518,44 +517,30 @@
       opa.look(tl, tGross - 0.05, -1, 0, 0.18);
       opa.mouth(tl, tGross + 0.6, "smile");
       opa.look(tl, tGross + 0.9, 4, 2, 0.2);
-      opa.look(tl, tSaug - 0.25, -4, 2, 0.2);
+      opa.look(tl, tTab - 0.25, -4, 2, 0.2);
       ANIM.sfx(tGross, "roll", -11, { dur: 1.6 });
 
-      // ---------- Saugroboter ----------
-      gsap.set(rob.root, { y: FLOOR });
-      const tRa = t0 - 1.0, tRb = t1 + 1.2;
-      const robFront = S_ROB * (84 + 16);
-      const pR = (tSaug - tRa) / (tRb - tRa);
-      const fR = (1 - Math.cos(Math.PI * pR)) / 2;
-      const xR0 = -300, xR1 = xR0 + (TH.x0 - robFront - xR0) / fR;
-      tl.fromTo(rob.root, { x: xR0 }, { x: xR1, duration: tRb - tRa, ease: "sine.inOut" }, tRa);
-      R._s07.rob = { tRa, tRb, xR0, xR1 };
-      rob.spin(tl, tRa, tRb - tRa);
-      const nH = Math.max(1, Math.floor((tB - tA) / 0.5));
-      tl.fromTo(rob.bounce, Object.assign({ scaleY: 1 }, O0), Object.assign({ scaleY: 1.03, duration: 0.25, ease: "sine.inOut", yoyo: true, repeat: nH * 2 - 1 }, O0), tA);
-      // Display: blinzeln, LED pulsiert, bei „Saugroboter“ glücklich
-      const rb = rng(31);
-      for (let t = tA + 0.6; t < tB - 0.3; t += 1.6 + rb() * 1.4) {
-        if (Math.abs(t - tSaug) < 0.9) continue;
-        tl.to(rob.eyes, { scaleY: 0.12, duration: 0.06, ease: "power1.in", transformOrigin: "50% 50%" }, t);
-        tl.to(rob.eyes, { scaleY: 1, duration: 0.1, ease: "power1.out", transformOrigin: "50% 50%" }, t + 0.07);
-      }
-      const nL = Math.max(1, Math.floor((tB - tA) / 0.8));
-      tl.fromTo(rob.led, { opacity: 1 }, { opacity: 0.35, duration: 0.4, ease: "sine.inOut", yoyo: true, repeat: nL * 2 - 1 }, tA);
-      tl.set(rob.eyes, { opacity: 0 }, tSaug);
-      tl.set(st.robHappy, { opacity: 1 }, tSaug);
-      tl.fromTo(rob.smile, { scale: 1 }, { scale: 1.45, duration: 0.3, ease: "back.out(3)", transformOrigin: "50% 0%", immediateRender: false }, tSaug);
-      tl.set(st.robHappy, { opacity: 0 }, tSaug + 0.85);
-      tl.set(rob.eyes, { opacity: 1 }, tSaug + 0.85);
-      ANIM.sfx(xToTime(0), "robot", -15, { dur: t1 + 0.35 - xToTime(0) });
-      ANIM.sfx(tSaug, "beep", -4);
-      ANIM.sfx(tSaug + 0.22, "beep", -8);
-      function xToTime(x) {
-        // Zeitpunkt, an dem die Roboter-Vorderkante bei Bildschirm-x ~ x erscheint (grob, für den Summton)
-        const target = x - robFront + 20;
-        const f = (target - xR0) / (xR1 - xR0);
-        return tRa + (Math.acos(1 - 2 * Math.min(1, Math.max(0, f))) / Math.PI) * (tRb - tRa);
-      }
+      // ---------- Anna mit vollem Tablett: folgt Opa im gleichen Tempo, kreuzt die Türebene auf „Tablett“ ----------
+      anna.init(tl);
+      const VA = OPA.v, tAX = tTab + 0.1;
+      const xAnna = (t) => PLANE + VA * (t - tAX);
+      gsap.set(anna.root, { x: xAnna(tA), y: FLOOR });
+      tl.fromTo(anna.root, { x: xAnna(tA) }, { x: xAnna(tB), duration: DUR, ease: "none", immediateRender: false }, tA);
+      const ar = ANIM.RIG.anna, grip = st.tray.grip;
+      anna.pose(tl, tA, {
+        armL: ANIM.ik({ x: ar.armL.sx, y: ar.armL.sy }, { x: -grip, y: -258 }, ar.armL.l1, ar.armL.l2, 1),
+        armR: ANIM.ik({ x: ar.armR.sx, y: ar.armR.sy }, { x: grip, y: -258 }, ar.armR.l1, ar.armR.l2, -1),
+        head: 0,
+      }, 0);
+      ANIM.walk(tl, anna, tA, DUR, { step: 0.34, swing: 15 });
+      anna.expr(tl, tA, "smile", "happy", [3, 3]);
+      anna.blinks(tl, tA, tAX - 0.6, 41);
+      // kurz vor der Schwelle: prüfender Blick auf die Gläser … dann stolz in die Kamera
+      anna.look(tl, tAX - 0.6, 1, 6, 0.18).brows(tl, tAX - 0.6, "worried", 0.2).mouth(tl, tAX - 0.6, "o");
+      anna.look(tl, tAX + 0.06, 0, 0, 0.14).brows(tl, tAX + 0.06, "happy", 0.16).mouth(tl, tAX + 0.06, "grin");
+      anna.eyesClosed(tl, tAX + 0.3, true);
+      anna.eyesClosed(tl, tAX + 0.48, false);
+      ANIM.sfx(tAX + 0.08, "sparkle", -12);
 
       // ---------- „Keine Stolperkante“ ----------
       const tC1 = tKeine + 0.06;
@@ -599,11 +584,6 @@
       // danach markiert ein kleiner Ring die eingelassene Schiene
       tl.to(st.railRing, Object.assign({ scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)" }, O0), tLift + 0.24);
 
-      // ---------- „Barrierefreier Durchgang“ ----------
-      const tC2 = tBarr + 0.02;
-      tl.fromTo(st.chip2, { opacity: 0, x: -50, scale: 0.9 }, { opacity: 1, x: 0, scale: 1, duration: 0.5, ease: "back.out(1.7)", immediateRender: false }, tC2);
-      tl.fromTo(st.chip2.querySelector(".bar"), { scaleY: 0 }, { scaleY: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, tC2 + 0.12);
-      ANIM.sfx(tC2, "pop", -6);
     },
   };
 })();

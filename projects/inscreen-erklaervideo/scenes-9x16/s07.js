@@ -1,17 +1,20 @@
-// s07 — „Keine Stolperkante: barrierefrei für Kinder, Großeltern – und sogar den Saugroboter.“
-// Warme Seitenansicht (Schnitt) durch die bündige Schwelle: links innen, rechts Terrasse.
-// Das Kind saust auf dem Bobbycar durch, Opa geht mit Rollator hinterher, der Saugroboter gleitet nach.
-// Eine Lupe zeigt live die in die Schwelle eingelassene Führungsschiene (inkl. Räder, die drüberrollen).
+// s07 (9:16) — „Keine Stolperkante: barrierefrei für Kinder, Großeltern – und sogar den Saugroboter.“
+// Hochformat: Kamera nah an der bündigen Schwelle (Seitenansicht im Schnitt, links innen, rechts Terrasse).
+// Start nah auf Kind + Schwelle (Stolperkanten-Gag), dann Rückfahrt, damit Opa ins Bild kommt, danach
+// Schwenk nach rechts mit Opa und Saugroboter. Die Lupe (bildfest, rechts unter den Chips) zeigt live die
+// in die Schwelle eingelassene Führungsschiene; ihre Verbindungslinien folgen der Kamera.
 (function () {
   const FLOOR = 820; // Bodenlinie innen = Terrasse außen
   const TH = { x0: 926, x1: 994, y1: 870 }; // Schwellenprofil (Welt)
   const PLANE = 941; // Türebene / Plissee-Linie
-  const PAN = 60; // leichte Kamerafahrt nach rechts (Vordergrund)
-  const LENS = { x: 1590, y: 300, r: 160, z: 2.8, cx: 960, cy: 830 };
-  const S_OPA = 0.8, S_KID = 0.9, S_ROB = 0.8;
-  const KID_WAIT = 805, KID_PARK = 1720;
-  const OPA = { v: 200, T: 1.0, beta: 0.62, alpha: 5, rdx: 42 }; // Gehtempo (px/s), Zyklus (s), Standphase, Vorlage (°), Rollator-Versatz
+  const YF = 1316; // Bodenlinie im Bild (knapp über der Untertitel-Zone)
+  // Lupe: Bildmitte (x,y), Radius, Vergrößerung (Bild-px je Welt-px), Weltmittelpunkt
+  const LENS = { x: 818, y: 604, r: 150, z: 3.2, cx: 958, cy: 822 };
+  const S_OPA = 0.8, S_KID = 0.9, S_ROB = 0.9;
+  const KID_WAIT = 828, KID_PARK = 1780, KID_GAP = 14;
+  const OPA = { v: 220, T: 0.92, beta: 0.62, alpha: 5, rdx: 42 }; // Gehtempo (px/s), Zyklus (s), Standphase, Vorlage (°), Rollator-Versatz
   const GRIP = { x: 82 + 42, y: -257 }; // Griffmitte im Opa-Basisraum (inkl. Rollator-Versatz)
+  const ROB = { v: 205, boost: 70 }; // Saugroboter: Grundtempo, kleiner Schub über der Schwelle
 
   // ---------- Hilfen ----------
   // Dreh-/Skalier-Gruppe mit Drehpunkt (px,py) um ein vorhandenes SVGK.G-Element legen
@@ -125,6 +128,13 @@
     return { Gb, ch, sample, legs, ankle, Sb };
   }
 
+  // Kamera-Kurven als reine Funktionen (deterministisch, beim Seeken exakt)
+  const E = {
+    sine: (u) => -(Math.cos(Math.PI * u) - 1) / 2,
+    p2: (u) => (u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2),
+  };
+  const clamp01 = (u) => (u < 0 ? 0 : u > 1 ? 1 : u);
+
   (window.SCENES = window.SCENES || {}).s07 = {
     set: "access",
     setup(R, ctx) {
@@ -134,13 +144,16 @@
       const root = S("g", { id: "set-access" }, svg);
       const st = { root };
       R.sets.access = st;
-      const scene = S("g", { id: "acc-scene" }, root);
+      S("rect", { x: 0, y: 0, width: SVGK.F.W, height: SVGK.F.H, fill: C.cream }, root);
+      const cam = SETS.camera(root);
+      st.cam = cam;
+      const scene = S("g", { id: "acc-scene" }, cam.pos);
       st.sky = S("g", null, scene);
       st.far = S("g", null, scene);
       st.fg = S("g", null, scene);
       const fg = st.fg;
 
-      // Muster: Schraffur für Schnittflächen, Kies
+      // Muster: Schraffur für Schnittflächen
       const hatch = (id, col, gap, w, op) => {
         const p = S("pattern", { id, width: gap, height: gap, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" }, defs);
         S("line", { x1: 0, y1: 0, x2: 0, y2: gap, stroke: col, "stroke-width": w, opacity: op }, p);
@@ -149,61 +162,57 @@
       const hatchWall = hatch("accHatchW", C.cream3, 16, 3, 0.9);
       const hatchSlab = hatch("accHatchS", C.an3, 18, 2.2, 0.16);
 
-      // ---------- Himmel (Parallaxe langsam) ----------
-      const sky = SETS.gradient(svg, "accSky", [[0, "#fde6b5"], [0.62, "#fbd27f"], [1, "#fbd27f"]]);
-      S("rect", { x: 880, y: -20, width: 1360, height: 860, fill: sky }, st.sky);
-      S("circle", { cx: 1340, cy: 690, r: 190, fill: "#fff4dc", opacity: 0.32 }, st.sky);
-      S("circle", { cx: 1340, cy: 690, r: 78, fill: "#fff8e8" }, st.sky);
+      // ---------- Himmel (Parallaxe langsam) — reicht im Hochformat weit nach oben ----------
+      const sky = SETS.gradient(svg, "accSky", [[0, "#fff4dc"], [0.5, "#fde6b5"], [0.84, "#fbd27f"], [1, "#fbd27f"]]);
+      S("rect", { x: 600, y: -900, width: 1900, height: 1760, fill: sky }, st.sky);
+      S("circle", { cx: 1330, cy: 690, r: 190, fill: "#fff4dc", opacity: 0.32 }, st.sky);
+      S("circle", { cx: 1330, cy: 690, r: 78, fill: "#fff8e8" }, st.sky);
       st.clouds = [];
-      [[1160, 150, 0.85], [1960, 520, 0.7], [1250, 430, 0.5]].forEach(([x, y, s]) => {
+      [[1210, -150, 0.9], [1480, 120, 0.7], [1170, 400, 0.55], [1640, 470, 0.6]].forEach(([x, y, s]) => {
         const c = G(st.sky, { x, y, s });
         S("path", { d: "M-90,20 Q-90,-10 -60,-12 Q-50,-44 -14,-40 Q10,-66 44,-44 Q84,-46 88,-10 Q112,-4 108,20 Z", fill: "#fff", opacity: 0.7 }, c);
         st.clouds.push(c);
       });
 
       // ---------- Ferne: Hügel, Hecke, Baum (Parallaxe mittel) ----------
-      S("path", { d: "M860,690 Q1160,610 1400,652 T1860,640 T2260,662 V830 H860 Z", fill: C.g4 }, st.far);
+      S("path", { d: "M640,690 Q960,610 1200,652 T1660,640 T2260,662 V830 H640 Z", fill: C.g4 }, st.far);
       const hedge = S("g", null, st.far);
-      for (let i = 0; i < 20; i++) {
-        S("circle", { cx: 900 + i * 72, cy: 748 + (i % 3) * 7, r: 52 + (i % 2) * 9, fill: i % 2 ? C.g2 : C.g3 }, hedge);
+      for (let i = 0; i < 24; i++) {
+        S("circle", { cx: 660 + i * 72, cy: 748 + (i % 3) * 7, r: 52 + (i % 2) * 9, fill: i % 2 ? C.g2 : C.g3 }, hedge);
       }
-      S("rect", { x: 860, y: 752, width: 1400, height: 70, fill: C.g2 }, hedge);
-      S("rect", { x: 860, y: 800, width: 1400, height: 22, fill: C.g3 }, hedge); // Rasenkante
+      S("rect", { x: 640, y: 752, width: 1760, height: 70, fill: C.g2 }, hedge);
+      S("rect", { x: 640, y: 800, width: 1760, height: 22, fill: C.g3 }, hedge); // Rasenkante
       const tree = S("g", null, st.far);
-      S("rect", { x: 1928, y: 470, width: 24, height: 340, fill: "#6f4a2e" }, tree);
-      [[1940, 420, 120, C.g1], [1860, 486, 76, C.g2], [2010, 476, 86, C.g1], [1936, 330, 86, C.g2]].forEach(([x, y, r, c]) => S("circle", { cx: x, cy: y, r, fill: c }, tree));
+      S("rect", { x: 1478, y: 470, width: 24, height: 340, fill: "#6f4a2e" }, tree);
+      [[1490, 420, 120, C.g1], [1410, 486, 76, C.g2], [1560, 476, 86, C.g1], [1486, 330, 86, C.g2]].forEach(([x, y, r, c]) => S("circle", { cx: x, cy: y, r, fill: c }, tree));
 
       // ---------- Innenraum ----------
-      S("path", { d: `M-140,0 H896 V196 H${PLANE} V${FLOOR} H-140 Z`, fill: C.cream }, fg);
-      const glowG = S("radialGradient", { id: "accGlow", cx: 1, cy: 0.72, r: 0.9 }, defs);
+      S("path", { d: `M-200,-900 H896 V196 H${PLANE} V${FLOOR} H-200 Z`, fill: C.cream }, fg);
+      const glowG = S("radialGradient", { id: "accGlow", cx: 1, cy: 0.78, r: 0.9 }, defs);
       [[0, "#fde6b5", 0.85], [1, "#fde6b5", 0]].forEach(([o, c, op]) => S("stop", { offset: o, "stop-color": c, "stop-opacity": op }, glowG));
-      S("rect", { x: 200, y: 196, width: PLANE - 200, height: FLOOR - 196, fill: "url(#accGlow)", opacity: 0.55 }, fg);
+      S("rect", { x: 300, y: -200, width: PLANE - 300, height: FLOOR + 200, fill: "url(#accGlow)", opacity: 0.55 }, fg);
       S("rect", { x: 896, y: 196, width: PLANE - 896, height: FLOOR - 196, fill: C.cream2 }, fg); // Laibung innen
-      // Decke im Schnitt
-      S("rect", { x: -140, y: 0, width: 1036, height: 30, fill: C.cream2 }, fg);
-      S("rect", { x: -140, y: 0, width: 1036, height: 30, fill: hatchWall }, fg);
-      S("rect", { x: -140, y: 28, width: 1036, height: 4, fill: C.cream3 }, fg);
-      // Bild (Markenmotiv als Kunst)
-      const art = S("g", null, fg);
+      // Bild (Markenmotiv als Kunst), etwas kleiner und näher an der Tür
+      const art = S("g", { transform: "translate(612,372) scale(0.8) translate(-352,-318)" }, fg);
       S("rect", { x: 352, y: 318, width: 200, height: 240, fill: "#fff", stroke: C.cream3, "stroke-width": 10 }, art);
       S("path", { d: "M386,508 V360 H500", stroke: C.yellow, "stroke-width": 9, fill: "none" }, art);
       S("path", { d: "M424,540 V410 H522", stroke: C.red, "stroke-width": 9, fill: "none" }, art);
       // Lichtschalter
       S("rect", { x: 842, y: 470, width: 30, height: 30, rx: 4, fill: "#fbf8f2", stroke: C.cream3, "stroke-width": 2 }, fg);
       S("rect", { x: 853, y: 478, width: 8, height: 14, rx: 2, fill: C.cream3 }, fg);
-      // Pflanze im Topf (links)
-      const pot = S("g", null, fg);
+      // Pflanze im Topf (links, Bildrand)
+      const pot = S("g", { transform: "translate(440,0)" }, fg);
       S("path", { d: "M78,812 L64,730 H196 L182,812 Z", fill: C.cream3 }, pot);
       S("rect", { x: 58, y: 720, width: 144, height: 18, rx: 6, fill: "#d6c5a8" }, pot);
-      SETS.plant(fg, 130, 724, 0.8, 9, [C.g1, C.g2, C.g1, C.g3]);
+      SETS.plant(pot, 130, 724, 0.8, 9, [C.g1, C.g2, C.g1, C.g3]);
       // Sockelleiste
-      S("rect", { x: -140, y: 804, width: 1036, height: 16, fill: "#e8dcc6" }, fg);
+      S("rect", { x: -200, y: 804, width: 1096, height: 16, fill: "#e8dcc6" }, fg);
 
       // ---------- Wand über der Tür (Schnitt) ----------
-      S("rect", { x: 896, y: 0, width: 140, height: 196, fill: C.cream2 }, fg);
-      S("rect", { x: 896, y: 0, width: 140, height: 196, fill: hatchWall }, fg);
-      S("rect", { x: 896, y: 0, width: 6, height: 196, fill: "#fbf8f2" }, fg); // Innenputz
-      S("rect", { x: 1030, y: 0, width: 6, height: 196, fill: "#ffffff" }, fg); // Außenputz
+      S("rect", { x: 896, y: -900, width: 140, height: 1096, fill: C.cream2 }, fg);
+      S("rect", { x: 896, y: -900, width: 140, height: 1096, fill: hatchWall }, fg);
+      S("rect", { x: 896, y: -900, width: 6, height: 1096, fill: "#fbf8f2" }, fg); // Innenputz
+      S("rect", { x: 1030, y: -900, width: 6, height: 1096, fill: "#ffffff" }, fg); // Außenputz
       S("rect", { x: 896, y: 190, width: 140, height: 6, fill: C.cream3 }, fg);
       // Rahmenprofil oben (Sturz) in Anthrazit
       S("rect", { x: TH.x0, y: 196, width: TH.x1 - TH.x0, height: 44, rx: 2, fill: C.an1 }, fg);
@@ -222,32 +231,41 @@
       S("path", { d: zz, stroke: C.an2, "stroke-width": 1.5, fill: "none", opacity: 0.75, "stroke-linejoin": "round" }, mesh);
       S("path", { d: zz, stroke: "#fff", "stroke-width": 0.8, fill: "none", opacity: 0.55, transform: "translate(1,0)" }, mesh);
 
+      // ---------- Erdreich unter allem (Hochformat zeigt mehr Tiefe) ----------
+      const SOIL = FLOOR + 362;
+      S("rect", { x: -200, y: SOIL, width: 2600, height: 900, fill: "#e6d8bf" }, fg);
+      const rs = rng(41);
+      for (let i = 0; i < 140; i++) {
+        S("ellipse", { cx: -150 + rs() * 2500, cy: SOIL + 20 + rs() * 820, rx: 4 + rs() * 7, ry: 3 + rs() * 4, fill: "none", stroke: "#d2c3aa", "stroke-width": 2, opacity: 0.6 }, fg);
+      }
+
       // ---------- Bodenaufbau innen (Schnitt) ----------
       const fl = S("g", null, fg);
-      S("rect", { x: -140, y: FLOOR, width: TH.x0 + 140, height: 8, fill: "#d39a5e" }, fl);
-      S("rect", { x: -140, y: FLOOR + 8, width: TH.x0 + 140, height: 18, fill: C.oak2 }, fl);
-      for (let x = -100; x < TH.x0; x += 128) S("rect", { x, y: FLOOR + 8, width: 3, height: 18, fill: C.oak1, opacity: 0.8 }, fl);
-      S("rect", { x: -140, y: FLOOR + 26, width: TH.x0 + 140, height: 38, fill: C.cream2 }, fl); // Estrich
+      S("rect", { x: -200, y: FLOOR, width: TH.x0 + 200, height: 8, fill: "#d39a5e" }, fl);
+      S("rect", { x: -200, y: FLOOR + 8, width: TH.x0 + 200, height: 18, fill: C.oak2 }, fl);
+      for (let x = -164; x < TH.x0; x += 128) S("rect", { x, y: FLOOR + 8, width: 3, height: 18, fill: C.oak1, opacity: 0.8 }, fl);
+      S("rect", { x: -200, y: FLOOR + 26, width: TH.x0 + 200, height: 38, fill: C.cream2 }, fl); // Estrich
       const rd = rng(17);
-      for (let i = 0; i < 70; i++) S("circle", { cx: -120 + rd() * (TH.x0 + 100), cy: FLOOR + 31 + rd() * 28, r: 1.6 + rd() * 1.8, fill: C.cream3 }, fl);
-      S("rect", { x: -140, y: FLOOR + 64, width: TH.x0 + 140, height: 38, fill: C.b6 }, fl); // Dämmung
-      let zi = `M-140,${FLOOR + 83}`;
-      for (let x = -130, i = 0; x <= TH.x0; x += 14, i++) zi += ` L${x},${FLOOR + (i % 2 ? 70 : 96)}`;
+      for (let i = 0; i < 80; i++) S("circle", { cx: -180 + rd() * (TH.x0 + 160), cy: FLOOR + 31 + rd() * 28, r: 1.6 + rd() * 1.8, fill: C.cream3 }, fl);
+      S("rect", { x: -200, y: FLOOR + 64, width: TH.x0 + 200, height: 38, fill: C.b6 }, fl); // Dämmung
+      let zi = `M-200,${FLOOR + 83}`;
+      for (let x = -190, i = 0; x <= TH.x0; x += 14, i++) zi += ` L${x},${FLOOR + (i % 2 ? 70 : 96)}`;
       S("path", { d: zi, stroke: C.b5, "stroke-width": 2.4, fill: "none" }, fl);
-      S("rect", { x: -140, y: FLOOR + 102, width: 1176, height: 260, fill: C.cream3 }, fl); // Bodenplatte
-      S("rect", { x: -140, y: FLOOR + 102, width: 1176, height: 260, fill: hatchSlab }, fl);
-      S("rect", { x: -140, y: FLOOR + 102, width: 1176, height: 3, fill: "#d2c3aa" }, fl);
+      S("rect", { x: -200, y: FLOOR + 102, width: 1236, height: 260, fill: C.cream3 }, fl); // Bodenplatte
+      S("rect", { x: -200, y: FLOOR + 102, width: 1236, height: 260, fill: hatchSlab }, fl);
+      S("rect", { x: -200, y: FLOOR + 102, width: 1236, height: 3, fill: "#d2c3aa" }, fl);
+      S("rect", { x: -200, y: SOIL - 3, width: 1236, height: 3, fill: "#d2c3aa" }, fl);
 
       // ---------- Terrasse außen (Schnitt) ----------
       const tr = S("g", null, fg);
-      S("rect", { x: TH.x1, y: FLOOR, width: 1300, height: 26, fill: "#e6dac6" }, tr);
-      S("rect", { x: TH.x1, y: FLOOR, width: 1300, height: 3, fill: "#f1e8d8" }, tr);
-      for (let x = TH.x1 + 150; x < 2300; x += 168) S("rect", { x, y: FLOOR, width: 3, height: 26, fill: "#d2c3aa" }, tr);
-      S("rect", { x: TH.x1, y: FLOOR + 26, width: 1300, height: 30, fill: C.cream3 }, tr); // Splittbett
-      S("rect", { x: 1036, y: FLOOR + 56, width: 1300, height: 220, fill: "#e9dcc4" }, tr); // Kies
+      S("rect", { x: TH.x1, y: FLOOR, width: 1500, height: 26, fill: "#e6dac6" }, tr);
+      S("rect", { x: TH.x1, y: FLOOR, width: 1500, height: 3, fill: "#f1e8d8" }, tr);
+      for (let x = TH.x1 + 150; x < 2500; x += 168) S("rect", { x, y: FLOOR, width: 3, height: 26, fill: "#d2c3aa" }, tr);
+      S("rect", { x: TH.x1, y: FLOOR + 26, width: 1500, height: 30, fill: C.cream3 }, tr); // Splittbett
+      S("rect", { x: 1036, y: FLOOR + 56, width: 1460, height: SOIL - FLOOR - 56, fill: "#e9dcc4" }, tr); // Kies
       const rg = rng(23);
-      for (let i = 0; i < 90; i++) {
-        const x = 1040 + rg() * 1220, y = FLOOR + 30 + rg() * 232;
+      for (let i = 0; i < 110; i++) {
+        const x = 1040 + rg() * 1420, y = FLOOR + 30 + rg() * (SOIL - FLOOR - 40);
         S("ellipse", { cx: x, cy: y, rx: 4 + rg() * 6, ry: 3 + rg() * 4, fill: "none", stroke: "#d2c3aa", "stroke-width": 2, opacity: 0.75 }, tr);
       }
       S("rect", { x: TH.x1, y: FLOOR + 56, width: 1036 - TH.x1, height: 46, fill: C.b6 }, tr); // Perimeterdämmung
@@ -313,13 +331,13 @@
       st.level0 = G(st.fxBack, { x: 960, y: FLOOR - 1 });
       S("line", { x1: -84, y1: 0, x2: 84, y2: 0, stroke: "#fff", "stroke-width": 3, "stroke-dasharray": "9 7", "stroke-linecap": "round", opacity: 0.9 }, st.level0);
 
-      // ---------- Lupe (live: <use> auf die Szene) ----------
+      // ---------- Lupe (bildfest; live: <use> auf die Szene) ----------
       const lensLayer = S("g", null, root);
       st.lensLayer = lensLayer;
-      // Markierung + Verbindungslinien liegen in der Welt hinter den Figuren (Lupe selbst bleibt bildfest)
+      // Markierung + Verbindungslinien liegen in der Welt hinter den Figuren
       const mr = LENS.r / LENS.z;
-      st.markCircle = S("circle", { cx: LENS.cx, cy: LENS.cy, r: mr, fill: "none", stroke: "#fff", "stroke-width": 4.5 }, st.fxBack);
-      st.conn = [0, 1].map(() => S("line", { x1: 0, y1: 0, x2: 0, y2: 0, stroke: "#fff", "stroke-width": 4, "stroke-linecap": "round", opacity: 0.95 }, st.fxBack));
+      st.markCircle = S("circle", { cx: LENS.cx, cy: LENS.cy, r: mr, fill: "none", stroke: "#fff", "stroke-width": 4 }, st.fxBack);
+      st.conn = [0, 1].map(() => S("line", { x1: LENS.cx, y1: LENS.cy, x2: LENS.cx, y2: LENS.cy, stroke: "#fff", "stroke-width": 3.4, "stroke-linecap": "round", opacity: 0 }, st.fxBack));
       st.lens = G(lensLayer, { x: LENS.x, y: LENS.y });
       const cp = S("clipPath", { id: "acc-lens-clip" }, defs);
       S("circle", { cx: 0, cy: 0, r: LENS.r }, cp);
@@ -327,8 +345,7 @@
       S("circle", { cx: 0, cy: 0, r: LENS.r, fill: C.cream }, st.lens);
       const clipG = S("g", { "clip-path": "url(#acc-lens-clip)" }, st.lens);
       const zoom = S("g", { transform: `scale(${LENS.z}) translate(${-LENS.cx},${-LENS.cy})` }, clipG);
-      st.lensPan = S("g", null, zoom);
-      S("use", { href: "#acc-scene" }, st.lensPan);
+      S("use", { href: "#acc-scene" }, zoom);
       // Wasserwaage in der Lupe (liegt über der Fuge innen/Schwelle/außen)
       const fy = (FLOOR - LENS.cy) * LENS.z; // Bodenlinie in Lupen-Koordinaten
       st.levelTool = G(clipG, { x: 0, y: fy });
@@ -348,24 +365,26 @@
       S("circle", { cx: 0, cy: 0, r: LENS.r, fill: "none", stroke: "#fff", "stroke-width": 12 }, st.lens);
       S("circle", { cx: 0, cy: 0, r: LENS.r + 10, fill: "none", stroke: C.yellow, "stroke-width": 4 }, st.lens);
 
-      // ---------- Texte ----------
+      // ---------- Texte (oben gestapelt, Label links neben der Lupe) ----------
       const h = R.huds[ctx.id];
       const css = document.createElement("style");
       css.textContent = `
-        .s07-head { font-size: 64px; padding: 16px 34px 18px 24px; gap: 18px; }
-        .s07-head .bar { width: 8px; height: 60px; }
-        .s07-lbl { font-size: 34px; padding: 12px 24px 12px 18px; gap: 12px; }
-        .s07-lbl .bar { height: 36px; }
+        .s07-head { font-size: 76px; padding: 12px 34px 16px 22px; gap: 18px; }
+        .s07-head .bar { width: 8px; height: 66px; }
+        .s07-sub { font-size: 46px; padding: 12px 28px 14px 20px; gap: 14px; }
+        .s07-sub .bar { height: 46px; }
+        .s07-lbl { font-size: 40px; line-height: 1.12; padding: 16px 26px 18px 18px; gap: 14px; }
+        .s07-lbl .bar { height: 92px; }
       `;
       document.head.appendChild(css);
       st.chip1 = ANIM.el("div", "chip s07-head", h, '<div class="bar"></div>Keine Stolperkante');
-      st.chip1.style.left = "80px"; st.chip1.style.top = "76px";
-      st.chip2 = ANIM.el("div", "chip", h, '<div class="bar"></div>Barrierefreier Durchgang');
-      st.chip2.style.left = "80px"; st.chip2.style.top = "202px";
-      st.lbl = ANIM.el("div", "chip s07-lbl", h, '<div class="bar"></div>Führungsschiene eingelassen');
-      st.lbl.style.left = LENS.x + "px"; st.lbl.style.top = "58px";
+      st.chip1.style.left = "60px"; st.chip1.style.top = "214px";
+      st.chip2 = ANIM.el("div", "chip s07-sub", h, '<div class="bar"></div>Barrierefreier Durchgang');
+      st.chip2.style.left = "60px"; st.chip2.style.top = "344px";
+      st.lbl = ANIM.el("div", "chip s07-lbl", h, '<div class="bar"></div><div>Führungsschiene<br>eingelassen</div>');
+      st.lbl.style.right = SVGK.F.W - (LENS.x - LENS.r - 34) + "px"; st.lbl.style.top = LENS.y + "px";
       gsap.set([st.chip1, st.chip2], { opacity: 0, transformOrigin: "0% 50%" });
-      gsap.set(st.lbl, { opacity: 0, xPercent: -50, transformOrigin: "50% 100%" });
+      gsap.set(st.lbl, { opacity: 0, yPercent: -50, transformOrigin: "100% 50%" });
     },
 
     build(ctx, tl, R) {
@@ -382,25 +401,47 @@
       const tSaug = ctx.w("saugroboter");
       const kid = st.kid, opa = st.opa, rob = st.robot;
 
-      // ---------- Kamera-Parallaxe ----------
-      const panE = "sine.inOut";
-      tl.fromTo(st.fg, { x: 0 }, { x: -PAN, duration: DUR, ease: panE }, tA);
-      tl.fromTo(st.far, { x: 0 }, { x: -PAN * 0.5, duration: DUR, ease: panE }, tA);
-      tl.fromTo(st.sky, { x: 0 }, { x: -PAN * 0.18, duration: DUR, ease: panE }, tA);
-      tl.fromTo(st.lensPan, { x: 0 }, { x: PAN, duration: DUR, ease: panE }, tA);
-      st.clouds.forEach((c, i) => tl.fromTo(c, { x: 0 }, { x: 26 + i * 12, duration: DUR, ease: "sine.inOut" }, tA));
-      // Verbindungslinien Lupe <-> Markierung (äußere Tangenten), synchron zur Kamerafahrt
-      const tangents = (lx) => {
-        const c1 = { x: LENS.cx, y: LENS.cy }, r1 = LENS.r / LENS.z, c2 = { x: lx, y: LENS.y }, r2 = LENS.r + 6;
-        const dx = c2.x - c1.x, dy = c2.y - c1.y, dd = Math.hypot(dx, dy), th = Math.atan2(dy, dx);
-        const g = Math.acos(-(r2 - r1) / dd);
-        return [1, -1].map((sg) => {
-          const a = th + sg * g;
-          return { x1: c1.x + r1 * Math.cos(a), y1: c1.y + r1 * Math.sin(a), x2: c2.x + r2 * Math.cos(a), y2: c2.y + r2 * Math.sin(a) };
-        });
+      // Zeitfunktionen über eigene Ease-Kurve exakt in die Timeline schreiben (seekbar, deterministisch)
+      const fnEase = (fn) => (p) => fn(tA + p * DUR);
+      const drive = (el, prop, fn, origin) => {
+        const from = {}, to = { duration: DUR, ease: fnEase(fn) };
+        from[prop] = 0; to[prop] = 1;
+        if (origin) { Object.assign(from, O0); Object.assign(to, O0); }
+        tl.fromTo(el, from, to, tA);
       };
-      const tg0 = tangents(LENS.x), tg1 = tangents(LENS.x + PAN); // Weltkoordinaten: Lupe bleibt im Bild stehen
-      st.conn.forEach((ln, i) => tl.fromTo(ln, { attr: tg0[i] }, { attr: tg1[i], duration: DUR, ease: panE }, tA));
+      const driveAttr = (el, name, fn) => {
+        const a0 = {}, a1 = {};
+        a0[name] = 0; a1[name] = 1;
+        tl.fromTo(el, { attr: a0 }, { attr: a1, duration: DUR, ease: fnEase(fn) }, tA);
+      };
+
+      // ---------- Kamera: nah auf die Schwelle → Rückfahrt (Opa kommt) → Schwenk nach rechts ----------
+      // X = Bild-x der Türebene, z = Zoom; die Bodenlinie bleibt bei YF.
+      const KEYS = [
+        { t: tA, X: 628, z: 1.46 },
+        { t: tStolE + 0.05, X: 618, z: 1.55, e: E.sine },
+        { t: tBarr - 0.15, X: 618, z: 1.55 },
+        { t: tKind + 0.1, X: 540, z: 1.17, e: E.p2 },
+        { t: tGross - 0.05, X: 540, z: 1.17 },
+        { t: t1 + 0.1, X: 335, z: 1.12, e: E.sine },
+      ];
+      const camAt = (t) => {
+        let k = 0;
+        while (k < KEYS.length - 2 && t > KEYS[k + 1].t) k++;
+        const a = KEYS[k], b = KEYS[k + 1];
+        const u = clamp01((t - a.t) / (b.t - a.t)), f = b.e ? b.e(u) : u;
+        const X = a.X + (b.X - a.X) * f, z = a.z + (b.z - a.z) * f;
+        return { X, z, cx: PLANE - (X - 540) / z, cy: FLOOR + (960 - YF) / z };
+      };
+      drive(st.cam.pos, "x", (t) => -camAt(t).cx, false);
+      drive(st.cam.pos, "y", (t) => -camAt(t).cy, false);
+      drive(st.cam.sc, "scale", (t) => camAt(t).z, true);
+      const toScreenX = (wx, t) => { const c = camAt(t); return 540 + (wx - c.cx) * c.z; };
+      // Parallaxe: Ferne und Himmel bleiben gegenüber der Kamera zurück
+      const cx0 = camAt(tA).cx;
+      drive(st.far, "x", (t) => (camAt(t).cx - cx0) * 0.35, false);
+      drive(st.sky, "x", (t) => (camAt(t).cx - cx0) * 0.75, false);
+      st.clouds.forEach((c, i) => tl.fromTo(c, { x: 0 }, { x: 26 + i * 12, duration: DUR, ease: "sine.inOut" }, tA));
 
       // ---------- Kind auf dem Bobbycar ----------
       kid.init(tl);
@@ -441,7 +482,7 @@
       tl.to(st.kidHead, Object.assign({ rotation: -2, duration: 0.12, ease: "sine.inOut", yoyo: true, repeat: 3 }, O0), tL + 0.25);
       tl.to(st.kidHead, Object.assign({ rotation: 6, duration: 0.22, ease: "power2.out" }, O0), tStop - 0.22);
       tl.to(st.kidHead, Object.assign({ rotation: 0, duration: 0.4, ease: "back.out(2)" }, O0), tStop);
-      // Bremsen: nach vorn nicken, zurückfedern
+      // Bremsen: nach vorn nicken, zurückfedern (passiert schon außerhalb des Bildes)
       tl.to(st.kidFront, Object.assign({ rotation: 4, duration: 0.24, ease: "power2.in" }, O0), tStop - 0.26);
       tl.to(st.kidFront, Object.assign({ rotation: 0, duration: 0.42, ease: "back.out(2.6)" }, O0), tStop - 0.02);
       // Fahrtwind-Linien
@@ -450,16 +491,11 @@
         tl.fromTo(p, { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", duration: 0.24, ease: "power2.out", immediateRender: false }, ts);
         tl.to(p, { drawSVG: "100% 100%", opacity: 0, duration: 0.3, ease: "power2.in" }, ts + 0.42);
       });
-      // Geparkt: zurückschauen, wippen
       kid.look(tl, tStop + 0.25, -5, 0, 0.18).brows(tl, tStop + 0.25, "happy", 0.15);
-      kid.look(tl, tSaug - 0.2, -5, 2, 0.2);
       kid.blinks(tl, tStop + 0.3, tB, 12);
-      const nP = Math.max(1, Math.floor((tB - tStop - 0.4) / 0.9));
-      tl.fromTo(kid.root, { y: FLOOR }, { y: FLOOR - 3, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: nP * 2 - 1, immediateRender: false }, tStop + 0.4);
       ANIM.sfx(tL - 0.42, "roll", -10, { dur: 0.25 });
       ANIM.sfx(tL, "roll", -3, { dur: Dk });
       ANIM.sfx(tCross - 0.2, "whoosh", -3);
-      ANIM.sfx(tStop - 0.25, "slide", -12, { dur: 0.3 });
 
       // ---------- Opa mit Rollator ----------
       opa.init(tl);
@@ -468,49 +504,41 @@
       const frontOff = S_OPA * (150 + 16 + OPA.rdx); // vorderste Rollatorkante relativ zum Fußpunkt
       const wheelOff = S_OPA * (150 + OPA.rdx);
       // Vorderrad über die Schwelle auf „Großeltern“, aber nie ins wartende Kind laufen
-      const Tc = Math.max(tGross + 0.45, tL + (960 - wheelOff + frontOff - (kidRear - 42)) / OPA.v);
+      const Tc = Math.max(tGross + 0.4, tL + (960 - wheelOff + frontOff - (kidRear - KID_GAP)) / OPA.v);
       const rootC = 960 - wheelOff;
       // Gangphase so wählen, dass ein Fuß flach auf der Schwelle steht (Lupe!)
       let tRef = Tc, best = 1e9;
       for (let k = 0; k < 100; k++) {
-        const tr = Tc + k * 0.01;
-        const Xr = rootC - S_OPA * gait.Gb((Tc - tr) / OPA.T);
+        const trf = Tc + k * 0.01;
+        const Xr = rootC - S_OPA * gait.Gb((Tc - trf) / OPA.T);
         gait.legs.forEach((L) => {
           for (let c = -8; c <= 8; c++) {
-            const ths = tr + (c + L.off) * OPA.T;
-            const heel = Xr + S_OPA * (gait.Gb((ths - tr) / OPA.T) + L.h0);
+            const ths = trf + (c + L.off) * OPA.T;
+            const heel = Xr + S_OPA * (gait.Gb((ths - trf) / OPA.T) + L.h0);
             const e = Math.abs(heel + S_OPA * 22 - 962);
-            if (e < best) { best = e; tRef = tr; }
+            if (e < best) { best = e; tRef = trf; }
           }
         });
       }
       const Xref = rootC - S_OPA * gait.Gb((Tc - tRef) / OPA.T);
       const tauOf = (t) => (t - tRef) / OPA.T;
       const Xopa = (t) => Xref + S_OPA * gait.Gb(tauOf(t));
-      R._s07 = { gait, Xopa, tRef, Tc, tL, tStop, tCross };
-      const fnEase = (fn) => (p) => fn(tA + p * DUR);
-      const drive = (el, prop, fn, origin) => {
-        const from = {}, to = { duration: DUR, ease: fnEase(fn) };
-        from[prop] = 0; to[prop] = 1;
-        if (origin) { Object.assign(from, O0); Object.assign(to, O0); }
-        tl.fromTo(el, from, to, tA);
-      };
       gsap.set(opa.root, { y: FLOOR });
       drive(opa.root, "x", Xopa, false);
-      const G = gait.ch, smp = gait.sample;
+      const Gc = gait.ch, smp = gait.sample;
       ["legR", "legL"].forEach((k) => {
-        drive(opa[k].u, "rotation", (t) => smp(G[k][0], tauOf(t)), true);
-        drive(opa[k].f, "rotation", (t) => smp(G[k][1], tauOf(t)), true);
-        drive(opa[k].h, "rotation", (t) => smp(G[k][2], tauOf(t)), true);
+        drive(opa[k].u, "rotation", (t) => smp(Gc[k][0], tauOf(t)), true);
+        drive(opa[k].f, "rotation", (t) => smp(Gc[k][1], tauOf(t)), true);
+        drive(opa[k].h, "rotation", (t) => smp(Gc[k][2], tauOf(t)), true);
       });
-      drive(opa.armR.u, "rotation", (t) => smp(G.arm[0], tauOf(t)), true);
-      drive(opa.armR.f, "rotation", (t) => smp(G.arm[1], tauOf(t)), true);
-      drive(opa.armR.h, "rotation", (t) => smp(G.arm[2], tauOf(t)), true);
-      drive(opa.lean, "y", (t) => smp(G.bob, tauOf(t)), false);
-      drive(opa.head, "rotation", (t) => smp(G.head, tauOf(t)), true);
+      drive(opa.armR.u, "rotation", (t) => smp(Gc.arm[0], tauOf(t)), true);
+      drive(opa.armR.f, "rotation", (t) => smp(Gc.arm[1], tauOf(t)), true);
+      drive(opa.armR.h, "rotation", (t) => smp(Gc.arm[2], tauOf(t)), true);
+      drive(opa.lean, "y", (t) => smp(Gc.bob, tauOf(t)), false);
+      drive(opa.head, "rotation", (t) => smp(Gc.head, tauOf(t)), true);
       opa.rwheels.forEach((w) => drive(w, "rotation", (t) => (gait.Gb(tauOf(t)) / (2 * Math.PI * 16)) * 360, true));
       opa.breathe(tl, tA, tB, 0.004, 1.6);
-      // Mimik: zufrieden, schaut dem Kind nach, dann in die Kamera
+      // Mimik: zufrieden, staunt dem Kind nach, dann in die Kamera, zum Schluss Blick zurück zum Roboter
       opa.look(tl, 0, 3, 1, 0).brows(tl, 0, "happy", 0).mouth(tl, 0, "smile");
       opa.blinks(tl, tA, tB, 21);
       opa.look(tl, tCross - 0.15, 5, -1, 0.14).brows(tl, tCross - 0.15, "surprised", 0.14).mouth(tl, tCross - 0.15, "o");
@@ -521,16 +549,14 @@
       opa.look(tl, tSaug - 0.25, -4, 2, 0.2);
       ANIM.sfx(tGross, "roll", -11, { dur: 1.6 });
 
-      // ---------- Saugroboter ----------
+      // ---------- Saugroboter: folgt Opa, gleitet auf „Saugroboter“ über die Schwelle ----------
       gsap.set(rob.root, { y: FLOOR });
-      const tRa = t0 - 1.0, tRb = t1 + 1.2;
+      const tRX = tSaug + 0.12; // Robotermitte über der Türebene
+      const robX = (t) => PLANE + ROB.v * (t - tRX) + ROB.boost * (E.sine(clamp01((t - tRX + 0.55) / 1.1)) - 0.5);
+      drive(rob.root, "x", robX, false);
       const robFront = S_ROB * (84 + 16);
-      const pR = (tSaug - tRa) / (tRb - tRa);
-      const fR = (1 - Math.cos(Math.PI * pR)) / 2;
-      const xR0 = -300, xR1 = xR0 + (TH.x0 - robFront - xR0) / fR;
-      tl.fromTo(rob.root, { x: xR0 }, { x: xR1, duration: tRb - tRa, ease: "sine.inOut" }, tRa);
-      R._s07.rob = { tRa, tRb, xR0, xR1 };
-      rob.spin(tl, tRa, tRb - tRa);
+      R._s07 = { gait, Xopa, tRef, Tc, tL, tStop, tCross, robX, camAt };
+      rob.spin(tl, tA, DUR);
       const nH = Math.max(1, Math.floor((tB - tA) / 0.5));
       tl.fromTo(rob.bounce, Object.assign({ scaleY: 1 }, O0), Object.assign({ scaleY: 1.03, duration: 0.25, ease: "sine.inOut", yoyo: true, repeat: nH * 2 - 1 }, O0), tA);
       // Display: blinzeln, LED pulsiert, bei „Saugroboter“ glücklich
@@ -547,15 +573,12 @@
       tl.fromTo(rob.smile, { scale: 1 }, { scale: 1.45, duration: 0.3, ease: "back.out(3)", transformOrigin: "50% 0%", immediateRender: false }, tSaug);
       tl.set(st.robHappy, { opacity: 0 }, tSaug + 0.85);
       tl.set(rob.eyes, { opacity: 1 }, tSaug + 0.85);
-      ANIM.sfx(xToTime(0), "robot", -15, { dur: t1 + 0.35 - xToTime(0) });
+      // Summton ab dem Moment, in dem der Roboter ins Bild rollt
+      let tRobIn = t0;
+      for (let t = tA; t < t1; t += 0.02) { if (toScreenX(robX(t) + robFront, t) > 0) { tRobIn = Math.max(t0, t); break; } }
+      ANIM.sfx(tRobIn, "robot", -15, { dur: t1 + 0.35 - tRobIn });
       ANIM.sfx(tSaug, "beep", -4);
       ANIM.sfx(tSaug + 0.22, "beep", -8);
-      function xToTime(x) {
-        // Zeitpunkt, an dem die Roboter-Vorderkante bei Bildschirm-x ~ x erscheint (grob, für den Summton)
-        const target = x - robFront + 20;
-        const f = (target - xR0) / (xR1 - xR0);
-        return tRa + (Math.acos(1 - 2 * Math.min(1, Math.max(0, f))) / Math.PI) * (tRb - tRa);
-      }
 
       // ---------- „Keine Stolperkante“ ----------
       const tC1 = tKeine + 0.06;
@@ -578,14 +601,34 @@
       // ---------- Lupe ----------
       const tLens = tCrush + 0.06;
       gsap.set(st.markCircle, { drawSVG: "0% 0%" });
-      gsap.set(st.conn, { drawSVG: "0% 0%" });
       gsap.set(st.lens, Object.assign({ scale: 0 }, O0));
       gsap.set(st.railRing, Object.assign({ scale: 0, opacity: 0 }, O0));
       tl.to(st.markCircle, { drawSVG: "0% 100%", duration: 0.28, ease: "power2.inOut" }, tLens);
-      st.conn.forEach((ln) => tl.to(ln, { drawSVG: "0% 100%", duration: 0.28, ease: "power2.out" }, tLens + 0.12));
+      // Verbindungslinien (äußere Tangenten Markierung ↔ Lupe), Lupe ist bildfest → Weltpunkt folgt der Kamera
+      const tConn = tLens + 0.12, dConn = 0.3;
+      let cache = { t: NaN, v: null };
+      const tang = (t) => {
+        if (t === cache.t) return cache.v;
+        const c = camAt(t);
+        const c1 = { x: LENS.cx, y: LENS.cy }, r1 = LENS.r / LENS.z;
+        const c2 = { x: c.cx + (LENS.x - 540) / c.z, y: c.cy + (LENS.y - 960) / c.z }, r2 = (LENS.r + 6) / c.z;
+        const dx = c2.x - c1.x, dy = c2.y - c1.y, dd = Math.hypot(dx, dy), thA = Math.atan2(dy, dx);
+        const g = Math.acos(Math.max(-1, Math.min(1, -(r2 - r1) / dd)));
+        const rev = E.p2(clamp01((t - tConn) / dConn));
+        const v = [1, -1].map((sg) => {
+          const a = thA + sg * g;
+          const x1 = c1.x + r1 * Math.cos(a), y1 = c1.y + r1 * Math.sin(a);
+          const x2 = c2.x + r2 * Math.cos(a), y2 = c2.y + r2 * Math.sin(a);
+          return { x1, y1, x2: x1 + (x2 - x1) * rev, y2: y1 + (y2 - y1) * rev };
+        });
+        cache = { t, v };
+        return v;
+      };
+      st.conn.forEach((ln, i) => ["x1", "y1", "x2", "y2"].forEach((k) => driveAttr(ln, k, (t) => tang(t)[i][k])));
+      tl.set(st.conn, { opacity: 0.95 }, tConn);
       tl.to(st.lens, Object.assign({ scale: 1, duration: 0.48, ease: "back.out(1.6)" }, O0), tLens + 0.2);
       ANIM.sfx(tLens + 0.16, "whooshSoft", -8);
-      tl.fromTo(st.lbl, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, tLens + 0.42);
+      tl.fromTo(st.lbl, { opacity: 0, x: 26 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, tLens + 0.42);
       // Libelle pendelt aus und rastet exakt mittig ein — vor der Durchfahrt wird die Waage weggenommen
       const tLift = tL - 0.3;
       const tClick = Math.min(tLens + 0.86, tLift - 0.22);

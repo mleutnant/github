@@ -55,7 +55,7 @@ PLUCKS: list[tuple[int, int]] = [
     (S["outro"] + 30, 0), (S["outro"] + 45, 2),          # Outro: frame locks, systems line
 ]
 # Dimension lines / counters snapping out → dry snap
-SNAPS = [S["bautiefe"] + 15, S["bautiefe"] + 45, S["groesse"] + 15, S["groesse"] + 45]
+SNAPS = [S["bautiefe"] + 15, S["bautiefe"] + 45, S["groesse"] + 15, S["groesse"] + 60]
 # Marker cascade (Schwellen) and counter ticks (Wärme)
 TICKS = [S["schwellen"] + f for f in range(15, 46, 5)] + [S["waerme"] + f for f in (22, 28, 33, 37, 41, 45)]
 # Glass panes setting down (Verglasung)

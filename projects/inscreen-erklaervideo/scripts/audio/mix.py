@@ -85,7 +85,12 @@ def smooth_gate(n, intervals, att=0.12, rel=0.45):
 def limiter(st, ceiling_db=-1.3, look=0.004, release=0.08):
     """Einfacher Look-ahead-Peak-Limiter (Sample-Peak, mit Reserve für True Peak)."""
     c = db(ceiling_db)
-    peak = np.max(np.abs(st), axis=0)
+    # True-Peak-Erkennung: 4-fach überabgetastet, Maximum je Original-Sample
+    from scipy.signal import resample_poly
+    up = np.abs(resample_poly(st, 4, 1, axis=1))
+    n = st.shape[1]
+    up = up[:, : n * 4].reshape(st.shape[0], n, 4).max(axis=2)
+    peak = np.max(up, axis=0)
     need = np.minimum(1.0, c / np.maximum(peak, 1e-9))
     la = int(look * SR)
     from scipy.ndimage import minimum_filter1d
@@ -165,7 +170,7 @@ def main():
         for _ in range(4):
             li, _ = measure(mix)
             mix *= db(TARGET_MIX - li)
-            mix = limiter(mix, -1.4)
+            mix = limiter(mix, -1.25)
         li, tp = measure(mix)
     else:
         # Vorschau ohne Stimme: gleicher Verstärkungsweg, als wäre die Stimme da (+2 dB)

@@ -23,12 +23,12 @@ OUT_JSON = PROJECT / "script" / "timing.json"
 
 FPS = 30
 EST_CHARS_PER_SEC = 15.5  # Schätzung, nur solange keine echte VO vorliegt
-INTRO = 1.1  # Musik + erste Bewegung vor dem ersten Wort
-OUTRO = 3.2  # Logo-Hold nach dem letzten Wort
+INTRO = 0.9  # Musik + erste Bewegung vor dem ersten Wort
+OUTRO = 2.9  # Logo-Hold nach dem letzten Wort
 # Pause NACH dem jeweiligen Abschnitt (Sekunden). Szenenwechsel bekommen mehr Luft.
 GAP_AFTER = {
-    "s01": 0.55, "s02": 0.45, "s03": 0.55, "s04": 0.45, "s05": 0.85,
-    "s06": 1.35, "s07": 0.5, "s08": 0.6, "s09": 0.4, "s10": 0.55,
+    "s01": 0.45, "s02": 0.4, "s03": 0.45, "s04": 0.35, "s05": 0.6,
+    "s06": 0.95, "s07": 0.4, "s08": 0.45, "s09": 0.3, "s10": 0.45,
 }
 VISUAL_LEAD = 0.3  # Bildwechsel kommt so viel früher als das erste Wort des Abschnitts
 
@@ -85,13 +85,14 @@ def main():
     segs, source = [], "estimated"
     for seg in cfg["segments"]:
         sid = seg["id"]
-        mp3, meta = VO_DIR / f"{sid}.mp3", VO_DIR / f"{sid}.json"
+        meta = VO_DIR / f"{sid}.json"
+        mp3 = next((VO_DIR / f"{sid}.{ext}" for ext in ("mp3", "wav") if (VO_DIR / f"{sid}.{ext}").exists()), VO_DIR / f"{sid}.mp3")
         if mp3.exists() and meta.exists():
             source = "elevenlabs"
             data = json.loads(meta.read_text(encoding="utf-8"))
             words = words_from_alignment(seg["text"], data["alignment"])
             file_dur = audio_duration(mp3)
-            file = f"assets/audio/vo/{sid}.mp3"
+            file = f"assets/audio/vo/{mp3.name}"
         else:
             words = words_estimated(seg["text"])
             file_dur = words[-1]["e"] + 0.05

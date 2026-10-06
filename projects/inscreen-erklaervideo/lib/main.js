@@ -141,7 +141,7 @@
       tl.set(ring, { opacity: 0 }, t1 + 0.12);
       tl.fromTo(hB, { clipPath: `circle(0px at ${tr.cx}px ${tr.cy}px)` }, Object.assign({ clipPath: `circle(${Math.round(rr)}px at ${tr.cx}px ${tr.cy}px)` }, EI, IR), t0);
       tl.set(hB, { clipPath: "none" }, t1 + 0.12);
-      tl.to(hA, { opacity: 0, duration: 0.3, ease: "sine.in" }, t0 + D * 0.3);
+      tl.to(hA, { opacity: 0, duration: 0.18, ease: "power1.in" }, t0);
       tl.set(mi.rect, { attr: { width: 1920, x: 0 } }, t1 + 0.12);
       tl.set(mi.circ, { attr: { r: 0 } }, t1 + 0.12);
     } else if (tr.type === "scan") {

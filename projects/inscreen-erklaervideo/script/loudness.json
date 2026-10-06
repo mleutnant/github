@@ -1,12 +1,13 @@
 {
+ "vo_in": -18.1,
  "stems": {
-  "vo": null,
+  "vo": -14.0,
   "music": -36.0,
   "sfx": -25.0
  },
  "mix": {
-  "lufs": -23.0,
-  "true_peak_dbtp": -2.3,
-  "with_vo": false
+  "lufs": -12.0,
+  "true_peak_dbtp": -1.2,
+  "with_vo": true
  }
 }

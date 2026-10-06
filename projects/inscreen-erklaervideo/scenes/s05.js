@@ -1,0 +1,396 @@
+// s05 — „Sein Rahmen sitzt im Festflügel und in der Schwelle.“
+// Röntgenblick auf DIESELBE QuinLine®-Tür (Bildposition wie im Wohnzimmer): weiße Blueprint-Linien,
+// der InScreen-Rahmen leuchtet gelb auf und zeichnet sich nach, das Profil im Festflügel pulsiert,
+// dann fährt die Kamera auf die Schwelle und eine Lupe zeigt den Schwellen-Querschnitt.
+(function () {
+  // Nominal-Layout: Tür 900×700 bei x 510 / y 185. In build() wird es per BASE exakt auf die
+  // Bildposition der Wohnzimmer-Tür am Ende von s04 gelegt (aus dem Kamera-Endzustand), damit der
+  // Scan wie ein Röntgenblick auf DIESELBE Tür wirkt. Fallback: genau die Nominal-Lage.
+  const OX = 510, OY = 185, W = 900, H = 700, FT = 24, TH = 20;
+  // Kamera-Ziel „Schwelle“: Weltpunkt FOC landet bei SCR, Zoom Z
+  const Z = 2.2, FOC = { x: 976, y: 870 }, SCR = { x: 500, y: 780 };
+  const DRIFT = 1.025; // leichter Push-in vor der Fahrt (Zentrum = Profil-Mitte, damit der Label-Anker sitzt)
+  const PX = OX + 466; // Profil-Mitte (Nominal-x)
+  const LEAD_Y = 338, CHIP_R = 400; // Festflügel-Label (rechte Kante) + Hinweislinie
+  const LENS = { x: 1060, y: 380, r: 250 };
+  const CALL = { x: 1060, y: 780, r: 44 }; // Detailkreis auf der Schwelle (nach der Fahrt)
+  const S_Y = 330, S_X = 1500; // Schwelle-Label
+  const rp = (x0, y0, x1, y1) => `M${x0},${y0} H${x1} V${y1} H${x0} Z`;
+
+  // Tür als Linienzeichnung (lokale Türkoordinaten 900×700, Geometrie wie lib/door.js, Flügel offen)
+  function doorLines(gMain, gThin, gHidden, gPleat) {
+    const { S } = SVGK;
+    const P = (g, d) => S("path", { d }, g);
+    // Blendrahmen + Schwelle
+    P(gMain, rp(0, 0, W, H));
+    P(gMain, rp(FT, FT, W - FT, H - TH));
+    P(gThin, `M0,${H - TH} H${FT} M${W - FT},${H - TH} H${W} M${FT},${H - TH + 13} H${W - FT}`);
+    // Festflügel (hinter dem Schiebeflügel → verdeckte Kanten gestrichelt)
+    P(gHidden, rp(54, 54, 428, 650));
+    // Schiebeflügel, offen über dem Festflügel
+    P(gMain, rp(34, FT, 468, H - TH));
+    P(gMain, rp(70, 60, 432, 644));
+    P(gThin, "M104,236 L236,104 M128,292 L292,128 M330,610 L410,530");
+    S("rect", { x: 441, y: 348, width: 18, height: 32, rx: 6 }, gMain); // HST-Griff
+    S("rect", { x: 443, y: 268, width: 14, height: 104, rx: 7 }, gMain);
+    // InScreen (erst weiß, später gelb nachgezeichnet)
+    P(gMain, rp(458, FT, 876, 36)); // obere Führungsschiene
+    P(gMain, rp(458, 36, 474, 680)); // Integrationsprofil
+    S("rect", { x: 858, y: 36, width: 18, height: 644, rx: 3 }, gMain); // Griffleiste
+    S("rect", { x: 863, y: 322, width: 8, height: 70, rx: 4 }, gMain);
+    P(gThin, rp(458, 680, 876, 690)); // untere Führungsschiene (in der Schwelle)
+    // Plissee geschlossen
+    if (gPleat) {
+      const n = 44, plW = 386;
+      for (let i = 1; i < n; i++) {
+        const x = 472 + (plW / n) * i;
+        S("line", { x1: x, y1: 37, x2: x, y2: 677, opacity: i % 2 ? 0.55 : 1 }, gPleat);
+      }
+    }
+  }
+
+  // Schraffur „/“ in einem Rechteck
+  function hatch(g, xa, ya, xb, yb, step) {
+    for (let c = xa + ya + step; c < xb + yb; c += step) {
+      const x1 = Math.max(xa, c - yb), x2 = Math.min(xb, c - ya);
+      if (x2 > x1) SVGK.S("line", { x1, y1: c - x1, x2, y2: c - x2 }, g);
+    }
+  }
+
+  (window.SCENES = window.SCENES || {}).s05 = {
+    set: "xray",
+    setup(R, ctx) {
+      const { S, G, C, rng } = SVGK;
+      const svg = R.svg;
+      const defs = svg.querySelector("defs") || S("defs", null, svg);
+      const st = SETS.makeStage(svg, { id: "set-xray", dotOpacity: 0.05, gy: 520 });
+      R.sets.xray = st;
+      const q = (st.q = {});
+      const Y = C.yellow;
+
+      // ---- defs: Glow, Scan-Band-Maske, Lupen-Clip ----
+      const fW = S("filter", { id: "s05blur", filterUnits: "userSpaceOnUse", x: -600, y: -600, width: 3200, height: 2400 }, defs);
+      S("feGaussianBlur", { stdDeviation: 6 }, fW);
+      const fY = S("filter", { id: "s05blurY", filterUnits: "userSpaceOnUse", x: -600, y: -600, width: 3200, height: 2400 }, defs);
+      S("feGaussianBlur", { stdDeviation: 7 }, fY);
+      const bandG = S("linearGradient", { id: "s05band", x1: 0, y1: 0, x2: 0, y2: 1 }, defs);
+      [[0, "#000"], [0.8, "#fff"], [1, "#fff"]].forEach(([o, c]) => S("stop", { offset: o, "stop-color": c }, bandG));
+      const mask = S("mask", { id: "s05mask", maskUnits: "userSpaceOnUse", x: -600, y: -600, width: 3200, height: 2400 }, defs);
+      q.band = S("rect", { x: -600, y: -330, width: 3200, height: 330, fill: "url(#s05band)" }, mask);
+      const lc = S("clipPath", { id: "s05lensClip" }, defs);
+      S("circle", { cx: 0, cy: 0, r: LENS.r - 3 }, lc);
+
+      // ---- Kamera: äußere Gruppe = Verschiebung (x/y), innere = Zoom (svgOrigin 0 0) ----
+      q.camT = S("g", null, st.layer);
+      q.camS = S("g", null, q.camT);
+      gsap.set(q.camT, { x: 0, y: 0 });
+      gsap.set(q.camS, { scale: 1, svgOrigin: "0 0" });
+      const cam = q.camS;
+
+      q.bases = [];
+      const base = (parent, attrs) => { const g = S("g", attrs || null, parent); q.bases.push(g); return g; };
+      // Millimeterraster in der Welt (zoomt mit)
+      q.grid = S("g", { stroke: "#fff", "stroke-width": 1, opacity: 0.045 }, cam);
+      for (let x = 10 - 50 * 12; x <= 2600; x += 50) S("line", { x1: x, y1: -415, x2: x, y2: 1500 }, q.grid);
+      for (let y = 35 - 50 * 8; y <= 1500; y += 50) S("line", { x1: -600, y1: y, x2: 2600, y2: y }, q.grid);
+
+      // Boden-Linie mit Schraffur
+      const wB = base(cam);
+      q.ground = S("g", { stroke: "#fff", "stroke-width": 3, opacity: 0.6, fill: "none" }, wB);
+      S("line", { x1: 330, y1: OY + H, x2: 1600, y2: OY + H }, q.ground);
+      S("line", { x1: 330, y1: OY + H + 30, x2: 1600, y2: OY + H + 30, opacity: 0.45 }, q.ground);
+      q.hatch = S("g", { stroke: "#fff", "stroke-width": 2, opacity: 0.3 }, wB);
+      for (let x = 362; x <= 1600; x += 22) S("line", { x1: x, y1: OY + H + 3, x2: x - 25, y2: OY + H + 28 }, q.hatch);
+
+      // Maßlinien (ohne Zahlen) — technischer Look
+      q.dims = S("g", { stroke: C.b5, "stroke-width": 2, opacity: 0.75, fill: "none" }, wB);
+      q.dimLines = [];
+      q.dimTicks = [];
+      const dl = (d) => { const p = S("path", { d }, q.dims); q.dimLines.push(p); return p; };
+      const tick = (x, y) => { const p = S("path", { d: `M${x - 9},${y + 9} L${x + 9},${y - 9}`, "stroke-width": 3 }, q.dims); q.dimTicks.push(p); };
+      const DY = OY - 42, DX = OX - 42;
+      dl(`M${OX},${DY} H${OX + W}`);
+      dl(`M${OX},${OY - 10} V${DY - 14} M${PX - 8},${OY - 10} V${DY - 14} M${OX + W},${OY - 10} V${DY - 14}`);
+      [OX, PX - 8, OX + W].forEach((x) => tick(x, DY));
+      dl(`M${DX},${OY} V${OY + H}`);
+      dl(`M${OX - 10},${OY} H${DX - 14} M${OX - 10},${OY + H} H${DX - 14}`);
+      [OY, OY + H].forEach((y) => tick(DX, y));
+
+      // Nachglühen: (a) Band, das der Scanlinie folgt, (b) allgemeiner Glow, der abklingt
+      q.glowBand = S("g", { mask: "url(#s05mask)", opacity: 1 }, cam);
+      const gb = S("g", { transform: `translate(${OX},${OY})`, stroke: "#dff3ff", "stroke-width": 10, fill: "none", filter: "url(#s05blur)" }, base(q.glowBand));
+      doorLines(gb, gb, gb, null);
+      q.glowAll = S("g", { opacity: 0.6, stroke: "#dff3ff", "stroke-width": 8, fill: "none", filter: "url(#s05blur)" }, wB);
+      q.glowAllW = q.glowAll;
+      const ga = S("g", { transform: `translate(${OX},${OY})` }, q.glowAll);
+      doorLines(ga, ga, ga, null);
+
+      // ---- Tür-Linien ----
+      const D = S("g", { transform: `translate(${OX},${OY})` }, wB);
+      q.D = D;
+      q.fixHL = S("rect", { x: FT, y: FT, width: 458 - FT, height: H - TH - FT, fill: "#fff", opacity: 0 }, D);
+      q.lines = S("g", { opacity: 1, fill: "none", stroke: "#fff", "stroke-linejoin": "round" }, D);
+      q.gHidden = S("g", { "stroke-width": 2.5, "stroke-dasharray": "10 8", opacity: 0.5 }, q.lines);
+      q.gPleat = S("g", { "stroke-width": 1.3, opacity: 0.55 }, q.lines);
+      q.gThin = S("g", { "stroke-width": 2, opacity: 0.62 }, q.lines);
+      q.gMain = S("g", { "stroke-width": 3.5 }, q.lines);
+      doorLines(q.gMain, q.gThin, q.gHidden, q.gPleat);
+
+      // ---- InScreen-Rahmen in Gelb (Glow, Füllung, Strich) ----
+      const yPaths = {
+        profile: "M466,36 H458 V680 H474 V36 H466", // Start oben Mitte → 50 % = Fuß
+        bottom: "M876,685 V680 H458 V690 H876 V685", // 50 % = linkes Ende
+        top: "M876,30 V24 H458 V36 H876 V30",
+        grip: "M867,680 H858 V36 H876 V680 H867", // 50 % = oben Mitte
+        handle: rp(863, 322, 871, 392),
+      };
+      const yRects = { profile: [458, 36, 16, 644], bottom: [458, 680, 418, 10], top: [458, 24, 418, 12], grip: [858, 36, 18, 644], handle: [863, 322, 8, 70] };
+      q.yGlowG = S("g", { stroke: Y, "stroke-width": 14, fill: "none", "stroke-linejoin": "round", filter: "url(#s05blurY)", opacity: 0 }, D);
+      q.yFillG = S("g", { fill: Y, opacity: 0 }, D);
+      q.yStrokeG = S("g", { stroke: Y, "stroke-width": 4.5, fill: "none", "stroke-linejoin": "round" }, D);
+      q.yS = {};
+      q.yG = {};
+      Object.keys(yPaths).forEach((k) => {
+        const [x, y, w, h] = yRects[k];
+        S("rect", { x, y, width: w, height: h }, q.yFillG);
+        q.yG[k] = S("path", { d: yPaths[k] }, q.yGlowG);
+        q.yS[k] = S("path", { d: yPaths[k] }, q.yStrokeG);
+      });
+      q.pFlash = S("rect", { x: 458, y: 36, width: 16, height: 644, fill: Y, opacity: 0 }, D);
+      q.bFlash = S("rect", { x: 458, y: 680, width: 418, height: 10, fill: Y, opacity: 0 }, D);
+      q.rings = [0, 1].map(() => {
+        const g = G(D, { x: 466, y: 358 });
+        S("rect", { x: -8, y: -322, width: 16, height: 644, fill: "none", stroke: Y, "stroke-width": 3, "vector-effect": "non-scaling-stroke" }, g);
+        gsap.set(g, { opacity: 0, scaleX: 1, scaleY: 1, svgOrigin: "0 0" });
+        return g;
+      });
+
+      // ---- Bildschirm-Ebene (zoomt nicht) ----
+      const ov = S("g", null, st.layer);
+      q.ov = ov;
+      // Passermarken in den Ecken
+      const cm = S("g", { stroke: "#fff", "stroke-width": 2, opacity: 0.35, fill: "none" }, ov);
+      [[60, 60, 1, 1], [1860, 60, -1, 1], [60, 1020, 1, -1], [1860, 1020, -1, -1]].forEach(([x, y, sx, sy]) => {
+        S("path", { d: `M${x},${y + sy * 44} V${y} H${x + sx * 44}` }, cm);
+      });
+
+      // Festflügel-Hinweislinie (Anker gleitet bei der Kamerafahrt am Profil mit)
+      q.fLine = S("line", { x1: PX, y1: LEAD_Y, x2: PX, y2: LEAD_Y, stroke: "#fff", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 }, ov);
+      const fa = S("g", { transform: `translate(${PX},${LEAD_Y})` }, ov);
+      q.fAnchor = fa;
+      q.fDotMove = S("g", null, fa); // nur x
+      q.fDot = S("g", null, q.fDotMove); // nur scale (svgOrigin)
+      S("circle", { r: 15, fill: "none", stroke: "#fff", "stroke-width": 2.5, opacity: 0.7 }, q.fDot);
+      S("circle", { r: 7.5, fill: "#fff" }, q.fDot);
+      gsap.set(q.fDot, { scale: 0, svgOrigin: "0 0" });
+
+      // Detailkreis auf der Schwelle + Tangenten zur Lupe
+      const dx = CALL.x - LENS.x, dy = CALL.y - LENS.y, dd = Math.hypot(dx, dy);
+      const ux = dx / dd, uy = dy / dd, nx = -uy, ny = ux;
+      const sn = (LENS.r - CALL.r) / dd, cs = Math.sqrt(1 - sn * sn);
+      q.tangents = [1, -1].map((sg) => {
+        const vx = sg * cs * nx + sn * ux, vy = sg * cs * ny + sn * uy;
+        const p1 = { x: LENS.x + LENS.r * vx, y: LENS.y + LENS.r * vy }, p2 = { x: CALL.x + CALL.r * vx, y: CALL.y + CALL.r * vy };
+        const ln = S("line", { x1: p2.x, y1: p2.y, x2: p2.x, y2: p2.y, stroke: "#fff", "stroke-width": 2.5, "stroke-dasharray": "9 7", opacity: 0.75 }, ov);
+        ln._p1 = p1;
+        return ln;
+      });
+      const cw = G(ov, { x: CALL.x, y: CALL.y });
+      q.call = cw;
+      S("circle", { r: CALL.r, fill: "#fff", opacity: 0.07 }, cw);
+      S("circle", { r: CALL.r, fill: "none", stroke: "#fff", "stroke-width": 4 }, cw);
+      gsap.set(cw, { scale: 0.01, svgOrigin: "0 0" });
+
+      // Schwelle-Hinweislinie
+      const sx0 = LENS.x + Math.sqrt(LENS.r * LENS.r - (S_Y - LENS.y) ** 2);
+      q.sLine = S("line", { x1: sx0, y1: S_Y, x2: sx0, y2: S_Y, stroke: "#fff", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 }, ov);
+
+      // ---- Lupe mit Schwellen-Querschnitt ----
+      const lw = G(ov, { x: LENS.x, y: LENS.y });
+      q.lens = lw;
+      S("circle", { r: LENS.r + 4, fill: "none", stroke: "#0a1f28", "stroke-width": 22, opacity: 0.5 }, lw);
+      S("circle", { r: LENS.r, fill: "#0d2732" }, lw);
+      const cl = S("g", { "clip-path": "url(#s05lensClip)" }, lw);
+      const lg = S("g", { stroke: "#fff", "stroke-width": 1, opacity: 0.07 }, cl);
+      for (let v = -240; v <= 240; v += 30) { S("line", { x1: v, y1: -260, x2: v, y2: 260 }, lg); S("line", { x1: -260, y1: v, x2: 260, y2: v }, lg); }
+      // Querschnitt vergrößert: Schwellen-Mitte (20|Y0) → Lupen-Mitte, Faktor 1,45
+      const sec = S("g", { transform: "translate(0,22) scale(1.45) translate(-20,-40)" }, cl);
+      const Y0 = 40, L = -300, T0 = -84, T1 = 124, RR = 300;
+      const wl = { fill: "none", stroke: "#fff", "stroke-width": 2 };
+      // innen: Bodenbelag, Estrich, Dämmung
+      S("rect", { x: L, y: Y0, width: T0 - L, height: 16, fill: C.b2, stroke: "#fff", "stroke-width": 2 }, sec);
+      const pq = S("g", { stroke: "#fff", "stroke-width": 1.2, opacity: 0.5 }, sec);
+      for (let x = T0 - 40; x > L; x -= 52) S("line", { x1: x, y1: Y0 + 2, x2: x, y2: Y0 + 14 }, pq);
+      S("rect", Object.assign({ x: L, y: Y0 + 16, width: T0 - L, height: 84 }, wl), sec);
+      const hs = S("g", { stroke: "#fff", "stroke-width": 1.2, opacity: 0.35 }, sec);
+      hatch(hs, L, Y0 + 16, T0, Y0 + 100, 14);
+      S("rect", Object.assign({ x: L, y: Y0 + 100, width: T0 - L, height: 160 }, wl), sec);
+      let zz = `M${L},${Y0 + 140}`;
+      for (let x = L, k = 0; x < T0; x += 14, k++) zz += ` L${x + 14},${Y0 + (k % 2 ? 140 : 116)}`;
+      S("path", { d: zz, fill: "none", stroke: "#fff", "stroke-width": 1.5, opacity: 0.4 }, sec);
+      // außen: Terrassenplatte auf Splitt (gleiche Höhe)
+      S("rect", { x: T1, y: Y0, width: RR - T1, height: 28, fill: C.b2, stroke: "#fff", "stroke-width": 2 }, sec);
+      S("line", { x1: 212, y1: Y0, x2: 212, y2: Y0 + 28, stroke: "#fff", "stroke-width": 1.6, opacity: 0.7 }, sec);
+      const gr = S("g", { fill: "#fff", opacity: 0.32 }, sec);
+      const r = rng(505);
+      for (let i = 0; i < 60; i++) S("circle", { cx: T1 + 6 + r() * (RR - T1 - 6), cy: Y0 + 36 + r() * 150, r: 1.3 + r() * 2.2 }, gr);
+      // Rohbau unter Schwelle und Terrasse (Beton-Signatur)
+      S("rect", { x: T0, y: Y0 + 110, width: RR - T0, height: 120, fill: "none", stroke: "#fff", "stroke-width": 1.6, opacity: 0.55 }, sec);
+      const bt = S("g", { fill: "none", stroke: "#fff", "stroke-width": 1.2, opacity: 0.3 }, sec);
+      const rb = rng(506);
+      for (let i = 0; i < 26; i++) {
+        const x = T0 + 10 + rb() * (T1 - T0 - 20), y = Y0 + 122 + rb() * 70, a = rb() * 6.28, k = 5 + rb() * 3;
+        S("path", { d: `M${x + Math.cos(a) * k},${y + Math.sin(a) * k} L${x + Math.cos(a + 2.1) * k},${y + Math.sin(a + 2.1) * k} L${x + Math.cos(a + 4.2) * k},${y + Math.sin(a + 4.2) * k} Z` }, bt);
+      }
+      // Schwellenprofil mit eingelassener Führungsschiene (bündig)
+      S("path", { d: `M${T0},${Y0} H-70 V${Y0 + 36} H-16 V${Y0} H${T1} V${Y0 + 110} H${T0} Z`, fill: C.b1, stroke: "#fff", "stroke-width": 2.6, "stroke-linejoin": "round" }, sec);
+      const ch = S("g", { fill: "none", stroke: "#fff", "stroke-width": 1.5, opacity: 0.7 }, sec);
+      S("rect", { x: -72, y: Y0 + 48, width: 66, height: 52 }, ch);
+      S("rect", { x: 46, y: Y0 + 20, width: 66, height: 80 }, ch);
+      S("rect", { x: 66, y: Y0, width: 14, height: 14 }, ch); // Laufschiene Schiebeflügel
+      S("rect", { x: 4, y: Y0 + 20, width: 30, height: 80 }, ch);
+      const tb = S("g", { stroke: "#fff", "stroke-width": 1.1, opacity: 0.6 }, sec);
+      hatch(tb, 4, Y0 + 20, 34, Y0 + 100, 9);
+      // InScreen-Teile: Führungsschiene gelb, Gleiter rot
+      q.railFill = S("rect", { x: -68, y: Y0 + 1, width: 50, height: 33, fill: Y, opacity: 0.35 }, sec);
+      S("path", { d: `M-68,${Y0} V${Y0 + 34} H-18 V${Y0}`, fill: "none", stroke: Y, "stroke-width": 4, "stroke-linejoin": "round" }, sec);
+      S("path", { d: `M-58,${Y0} V${Y0 + 22} H-28 V${Y0}`, fill: "none", stroke: Y, "stroke-width": 2 }, sec);
+      S("rect", { x: -50, y: Y0 + 6, width: 14, height: 13, rx: 2, fill: C.red }, sec);
+      // Plissee steht in der Schiene
+      let pz = `M-43,${Y0 + 6}`;
+      for (let y = Y0 - 3, k = 0; y > -175; y -= 8, k++) pz += ` L${k % 2 ? -43 + 4 : -43 - 4},${y}`;
+      q.zig = S("path", { d: pz, fill: "none", stroke: "#fff", "stroke-width": 1.8, "stroke-linejoin": "round" }, sec);
+      // gleiche Höhe innen/außen: rote Niveau-Linie + Höhenmarken
+      q.level = S("path", { d: `M-175,${Y0} H215`, stroke: C.red, "stroke-width": 2.4, fill: "none" }, sec);
+      q.levelTri = [-120, 162].map((x) => S("path", { d: `M${x - 10},${Y0 - 20} H${x + 10} L${x},${Y0 - 3} Z`, fill: "none", stroke: C.red, "stroke-width": 2.2, "stroke-linejoin": "round" }, sec));
+      S("circle", { r: LENS.r, fill: "none", stroke: "#fff", "stroke-width": 6 }, lw);
+      gsap.set(lw, { scale: 0.2, opacity: 0, svgOrigin: "0 0" });
+
+      // ---- HUD-Texte ----
+      const hud = R.huds[ctx.id];
+      const css = (e, o) => Object.assign(e.style, o);
+      q.title = ANIM.el("div", "t-label", hud, "Innenansicht");
+      css(q.title, { left: "100px", top: "962px", color: "#fff", fontSize: "32px", opacity: 0.8 });
+      q.legend = ANIM.el("div", "t-label", hud, '<span style="display:inline-block;width:64px;height:7px;border-radius:4px;background:#f6a206;vertical-align:middle;margin:-4px 18px 0 0"></span>InScreen-Rahmen');
+      css(q.legend, { right: "100px", top: "962px", color: "#fff", fontSize: "32px" });
+      q.fChip = ANIM.el("div", "chip", hud, '<span class="bar"></span>Festflügel');
+      css(q.fChip, { right: 1920 - CHIP_R + "px", top: LEAD_Y - 38 + "px", transformOrigin: "100% 50%" });
+      q.sChip = ANIM.el("div", "chip", hud, '<span class="bar"></span>Schwelle');
+      css(q.sChip, { left: S_X + "px", top: S_Y - 38 + "px", transformOrigin: "0% 50%" });
+      q.sSub = ANIM.el("div", "t-body", hud, "Führungsschiene<br>eingelassen");
+      css(q.sSub, { left: S_X + 2 + "px", top: S_Y + 56 + "px", fontSize: "34px", lineHeight: "1.18" });
+      q.inLbl = ANIM.el("div", "t-body", hud, "innen");
+      css(q.inLbl, { left: LENS.x - 165 + "px", top: LENS.y - 92 + "px", fontSize: "30px" });
+      q.outLbl = ANIM.el("div", "t-body", hud, "außen");
+      css(q.outLbl, { left: LENS.x + 140 + "px", top: LENS.y - 92 + "px", fontSize: "30px" });
+      gsap.set([q.inLbl, q.outLbl], { xPercent: -50, yPercent: -50 });
+      gsap.set([q.legend, q.fChip, q.sChip, q.sSub, q.inLbl, q.outLbl], { opacity: 0 });
+    },
+
+    build(ctx, tl, R) {
+      const q = R.sets.xray.q;
+      const t0 = ctx.t0, t1 = ctx.t1;
+      const tScan = t0 - 0.62 * 0.45; // Scan-Übergang aus main.js (Start + Dauer 0,62 s)
+      const tRah = ctx.w("rahmen"), tFest = ctx.w("festflügel"), tSch = ctx.w("schwelle");
+      const dC = 0.54, tC = Math.max(tFest + 0.8, tSch - 0.47); // Kamera kommt auf „Schwelle“ an
+
+      // BASE: Nominal-Tür → Bildposition der Wohnzimmer-Tür am Ende von s04 (letzter Kamera-Tween vor t0)
+      const B = { x: 0, y: 0, s: 1 };
+      try {
+        const lr = R.sets.lr, last = (el) => tl.getTweensOf(el).filter((tw) => tw.startTime() < t0 - 0.05)
+          .sort((a, b) => a.startTime() + a.duration() - (b.startTime() + b.duration())).pop();
+        const tp = last(lr.cam.pos), ts = last(lr.cam.sc);
+        const px = tp && typeof tp.vars.x === "number" ? tp.vars.x : gsap.getProperty(lr.cam.pos, "x");
+        const py = tp && typeof tp.vars.y === "number" ? tp.vars.y : gsap.getProperty(lr.cam.pos, "y");
+        const z = ts && typeof ts.vars.scale === "number" ? ts.vars.scale : gsap.getProperty(lr.cam.sc, "scaleX");
+        const db = lr.doorBox, ds = (z * db.w) / W;
+        const dx = 960 + z * (db.x + px), dy = 540 + z * (db.y + py);
+        if (ds > 0.7 && ds < 1.5 && dx > 200 && dx < 900 && dy > 40 && dy < 400) {
+          B.s = ds; B.x = dx - ds * OX; B.y = dy - ds * OY;
+        }
+      } catch (e) { console.warn("[s05] Tür-Position aus s04 nicht lesbar, nutze Nominal-Lage"); }
+      q.bases.forEach((g) => g.setAttribute("transform", `translate(${B.x},${B.y}) scale(${B.s})`));
+      const ax0 = B.x + B.s * PX; // Profil-Mitte vor dem Zoom (Bildschirm)
+      q.fLine.setAttribute("x1", ax0); q.fLine.setAttribute("x2", ax0);
+      q.fAnchor.setAttribute("transform", `translate(${ax0},${LEAD_Y})`);
+      // Kamera-Ziel: Nominal-Punkt FOC → SCR bei Gesamt-Zoom Z
+      const cS = Z / B.s, cX = SCR.x - cS * B.x - Z * FOC.x, cY = SCR.y - cS * B.y - Z * FOC.y;
+
+      // 1) Linienzeichnung steht — Nachglühen hinter der Scanlinie, Maßlinien zeichnen sich
+      tl.to(q.band, { attr: { y: 1080 - 330 }, duration: 0.62, ease: "power2.inOut" }, tScan);
+      tl.to(q.glowBand, { opacity: 0, duration: 0.5, ease: "sine.out" }, t0 + 0.28);
+      tl.to(q.glowAll, { opacity: 0.12, duration: 1.0, ease: "power2.out" }, t0 + 0.05);
+      tl.to(q.lines, { opacity: 0.85, duration: 0.8, ease: "sine.inOut" }, t0 + 0.1);
+      tl.fromTo(q.dimLines, { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", duration: 0.55, ease: "power2.out", stagger: 0.07 }, t0 - 0.05);
+      tl.fromTo(q.dimTicks, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "power1.out", stagger: 0.04 }, t0 + 0.3);
+      // leichter Push-in bis zur Kamerafahrt (Zentrum = Profil-Mitte)
+      tl.to(q.camT, { x: ax0 * (1 - DRIFT), y: 540 * (1 - DRIFT), duration: tC - (t0 + 0.35), ease: "sine.inOut" }, t0 + 0.35);
+      tl.to(q.camS, { scale: DRIFT, svgOrigin: "0 0", duration: tC - (t0 + 0.35), ease: "sine.inOut" }, t0 + 0.35);
+
+      // 2) „Rahmen“: InScreen-Rahmen leuchtet gelb auf und zeichnet sich nach
+      const yd = (k, t, dur, ease, mid) =>
+        tl.fromTo([q.yS[k], q.yG[k]], { drawSVG: mid ? "50% 50%" : "0% 0%" }, { drawSVG: "0% 100%", duration: dur, ease }, t);
+      yd("profile", tRah - 0.06, 0.36, "power2.inOut", true);
+      yd("bottom", tRah + 0.08, 0.42, "power2.out", true);
+      yd("top", tRah + 0.24, 0.38, "power2.inOut", true);
+      yd("grip", tRah + 0.5, 0.32, "power2.inOut", true);
+      yd("handle", tRah + 0.74, 0.22, "power2.out", false);
+      tl.to(q.yGlowG, { opacity: 1, duration: 0.25, ease: "power2.out" }, tRah - 0.06);
+      tl.to(q.yGlowG, { opacity: 0.45, duration: 0.5, ease: "sine.inOut" }, tRah + 0.95);
+      tl.to(q.yFillG, { opacity: 0.2, duration: 0.45, ease: "sine.out" }, tRah + 0.3);
+      ANIM.burst(tl, q.D, 466, 30, tRah + 0.27, { n: 7, len: 22, w: 4, r0: 14, seed: 551 });
+      ANIM.burst(tl, q.D, 867, 686, tRah + 0.8, { n: 7, len: 22, w: 4, r0: 14, seed: 552 });
+      tl.fromTo(q.legend, { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, tRah + 0.12);
+      ANIM.sfx(tRah - 0.02, "sparkle", -3);
+      // Glow atmet bis zum Szenenende
+      const tB = tRah + 1.45, per = 0.62, nB = Math.floor((t1 - tB) / per);
+      if (nB >= 1) tl.to(q.yGlowG, { opacity: 0.85, duration: per, ease: "sine.inOut", yoyo: true, repeat: nB - 1 }, tB);
+
+      // 3) „Festflügel“: Profil pulsiert, Hinweislinie + Label
+      tl.to(q.fixHL, { opacity: 0.08, duration: 0.25, ease: "power2.out" }, tFest - 0.06);
+      tl.to(q.fixHL, { opacity: 0.035, duration: 0.6, ease: "sine.inOut" }, tFest + 0.45);
+      [0, 0.32].forEach((dt, i) => {
+        tl.to(q.pFlash, { opacity: 0.85, duration: 0.12, ease: "power2.out" }, tFest - 0.04 + dt);
+        tl.to(q.pFlash, { opacity: 0.25, duration: 0.2, ease: "sine.inOut" }, tFest + 0.08 + dt);
+        tl.fromTo(q.rings[i], { scaleX: 1, scaleY: 1, opacity: 0.9, svgOrigin: "0 0" },
+          { scaleX: 3.6, scaleY: 1.025, opacity: 0, duration: 0.55, ease: "power2.out", svgOrigin: "0 0", immediateRender: false }, tFest - 0.04 + dt);
+      });
+      tl.to(q.fDot, { scale: 1, duration: 0.3, ease: "back.out(2.5)", svgOrigin: "0 0" }, tFest - 0.08);
+      tl.set(q.fLine, { opacity: 1 }, tFest - 0.06);
+      tl.to(q.fLine, { attr: { x2: CHIP_R + 4 }, duration: 0.32, ease: "expo.out" }, tFest - 0.06);
+      tl.fromTo(q.fChip, { opacity: 0, x: 26, scale: 0.85 }, { opacity: 1, x: 0, scale: 1, duration: 0.42, ease: "back.out(1.7)" }, tFest + 0.02);
+      ANIM.sfx(tFest, "ding", -4);
+
+      // 4) „Schwelle“: Kamera fährt flott auf die Schwelle, Lupe mit Querschnitt
+      const eC = "power3.inOut";
+      tl.to(q.camT, { x: cX, y: cY, duration: dC, ease: eC }, tC);
+      tl.to(q.camS, { scale: cS, svgOrigin: "0 0", duration: dC, ease: eC }, tC);
+      // Strichstärken mitführen, damit die Linien beim Zoom nicht klobig werden
+      [[q.gMain, 2.5], [q.gThin, 1.5], [q.gHidden, 1.6], [q.gPleat, 0.95], [q.yStrokeG, 3.2], [q.yGlowG, 9],
+        [q.glowAllW, 5], [q.ground, 2], [q.hatch, 1.4], [q.grid, 0.6]].forEach(([el, v]) =>
+        tl.to(el, { attr: { "stroke-width": v }, duration: dC, ease: eC }, tC));
+      const ax = SCR.x + Z * (PX - FOC.x); // Profil-Mitte nach dem Zoom
+      tl.to(q.fLine, { attr: { x1: ax }, duration: dC, ease: eC }, tC);
+      tl.to(q.fDotMove, { x: ax - ax0, duration: dC, ease: eC }, tC);
+      ANIM.sfx(tC, "whooshSoft", -4);
+
+      tl.to(q.bFlash, { opacity: 0.8, duration: 0.18, ease: "power2.out" }, tSch - 0.1);
+      tl.to(q.bFlash, { opacity: 0.3, duration: 0.45, ease: "sine.inOut" }, tSch + 0.1);
+      tl.to(q.call, { scale: 1, duration: 0.32, ease: "back.out(2)", svgOrigin: "0 0" }, tSch - 0.12);
+      q.tangents.forEach((ln) => tl.to(ln, { attr: { x2: ln._p1.x, y2: ln._p1.y }, duration: 0.3, ease: "power2.out" }, tSch - 0.08));
+      tl.to(q.lens, { scale: 1, opacity: 1, duration: 0.48, ease: "back.out(1.5)", svgOrigin: "0 0" }, tSch - 0.08);
+      tl.fromTo(q.zig, { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", duration: 0.42, ease: "power2.out" }, tSch + 0.06);
+      tl.fromTo(q.level, { drawSVG: "50% 50%" }, { drawSVG: "0% 100%", duration: 0.4, ease: "power3.out" }, tSch + 0.14);
+      tl.fromTo(q.levelTri, { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.3, ease: "back.out(2)", stagger: 0.06 }, tSch + 0.28);
+      tl.to(q.railFill, { opacity: 0.85, duration: 0.18, ease: "power2.out" }, tSch + 0.16);
+      tl.to(q.railFill, { opacity: 0.42, duration: 0.4, ease: "sine.inOut" }, tSch + 0.34);
+      tl.set(q.sLine, { opacity: 1 }, tSch - 0.02);
+      tl.to(q.sLine, { attr: { x2: S_X - 10 }, duration: 0.28, ease: "expo.out" }, tSch - 0.02);
+      tl.fromTo(q.sChip, { opacity: 0, x: -26, scale: 0.85 }, { opacity: 1, x: 0, scale: 1, duration: 0.42, ease: "back.out(1.7)" }, tSch + 0.02);
+      tl.fromTo(q.sSub, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.36, ease: "power2.out" }, tSch + 0.14);
+      tl.fromTo([q.inLbl, q.outLbl], { opacity: 0 }, { opacity: 0.9, duration: 0.3, ease: "power1.out", stagger: 0.05 }, tSch + 0.16);
+      ANIM.sfx(tSch, "ding", -3);
+      // 5) Halten bis ctx.t1 (Glow atmet weiter), danach Scan-Übergang
+    },
+  };
+})();

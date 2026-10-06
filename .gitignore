@@ -37,3 +37,10 @@ projects/*/compositions/animations/*/render*.webm
 # OS
 .DS_Store
 Thumbs.db
+
+# InScreen-Erklärvideo: regenerierbare Audio-Zwischenstände
+projects/inscreen-erklaervideo/assets/audio/stems/
+projects/inscreen-erklaervideo/assets/audio/sfx/
+projects/inscreen-erklaervideo/assets/audio/music.wav
+projects/inscreen-erklaervideo/renders/
+projects/inscreen-erklaervideo/assets/audio/mix.wav

@@ -1,0 +1,426 @@
+[
+ {
+  "t": 2.587,
+  "name": "clunk",
+  "gain": -4
+ },
+ {
+  "t": 3.535,
+  "name": "slide",
+  "gain": -6,
+  "dur": 1.25
+ },
+ {
+  "t": 4.805,
+  "name": "thud",
+  "gain": -10
+ },
+ {
+  "t": 4.916,
+  "name": "breathIn",
+  "gain": -12
+ },
+ {
+  "t": 4.966,
+  "name": "breeze",
+  "gain": -8
+ },
+ {
+  "t": 5.596,
+  "name": "buzzIn",
+  "gain": -6,
+  "dur": 3.505999999999999
+ },
+ {
+  "t": 8.673,
+  "name": "whoosh",
+  "gain": -2
+ },
+ {
+  "t": 8.682,
+  "name": "swish",
+  "gain": -6
+ },
+ {
+  "t": 9.222,
+  "name": "swish",
+  "gain": -12
+ },
+ {
+  "t": 9.452,
+  "name": "whoosh",
+  "gain": -4
+ },
+ {
+  "t": 9.912,
+  "name": "thud",
+  "gain": 0
+ },
+ {
+  "t": 9.982,
+  "name": "boing",
+  "gain": -11
+ },
+ {
+  "t": 10.272,
+  "name": "thud",
+  "gain": -9
+ },
+ {
+  "t": 11.019,
+  "name": "pop",
+  "gain": -6
+ },
+ {
+  "t": 11.229,
+  "name": "clunk",
+  "gain": -7
+ },
+ {
+  "t": 11.954,
+  "name": "sparkle",
+  "gain": -6
+ },
+ {
+  "t": 11.974,
+  "name": "pop",
+  "gain": -6
+ },
+ {
+  "t": 12.234,
+  "name": "buzzShort",
+  "gain": -14
+ },
+ {
+  "t": 12.441,
+  "name": "whooshSoft",
+  "gain": -11
+ },
+ {
+  "t": 12.651,
+  "name": "tap",
+  "gain": -15
+ },
+ {
+  "t": 12.821,
+  "name": "tap",
+  "gain": -15
+ },
+ {
+  "t": 12.991,
+  "name": "tap",
+  "gain": -15
+ },
+ {
+  "t": 13.161,
+  "name": "trip",
+  "gain": -2
+ },
+ {
+  "t": 13.181,
+  "name": "pop",
+  "gain": -6
+ },
+ {
+  "t": 13.431,
+  "name": "bonk",
+  "gain": -2
+ },
+ {
+  "t": 13.491,
+  "name": "stars",
+  "gain": -6
+ },
+ {
+  "t": 14.011,
+  "name": "whooshSoft",
+  "gain": -12
+ },
+ {
+  "t": 14.123,
+  "name": "swish",
+  "gain": -5
+ },
+ {
+  "t": 14.603,
+  "name": "pop",
+  "gain": -6
+ },
+ {
+  "t": 14.623,
+  "name": "drill",
+  "gain": -3,
+  "dur": 0.8079999999999992
+ },
+ {
+  "t": 15.381,
+  "name": "scribble",
+  "gain": -4
+ },
+ {
+  "t": 15.621,
+  "name": "scribble",
+  "gain": -5
+ },
+ {
+  "t": 16.148,
+  "name": "whooshSoft",
+  "gain": -2
+ },
+ {
+  "t": 17.337,
+  "name": "zip",
+  "gain": -3,
+  "dur": 0.95
+ },
+ {
+  "t": 17.387,
+  "name": "pop",
+  "gain": -4
+ },
+ {
+  "t": 18.287,
+  "name": "magnet",
+  "gain": -2
+ },
+ {
+  "t": 18.337,
+  "name": "sparkle",
+  "gain": -6
+ },
+ {
+  "t": 18.52,
+  "name": "buzzShort",
+  "gain": -8
+ },
+ {
+  "t": 18.57,
+  "name": "boing",
+  "gain": -10
+ },
+ {
+  "t": 19.682,
+  "name": "ding",
+  "gain": -10
+ },
+ {
+  "t": 20.804,
+  "name": "pop",
+  "gain": -6
+ },
+ {
+  "t": 22.324,
+  "name": "whoosh",
+  "gain": -2
+ },
+ {
+  "t": 23.156,
+  "name": "sparkle",
+  "gain": -3
+ },
+ {
+  "t": 24.219,
+  "name": "ding",
+  "gain": -4
+ },
+ {
+  "t": 25.179,
+  "name": "whooshSoft",
+  "gain": -4
+ },
+ {
+  "t": 25.649,
+  "name": "ding",
+  "gain": -3
+ },
+ {
+  "t": 26.051,
+  "name": "whoosh",
+  "gain": -2
+ },
+ {
+  "t": 26.58,
+  "name": "slide",
+  "gain": -8,
+  "dur": 1.05
+ },
+ {
+  "t": 27.412,
+  "name": "whooshSoft",
+  "gain": -8
+ },
+ {
+  "t": 27.59,
+  "name": "click",
+  "gain": -6
+ },
+ {
+  "t": 27.962,
+  "name": "ding",
+  "gain": -8
+ },
+ {
+  "t": 29.275,
+  "name": "sparkle",
+  "gain": -8
+ },
+ {
+  "t": 30.948,
+  "name": "whooshSoft",
+  "gain": -10
+ },
+ {
+  "t": 31.298,
+  "name": "pop",
+  "gain": -8
+ },
+ {
+  "t": 31.548,
+  "name": "pop",
+  "gain": -6
+ },
+ {
+  "t": 32.248,
+  "name": "pop",
+  "gain": -6
+ },
+ {
+  "t": 32.948,
+  "name": "sparkle",
+  "gain": -6
+ },
+ {
+  "t": 41.004,
+  "name": "pop",
+  "gain": -8
+ },
+ {
+  "t": 42.115,
+  "name": "slide",
+  "gain": -12,
+  "dur": 0.75
+ },
+ {
+  "t": 42.781,
+  "name": "slide",
+  "gain": -12,
+  "dur": 0.55
+ },
+ {
+  "t": 42.781,
+  "name": "pop",
+  "gain": -10
+ },
+ {
+  "t": 43.327,
+  "name": "slide",
+  "gain": -12,
+  "dur": 0.45
+ },
+ {
+  "t": 43.843,
+  "name": "slide",
+  "gain": -12,
+  "dur": 0.55
+ },
+ {
+  "t": 44.279,
+  "name": "buzzShort",
+  "gain": -6
+ },
+ {
+  "t": 44.393,
+  "name": "magnet",
+  "gain": -4
+ },
+ {
+  "t": 44.829,
+  "name": "bonk",
+  "gain": -2
+ },
+ {
+  "t": 44.849,
+  "name": "boing",
+  "gain": -6
+ },
+ {
+  "t": 45.129,
+  "name": "stars",
+  "gain": -10
+ },
+ {
+  "t": 45.665,
+  "name": "swish",
+  "gain": -14
+ },
+ {
+  "t": 46.081,
+  "name": "buzzShort",
+  "gain": -12
+ },
+ {
+  "t": 63.014,
+  "name": "pop",
+  "gain": -7
+ },
+ {
+  "t": 63.614,
+  "name": "pop",
+  "gain": -16
+ },
+ {
+  "t": 63.664,
+  "name": "click",
+  "gain": -12
+ },
+ {
+  "t": 63.968,
+  "name": "pop",
+  "gain": -7
+ },
+ {
+  "t": 64.098,
+  "name": "boing",
+  "gain": -10
+ },
+ {
+  "t": 65.051,
+  "name": "pop",
+  "gain": -7
+ },
+ {
+  "t": 66.143,
+  "name": "whoosh",
+  "gain": -4
+ },
+ {
+  "t": 67.028,
+  "name": "sparkle",
+  "gain": -4
+ },
+ {
+  "t": 70.577,
+  "name": "ding",
+  "gain": -6
+ },
+ {
+  "t": 71.177,
+  "name": "zip",
+  "gain": -8
+ },
+ {
+  "t": 71.677,
+  "name": "bonk",
+  "gain": -6
+ },
+ {
+  "t": 71.707,
+  "name": "boing",
+  "gain": -9
+ },
+ {
+  "t": 72.377,
+  "name": "buzzShort",
+  "gain": -12
+ }
+]

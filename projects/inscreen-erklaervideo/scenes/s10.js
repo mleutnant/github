@@ -29,7 +29,7 @@
     const L = P.L, Cx = P.Cx;
 
     // ---- Karton (vor der Tür, landet bei „InScreen“) ----
-    const BW = 690, BH = 200, bxc = Cx - 20, byb = 1000;
+    const BW = 690, BH = 170, bxc = Cx - 50, byb = 1045;
     P.box = { w: BW, h: BH, x: bxc, y: byb };
     P.boxShadow = S("ellipse", { cx: bxc, cy: byb + 4, rx: BW / 2 + 40, ry: 20, fill: C.blue, opacity: 0.16 }, L.front);
     const mv = S("g", null, L.front);
@@ -48,21 +48,19 @@
     S("rect", { x: -BW / 2, y: -BH, width: 10, height: BH, fill: C.oak3, opacity: 0.35 }, sq);
     S("rect", { x: BW / 2 - 10, y: -BH, width: 10, height: BH, fill: C.oak1, opacity: 0.3 }, sq);
     // Klebeband
-    S("rect", { x: -24, y: -BH, width: 48, height: 62, fill: "#efe5d3", opacity: 0.55 }, sq);
-    // „Diese Seite oben“-Pfeile
-    [BW / 2 - 70, BW / 2 - 42].forEach((x) => S("path", { d: `M${x},-118 v-34 m-10,12 l10,-12 l10,12`, stroke: C.oak1, "stroke-width": 4, fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" }, sq));
+    S("rect", { x: -24, y: -BH, width: 48, height: 50, fill: "#efe5d3", opacity: 0.55 }, sq);
     // Marken-Rahmenlinien + Aufschrift
-    S("path", { d: `M${-BW / 2 + 40},-64 V-112 H${-BW / 2 + 150}`, stroke: C.yellow, "stroke-width": 8, fill: "none" }, sq);
-    S("path", { d: `M${BW / 2 - 150},-22 H${BW / 2 - 40} V-70`, stroke: C.red, "stroke-width": 8, fill: "none" }, sq);
-    const tx = S("text", { x: 0, y: -50, "text-anchor": "middle", fill: C.blue, style: "font-family:'Filson Pro',sans-serif;font-weight:800;font-size:44px;" }, sq);
+    S("path", { d: `M${-BW / 2 + 40},-56 V-100 H${-BW / 2 + 150}`, stroke: C.yellow, "stroke-width": 8, fill: "none" }, sq);
+    S("path", { d: `M${BW / 2 - 150},-16 H${BW / 2 - 40} V-60`, stroke: C.red, "stroke-width": 8, fill: "none" }, sq);
+    const tx = S("text", { x: 0, y: -40, "text-anchor": "middle", fill: C.blue, style: "font-family:'Filson Pro',sans-serif;font-weight:800;font-size:42px;" }, sq);
     tx.innerHTML = 'InScreen<tspan fill="#e3002c" dx="16" font-weight="700">|</tspan><tspan dx="16" font-weight="700">Plug-&amp;-Play-Set</tspan>';
     // Vorderlasche: geschlossen = Deckel (flach, nach oben), offen = hängt vorne herunter
     const flap = G(sq, { x: 0, y: -BH });
     P.flap = flap;
-    S("rect", { x: -BW / 2, y: 0, width: BW, height: 70, fill: C.oak3 }, flap);
-    S("rect", { x: -BW / 2, y: 62, width: BW, height: 8, fill: C.oak1, opacity: 0.45 }, flap);
-    S("rect", { x: -24, y: 0, width: 48, height: 70, fill: "#efe5d3", opacity: 0.5 }, flap);
-    gsap.set(flap, { scaleY: -0.2, svgOrigin: "0 0" });
+    S("rect", { x: -BW / 2, y: 0, width: BW, height: 52, fill: C.oak3 }, flap);
+    S("rect", { x: -BW / 2, y: 45, width: BW, height: 7, fill: C.oak1, opacity: 0.45 }, flap);
+    S("rect", { x: -24, y: 0, width: 48, height: 52, fill: "#efe5d3", opacity: 0.5 }, flap);
+    gsap.set(flap, { scaleY: -0.26, svgOrigin: "0 0" });
     gsap.set(P.ears, { scale: 0, svgOrigin: "0 0" });
     gsap.set(mv, { y: -1100 });
     gsap.set(P.boxShadow, { opacity: 0 });
@@ -71,7 +69,7 @@
     const cmv = S("g", null, L.mid);
     P.cassMv = cmv;
     gsap.set(cmv, { opacity: 0 });
-    P.cassBox = { x: Cx - 20, y: byb - BH + 30 };
+    P.cassBox = { x: bxc, y: byb - BH + 26 };
     const cw = G(cmv, { x: P.cassBox.x, y: P.cassBox.y, rot: 90 });
     drawCassette(cw, P.cassH);
     P.cassHand = S("g", { opacity: 0 }, P.hold.armR.content);
@@ -84,7 +82,7 @@
     [0, 8, 16].forEach((y) => S("path", { d: `M-2,${y} h16`, stroke: C.skin3, "stroke-width": 2.6, "stroke-linecap": "round" }, fist));
 
     // ---- Bohrmaschine (mit beleidigtem Gesicht) + Schrauben ----
-    const DXd = Cx + 790, DYd = 410;
+    const DXd = Cx + 765, DYd = 410;
     const dmv = S("g", null, L.fx);
     P.drill = { mv: dmv };
     const pop = G(dmv, { x: DXd, y: DYd });
@@ -147,6 +145,9 @@
     ].map((d) => S("path", { d, stroke: C.red, "stroke-width": 12, fill: "none", "stroke-linecap": "round" }, smv));
     gsap.set(P.screws.strikes, { drawSVG: "0% 0%" });
 
+    // Einrast-Blitz entlang des Profils
+    P.snapLine = S("line", { x1: P.gripX0 - 3, y1: P.cassTop + 6, x2: P.gripX0 - 3, y2: P.cassTop + P.cassH - 6, stroke: C.yellow, "stroke-width": 7, "stroke-linecap": "round", opacity: 0 }, L.fx);
+
     // ---- Funkeln beim Zwinkern + Staubwölkchen ----
     const sparkle = (x, y, r) => {
       const g = G(L.fx, { x, y });
@@ -198,7 +199,7 @@
     tl.set(P.tape, { opacity: 0 }, t0 + 0.34);
     ANIM.sfx(t0 + 0.32, "swish", -12);
     P.armTo(tl, t0 + 0.4, "armR", [-12, 10], 0.34, "back.out(1.6)");
-    P.armTo(tl, t0 + 0.1, "armL", [14, -24], 0.42, "power2.inOut", { angle: -92 });
+    P.armTo(tl, t0 + 0.1, "armL", [9, -10], 0.42, "power2.inOut", { angle: 86 });
     ben.look(tl, t0 + 0.1, 0, 1, 0.2).mouth(tl, t0 + 0.12, "smile").brows(tl, t0 + 0.1, "neutral", 0.2);
     tl.to(ben.head, Object.assign({ rotation: 0, duration: 0.3, ease: "power2.out" }, O0), t0 + 0.08);
 
@@ -226,21 +227,21 @@
     tl.to(P.flap, Object.assign({ scaleY: 1, duration: 0.4, ease: "back.out(1.7)" }, O0), tPlug);
     P.ears.forEach((e, i) => tl.to(e, Object.assign({ scale: 1, duration: 0.34, ease: "back.out(2.6)" }, O0), tPlug + 0.06 + i * 0.05));
     ANIM.sfx(tPlug, "box", -2);
-    tl.to(P.cassMv, { y: -28, duration: 0.32, ease: "back.out(2.6)" }, tPlug + 0.14);
+    tl.to(P.cassMv, { y: -40, duration: 0.32, ease: "back.out(2.6)" }, tPlug + 0.14);
     ANIM.sfx(tPlug + 0.16, "pop", -8);
 
     // ---- Kassette greifen (Ben taucht hinter den Karton) ----
-    const tPress = tClip - 0.04; // Andrücken -> Klick bei tClick
+    const tLift = Math.max(tPlug + 0.62, tClip - 0.7);
+    const tPress = Math.max(tClip - 0.04, tLift + 0.4); // Andrücken -> Klick bei tClick
     const tClick = tPress + 0.1;
-    const tLift = Math.max(tPlug + 0.62, tPress - 0.66);
     const tGrab = tLift - 0.04;
     const tCr = Math.max(tPlug + 0.2, tGrab - 0.36);
-    const crY = 115, th = 62;
-    ben.breathe(tl, t0, tCr - 0.05, 0.013, 1.7);
+    const crY = 168, th = 77;
+    P.breathe(tl, t0, tCr - 0.05);
     tl.to(ben.lean, { y: crY, duration: tGrab - tCr, ease: "power2.inOut" }, tCr);
     ben.pose(tl, tCr, { legL: [th, -2 * th], legR: [-th, 2 * th] }, tGrab - tCr, "power2.inOut");
     P.state.lean = crY;
-    const cassTarget = { x: P.cassBox.x, y: P.cassBox.y - 28 };
+    const cassTarget = { x: P.cassBox.x, y: P.cassBox.y - 40 };
     P.armTo(tl, tCr + 0.02, "armR", cassTarget, tGrab - tCr - 0.02, "power2.inOut", { angle: 90 });
     ben.look(tl, tCr, 3, 8, 0.15).brows(tl, tCr, "neutral", 0.2).mouth(tl, tCr + 0.05, "o");
     cam.to(tl, tCr, PUSH, tClick - 0.12 - tCr, "sine.inOut");
@@ -263,11 +264,14 @@
     tl.set(P.cassHand, { opacity: 0 }, tClick);
     tl.set([door.pleat, door.grip], { opacity: 1 }, tClick);
     ANIM.sfx(tClick, "click", 0);
+    tl.set(P.snapLine, { opacity: 1 }, tClick);
+    tl.fromTo(P.snapLine, { drawSVG: "50% 50%" }, { drawSVG: "0% 100%", duration: 0.2, ease: "power3.out" }, tClick);
+    tl.to(P.snapLine, { opacity: 0, duration: 0.3, ease: "power1.in" }, tClick + 0.22);
     ANIM.burst(tl, P.L.fx, P.gripX0 - 6, P.cassTop + 70, tClick, { color: C.yellow, n: 8, len: 26, r0: 16, w: 5, seed: 41 });
     ANIM.burst(tl, P.L.fx, P.gripX0 - 6, P.cassTop + 470, tClick + 0.04, { color: C.yellow, n: 7, len: 22, r0: 14, w: 5, seed: 43 });
     cam.shake(tl, tClick, 5, 0.15);
     ben.mouth(tl, tClick + 0.04, "grin").brows(tl, tClick + 0.04, "happy", 0.15);
-    ben.breathe(tl, tClick + 0.3, t1, 0.013, 1.7);
+    P.breathe(tl, tClick + 0.3, t1);
 
     // ---- Plissee gleitet zu (Ben gibt der Griffleiste einen Schubs) ----
     const tZip = tClick + 0.16, zDur = 0.8;
@@ -275,11 +279,12 @@
     ANIM.sfx(tZip, "zip", -3, { dur: zDur });
     const pp = 0.17 / zDur, push = P.door.geo.plW * (pp < 0.5 ? 2 * pp * pp : 1 - 2 * (1 - pp) * (1 - pp));
     P.armTo(tl, tZip, "armR", { x: P.gripCX + push, y: P.cassCY }, 0.17, "power2.in");
-    P.armTo(tl, tZip + 0.19, "armR", [-24, 22], 0.36, "power2.out");
+    const dRel = Math.min(0.36, tFertig - 0.11 - (tZip + 0.19));
+    if (dRel > 0.12) P.armTo(tl, tZip + 0.19, "armR", [-24, 22], dRel, "power2.out");
     ben.look(tl, tZip + 0.05, 8, 0, 0.25);
 
     // ---- „fertig“: Daumen hoch ----
-    const tThumb = tFertig - 0.1;
+    const tThumb = Math.max(tFertig - 0.1, tZip + 0.2);
     P.armTo(tl, tThumb, "armR", [-42, -96], 0.36, "back.out(2)", { angle: 0 });
     tl.set(P.handR, { opacity: 0 }, tThumb + 0.08);
     tl.set(P.fist, { opacity: 1 }, tThumb + 0.08);
@@ -291,7 +296,7 @@
     // ---- „ohne Bohren und Schrauben“ ----
     const D = P.drill;
     const tDr = tOhne - 0.12;
-    tl.to(D.pop, Object.assign({ scale: 1.18, duration: 0.38, ease: "back.out(2.2)" }, O0), tDr);
+    tl.to(D.pop, Object.assign({ scale: 1.12, duration: 0.38, ease: "back.out(2.2)" }, O0), tDr);
     ANIM.sfx(tDr, "pop", -8);
     ANIM.sfx(tDr + 0.1, "drill", -9, { dur: 0.5 });
     const nSp = Math.max(2, Math.round((tBohr - tDr - 0.05) / 0.06));
@@ -347,7 +352,7 @@
     ANIM.sfx(tOff + 0.12, "swish", -10);
     // Ben lacht
     ben.mouth(tl, tOff + 0.05, "grin").eyesClosed(tl, tOff + 0.05, true).eyesClosed(tl, tOff + 0.42, false);
-    P.armTo(tl, tOff, "armR", [-14, 10], 0.4, "power2.inOut", { angle: 0 });
+    P.armTo(tl, tOff, "armR", [-14, 10], Math.max(0.15, Math.min(0.4, tNach - 0.05 - tOff)), "power2.inOut", { angle: 0 });
     tl.to(ben.lean, { y: -6, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 3 }, tOff + 0.05);
 
     // ---- „Nachrüsten?“: Chips ----
@@ -355,7 +360,7 @@
       tl.fromTo(c, { opacity: 0, scale: 0.6, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.42, ease: "back.out(1.9)" }, tNach + 0.02 + i * 0.2);
       ANIM.sfx(tNach + 0.02 + i * 0.2, "pop", -6);
     });
-    const chin = { x: Bx + 26, y: P.BY - P.s * 470 };
+    const chin = { x: Bx + 22, y: P.BY - P.s * 438 };
     P.armTo(tl, tNach - 0.02, "armR", chin, 0.38, "power2.inOut", { bend: 1 });
     ben.look(tl, tNach + 0.05, 4, -8, 0.2).brows(tl, tNach + 0.05, "surprised", 0.2).mouth(tl, tNach + 0.1, "o");
     tl.to(ben.head, Object.assign({ rotation: -5, duration: 0.35, ease: "power2.inOut" }, O0), tNach + 0.05);

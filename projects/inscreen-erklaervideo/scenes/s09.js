@@ -98,14 +98,14 @@
     }
     [[lx - 52, ly], [lx + 54, ly]].forEach(([x, y]) => S("rect", { x: x - 12, y: y - 6, width: 24, height: 12, rx: 4, fill: C.an1 }, lad));
     const pail = S("g", null, pr);
-    const px = lx + 170, py = FL + 56;
+    const px = lx + 150, py = FL + 50;
     S("ellipse", { cx: px, cy: py + 2, rx: 50, ry: 8, fill: C.blue, opacity: 0.14 }, pail);
     S("path", { d: `M${px - 40},${py - 86} L${px - 34},${py} H${px + 34} L${px + 40},${py - 86} Z`, fill: "#fbf8f2" }, pail);
     S("rect", { x: px - 44, y: py - 94, width: 88, height: 14, rx: 5, fill: C.b4 }, pail);
     S("path", { d: `M${px - 38},${py - 88} Q${px},${py - 140} ${px + 38},${py - 88}`, stroke: C.an3, "stroke-width": 4, fill: "none" }, pail);
     S("path", { d: `M${px - 37},${py - 52} H${px + 37}`, stroke: C.b5, "stroke-width": 8 }, pail);
     const tb = S("g", null, pr);
-    const tx = DX - 110, ty = FL + 64;
+    const tx = DX - 80, ty = FL + 64;
     S("ellipse", { cx: tx, cy: ty + 2, rx: 92, ry: 10, fill: C.blue, opacity: 0.14 }, tb);
     S("rect", { x: tx - 80, y: ty - 74, width: 160, height: 74, rx: 8, fill: C.an2 }, tb);
     S("rect", { x: tx - 84, y: ty - 92, width: 168, height: 26, rx: 7, fill: C.b3 }, tb);
@@ -118,8 +118,6 @@
     S("circle", { cx: bx, cy: 128, r: 34, fill: "#fff4dc", opacity: 0.6 }, bulb);
     S("ellipse", { cx: bx, cy: 126, rx: 17, ry: 21, fill: C.y3 }, bulb);
     S("path", { d: `M${bx - 6},${118} q6,10 12,0`, stroke: C.y1, "stroke-width": 2.5, fill: "none" }, bulb);
-    S("rect", { x: DX + DW + 150, y: 612, width: 36, height: 36, rx: 5, fill: "#fbf8f2", stroke: C.cream3, "stroke-width": 2 }, pr);
-    S("circle", { cx: DX + DW + 168, cy: 630, r: 9, fill: C.cream3 }, pr);
 
     // ---- Ben ----
     const ben = CHAR.makeBen(L.char, { x: Bx, y: BY, s });
@@ -201,6 +199,11 @@
       P.state[side] = uf;
       P.state.ang[side] = ang;
       return uf;
+    };
+    // Atmen, Periode so gewählt, dass der letzte Zyklus genau am Fensterende ruht
+    P.breathe = (tl, a, b) => {
+      const n = Math.max(1, Math.round((b - a) / 1.7));
+      ben.breathe(tl, a, b, 0.013, (b - a) / n - 0.001);
     };
     // Welt -> Bildschirm für eine Kamera-Einstellung
     P.toScreen = (pt, c) => ({ x: (pt.x - c.x) * c.z + 960, y: (pt.y - c.y) * c.z + 540 });
@@ -291,7 +294,7 @@
     ben.pose(tl, 0, { head: 0 }, 0).look(tl, 0, 0, 1, 0).brows(tl, 0, "neutral", 0).mouth(tl, 0, "smile");
     gsap.set(P.blade, Object.assign({ scaleX: 0.02 }, O0));
     gsap.set(P.hook, { x: -P.tapeL * 0.98 });
-    ben.breathe(tl, tPre, t1, 0.013, 1.7);
+    P.breathe(tl, tPre, t1);
     ben.blinks(tl, tPre, tMasse - 0.2, 21);
     P.clouds.forEach((c, i) => tl.fromTo(c, { x: 0 }, { x: 40 + i * 18, duration: 16, ease: "sine.inOut" }, tPre));
 
@@ -299,13 +302,13 @@
     const tUp = tFuer - 0.12;
     tl.to(ben.lean, { y: 6, duration: 0.14, ease: "power2.in" }, tUp - 0.12);
     tl.to(ben.lean, { y: 0, duration: 0.4, ease: "back.out(2.2)" }, tUp + 0.02);
-    P.armTo(tl, tUp, "armR", [-124, -55], 0.34, "back.out(1.7)");
+    P.armTo(tl, tUp, "armR", [-118, -40], 0.34, "back.out(1.7)");
     ben.brows(tl, tUp, "happy", 0.2).look(tl, tUp, 1, -1, 0.2);
-    const nW = 4, per = 0.24;
+    const per = 0.24, nW = Math.max(2, Math.min(5, Math.floor((tBest - 0.56 - (tUp + 0.34)) / per)));
     for (let i = 0; i < nW; i++) {
-      ben.pose(tl, tUp + 0.34 + i * per, { armR: [undefined, i % 2 ? -32 : -82] }, per, "sine.inOut");
+      ben.pose(tl, tUp + 0.34 + i * per, { armR: [undefined, i % 2 ? -20 : -58] }, per, "sine.inOut");
     }
-    P.state.armR = [-124, -32];
+    P.state.armR = [-118, nW % 2 ? -58 : -20];
     ben.mouth(tl, tFach - 0.04, "grin");
     tl.to(ben.head, Object.assign({ rotation: -7, duration: 0.3, ease: "back.out(2)" }, O0), tFach - 0.06);
     tl.to(ben.head, Object.assign({ rotation: 0, duration: 0.4, ease: "power2.inOut" }, O0), tFach + 0.5);
@@ -344,8 +347,10 @@
     const tSw = tTap + 0.03;
     tl.to(P.q(".p9-knob"), { x: 62, duration: 0.26, ease: "back.out(2.4)" }, tSw);
     tl.to(P.q(".p9-tog"), { backgroundColor: "#e3002c", duration: 0.16, ease: "power1.out" }, tSw);
-    tl.fromTo(P.q(".p9-ring"), { scale: 0.7, opacity: 0.9 }, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out" }, tSw);
-    tl.fromTo(P.q(".p9-state"), { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, tSw + 0.08);
+    const ring = P.q(".p9-ring");
+    tl.set(ring, { opacity: 0.9, scale: 0.7 }, tSw);
+    tl.to(ring, { scale: 1.5, opacity: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, tSw + 0.001);
+    tl.fromTo(P.q(".p9-state"), { opacity: 0, x: -22 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, tSw + 0.08);
     tl.to(P.tabKnob, { attr: { cx: 101.5 }, duration: 0.2, ease: "back.out(2)" }, tSw);
     tl.to(P.tabTrack, { fill: C.red, duration: 0.12, ease: "power1.out" }, tSw);
     ANIM.sfx(tTap, "tap", -6);
@@ -355,11 +360,12 @@
     ben.look(tl, tSw + 0.35, 6, -1, 0.2);
     tl.to(ben.head, Object.assign({ rotation: 5, duration: 0.18, ease: "power2.out" }, O0), tWird - 0.05);
     tl.to(ben.head, Object.assign({ rotation: 0, duration: 0.3, ease: "back.out(2)" }, O0), tWird + 0.13);
-    P.armTo(tl, tSw + 0.3, "armR", [-18, 14], 0.4, "power2.inOut");
+    const dRel = Math.min(0.4, tAus - 0.07 - (tSw + 0.3));
+    if (dRel > 0.12) P.armTo(tl, tSw + 0.3, "armR", [-18, 14], dRel, "power2.inOut");
 
     // ---- „aus einer Hand“: Ben präsentiert mit offener Hand, Schritte poppen auf ----
     const tPres = tAus - 0.05;
-    P.armTo(tl, tPres, "armR", { x: Bx + 178, y: BY - 418 }, 0.38, "back.out(1.6)");
+    P.armTo(tl, tPres, "armR", { x: Bx + 214, y: BY - 424 }, 0.38, "back.out(1.6)");
     ben.mouth(tl, tPres + 0.1, "smile");
     const steps = P.qa(".p9-step");
     const tS0 = tHand - 0.42;
@@ -376,7 +382,7 @@
 
     // ---- „die Maße“: Maßband ziehen ----
     const pouch = { x: Bx + P.s * 43, y: BY - P.s * 250 };
-    const tGrab = tDie - 0.1;
+    const tGrab = Math.max(tAus + 0.36, Math.min(tDie - 0.1, tMasse - 0.62));
     P.armTo(tl, tGrab, "armR", pouch, 0.26, "power2.inOut", { angle: 0 });
     ben.look(tl, tGrab, 3, 7, 0.16).brows(tl, tGrab, "sly", 0.2).mouth(tl, tGrab + 0.1, "smirk");
     tl.set(P.tape, { opacity: 1 }, tGrab + 0.26);
@@ -401,13 +407,14 @@
     // ---- „schon“: grinsendes Schulterzucken ----
     const tSh = tSchon - 0.06;
     tl.to(ben.lean, { y: -12, duration: 0.18, ease: "power2.out" }, tSh);
-    tl.to(ben.lean, { y: 0, duration: 0.4, ease: "back.out(2)" }, tSh + 0.3);
+    const dBack = Math.max(0.16, Math.min(0.38, tVor + 0.08 - (tSh + 0.26)));
+    tl.to(ben.lean, { y: 0, duration: 0.4, ease: "back.out(2)" }, tSh + 0.26);
     P.armTo(tl, tSh, "armR", { x: Bx + 150, y: BY - 360 }, 0.22, "power2.out");
     P.armTo(tl, tSh, "armL", { x: Bx - 74, y: BY - 336 }, 0.22, "power2.out");
-    P.armTo(tl, tSh + 0.3, "armR", { x: Bx + 128, y: BY - 318 }, 0.38, "back.out(1.6)");
-    P.armTo(tl, tSh + 0.3, "armL", tabHand, 0.38, "back.out(1.6)");
+    P.armTo(tl, tSh + 0.26, "armR", { x: Bx + 128, y: BY - 318 }, dBack, "back.out(1.6)");
+    P.armTo(tl, tSh + 0.26, "armL", tabHand, dBack, "back.out(1.6)");
     tl.to(ben.head, Object.assign({ rotation: 9, duration: 0.22, ease: "power2.out" }, O0), tSh + 0.04);
-    tl.to(ben.head, Object.assign({ rotation: 2, duration: 0.45, ease: "power2.inOut" }, O0), tSh + 0.42);
+    tl.to(ben.head, Object.assign({ rotation: 2, duration: Math.min(0.45, t1 - tSh - 0.45), ease: "power2.inOut" }, O0), tSh + 0.42);
     ben.mouth(tl, tSh + 0.02, "grin").brows(tl, tSh, "happy", 0.18).look(tl, tSh + 0.05, -2, 0, 0.18);
 
     // ---- „vor“: Maßband schnappt zurück ----

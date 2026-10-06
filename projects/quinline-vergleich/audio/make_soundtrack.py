@@ -40,16 +40,31 @@ SCENE_START = {
 }
 TRANSITION = 15
 
-# Value landings / highlights (absolute frames) → soft pluck, (frame, pitch index into chord)
+S = SCENE_START
+
+# Value landings / highlights (absolute frames) → soft pluck, (frame, pitch index into chord).
+# Frames come from each scene's beat list (local frame + scene start).
 PLUCKS: list[tuple[int, int]] = [
-    (165 + 45, 0), (165 + 75, 2),            # Größe: height, width
-    (270 + 45, 0), (270 + 75, 2),            # Bautiefe: Flügel, Zarge
-    (375 + 45, 1),                           # Verglasung
-    (450 + 45, 0), (450 + 60, 2),            # Typen: 2–4-teilig, Schema E note
-    (525 + 60, 1), (525 + 75, 3),            # Schwellen: rows in, 74-only highlight
-    (645 + 45, 0), (645 + 60, 2),            # Wärme: values, rating
-    (735 + 45, 1),                           # Antrieb: eVOMATIC chip
+    (S["groesse"] + 45, 0), (S["groesse"] + 75, 2),      # Größe: height, width
+    (S["bautiefe"] + 30, 0), (S["bautiefe"] + 60, 2),    # Bautiefe: +10 mm, +24 mm
+    (S["glas"] + 45, 1), (S["glas"] + 50, 3),            # Verglasung: values, +10 mm
+    (S["typen"] + 45, 0), (S["typen"] + 55, 2),          # Typen: 2- bis 4-teilig, Schema E
+    (S["schwellen"] + 60, 1), (S["schwellen"] + 75, 3),  # Schwellen: 74-only rows, chips
+    (S["waerme"] + 45, 0), (S["waerme"] + 60, 2),        # Wärme: values, Passivhaus rule
+    (S["antrieb"] + 30, 1), (S["antrieb"] + 45, 3),      # Antrieb: eVOMATIC®, chip
+    (S["outro"] + 30, 0), (S["outro"] + 45, 2),          # Outro: frame locks, systems line
 ]
+# Dimension lines / counters snapping out → dry snap
+SNAPS = [S["bautiefe"] + 15, S["bautiefe"] + 45, S["groesse"] + 15, S["groesse"] + 45]
+# Marker cascade (Schwellen) and counter ticks (Wärme)
+TICKS = [S["schwellen"] + f for f in range(15, 46, 5)] + [S["waerme"] + f for f in (22, 28, 33, 37, 41, 45)]
+# Glass panes setting down (Verglasung)
+TINKS = [S["glas"] + 15, S["glas"] + 22, S["glas"] + 30]
+# Small mechanical moves inside scenes: (start frame, length s) whoosh / lock frame
+MINI_WHOOSH = [(S["typen"] + 25, 0.4)]
+LOCKS = [S["typen"] + 45, S["antrieb"] + 15, S["antrieb"] + 75]
+# eVOMATIC® motor runs: (start, end) frames
+MOTOR = [(S["antrieb"] + 18, S["antrieb"] + 42), (S["antrieb"] + 50, S["antrieb"] + 70)]
 
 DROP = SCENE_START["titel"] / FPS          # beat kicks in with the title (3.0 s)
 END_DRUMS = (SCENE_START["outro"] + TRANSITION) / FPS  # 27.5 s final hit
@@ -184,6 +199,31 @@ def tick(freq: float = 2600) -> np.ndarray:
     return np.sin(2 * np.pi * freq * t) * np.exp(-t / 0.006)
 
 
+def tink(freq: float) -> np.ndarray:
+    """Glass pane touching down: inharmonic bell partials, short."""
+    n = int(0.6 * SR)
+    t = np.arange(n) / SR
+    x = sum(a * np.sin(2 * np.pi * freq * r * t) * np.exp(-t * d) for r, a, d in ((1, 1, 9), (2.76, 0.5, 14), (5.4, 0.25, 22)))
+    return x * np.minimum(1, t / 0.001)
+
+
+def snap() -> np.ndarray:
+    n = int(0.08 * SR)
+    t = np.arange(n) / SR
+    return fft_filter(rng.standard_normal(n), lo=2500, hi=9000) * np.exp(-t / 0.008)
+
+
+def motor(length: float) -> np.ndarray:
+    """Soft electric drive hum with a gentle rise and fall."""
+    n = int(length * SR)
+    t = np.arange(n) / SR
+    f = 110 + 25 * np.sin(np.pi * t / length)
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    x = sum((0.8 ** k) * np.sin(k * ph) for k in range(1, 9))
+    x = fft_filter(x, lo=80, hi=1800)
+    return x * np.sin(np.pi * np.clip(t / length, 0, 1)) ** 0.8 / 3
+
+
 def whoosh(length: float = 0.62) -> np.ndarray:
     """Noise swell whose band sweeps up then down — the sash gliding by."""
     n = int(length * SR)
@@ -285,11 +325,11 @@ music *= duck[:, None]
 
 # Opener: "Heben." lift tone, "Schieben." whoosh, "Öffnen." soft hit
 lift = np.sin(2 * np.pi * np.cumsum(np.linspace(180, 360, int(0.4 * SR))) / SR) * env_ad(int(0.4 * SR), 0.05, 0.15)
-add(sfx, f2s(2), lift, 0.45)
-add(sfx, f2s(13), whoosh(0.9), 1.6, pan=0.3)
-add(sfx, f2s(43), clack(), 0.8)
-add(sfx, f2s(45), pluck(midi(76)), 0.4, pan=-0.2)
-add(sfx, f2s(60), pluck(midi(81)), 0.32, pan=0.2)
+add(sfx, f2s(0), lift, 0.45)                       # "Heben." — sashes lift
+add(sfx, f2s(12), whoosh(1.1), 1.6, pan=0.3)        # "Schieben." — slide peaks ~f30
+add(sfx, f2s(45), clack(), 0.8)                     # sash lowers and locks
+add(sfx, f2s(47), pluck(midi(76)), 0.4, pan=-0.2)   # "Öffnen." lands
+add(sfx, f2s(60), pluck(midi(81)), 0.32, pan=0.2)   # red frame starts
 # Riser into the drop
 add(sfx, f2s(SCENE_START["titel"]) - int(1.4 * SR), riser(1.4), 0.8)
 
@@ -307,6 +347,19 @@ for key, start in SCENE_START.items():
         sfx[s0:e, ch] += (w * fn(ang))[: e - s0] * 0.85
     add(sfx, f2s(start + TRANSITION), clack(), 0.42, pan=-0.5)
 
+for fr in SNAPS:
+    add(sfx, f2s(fr), snap(), 0.35, pan=-0.3)
+for k, fr in enumerate(TICKS):
+    add(sfx, f2s(fr), tick(2400 if k % 2 else 2000), 0.13, pan=0.35 if k % 2 else -0.35)
+for k, fr in enumerate(TINKS):
+    add(sfx, f2s(fr), tink(midi(88 + 2 * k)), 0.12, pan=-0.3 + 0.3 * k)
+for fr, length in MINI_WHOOSH:
+    add(sfx, f2s(fr), whoosh(length), 0.45, pan=0.2)
+for fr in LOCKS:
+    add(sfx, f2s(fr), clack(), 0.3, pan=0.4)
+for a_fr, b_fr in MOTOR:
+    add(sfx, f2s(a_fr), motor((b_fr - a_fr) / FPS), 0.5, pan=0.45)
+
 # Title counters: accelerating ticks while 00 → 74 / 84 count up
 for k in range(18):
     p = k / 17
@@ -316,8 +369,8 @@ for k in range(18):
 # Value landings
 for fr, idx in PLUCKS:
     sec = fr / FPS
-    c = max(0, int((sec - DROP) // bar)) % 4
-    note = CHORDS[c][idx % 4] + 12
+    chord = [48, 55, 60, 64] if sec >= END_DRUMS else CHORDS[max(0, int((sec - DROP) // bar)) % 4]
+    note = chord[idx % 4] + 12
     add(sfx, f2s(fr), pluck(midi(note)), 0.2, pan=0.0)
 
 # Final impact with the outro

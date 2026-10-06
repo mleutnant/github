@@ -75,10 +75,13 @@ def main():
             "dann sitzt jedes Wort auf der Animation.",
             "",
             *[
-                f"**Schnitt nach Abschnitt {int(c['after'][1:])}:** Aufnahme bei **{dec3(c['source_t'])} s** (Aufnahme-Zeit) "
-                f"schneiden und den Rest **{dec(c['insert'])} s später** anlegen — also ab Video-Zeit "
-                f"**{dec3(T['voSync']['offset'] + c['source_t'] + sum(x['insert'] for x in T['voSync']['cuts'][:k + 1]))} s**."
+                line
                 for k, c in enumerate(T["voSync"].get("cuts", []))
+                for line in (
+                    f"- **Schnitt nach Abschnitt {int(c['after'][1:])}:** Aufnahme bei **{dec3(c['source_t'])} s** (Aufnahme-Zeit) "
+                    f"schneiden und den Rest **{dec(c['insert'])} s später** anlegen — also ab Video-Zeit "
+                    f"**{dec3(T['voSync']['offset'] + c['source_t'] + sum(x['insert'] for x in T['voSync']['cuts'][:k + 1]))} s**.",
+                )
             ],
             *(["", "Sonst nichts schneiden oder verschieben."] if T["voSync"].get("cuts") else []),
             "",

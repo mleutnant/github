@@ -22,6 +22,10 @@
   document.head.appendChild(css);
 
   const MAXC = F.portrait ? 20 : 34;
+  // Schreibweise in den Untertiteln abweichend vom Sprechertext (nur Anzeige, Timing bleibt)
+  const DISPLAY = { s03: { "Fliegengitter:": "Fliegengitter?" } };
+  // Wörter, die trotz Zeilenlänge beim vorherigen Wort bleiben ("Segment:Wortindex")
+  const KEEP = new Set(["s03:1"]);
   const groups = [];
   T.segments.forEach((s) => {
     let cur = [];
@@ -29,8 +33,8 @@
     s.words.forEach((w, i) => {
       if (/^[–-]$/.test(w.w)) return; // Gedankenstrich wird nicht gesprochen
       const add = w.w.length + (cur.length ? 1 : 0);
-      if (cur.length && len + add > MAXC) { groups.push(cur); cur = []; len = 0; }
-      cur.push(w);
+      if (cur.length && len + add > MAXC && !KEEP.has(`${s.id}:${i}`)) { groups.push(cur); cur = []; len = 0; }
+      cur.push(Object.assign({ sid: s.id }, w));
       len += add;
       const brk = /[.?!:]$/.test(w.w) || (/[,]$/.test(w.w) && len > MAXC * 0.55);
       if (brk) { groups.push(cur); cur = []; len = 0; }
@@ -47,7 +51,7 @@
     const spans = g.map((w) => {
       const sp = document.createElement("span");
       sp.className = "cw";
-      sp.textContent = w.w;
+      sp.textContent = (DISPLAY[w.sid] || {})[w.w] || w.w;
       el.appendChild(sp);
       return sp;
     });

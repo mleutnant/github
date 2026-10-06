@@ -26,6 +26,10 @@ def dec(x: float) -> str:
     return f"{x:.1f}".replace(".", ",")
 
 
+def dec3(x: float) -> str:
+    return f"{x:.3f}".replace(".", ",")
+
+
 def srt_tc(t: float) -> str:
     ms = int(round(max(0.0, t) * 1000))
     h, ms = divmod(ms, 3600_000)
@@ -65,6 +69,12 @@ def main():
         "**Einsatz** und sollte ungefähr in der angegebenen **Sprechdauer** fertig sein — dann landen die "
         "Bewegungen auf den richtigen Wörtern. Kleine Abweichungen (± 0,3 s) sind unkritisch.",
         "",
+        *([
+            f"**Eigene Aufnahme anlegen:** `{T['voSync']['source']}` unverändert (kein Tempo, kein Schnitt) bei "
+            f"**{dec3(T['voSync']['offset'])} s** (Timecode {srt_tc(T['voSync']['offset'])}) auf die Tonspur legen — "
+            "dann sitzt jedes Wort auf der Animation.",
+            "",
+        ] if T.get("voSync") else []),
         "| Nr. | Einsatz | Ende | Sprechdauer | Pause danach | Text |",
         "|---|---|---|---|---|---|",
     ]

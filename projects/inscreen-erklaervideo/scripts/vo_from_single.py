@@ -72,7 +72,9 @@ def main():
     ap.add_argument("file")
     ap.add_argument("--tempo", type=float, default=1.0, help="Zeitstreckung (1.05 = 5 %% schneller, Tonhöhe bleibt)")
     ap.add_argument("--max-pause", type=float, default=0.0, help="Pausen innerhalb eines Abschnitts auf diese Länge kürzen (0 = aus)")
+    ap.add_argument("--out", default=None, help="Zielordner (Standard: assets/audio/vo)")
     args = ap.parse_args()
+    out = Path(args.out) if args.out else VO
     cfg = json.loads((PROJECT / "script" / "vo_segments.json").read_text(encoding="utf-8"))
     segs = cfg["segments"]
 
@@ -197,8 +199,8 @@ def main():
         seg_words[seg_of[kk]].extend(words_in(p, starts[kk], ends[kk]))
 
     # Ausschneiden + Zeichen-Zeitstempel schreiben
-    VO.mkdir(parents=True, exist_ok=True)
-    for f in VO.glob("s??.*"):
+    out.mkdir(parents=True, exist_ok=True)
+    for f in out.glob("s??.*"):
         f.unlink()
     pre, post = 0.06, 0.14
     for si, s in enumerate(segs):
@@ -237,7 +239,7 @@ def main():
         nf = int(0.012 * SR)
         clip[:nf] *= np.linspace(0, 1, nf)
         clip[-nf:] *= np.linspace(1, 0, nf)
-        wavfile.write(str(VO / f"{s['id']}.wav"), SR, (np.clip(clip, -1, 1) * 32767).astype(np.int16))
+        wavfile.write(str(out / f"{s['id']}.wav"), SR, (np.clip(clip, -1, 1) * 32767).astype(np.int16))
         chars_l, cs, ce = [], [], []
         for i, (w, a, b) in enumerate(ws):
             n = len(w)
@@ -252,9 +254,12 @@ def main():
         meta = {
             "id": s["id"], "text": s["text"], "source": Path(args.file).name, "tempo": args.tempo, "max_pause": args.max_pause,
             "timing_method": "Pausen-Zuordnung + Zeichenanteil (keine ElevenLabs-Zeitstempel)",
+            # Lage des Ausschnitts in der Originaldatei — erlaubt quellsynchrones Timing (build_timing.py),
+            # wenn die Aufnahme unverändert (Tempo 1, keine Pausenkürzung) unter das Video gelegt wird.
+            "source_start": round(c0, 4),
             "alignment": {"characters": chars_l, "character_start_times_seconds": cs, "character_end_times_seconds": ce},
         }
-        (VO / f"{s['id']}.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
+        (out / f"{s['id']}.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
         print(f"{s['id']}: {c0:6.2f} s, Länge {c1 - c0:4.2f} s, {len(cuts)} Pause(n) gekürzt  {s['text'][:50]}")
     print(f"Sprechzeit gesamt {t_last - t_first:.2f} s (Tempo {args.tempo})")
 

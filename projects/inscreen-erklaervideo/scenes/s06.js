@@ -111,10 +111,13 @@
     const cp = S("clipPath", { id: "s06-doorclip" }, defs);
     S("rect", { x: lr.doorBox.x, y: lr.doorBox.y, width: lr.doorBox.w, height: lr.doorBox.h }, cp);
     const shineG = S("g", { "clip-path": "url(#s06-doorclip)" }, lr.fgLayer);
+    // Letzter Farbwechsel muss vor dem Szenenwechsel sitzen (Übergang beginnt ~0,3 s vor Fensterende) —
+    // bei natürlichen Sprechpausen der Originalaufnahme rücken die Schritte entsprechend zusammen.
+    const tLast = Math.min(Math.max(tFarb + 1.7, tTuer + 0.15), ctx.t1 - 0.62);
     const steps = [
       ["weiss", tFarb + 0.3],
-      ["oak", Math.max(tFarb + 1.0, tPas + 0.2)],
-      ["anthrazit", Math.max(tFarb + 1.7, tTuer + 0.15)],
+      ["oak", Math.max(tFarb + 0.85, Math.min(Math.max(tFarb + 1.0, tPas + 0.2), tLast - 0.6))],
+      ["anthrazit", tLast],
     ];
     steps.forEach(([k, t], i) => {
       door.color(tl, t, k, 0.45, 0.0035);

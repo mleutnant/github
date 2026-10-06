@@ -102,11 +102,32 @@ def pace_factor(cfg: dict) -> float:
     return statistics.median(ratios) if ratios else 1.0
 
 
+def source_sync(cfg: dict) -> dict | None:
+    """Quellsynchron: alle Abschnitte stammen unverändert (Tempo 1, keine Pausenkürzung) aus EINER Aufnahme
+    (vo_from_single.py schreibt source_start). Dann liegen die Abschnitte im Video exakt wie in der Datei —
+    die Aufnahme kann später als Ganzes, unverändert, ab einem festen Versatz unter das Video gelegt werden."""
+    metas = []
+    for seg in cfg["segments"]:
+        audio, meta = find_vo(seg["id"])
+        if not (audio.exists() and meta.exists()):
+            return None
+        m = json.loads(meta.read_text(encoding="utf-8"))
+        if "source_start" not in m or abs(m.get("tempo", 1) - 1) > 1e-6 or m.get("max_pause", 0) > 0:
+            return None
+        metas.append(m)
+    if len({m["source"] for m in metas}) != 1:
+        return None
+    first = metas[0]["source_start"] + metas[0]["alignment"]["character_start_times_seconds"][0]
+    return {"source": metas[0]["source"], "offset": round(max(0.0, INTRO - first), 3),
+            "starts": [m["source_start"] for m in metas]}
+
+
 def main():
     cfg = json.loads(SEGMENTS.read_text(encoding="utf-8"))
     t = INTRO
     segs, source = [], "estimated"
     pace = pace_factor(cfg)
+    sync = source_sync(cfg)
     for seg in cfg["segments"]:
         sid = seg["id"]
         mp3, meta = find_vo(sid)
@@ -122,6 +143,8 @@ def main():
             file = None
         speech_start, speech_end = words[0]["s"], words[-1]["e"]
         clip_start = t - speech_start  # Clip so legen, dass das erste Wort exakt bei t liegt
+        if sync:  # Lage wie in der Originalaufnahme (natürliche Pausen statt GAP_AFTER)
+            clip_start = sync["offset"] + sync["starts"][len(segs)]
         absw = [
             {"w": w["w"], "k": norm(w["w"]).lower(), "s": round(clip_start + w["s"], 3), "e": round(clip_start + w["e"], 3)}
             for w in words
@@ -147,6 +170,8 @@ def main():
         s["winEnd"] = segs[i + 1]["winStart"] if i + 1 < len(segs) else total
 
     timing = {"fps": FPS, "total": total, "source": source, "segments": segs}
+    if sync:
+        timing["voSync"] = {"source": sync["source"], "offset": sync["offset"]}
     OUT_JSON.write_text(json.dumps(timing, ensure_ascii=False, indent=1), encoding="utf-8")
     OUT_JS.write_text(
         "// Generiert von scripts/build_timing.py — nicht von Hand bearbeiten.\n"
@@ -160,6 +185,8 @@ def main():
         h = re.sub(r'data-start="0" data-duration="[\d.]+"', f'data-start="0" data-duration="{total}"', h, count=1)
         html.write_text(h, encoding="utf-8")
     print(f"Quelle: {source} · Gesamtlänge {total:.2f} s · Schätz-Tempo ×{pace:.3f}")
+    if sync:
+        print(f"Quellsynchron zu {sync['source']}: Aufnahme unverändert ab {sync['offset']:.3f} s unter das Video legen")
     for s in segs:
         print(f"  {s['id']}  Fenster {s['winStart']:6.2f}–{s['winEnd']:6.2f}  Sprache {s['start']:6.2f}–{s['end']:6.2f}  {s['scene']}")
 

@@ -10,6 +10,7 @@ npm run dev                             # Remotion Studio (Live-Preview, localho
 npm run render -- BrandIntro <projekt>  # → ../projects/<projekt>/renders/BrandIntro.mp4
 npm run render -- BrandIntro <projekt> intro.mp4 --props='{"headline":"Hallo"}'
 npm run lint                            # ESLint + TypeScript
+node scripts/stills.mjs <CompositionId> <outDir> 0 45 90   # Einzelbilder + Kontaktbogen zur Selbstkontrolle
 ```
 
 Beim ersten Render lädt Remotion einmalig eine Chrome-Headless-Shell herunter. In Umgebungen ohne Zugriff auf `remotion.media` (z. B. Cloud-Sandbox) einen vorhandenen Chromium übergeben: `--browser-executable=/pfad/zu/chrome`.
@@ -24,6 +25,8 @@ src/brand/fonts.ts            Filson Pro laden (wartet vor dem ersten Frame)
 src/compositions/BrandIntro.tsx  Starter-Szene / Vorlage
 public/brand/                 Logos (mit eingebetteten Farben) + Fonts, via staticFile()
 scripts/render.mjs            Render-Wrapper, schreibt nur nach projects/<name>/renders/
+scripts/stills.mjs            Einzelbilder + Kontaktbogen (bündelt einmal, rendert mehrere Frames)
+src/compositions/quinline/    QuinLine® 74 vs. 84 (30 s): Szenen, Overlay, Pane-Slide-Übergang, Timing
 ```
 
 ## Regeln für Agents

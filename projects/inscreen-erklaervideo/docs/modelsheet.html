@@ -19,13 +19,19 @@
   const svg = document.getElementById("s");
   const tl = gsap.timeline({ paused: true });
   window.__timelines = { sheet: tl };
+  // Anna in vier Stimmungen aus dem Video
+  // 1) „herrlich“ (s01): Augen zu, breites Grinsen, Arme auf
   const a1 = CHAR.makeAnna(svg, { x: 180, y: 640, s: 0.95 }).init(tl);
+  a1.pose(tl, 0, { armL: [150, 20], armR: [-150, -20], head: -6 }, 0).mouth(tl, 0, "grin").eyesClosed(tl, 0, true).brows(tl, 0, "happy", 0);
+  // 2) „ungebetene Gäste“ (s02): genervt, schaut nach oben zu den Mücken, wedelt
   const a2 = CHAR.makeAnna(svg, { x: 470, y: 640, s: 0.95 }).init(tl);
-  a2.pose(tl, 0, { armL: [150, 20], armR: [-150, -20], head: -6 }, 0).mouth(tl, 0, "grin").eyesClosed(tl, 0, true).brows(tl, 0, "happy", 0);
+  a2.pose(tl, 0, { armL: [30, -120], armR: [-150, -40], head: 8 }, 0).mouth(tl, 0, "grimace").brows(tl, 0, "annoyed", 0).look(tl, 0, 5, -4, 0);
+  // 3) prüfender Blick (s07, Tablett an der Schwelle): besorgt, Blick nach unten
   const a3 = CHAR.makeAnna(svg, { x: 760, y: 640, s: 0.95 }).init(tl);
-  a3.pose(tl, 0, { armL: [30, -120], armR: [-150, -40], head: 8 }, 0).mouth(tl, 0, "grimace").brows(tl, 0, "angry", 0).look(tl, 0, 5, -4, 0);
+  a3.pose(tl, 0, { armL: [60, -70], armR: [-60, 70], head: 4 }, 0).mouth(tl, 0, "o").brows(tl, 0, "worried", 0).look(tl, 0, 1, 6, 0);
+  // 4) zufrieden (s11): Hände in die Hüften, lächelt in die Kamera
   const a4 = CHAR.makeAnna(svg, { x: 1040, y: 640, s: 0.95 }).init(tl);
-  a4.pose(tl, 0, { armL: [60, -70], armR: [-60, 70], head: -10 }, 0).mouth(tl, 0, "O").brows(tl, 0, "surprised", 0).look(tl, 0, -4, -5, 0);
+  a4.pose(tl, 0, { armL: [60, -113], armR: [-60, 113], head: -4 }, 0).mouth(tl, 0, "smile").brows(tl, 0, "happy", 0).look(tl, 0, 0, 0, 0);
   const ben = CHAR.makeBen(svg, { x: 1360, y: 700, s: 0.95 }).init(tl);
   ben.pose(tl, 0, { armR: [-130, -40], armL: [14, -10] }, 0).mouth(tl, 0, "grin").brows(tl, 0, "happy", 0);
   const m1 = CHAR.makeMosquito(svg, { x: 1660, y: 180, s: 1.6 }).init(tl);
@@ -37,6 +43,7 @@
   const opa = CHAR.makeOpa(svg, { x: 520, y: 1040, s: 0.62 }).init(tl);
   opa.pose(tl, 0, { armR: [-70, -20], legL: [18, 6], legR: [-16, 10], lean: 6 }, 0);
   const rob = CHAR.makeRobot(svg, { x: 900, y: 1030, s: 1 });
+  tl.seek(0.05, false);
 </script>
 </body>
 </html>

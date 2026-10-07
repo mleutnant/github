@@ -5,17 +5,19 @@
 <script src="../assets/vendor/gsap.min.js"></script>
 <script src="../lib/svg.js"></script>
 <script src="../lib/characters.js"></script>
+<script src="../lib/door.js"></script>
+<script src="../lib/anim.js"></script>
 <style>
   @font-face { font-family: "Filson Pro"; src: url("../assets/fonts/FilsonProBold.otf"); font-weight: 700; }
   html, body { margin: 0; width: 1920px; height: 1080px; background: #f7f1e6; font-family: "Filson Pro"; }
   svg { position: absolute; inset: 0; }
-  .lbl { position: absolute; font-size: 22px; color: #123442; font-weight: 700; }
+  .lbl { position: absolute; font-size: 26px; color: #123442; font-weight: 700; white-space: nowrap; transform: translateX(-50%); }
 </style>
 </head>
 <body>
 <svg id="s" viewBox="0 0 1920 1080" width="1920" height="1080"></svg>
 <script>
-  const { S } = SVGK;
+  const { S, C } = SVGK;
   const svg = document.getElementById("s");
   const tl = gsap.timeline({ paused: true });
   window.__timelines = { sheet: tl };
@@ -42,7 +44,44 @@
   const kid = CHAR.makeKid(svg, { x: 200, y: 1010, s: 0.9 }).init(tl);
   const opa = CHAR.makeOpa(svg, { x: 520, y: 1040, s: 0.62 }).init(tl);
   opa.pose(tl, 0, { armR: [-70, -20], legL: [18, 6], legR: [-16, 10], lean: 6 }, 0);
-  const rob = CHAR.makeRobot(svg, { x: 900, y: 1030, s: 1 });
+  // ---- Vorher → nachher: der Saugroboter fliegt raus, Anna trägt das volle Tablett ----
+  const rob = CHAR.makeRobot(svg, { x: 830, y: 1030, s: 1 });
+  const cross = S("g", { stroke: "#e3002c", "stroke-width": 10, "stroke-linecap": "round" }, svg);
+  S("line", { x1: 752, y1: 948, x2: 908, y2: 1052 }, cross);
+  S("line", { x1: 908, y1: 948, x2: 752, y2: 1052 }, cross);
+  const arrow = S("g", { stroke: "#123442", "stroke-width": 7, "stroke-linecap": "round", "stroke-linejoin": "round", fill: "none" }, svg);
+  S("path", { d: "M950,1000 H1032" }, arrow);
+  S("path", { d: "M1014,982 L1034,1000 L1014,1018" }, arrow);
+  const lbl = document.createElement("div");
+  lbl.className = "lbl"; lbl.textContent = "Feedback eingearbeitet";
+  lbl.style.left = "880px"; lbl.style.top = "900px";
+  document.body.appendChild(lbl);
+  const a5 = CHAR.makeAnna(svg, { x: 1140, y: 1045, s: 0.6 }).init(tl);
+  const tray = CHAR.makeTray(a5.lean, { x: 0, y: -262 });
+  const RA = ANIM.RIG.anna;
+  a5.pose(tl, 0, {
+    armL: ANIM.ik({ x: RA.armL.sx, y: RA.armL.sy }, { x: -tray.grip, y: -258 }, RA.armL.l1, RA.armL.l2, 1),
+    armR: ANIM.ik({ x: RA.armR.sx, y: RA.armR.sy }, { x: tray.grip, y: -258 }, RA.armR.l1, RA.armR.l2, -1),
+  }, 0).mouth(tl, 0, "grin").brows(tl, 0, "happy", 0);
+
+  // ---- InScreen-Tür: Schiebeflügel offen, Plissee zu, Mücke prallt draußen ab ----
+  const DX = 1345, DY = 735, DS = 0.47, DW = 900 * DS, DH = 690 * DS;
+  const out = S("g", null, svg); // Außenwelt hinter der Tür (Mücke liegt hinter dem Gewebe)
+  S("rect", { x: DX, y: DY, width: DW, height: DH, fill: "#fbd27f" }, out);
+  S("circle", { cx: DX + DW * 0.33, cy: DY + DH * 0.42, r: 34, fill: "#fff4dc" }, out);
+  S("path", { d: `M${DX},${DY + DH * 0.68} Q${DX + DW * 0.28},${DY + DH * 0.55} ${DX + DW * 0.55},${DY + DH * 0.64} T${DX + DW},${DY + DH * 0.6} V${DY + DH} H${DX} Z`, fill: C.g3 }, out);
+  S("rect", { x: DX, y: DY + DH * 0.8, width: DW, height: DH * 0.2, fill: C.g2 }, out);
+  const mq = CHAR.makeMosquito(out, { x: DX + DW * 0.74, y: DY + DH * 0.4, s: 1.05, mouth: "grimace" }).init(tl);
+  mq.brows(tl, 0, "surprised", 0); mq.face_(tl, 0, -1);
+  const door = DOOR.makeDoor(svg, { x: DX, y: DY, s: DS, variant: "anthrazit", screen: 1 });
+  door.slide(tl, 0, 1, 0.01);
+  // kleine Aufprall-Striche an der Mückennase
+  const bonk = S("g", { stroke: C.yellow, "stroke-width": 4, "stroke-linecap": "round" }, svg);
+  const bx = DX + DW * 0.74 - 52, by = DY + DH * 0.4 - 6;
+  [[-150, 20], [-180, 22], [150, 20]].forEach(([a, l]) => {
+    const r = (a * Math.PI) / 180;
+    S("line", { x1: bx + Math.cos(r) * 12, y1: by + Math.sin(r) * 12, x2: bx + Math.cos(r) * (12 + l), y2: by + Math.sin(r) * (12 + l) }, bonk);
+  });
   tl.seek(0.05, false);
 </script>
 </body>

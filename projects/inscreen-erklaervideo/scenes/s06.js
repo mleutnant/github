@@ -13,6 +13,7 @@
       .s06-pal { position:absolute; right:70px; top:250px; width:380px; padding:30px 30px 18px; background:#fff; box-shadow:0 18px 50px rgba(18,52,66,.22); }
       .s06-pal h3 { font-weight:800; font-size:38px; color:var(--sch-blue); margin-bottom:14px; white-space:nowrap; }
       .s06-pal p { font-weight:600; font-size:26px; line-height:1.2; color:var(--sch-blue); margin:-4px 0 14px; opacity:0; }
+      .s06-note { font-weight:500; font-size:24px; line-height:1.2; color:var(--sch-blue); opacity:0; margin-top:8px; padding-top:12px; border-top:2px solid #e3ebee; }
       .s06-sw { display:flex; align-items:center; gap:20px; padding:12px 0; }
       .s06-dot { width:64px; height:64px; border-radius:50%; box-shadow: inset 0 0 0 3px rgba(18,52,66,.15); }
       .s06-sw span { font-weight:700; font-size:34px; color:var(--sch-blue); white-space:nowrap; }
@@ -27,7 +28,8 @@
     const pal = ANIM.el("div", "s06-pal", h);
     const V = DOOR.VARIANTS;
     pal.innerHTML = `<h3>Farblich passend</h3><p>Griffleiste &amp; Kassettenrahmen<br>foliert oder pulverbeschichtet</p>` + ["weiss", "oak", "anthrazit"].map((k) =>
-      `<div class="s06-sw" data-k="${k}"><div class="s06-dotwrap"><div class="s06-dot" style="background:${V[k].frame}"></div><div class="s06-ring"></div></div><span>${V[k].label}</span></div>`).join("");
+      `<div class="s06-sw" data-k="${k}"><div class="s06-dotwrap"><div class="s06-dot" style="background:${V[k].frame}"></div><div class="s06-ring"></div></div><span>${V[k].label}</span></div>`).join("") +
+      `<div class="s06-note">Farbbeispiele – weitere Farben erhältlich</div>`;
     const tag3 = ANIM.el("div", "s06-tag", h, "<b>Griffleiste</b>");
     tag3.style.left = "1180px"; tag3.style.top = "250px";
     const tag4 = ANIM.el("div", "s06-tag", h, "<b>Griffleiste &amp; Rahmen</b><span>der Plisseekassette</span>");
@@ -125,6 +127,7 @@
     tl.fromTo(pal, { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.45, ease: "back.out(1.6)" }, tFarb - 0.05);
     const sws = pal.querySelectorAll(".s06-sw");
     tl.fromTo(pal.querySelector("p"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, Math.max(tFarb + 0.2, tFol - 0.1));
+    tl.fromTo(pal.querySelector(".s06-note"), { opacity: 0, y: 8 }, { opacity: 0.85, y: 0, duration: 0.35, ease: "power2.out" }, tFarb + 0.55);
     tl.fromTo(sws, { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: 0.3, ease: "power2.out", stagger: 0.08 }, tFarb + 0.1);
     ANIM.sfx(tFarb, "pop", -8);
     anna.look(tl, tFarb, 6, 0).mouth(tl, tFarb + 0.2, "grin").brows(tl, tFarb + 0.2, "happy");

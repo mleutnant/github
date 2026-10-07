@@ -15,6 +15,7 @@
       .s06v-pal { position:absolute; left:80px; right:80px; top:232px; padding:28px 34px 30px; background:#fff; box-shadow:0 18px 50px rgba(18,52,66,.24); border-left:8px solid var(--sch-red); }
       .s06v-pal h3 { font-weight:900; font-size:56px; line-height:1; color:var(--sch-blue); margin-bottom:26px; white-space:nowrap; }
       .s06v-pal p { font-weight:600; font-size:34px; line-height:1.18; color:var(--sch-blue); margin:-10px 0 22px; opacity:0; }
+      .s06v-note { font-weight:500; font-size:32px; line-height:1.15; color:var(--sch-blue); opacity:0; margin-top:22px; padding-top:16px; border-top:2px solid #e3ebee; text-align:center; }
       .s06v-row { display:flex; justify-content:space-between; }
       .s06v-sw { display:flex; flex-direction:column; align-items:center; gap:14px; width:33%; }
       .s06v-dot { width:96px; height:96px; border-radius:50%; box-shadow: inset 0 0 0 3px rgba(18,52,66,.15); }
@@ -30,7 +31,8 @@
     const pal = ANIM.el("div", "s06v-pal", h);
     const V = DOOR.VARIANTS;
     pal.innerHTML = `<h3>Farblich passend</h3><p>Griffleiste &amp; Kassettenrahmen:<br>foliert oder pulverbeschichtet</p><div class="s06v-row">` + ["weiss", "oak", "anthrazit"].map((k) =>
-      `<div class="s06v-sw" data-k="${k}"><div class="s06v-dotwrap"><div class="s06v-dot" style="background:${V[k].frame}"></div><div class="s06v-ring"></div></div><span>${V[k].label}</span></div>`).join("") + `</div>`;
+      `<div class="s06v-sw" data-k="${k}"><div class="s06v-dotwrap"><div class="s06v-dot" style="background:${V[k].frame}"></div><div class="s06v-ring"></div></div><span>${V[k].label}</span></div>`).join("") + `</div>` +
+      `<div class="s06v-note">Farbbeispiele – weitere Farben erhältlich</div>`;
     const tag3 = ANIM.el("div", "s06v-tag", h, "<b>Griffleiste</b>");
     tag3.style.left = "420px"; tag3.style.top = "236px";
     const tag4 = ANIM.el("div", "s06v-tag", h, "<b>Griffleiste &amp; Rahmen</b><span>der Plisseekassette</span>");
@@ -146,6 +148,7 @@
 
     tl.fromTo(pal, { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 0.45, ease: "back.out(1.6)" }, tFarb - 0.05);
     tl.fromTo(pal.querySelector("p"), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, Math.max(tFarb + 0.2, tFol - 0.1));
+    tl.fromTo(pal.querySelector(".s06v-note"), { opacity: 0, y: 8 }, { opacity: 0.85, y: 0, duration: 0.35, ease: "power2.out" }, tFarb + 0.55);
     const sws = pal.querySelectorAll(".s06v-sw");
     tl.fromTo(sws, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", stagger: 0.08 }, tFarb + 0.1);
     ANIM.sfx(tFarb, "pop", -8);

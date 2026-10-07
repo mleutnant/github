@@ -17,6 +17,8 @@
     .cap { position:absolute; left:50%; bottom:${F.portrait ? 392 : 70}px; transform:translateX(-50%); width:max-content; max-width:${F.portrait ? 940 : 1500}px;
       display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; padding:14px 26px 18px; background:rgba(18,52,66,.92);
       opacity:0; white-space:nowrap; }
+    .cap.low { bottom:${F.portrait ? 392 : 6}px; padding:${F.portrait ? "14px 26px 18px" : "8px 22px 10px"}; }
+    .cap.low .cw { font-size:${F.portrait ? 60 : 36}px; }
     .cap .cw { font-weight:800; font-size:${F.portrait ? 60 : 48}px; line-height:1.12; color:#fff; padding:0 8px; border-radius:6px; }
   `;
   document.head.appendChild(css);
@@ -44,10 +46,12 @@
 
   const mute = window.CAPTION_MUTE || [];
   const muted = (t) => mute.some(([a, b]) => t >= a && t <= b);
+  // Zeitfenster, in denen die Untertitel tiefer/kleiner sitzen (z. B. damit eine Aufschrift unten frei bleibt)
+  const low = window.CAPTION_LOW || [];
   groups.forEach((g, gi) => {
     if (muted(g[0].s)) return;
     const el = document.createElement("div");
-    el.className = "cap";
+    el.className = low.some(([a, b]) => g[0].s >= a && g[0].s <= b) ? "cap low" : "cap";
     const spans = g.map((w) => {
       const sp = document.createElement("span");
       sp.className = "cw";

@@ -177,6 +177,7 @@
   }
 
   function build(ctx, tl, R) {
+    window.CAPTION_LOW = [[ctx.t0 - 0.4, ctx.t1]]; // Untertitel tiefer, damit die Karton-Aufschrift lesbar bleibt
     const P = R.partner;
     const { C } = SVGK;
     const O0 = CHAR.O0;

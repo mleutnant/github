@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="de" data-composition-variables='[{"id":"captions","type":"boolean","label":"Untertitel einbrennen","default":true}]'>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1920, height=1080" />
@@ -42,6 +42,7 @@
     <div id="root" data-composition-id="inscreen-erklaervideo" data-width="1920" data-height="1080" data-start="0" data-duration="85.733">
       <svg id="scene" viewBox="0 0 1920 1080" width="1920" height="1080" xmlns="http://www.w3.org/2000/svg"><defs></defs></svg>
       <div id="hud"></div>
+      <div id="captions"></div>
       <div id="vignette"></div>
       <div id="grain"></div>
       <audio id="mix" data-start="0" data-track-index="2" src="assets/audio/mix.wav" data-volume="1"></audio>
@@ -64,6 +65,7 @@
     <script src="scenes/s10.js"></script>
     <script src="scenes/s11.js"></script>
     <script src="lib/main.js"></script>
+    <script src="lib/captions.js"></script>
     <script>
       window.__timelines = window.__timelines || {};
       window.__timelines["inscreen-erklaervideo"] = window.MASTER_TL;

@@ -150,6 +150,7 @@
 
     // Endkarte: Wisch mit Marken-Balken
     const tE = tDar - 0.3;
+    window.CAPTION_MUTE = [[tE + 0.15, 1e9]]; // Endkarte zeigt den Claim selbst
     tl.fromTo(k.end, { clipPath: "inset(0% 0% 0% 100%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power3.inOut" }, tE);
     ANIM.sfx(tE, "whoosh", -4);
     tl.to("#vignette", { opacity: 0, duration: 0.5, ease: "sine.inOut" }, tE + 0.1);

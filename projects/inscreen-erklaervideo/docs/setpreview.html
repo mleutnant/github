@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="de"><head><meta charset="UTF-8" />
+<script src="../assets/vendor/gsap.min.js"></script>
+<script src="../lib/svg.js"></script><script src="../lib/characters.js"></script><script src="../lib/door.js"></script><script src="../lib/sets.js"></script>
+<style>html,body{margin:0;width:1920px;height:1080px;background:#123442}svg{position:absolute;inset:0}</style></head>
+<body><svg id="s" viewBox="0 0 1920 1080" width="1920" height="1080"></svg>
+<script>
+const svg=document.getElementById('s'); const tl=gsap.timeline({paused:true}); window.__timelines={p:tl};
+const lr=SETS.makeLivingRoom(svg,{});
+lr.door.setScreenNow(0.55);
+gsap.set(lr.door.sash,{x:-lr.door.sashTravel});
+const anna=CHAR.makeAnna(lr.charLayer,{x:820,y:930,s:0.92}).init(tl);
+anna.pose(tl,0,{armL:[150,20],armR:[-150,-20]},0).mouth(tl,0,'grin').eyesClosed(tl,0,true).brows(tl,0,'happy',0);
+const m=CHAR.makeMosquito(lr.outLayer,{x:1240,y:420,s:1.1}).init(tl); m.face_(tl,0,-1);
+const m2=CHAR.makeMosquito(lr.charLayer,{x:1380,y:360,s:1.2,tone:'#566069',mouth:'grin'}).init(tl); m2.face_(tl,0,-1);
+</script></body></html>

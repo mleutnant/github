@@ -1,0 +1,67 @@
+{
+  "voice_id": "g1jpii0iyvtRs8fqXsd1",
+  "voice_name": "ElevenLabs g1jpii0iyvtRs8fqXsd1",
+  "model_preference": [
+    "eleven_v4",
+    "eleven_v3",
+    "eleven_multilingual_v2"
+  ],
+  "language_code": "de",
+  "segments": [
+    {
+      "id": "s01",
+      "scene": "Sommerabend",
+      "text": "Sommerabend. Die Hebeschiebetür steht weit offen – herrlich."
+    },
+    {
+      "id": "s02",
+      "scene": "Mücken",
+      "text": "Wären da nur nicht die ungebetenen Gäste."
+    },
+    {
+      "id": "s03",
+      "scene": "Problem",
+      "text": "Klassische Fliegengitter: aufgesetzt, auffällig, mit Stolperkante – und gebohrt wird auch noch."
+    },
+    {
+      "id": "s04",
+      "scene": "Auftritt InScreen",
+      "text": "Hier kommt InScreen: der Insektenschutz, integriert in die QuinLine-Hebeschiebetür."
+    },
+    {
+      "id": "s05",
+      "scene": "Integration",
+      "text": "Das Plissee ist über ein Integrationsprofil im Festflügel eingelassen – und die untere Führungsschiene in die Schwellenkonstruktion."
+    },
+    {
+      "id": "s06",
+      "scene": "Unsichtbar & farbgleich",
+      "text": "Zurückgeschoben verschwindet das Plissee fast unsichtbar im Profil. Griffleiste und Rahmen der Plisseekassette sind farblich passend foliert oder pulverbeschichtet."
+    },
+    {
+      "id": "s07",
+      "scene": "Keine Stolperkante",
+      "text": "Keine Stolperkante im Durchgangsbereich: bequem für Kinder, Großeltern – und das volle Tablett."
+    },
+    {
+      "id": "s08",
+      "scene": "Bedienung",
+      "text": "Das Fiberglas-Plissee gleitet stufenlos auf und zu. Die Mücken? Bleiben draußen."
+    },
+    {
+      "id": "s09",
+      "scene": "Bestellung",
+      "text": "Für Sie als Fachpartner: Bestellt wird aus einer Hand, die Maße liegen schon vor."
+    },
+    {
+      "id": "s10",
+      "scene": "Plug & Play",
+      "text": "Ab Werk kommt InScreen als Plug-and-Play-Set: einclipsen, fertig – ohne Bohren und Schrauben. Nachrüsten? Auch unkompliziert."
+    },
+    {
+      "id": "s11",
+      "scene": "Abschluss",
+      "text": "Integriert, farblich passend, schnell montiert: Darum ist InScreen die beste Insektenschutzlösung für Hebeschiebetüren."
+    }
+  ]
+}

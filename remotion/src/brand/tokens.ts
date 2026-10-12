@@ -8,7 +8,10 @@ export const colors = {
   blue: "#123442", // RAL 5008 — surfaces, frames
   red: "#e3002c", // RAL 3020 — Bildmarke, frames
   yellow: "#f6a206", // secondary accent
+  // Derived screen tints (brand-guidelines/default/tokens/colors.css)
+  blue90: "#24424f",
   blue70: "#4b656f",
+  blue20: "#d0d7db",
   grey60: "#6e7478",
 } as const;
 
@@ -23,6 +26,10 @@ export const ease = {
   loop: Easing.bezier(0.445, 0.05, 0.55, 0.95),
   /** GSAP power2.inOut — moves / exits */
   move: Easing.bezier(0.455, 0.03, 0.515, 0.955),
+  /** GSAP power3.inOut — panes sliding across the frame */
+  slide: Easing.bezier(0.645, 0.045, 0.355, 1),
+  /** GSAP expo.out — fast snaps that settle softly (counters, rules) */
+  snap: Easing.bezier(0.16, 1, 0.3, 1),
   /** GSAP back.out(1.4) — small accents */
   pop: Easing.bezier(0.175, 0.885, 0.32, 1.275),
 } as const;

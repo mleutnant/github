@@ -1,0 +1,57 @@
+// Newsletter QuinLine® 74 Edge: rastert das Negativ-Logo für den Footer und rendert die Vorschauen.
+// Aufruf (im Repo-Root): NODE_PATH=/opt/node22/lib/node_modules node projects/newsletter-ql74-edge/source/build.mjs
+import { createRequire } from 'node:module';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import path from 'node:path';
+import { readFileSync } from 'node:fs';
+
+const require = createRequire(import.meta.url);
+const { chromium } = require('playwright');
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const renders = path.join(here, '..', 'renders');
+const repo = path.join(here, '..', '..', '..');
+const html = path.join(renders, 'newsletter-ql74-edge.html');
+
+const browser = await chromium.launch();
+
+// 1) Negativ-Logo (komplett weiß, laut Guideline) als PNG, da Gmail & Co. kein SVG anzeigen.
+//    Auf die Logo-Kontur zugeschnitten, 300 px breit = 2x für 150 px Anzeigebreite.
+{
+  const svg = readFileSync(path.join(repo, 'brand-guidelines/default/assets/logo-schmidt-negative.svg'), 'utf8');
+  const page = await browser.newPage({ viewport: { width: 1200, height: 600 } });
+  await page.setContent(`<html><head><style>svg, svg *{fill:#ffffff !important}</style></head>
+    <body style="margin:0;background:transparent">${svg.replace('<svg ', '<svg width="522" ')}</body></html>`);
+  const bbox = await page.evaluate(() => {
+    const b = document.querySelector('svg').getBBox();
+    return { x: b.x, y: b.y, width: b.width, height: b.height };
+  });
+  const scale = 300 / bbox.width;
+  await page.evaluate((w) => document.querySelector('svg').setAttribute('width', String(w)), 522 * scale);
+  await page.screenshot({
+    path: path.join(renders, 'images', 'logo-schmidt-negativ.png'),
+    omitBackground: true,
+    clip: { x: bbox.x * scale, y: bbox.y * scale, width: 300, height: Math.ceil(bbox.height * scale) },
+  });
+  await page.close();
+}
+
+// 2) Vorschauen. Die Anrede-Variable des Newsletter-Tools wird nur für den Screenshot ersetzt.
+async function preview(width, file) {
+  const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 2 });
+  await page.goto(pathToFileURL(html).href, { waitUntil: 'networkidle' });
+  await page.evaluate(() => {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      const n = walker.currentNode;
+      if (n.nodeValue.includes('{SALUTATION')) n.nodeValue = 'Sehr geehrter Herr Mustermann,';
+    }
+  });
+  await page.screenshot({ path: path.join(renders, file), fullPage: true, type: 'jpeg', quality: 86 });
+  await page.close();
+}
+await preview(760, 'preview-desktop.jpg');
+await preview(390, 'preview-mobile.jpg');
+
+await browser.close();
+console.log('ok');

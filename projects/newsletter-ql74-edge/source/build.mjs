@@ -3,7 +3,8 @@
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
-import { readFileSync } from 'node:fs';
+import { readFileSync, copyFileSync, readdirSync, rmSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
@@ -54,4 +55,15 @@ await preview(760, 'preview-desktop.jpg');
 await preview(390, 'preview-mobile.jpg');
 
 await browser.close();
+
+// 3) CleverReach-Paket: HTML mit Editor-Markierungen + Bilder flach in einem ZIP (CleverReach erlaubt keine Unterordner).
+{
+  const cr = path.join(renders, 'cleverreach');
+  for (const f of ['keyvisual-ql74-edge.jpg', 'mockup-farbuebersicht-kompendium.jpg', 'logo-schmidt-negativ.png']) {
+    copyFileSync(path.join(renders, 'images', f), path.join(cr, f));
+  }
+  const zip = path.join(renders, 'newsletter-ql74-edge-cleverreach.zip');
+  rmSync(zip, { force: true });
+  execFileSync('zip', ['-j', '-q', zip, ...readdirSync(cr).map((f) => path.join(cr, f))]);
+}
 console.log('ok');

@@ -1,10 +1,12 @@
-// Newsletter QuinLine® 74 Edge: rastert das Negativ-Logo für den Footer und rendert die Vorschauen.
+// Newsletter QuinLine® 74 Edge: erzeugt beide HTML-Fassungen aus template.mjs, rastert das Negativ-Logo,
+// rendert die Vorschauen und packt das CleverReach-ZIP.
 // Aufruf (im Repo-Root): NODE_PATH=/opt/node22/lib/node_modules node projects/newsletter-ql74-edge/source/build.mjs
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
-import { readFileSync, copyFileSync, readdirSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, copyFileSync, readdirSync, rmSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import { render } from './template.mjs';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
@@ -13,6 +15,10 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const renders = path.join(here, '..', 'renders');
 const repo = path.join(here, '..', '..', '..');
 const html = path.join(renders, 'newsletter-ql74-edge.html');
+
+// 0) HTML-Fassungen erzeugen
+writeFileSync(html, render({ cr: false }));
+writeFileSync(path.join(renders, 'cleverreach', 'newsletter-ql74-edge-cleverreach.html'), render({ cr: true }));
 
 const browser = await chromium.launch();
 

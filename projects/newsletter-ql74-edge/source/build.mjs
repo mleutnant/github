@@ -16,9 +16,11 @@ const renders = path.join(here, '..', 'renders');
 const repo = path.join(here, '..', '..', '..');
 const html = path.join(renders, 'newsletter-ql74-edge.html');
 
-// 0) HTML-Fassungen erzeugen
+// 0) HTML-Fassungen erzeugen: komplett und nur Inhaltsbereich (ohne Kopfzeile/Social Media/Fußbereich)
 writeFileSync(html, render({ cr: false }));
 writeFileSync(path.join(renders, 'cleverreach', 'newsletter-ql74-edge-cleverreach.html'), render({ cr: true }));
+writeFileSync(path.join(renders, 'newsletter-ql74-edge-inhalt.html'), render({ cr: false, contentOnly: true }));
+writeFileSync(path.join(renders, 'cleverreach-inhalt', 'newsletter-ql74-edge-inhalt-cleverreach.html'), render({ cr: true, contentOnly: true }));
 
 const browser = await chromium.launch();
 
@@ -62,14 +64,14 @@ await preview(390, 'preview-mobile.jpg');
 
 await browser.close();
 
-// 3) CleverReach-Paket: HTML mit Editor-Markierungen + Bilder flach in einem ZIP (CleverReach erlaubt keine Unterordner).
-{
-  const cr = path.join(renders, 'cleverreach');
-  for (const f of ['keyvisual-ql74-edge.jpg', 'mockup-farbuebersicht-kompendium.jpg', 'logo-schmidt-negativ.png']) {
-    copyFileSync(path.join(renders, 'images', f), path.join(cr, f));
-  }
-  const zip = path.join(renders, 'newsletter-ql74-edge-cleverreach.zip');
+// 3) CleverReach-Pakete: HTML mit Editor-Markierungen + Bilder flach in einem ZIP (CleverReach erlaubt keine Unterordner).
+function pack(dir, images, zipName) {
+  const cr = path.join(renders, dir);
+  for (const f of images) copyFileSync(path.join(renders, 'images', f), path.join(cr, f));
+  const zip = path.join(renders, zipName);
   rmSync(zip, { force: true });
   execFileSync('zip', ['-j', '-q', zip, ...readdirSync(cr).map((f) => path.join(cr, f))]);
 }
+pack('cleverreach', ['keyvisual-ql74-edge.jpg', 'mockup-farbuebersicht-kompendium.jpg', 'logo-schmidt-negativ.png'], 'newsletter-ql74-edge-cleverreach.zip');
+pack('cleverreach-inhalt', ['keyvisual-ql74-edge.jpg', 'mockup-farbuebersicht-kompendium.jpg'], 'newsletter-ql74-edge-inhalt-cleverreach.zip');
 console.log('ok');

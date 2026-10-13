@@ -25,7 +25,7 @@ const T = (attrs = '') => `<table role="presentation" cellpadding="0" cellspacin
 const bgAttr = (bg) => (bg ? ` bgcolor="${bg}"` : '');
 const bgCss = (bg) => (bg ? ` background:${bg};` : '');
 
-export function render({ cr }) {
+export function render({ cr, contentOnly = false }) {
   const html = (inner) => (cr ? `<!--#html #-->${inner}<!--#/html#-->` : inner);
   const image = (inner) => (cr ? `<!--#image #-->${inner}<!--#/image#-->` : inner);
   const src = (file) => (cr ? file : `images/${file}`);
@@ -285,14 +285,17 @@ ${social('LinkedIn', 'LINK-LINKEDIN')}${gap}${social('Instagram', 'LINK-INSTAGRA
     ? `<!--#loop #-->\n${blocks.join('\n<!--#loopsplit #-->\n')}\n<!--#/loop#-->`
     : blocks.join('\n');
 
-  const notes = cr
+  const scope = contentOnly
+    ? `  Nur Inhaltsbereich: ohne Kopfzeile, ohne Social Media und Fußbereich (die kommen aus Ihrer CleverReach-Vorlage).\n`
+    : '';
+  const notes = scope + (cr
     ? `  Vorlage für CleverReach: die ZIP-Datei unter "Eigene Vorlagen" hochladen (nicht entpacken).
   Im Editor editierbar: Texte/Links (HTML-Markierungen), Bilder (IMAGE-Markierungen),
   Blöcke innerhalb von LOOP (verschieben, kopieren, löschen). Kopf- und Fußbereich sind fest, ihre Texte editierbar.
   Bilder beim Austauschen in der Breite lassen: Titelbild 600 px, Broschüren-Bild 504 px.`
     : `  Bilder unter images/ im Newsletter-Tool hochladen und die src-Pfade anpassen.
   keyvisual-ql74-edge.jpg und mockup-farbuebersicht-kompendium.jpg sind Ausschnitte aus Screenshots,
-  bitte durch die Originale ersetzen (Anzeigebreite 600 px bzw. 504 px).`;
+  bitte durch die Originale ersetzen (Anzeigebreite 600 px bzw. 504 px).`);
 
   const preheader = cr
     ? ''
@@ -314,8 +317,7 @@ ${social('LinkedIn', 'LINK-LINKEDIN')}${gap}${social('Instagram', 'LINK-INSTAGRA
   Erzeugt aus source/template.mjs – Änderungen dort vornehmen und source/build.mjs ausführen.
   E-Mail-HTML: Tabellen-Layout, Inline-Styles, 600 px, Schrift Arial (Office-Schrift laut CD-Guideline), für Outlook gehärtet.
 ${notes}
-  Platzhalter vor dem Versand ersetzen: LINK-LINKEDIN, LINK-INSTAGRAM, LINK-FACEBOOK.
-  Die Anrede-Variable {SALUTATION…} {LASTNAME} ist unverändert aus dem Original übernommen.
+${contentOnly ? '' : '  Platzhalter vor dem Versand ersetzen: LINK-LINKEDIN, LINK-INSTAGRAM, LINK-FACEBOOK.\n'}  Die Anrede-Variable {SALUTATION…} {LASTNAME} ist unverändert aus dem Original übernommen.
 -->
 <!--[if mso]>
 <noscript><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
@@ -360,16 +362,9 @@ ${T('class="container" width="600" style="width:600px; max-width:600px;"')}
 <tr>
 <td style="padding:0;">
 
-<!-- KOPFZEILE (fest) -->
-${header}
-
+${contentOnly ? '' : `<!-- KOPFZEILE (fest) -->\n${header}\n`}
 ${body}
-
-<!-- FOOTER (fest) -->
-${footer}
-
-${T('width="100%"')}${spacer(32, PAGE)}</table>
-
+${contentOnly ? '' : `\n<!-- FOOTER (fest) -->\n${footer}\n\n${T('width="100%"')}${spacer(32, PAGE)}</table>\n`}
 </td>
 </tr>
 </table>

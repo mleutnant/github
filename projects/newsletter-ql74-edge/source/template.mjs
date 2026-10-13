@@ -138,19 +138,24 @@ ${tocItems
     spacer(36, WHITE),
     row(WHITE, html('Die wichtigsten Systemdaten auf einen Blick'), { style: `${F} font-size:20px; line-height:26px; ${X} font-weight:700; color:#000000;` }),
     spacer(12, WHITE),
-    row(WHITE, specTable(
-      [
-        ['Zargenprofil', '5 Kammern, Bautiefe 174&nbsp;mm, Ansicht 63&nbsp;mm'],
-        ['Flügelprofil', '5 Kammern, Bautiefe 74&nbsp;mm, Ansicht 92&nbsp;mm'],
-        ['Profilüberschlag', 'geradlinig und schlank, 25&nbsp;mm Höhe'],
-        ['Design', 'kantige Glasleisten und Mitteldichtleisten'],
-        ['Glasdicken', 'bis 50&nbsp;mm'],
-        ['Getriebe', 'mit Riegelbolzen- oder Hakenriegelgetriebe lieferbar'],
-        ['Sicherheit', 'Sicherheitspakete ohne Einschränkungen einsetzbar'],
-        ['Systemtechnik', 'bewährte Merkmale analog Basis-System QuinLine®&nbsp;74'],
-      ],
-      { bg: WHITE, top: BLUE, topWidth: 2, line: HAIR, labelColor: BLUE, valueColor: '#000000', labelWidth: 150, pad: 12, size: 16 },
-    )),
+    // Systemdaten als ein einziger Textbereich (statt Tabellenzellen), damit sie im CleverReach-Editor
+    // wie normaler Text bearbeitet und um Zeilen ergänzt werden können. Linien oben/unten sind fest.
+    row(WHITE, `${T('width="100%"')}
+<tr><td bgcolor="${WHITE}" style="padding:14px 0 6px 0; background:${WHITE}; border-top:2px solid ${BLUE}; border-bottom:1px solid ${HAIR}; ${F} font-size:16px; line-height:24px; ${X} color:#000000;">${html(`
+${[
+  ['Zargenprofil', '5 Kammern, Bautiefe 174&nbsp;mm, Ansicht 63&nbsp;mm'],
+  ['Flügelprofil', '5 Kammern, Bautiefe 74&nbsp;mm, Ansicht 92&nbsp;mm'],
+  ['Profilüberschlag', 'geradlinig und schlank, 25&nbsp;mm Höhe'],
+  ['Design', 'kantige Glasleisten und Mitteldichtleisten'],
+  ['Glasdicken', 'bis 50&nbsp;mm'],
+  ['Getriebe', 'mit Riegelbolzen- oder Hakenriegelgetriebe lieferbar'],
+  ['Sicherheit', 'Sicherheitspakete ohne Einschränkungen einsetzbar'],
+  ['Systemtechnik', 'bewährte Merkmale analog Basis-System QuinLine®&nbsp;74'],
+]
+  .map(([label, value]) => p(`<strong style="color:${BLUE};">${label}:</strong> ${value}`, { mb: 8 }))
+  .join('\n')}
+`)}</td></tr>
+</table>`),
   ]);
 
   const muster = section(WHITE, [

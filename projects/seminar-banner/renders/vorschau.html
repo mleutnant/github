@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seminar-Banner Vorschau</title>
+<style>
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProRegular.otf") format("opentype");font-weight:400;font-display:block}
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProMedium.otf") format("opentype");font-weight:500;font-display:block}
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProBold.otf") format("opentype");font-weight:700;font-display:block}
+body{margin:0;padding:40px 16px 64px;background:#ffffff;color:#000000;font-family:"Filson Pro",Arial,sans-serif}
+main{max-width:1280px;margin:0 auto}
+h1{margin:0 0 8px;color:#123442;font-size:28px;line-height:1.15}
+p.lead{margin:0 0 40px;color:#6e7478;font-size:16px;line-height:1.5}
+section{margin:0 0 40px}
+h2{margin:0 0 12px;color:#123442;font-size:16px;line-height:1.15;font-weight:700}
+.frame{width:100%}
+.vorlage img{display:block;width:100%;max-width:766px;height:auto;border:1px solid #c9c9c9}
+</style>
+<style>
+.sch-sb{
+  --sch-sb-bg:#e3002c;
+  container-type:inline-size;
+  margin:0;
+  color:#ffffff;
+  font-family:"Filson Pro","filson-pro",Arial,Helvetica,sans-serif;
+}
+.sch-sb--blau{--sch-sb-bg:#123442}
+.sch-sb *,.sch-sb *::before,.sch-sb *::after{box-sizing:border-box}
+
+.sch-sb .sch-sb__inner{
+  display:flex;
+  align-items:stretch;
+  min-height:96px;
+  background:var(--sch-sb-bg);
+}
+/* Blaue Flächen schließen laut Guideline mit einer gelben Unterlinie */
+.sch-sb--blau .sch-sb__inner{border-bottom:8px solid #f6a206}
+
+.sch-sb .sch-sb__media{
+  position:relative;
+  flex:0 0 192px;
+  overflow:hidden;
+  background:#123442;
+}
+.sch-sb .sch-sb__media img{
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:none;
+  margin:0;
+  object-fit:cover;
+}
+
+.sch-sb .sch-sb__body{
+  display:flex;
+  flex:1 1 auto;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px 40px;
+  min-width:0;
+  padding:20px 24px 20px 48px;
+}
+.sch-sb .sch-sb__text{min-width:0;overflow-wrap:break-word}
+.sch-sb p.sch-sb__title,
+.sch-sb p.sch-sb__sub{
+  margin:0;
+  padding:0;
+  color:#ffffff;
+  font-family:inherit;
+  font-size:20px;
+  line-height:1.3;
+  letter-spacing:0;
+}
+.sch-sb p.sch-sb__title{font-weight:700}
+.sch-sb p.sch-sb__sub{font-weight:400;hyphens:auto;-webkit-hyphens:auto}
+
+/* Button: weißer Rahmen mit Bruch unten rechts, wie die Bildmarke */
+.sch-sb a.sch-sb__btn,
+.sch-sb a.sch-sb__btn:visited{
+  position:relative;
+  flex:0 0 auto;
+  display:inline-block;
+  margin:0 4px 2px 0;
+  padding:13px 28px 13px 30px;
+  border:2px solid #ffffff;
+  border-right:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  color:#ffffff;
+  font-family:inherit;
+  font-size:18px;
+  font-weight:700;
+  line-height:1.15;
+  text-decoration:none;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:background-color 180ms cubic-bezier(.2,.6,.2,1),color 180ms cubic-bezier(.2,.6,.2,1);
+}
+.sch-sb a.sch-sb__btn::after{
+  content:"";
+  position:absolute;
+  top:-2px;
+  right:-4px;
+  bottom:-4px;
+  width:4px;
+  border-top:2px solid #ffffff;
+  border-right:2px solid #ffffff;
+  pointer-events:none;
+}
+.sch-sb a.sch-sb__btn:hover,
+.sch-sb a.sch-sb__btn:focus-visible{
+  background:#ffffff;
+  color:var(--sch-sb-bg);
+  text-decoration:none;
+}
+.sch-sb a.sch-sb__btn:focus-visible{outline:3px solid #f6a206;outline-offset:2px}
+.sch-sb a.sch-sb__btn:active{transform:translateY(1px)}
+
+@media (prefers-reduced-motion:reduce){
+  .sch-sb a.sch-sb__btn{transition:none}
+}
+
+/* Schmale Spalten und Smartphone: richtet sich nach der Breite des Banners, nicht des Fensters */
+@container (max-width:900px){
+  .sch-sb .sch-sb__media{flex-basis:140px}
+  .sch-sb .sch-sb__body{gap:16px 24px;padding-left:32px}
+}
+@container (max-width:640px){
+  .sch-sb .sch-sb__media{display:none}
+  .sch-sb .sch-sb__body{flex-direction:column;align-items:flex-start;padding:20px 20px 24px}
+  .sch-sb p.sch-sb__title,
+  .sch-sb p.sch-sb__sub{font-size:18px}
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>Seminar-Banner</h1>
+  <p class="lead">Nachbau als HTML-Baustein. Die Breite des Banners richtet sich nach dem Platz, in den er eingefügt wird.</p>
+  <section class="vorlage">
+    <h2>Vorlage (Screenshot)</h2>
+    <img src="../source/vorlage-screenshot.png" alt="Vorlage">
+  </section>
+  
+  <section>
+    <h2>Nachbau, volle Breite</h2>
+    <div class="frame"><div class="sch-sb" lang="de"><!-- BEARBEITEN 6: Farbe -->
+  <div class="sch-sb__inner">
+    <div class="sch-sb__media">
+      <!-- BEARBEITEN 1: Bild -->
+      <img src="seminar-foto.jpg" alt="QuinLine-Seminar: Referent erklärt die Technik am Bildschirm" width="400" height="200" loading="lazy">
+    </div>
+    <div class="sch-sb__body">
+      <div class="sch-sb__text">
+        <!-- BEARBEITEN 2 und 3: Überschrift und Unterzeile -->
+        <p class="sch-sb__title">QuinLine-Seminare für Kaufleute und Monteure</p>
+        <p class="sch-sb__sub">Neue Termine für unsere Fensterbaufachbetriebe im November.</p>
+      </div>
+      <!-- BEARBEITEN 4 und 5: Button-Text und Link -->
+      <a class="sch-sb__btn" href="#seminar-anmeldung">Jetzt anmelden</a>
+    </div>
+  </div>
+</div></div>
+  </section>
+  
+  <section>
+    <h2>Variante Blau</h2>
+    <div class="frame"><div class="sch-sb sch-sb--blau" lang="de"><!-- BEARBEITEN 6: Farbe -->
+  <div class="sch-sb__inner">
+    <div class="sch-sb__media">
+      <!-- BEARBEITEN 1: Bild -->
+      <img src="seminar-foto.jpg" alt="QuinLine-Seminar: Referent erklärt die Technik am Bildschirm" width="400" height="200" loading="lazy">
+    </div>
+    <div class="sch-sb__body">
+      <div class="sch-sb__text">
+        <!-- BEARBEITEN 2 und 3: Überschrift und Unterzeile -->
+        <p class="sch-sb__title">QuinLine-Seminare für Kaufleute und Monteure</p>
+        <p class="sch-sb__sub">Neue Termine für unsere Fensterbaufachbetriebe im November.</p>
+      </div>
+      <!-- BEARBEITEN 4 und 5: Button-Text und Link -->
+      <a class="sch-sb__btn" href="#seminar-anmeldung">Jetzt anmelden</a>
+    </div>
+  </div>
+</div></div>
+  </section>
+  
+  <section>
+    <h2>Ohne Bild</h2>
+    <div class="frame"><div class="sch-sb" lang="de"><!-- BEARBEITEN 6: Farbe -->
+  <div class="sch-sb__inner">
+    <div class="sch-sb__body">
+      <div class="sch-sb__text">
+        <!-- BEARBEITEN 2 und 3: Überschrift und Unterzeile -->
+        <p class="sch-sb__title">QuinLine-Seminare für Kaufleute und Monteure</p>
+        <p class="sch-sb__sub">Neue Termine für unsere Fensterbaufachbetriebe im November.</p>
+      </div>
+      <!-- BEARBEITEN 4 und 5: Button-Text und Link -->
+      <a class="sch-sb__btn" href="#seminar-anmeldung">Jetzt anmelden</a>
+    </div>
+  </div>
+</div></div>
+  </section>
+  
+  <section>
+    <h2>Schmale Spalte (800 px)</h2>
+    <div class="frame" style="max-width:800px"><div class="sch-sb" lang="de"><!-- BEARBEITEN 6: Farbe -->
+  <div class="sch-sb__inner">
+    <div class="sch-sb__media">
+      <!-- BEARBEITEN 1: Bild -->
+      <img src="seminar-foto.jpg" alt="QuinLine-Seminar: Referent erklärt die Technik am Bildschirm" width="400" height="200" loading="lazy">
+    </div>
+    <div class="sch-sb__body">
+      <div class="sch-sb__text">
+        <!-- BEARBEITEN 2 und 3: Überschrift und Unterzeile -->
+        <p class="sch-sb__title">QuinLine-Seminare für Kaufleute und Monteure</p>
+        <p class="sch-sb__sub">Neue Termine für unsere Fensterbaufachbetriebe im November.</p>
+      </div>
+      <!-- BEARBEITEN 4 und 5: Button-Text und Link -->
+      <a class="sch-sb__btn" href="#seminar-anmeldung">Jetzt anmelden</a>
+    </div>
+  </div>
+</div></div>
+  </section>
+  
+  <section>
+    <h2>Smartphone (bis 640 px Breite)</h2>
+    <div class="frame" style="max-width:390px"><div class="sch-sb" lang="de"><!-- BEARBEITEN 6: Farbe -->
+  <div class="sch-sb__inner">
+    <div class="sch-sb__media">
+      <!-- BEARBEITEN 1: Bild -->
+      <img src="seminar-foto.jpg" alt="QuinLine-Seminar: Referent erklärt die Technik am Bildschirm" width="400" height="200" loading="lazy">
+    </div>
+    <div class="sch-sb__body">
+      <div class="sch-sb__text">
+        <!-- BEARBEITEN 2 und 3: Überschrift und Unterzeile -->
+        <p class="sch-sb__title">QuinLine-Seminare für Kaufleute und Monteure</p>
+        <p class="sch-sb__sub">Neue Termine für unsere Fensterbaufachbetriebe im November.</p>
+      </div>
+      <!-- BEARBEITEN 4 und 5: Button-Text und Link -->
+      <a class="sch-sb__btn" href="#seminar-anmeldung">Jetzt anmelden</a>
+    </div>
+  </div>
+</div></div>
+  </section>
+</main>
+</body>
+</html>

@@ -27,6 +27,10 @@ const bgCss = (bg) => (bg ? ` background:${bg};` : '');
 
 // snippet: true -> nur der Inhaltsbereich als HTML-Ausschnitt (ohne <html>/<head>/<body>) zum Einfügen
 // in ein HTML-Element einer bestehenden Vorlage. Spaltenbreiten in Prozent, Bild-URLs als Platzhalter.
+// CleverReach-Links aus der bisherigen SCHMIDT-Vorlage ([…] sind CleverReach-Platzhalter, & als &amp; im href)
+const URL_ONLINE = 'https://262600.seu2.cleverreach.com/m/[MAILING_ID]/[HASH]';
+const URL_ABMELDEN = 'https://366524.eu2.cleverreach.com/rmftlp.php?cid=[CTID]&amp;mid=[MAILING_ID]&amp;h=[CTID]-[USER_ID_SECURE]';
+
 const SNIPPET_SRC = { 'keyvisual-ql74-edge.jpg': 'URL-TITELBILD', 'mockup-farbuebersicht-kompendium.jpg': 'URL-BROSCHUERE' };
 
 export function render({ cr, contentOnly = false, snippet = false }) {
@@ -278,7 +282,7 @@ ${social('LinkedIn', 'LINK-LINKEDIN')}${gap}${social('Instagram', 'LINK-INSTAGRA
   const plainLink = (href, label) => `<a href="${href}" style="color:#4b565c; text-decoration:none;">${label}</a>`;
   const legal = section(PAGE, [
     spacer(32, PAGE),
-    legalText(`Wird diese Nachricht nicht richtig dargestellt, klicken Sie bitte ${legalLink('LINK-ONLINEVERSION', 'hier')}.`),
+    legalText(`Wird diese Nachricht nicht richtig dargestellt, klicken Sie bitte ${legalLink(URL_ONLINE, 'hier')}.`),
     spacer(24, PAGE),
     legalText('SCHMIDT GmbH<br>Töllen Linde 3<br>33129 Delbrück-Boke<br>Deutschland'),
     spacer(16, PAGE),
@@ -286,7 +290,7 @@ ${social('LinkedIn', 'LINK-LINKEDIN')}${gap}${social('Instagram', 'LINK-INSTAGRA
     spacer(16, PAGE),
     legalText('Geschäftsführer: Teresa Schmidt-Bertsch, Meinolf Funkenmeier<br>Register: Amtsgericht Paderborn, HRB 6481<br>Tax ID: DE 126 335 238'),
     spacer(16, PAGE),
-    legalText(`Wenn Sie diesen Newsletter (an: {EMAIL}) nicht mehr empfangen möchten, können Sie ihn ${legalLink('LINK-ABMELDEN', 'hier abbestellen')}.`),
+    legalText(`Wenn Sie diesen Newsletter (an: {EMAIL}) nicht mehr empfangen möchten, können Sie ihn ${legalLink(URL_ABMELDEN, 'hier abbestellen')}.`),
     spacer(40, PAGE),
   ]);
 
@@ -389,7 +393,7 @@ ${fluid}
   Erzeugt aus source/template.mjs – Änderungen dort vornehmen und source/build.mjs ausführen.
   E-Mail-HTML: Tabellen-Layout, Inline-Styles, 600 px, Schrift Arial (Office-Schrift laut CD-Guideline), für Outlook gehärtet.
 ${notes}
-${contentOnly ? '' : '  Platzhalter vor dem Versand ersetzen: LINK-LINKEDIN, LINK-INSTAGRAM, LINK-FACEBOOK, LINK-ONLINEVERSION, LINK-ABMELDEN.\n'}  Die Anrede-Variable {SALUTATION…} {LASTNAME} ist unverändert aus dem Original übernommen.
+${contentOnly ? '' : '  Platzhalter vor dem Versand ersetzen: LINK-LINKEDIN, LINK-INSTAGRAM, LINK-FACEBOOK.\n'}  Die Anrede-Variable {SALUTATION…} {LASTNAME} ist unverändert aus dem Original übernommen.
 -->
 <!--[if mso]>
 <noscript><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>

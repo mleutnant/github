@@ -175,18 +175,24 @@ ${p(label, { size: 14, lh: 18, color: ON_BLUE, mb: 6 })}
     row(BLUE, rule(YELLOW, BLUE)),
     spacer(32, BLUE),
     row(BLUE, `${T('width="100%"')}<tr>
-${stat('Standardschwelle', 'ab sofort bestellbar')}
+${stat('Standardschwelle', 'ab sofort<br>bestellbar')}
 <td class="stack-spacer" width="24" bgcolor="${BLUE}" style="padding:0; width:24px; background:${BLUE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>
-${stat('Niedrigschwelle und Renovierungsschwelle', 'ab Mitte November bestellbar')}
+${stat('Niedrig- &amp; Renovierungsschwelle', 'ab Mitte November<br>bestellbar')}
 </tr></table>`),
     spacer(36, BLUE),
-    row(BLUE, specTable(
-      [
-        ['Farbsortiment', 'weiß und cremeweiß durchgefärbt sowie Standard- und Sonderdekore gemäß Farbübersicht Stand 04/2026 (Download-Bereich im Kunden-Login)'],
-        ['Verglasungsdichtungen', 'schwarz und grau'],
-      ],
-      { bg: BLUE, top: HAIR_BLUE, topWidth: 1, line: HAIR_BLUE, labelColor: WHITE, valueColor: ON_BLUE, labelWidth: 190, pad: 14, size: 15 },
-    )),
+    row(BLUE, `${T('width="100%"')}
+<tr><td height="1" bgcolor="${BLUE}" style="padding:0; height:1px; background:${BLUE}; border-top:1px solid ${HAIR_BLUE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td></tr>
+${[
+  ['Farbsortiment', 'weiß und cremeweiß durchgefärbt sowie Standard- und Sonderdekore gemäß Farbübersicht Stand 04/2026 (Download-Bereich im <span style="white-space:nowrap;">Kunden-Login</span>)'],
+  ['Verglasungsdichtungen', 'schwarz und grau'],
+]
+  .map(([label, value]) =>
+    `<tr><td bgcolor="${BLUE}" style="padding:16px 0; background:${BLUE}; border-bottom:1px solid ${HAIR_BLUE}; ${F} font-size:15px; line-height:22px; ${X} color:${ON_BLUE};">${html(`
+${p(label, { size: 15, lh: 22, color: WHITE, mb: 4, extra: 'font-weight:700;' })}
+${p(value, { size: 15, lh: 22, color: ON_BLUE })}
+`)}</td></tr>`)
+  .join('\n')}
+</table>`),
     spacer(48, BLUE),
     `<tr><td height="8" bgcolor="${YELLOW}" style="padding:0; height:8px; background:${YELLOW}; font-size:8px; line-height:8px; ${X}">&nbsp;</td></tr>`,
   ])}`;
@@ -255,7 +261,7 @@ ${card('Stand 09/2026', 'Kompendium', 'Alle technischen Details: Typenübersicht
   ]);
 
   const social = (label, href) =>
-    `<td class="btn-out" bgcolor="${BLUE}" style="padding:9px 16px; background:${BLUE}; border:1px solid ${WHITE}; ${F} font-size:14px; line-height:18px; ${X} font-weight:700; color:${WHITE};">${html(`<a href="${href}" style="${F} font-size:14px; line-height:18px; font-weight:700; color:${WHITE}; text-decoration:none;">${label}</a>`)}</td>`;
+    `<td bgcolor="${BLUE}" style="padding:0; background:${BLUE};">${T()}<tr><td class="btn-out" bgcolor="${BLUE}" style="padding:9px 16px; background:${BLUE}; border:1px solid ${WHITE}; ${F} font-size:14px; line-height:18px; ${X} font-weight:700; color:${WHITE};">${html(`<a href="${href}" style="${F} font-size:14px; line-height:18px; font-weight:700; color:${WHITE}; text-decoration:none;">${label}</a>`)}</td></tr></table></td>`;
   const gap = `<td class="sp" width="12" bgcolor="${BLUE}" style="padding:0; width:12px; background:${BLUE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>`;
 
   const footer = section(BLUE, [
@@ -263,7 +269,7 @@ ${card('Stand 09/2026', 'Kompendium', 'Alle technischen Details: Typenübersicht
     row(BLUE, html('Immer up to date – SCHMIDT auf Social Media'), { attrs: 'align="center"', style: `${F} font-size:20px; line-height:26px; ${X} font-weight:700; color:${WHITE};` }),
     spacer(20, BLUE),
     row(BLUE, `${T('class="social" align="center"')}<tr>
-${social('LinkedIn', 'LINK-LINKEDIN')}${gap}${social('Instagram', 'LINK-INSTAGRAM')}${gap}${social('Facebook', 'LINK-FACEBOOK')}
+${social('LinkedIn', 'https://www.linkedin.com/company/schmidt-die-hebeschiebetuer')}${gap}${social('Instagram', 'https://www.instagram.com/schmidt_die_hebeschiebetuer/')}${gap}${social('Facebook', 'https://www.facebook.com/schmidtdiehebeschiebetuer')}
 </tr></table>`, { attrs: 'align="center"' }),
     spacer(40, BLUE),
     row(BLUE, hairline(HAIR_BLUE, BLUE)),
@@ -393,7 +399,7 @@ ${fluid}
   Erzeugt aus source/template.mjs – Änderungen dort vornehmen und source/build.mjs ausführen.
   E-Mail-HTML: Tabellen-Layout, Inline-Styles, 600 px, Schrift Arial (Office-Schrift laut CD-Guideline), für Outlook gehärtet.
 ${notes}
-${contentOnly ? '' : '  Platzhalter vor dem Versand ersetzen: LINK-LINKEDIN, LINK-INSTAGRAM, LINK-FACEBOOK.\n'}  Die Anrede-Variable {SALUTATION…} {LASTNAME} ist unverändert aus dem Original übernommen.
+  Die Anrede-Variable {SALUTATION…} {LASTNAME} ist unverändert aus dem Original übernommen.
 -->
 <!--[if mso]>
 <noscript><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>

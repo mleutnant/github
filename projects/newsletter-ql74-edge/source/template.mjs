@@ -267,11 +267,27 @@ ${social('LinkedIn', 'LINK-LINKEDIN')}${gap}${social('Instagram', 'LINK-INSTAGRA
     row(BLUE, `<img src="${src('logo-schmidt-negativ.png')}" width="150" height="24" alt="SCHMIDT" style="display:block; margin:0 auto; width:150px; height:auto; border:0; ${F} font-size:20px; font-weight:700; color:${WHITE};">`, { attrs: 'align="center"' }),
     spacer(24, BLUE),
     row(BLUE, html(`Weitere Informationen zu Neuheiten und Änderungen erhalten Sie regelmäßig in unserem Kunden-Login unter <a href="https://kunden-login.schmidt-boke.de/" style="color:${WHITE}; text-decoration:underline;">kunden-login.schmidt-boke.de</a>.`), { cls: 'hy', attrs: 'align="center" lang="de"', style: `${F} font-size:14px; line-height:21px; ${X} color:${ON_BLUE};` }),
-    spacer(16, BLUE),
-    row(BLUE, html(`SCHMIDT GmbH | Töllen Linde 3 | 33129 Delbrück-Boke<br>Telefon <a href="tel:+49525098450" style="color:#c5ced2; text-decoration:none;">+49 5250 9845-0</a> | <a href="mailto:kontakt@schmidt-boke.de" style="color:#c5ced2; text-decoration:none;">kontakt@schmidt-boke.de</a>`), { attrs: 'align="center"', style: `${F} font-size:13px; line-height:20px; ${X} color:#c5ced2;` }),
-    '<!-- Hier ggf. Abmeldelink und Impressum mit den Platzhaltern des Newsletter-Tools einfügen -->',
     spacer(40, BLUE),
     `<tr><td height="8" bgcolor="${YELLOW}" style="padding:0; height:8px; background:${YELLOW}; font-size:8px; line-height:8px; ${X}">&nbsp;</td></tr>`,
+  ]);
+
+  // Pflichtangaben unter der Karte (aus der bisherigen SCHMIDT-Vorlage): Online-Version, Impressum, Abmeldung.
+  const legalText = (inner) =>
+    row(PAGE, html(inner), { attrs: 'align="center"', style: `${F} font-size:12px; line-height:18px; ${X} color:#4b565c;` });
+  const legalLink = (href, label) => `<a href="${href}" style="color:${RED}; font-weight:700; text-decoration:none;">${label}</a>`;
+  const plainLink = (href, label) => `<a href="${href}" style="color:#4b565c; text-decoration:none;">${label}</a>`;
+  const legal = section(PAGE, [
+    spacer(32, PAGE),
+    legalText(`Wird diese Nachricht nicht richtig dargestellt, klicken Sie bitte ${legalLink('LINK-ONLINEVERSION', 'hier')}.`),
+    spacer(24, PAGE),
+    legalText('SCHMIDT GmbH<br>Töllen Linde 3<br>33129 Delbrück-Boke<br>Deutschland'),
+    spacer(16, PAGE),
+    legalText(`${plainLink('tel:+49525098450', '+49 5250 9845-0')}<br>${plainLink('mailto:kontakt@schmidt-boke.de', 'kontakt@schmidt-boke.de')}<br>${plainLink('https://www.schmidt-boke.de', 'www.schmidt-boke.de')}`),
+    spacer(16, PAGE),
+    legalText('Geschäftsführer: Teresa Schmidt-Bertsch, Meinolf Funkenmeier<br>Register: Amtsgericht Paderborn, HRB 6481<br>Tax ID: DE 126 335 238'),
+    spacer(16, PAGE),
+    legalText(`Wenn Sie diesen Newsletter (an: {EMAIL}) nicht mehr empfangen möchten, können Sie ihn ${legalLink('LINK-ABMELDEN', 'hier abbestellen')}.`),
+    spacer(40, PAGE),
   ]);
 
   const blocks = [
@@ -373,7 +389,7 @@ ${fluid}
   Erzeugt aus source/template.mjs – Änderungen dort vornehmen und source/build.mjs ausführen.
   E-Mail-HTML: Tabellen-Layout, Inline-Styles, 600 px, Schrift Arial (Office-Schrift laut CD-Guideline), für Outlook gehärtet.
 ${notes}
-${contentOnly ? '' : '  Platzhalter vor dem Versand ersetzen: LINK-LINKEDIN, LINK-INSTAGRAM, LINK-FACEBOOK.\n'}  Die Anrede-Variable {SALUTATION…} {LASTNAME} ist unverändert aus dem Original übernommen.
+${contentOnly ? '' : '  Platzhalter vor dem Versand ersetzen: LINK-LINKEDIN, LINK-INSTAGRAM, LINK-FACEBOOK, LINK-ONLINEVERSION, LINK-ABMELDEN.\n'}  Die Anrede-Variable {SALUTATION…} {LASTNAME} ist unverändert aus dem Original übernommen.
 -->
 <!--[if mso]>
 <noscript><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
@@ -408,7 +424,7 @@ ${T('class="container" width="600" style="width:600px; max-width:600px;"')}
 
 ${contentOnly ? '' : `<!-- KOPFZEILE (fest) -->\n${header}\n`}
 ${body}
-${contentOnly ? '' : `\n<!-- FOOTER (fest) -->\n${footer}\n\n${T('width="100%"')}${spacer(32, PAGE)}</table>\n`}
+${contentOnly ? '' : `\n<!-- FOOTER (fest) -->\n${footer}\n\n<!-- PFLICHTANGABEN (fest) -->\n${legal}\n`}
 </td>
 </tr>
 </table>

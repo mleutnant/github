@@ -47,8 +47,9 @@ const browser = await chromium.launch();
 }
 
 // 2) Vorschauen. Die Anrede-Variable des Newsletter-Tools wird nur für den Screenshot ersetzt.
-async function preview(width, file) {
-  const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 2 });
+// Skalierung so gewählt, dass die Bilder unter 8000 px Höhe bleiben (Grenze für die Anzeige im Chat).
+async function preview(width, file, scale) {
+  const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: scale });
   await page.goto(pathToFileURL(html).href, { waitUntil: 'networkidle' });
   await page.evaluate(() => {
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
@@ -60,8 +61,8 @@ async function preview(width, file) {
   await page.screenshot({ path: path.join(renders, file), fullPage: true, type: 'jpeg', quality: 86 });
   await page.close();
 }
-await preview(760, 'preview-desktop.jpg');
-await preview(390, 'preview-mobile.jpg');
+await preview(760, 'preview-desktop.jpg', 1.5);
+await preview(390, 'preview-mobile.jpg', 1.35);
 
 await browser.close();
 

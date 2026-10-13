@@ -21,6 +21,7 @@ writeFileSync(html, render({ cr: false }));
 writeFileSync(path.join(renders, 'cleverreach', 'newsletter-ql74-edge-cleverreach.html'), render({ cr: true }));
 writeFileSync(path.join(renders, 'newsletter-ql74-edge-inhalt.html'), render({ cr: false, contentOnly: true }));
 writeFileSync(path.join(renders, 'cleverreach-inhalt', 'newsletter-ql74-edge-inhalt-cleverreach.html'), render({ cr: true, contentOnly: true }));
+writeFileSync(path.join(renders, 'newsletter-ql74-edge-inhalt-snippet.html'), render({ snippet: true }));
 
 const browser = await chromium.launch();
 

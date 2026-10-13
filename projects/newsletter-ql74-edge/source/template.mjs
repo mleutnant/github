@@ -25,10 +25,15 @@ const T = (attrs = '') => `<table role="presentation" cellpadding="0" cellspacin
 const bgAttr = (bg) => (bg ? ` bgcolor="${bg}"` : '');
 const bgCss = (bg) => (bg ? ` background:${bg};` : '');
 
-export function render({ cr, contentOnly = false }) {
+// snippet: true -> nur der Inhaltsbereich als HTML-Ausschnitt (ohne <html>/<head>/<body>) zum Einfügen
+// in ein HTML-Element einer bestehenden Vorlage. Spaltenbreiten in Prozent, Bild-URLs als Platzhalter.
+const SNIPPET_SRC = { 'keyvisual-ql74-edge.jpg': 'URL-TITELBILD', 'mockup-farbuebersicht-kompendium.jpg': 'URL-BROSCHUERE' };
+
+export function render({ cr, contentOnly = false, snippet = false }) {
+  if (snippet) [cr, contentOnly] = [false, true];
   const html = (inner) => (cr ? `<!--#html #-->${inner}<!--#/html#-->` : inner);
   const image = (inner) => (cr ? `<!--#image #-->${inner}<!--#/image#-->` : inner);
-  const src = (file) => (cr ? file : `images/${file}`);
+  const src = (file) => (snippet ? SNIPPET_SRC[file] : cr ? file : `images/${file}`);
 
   const spacer = (h, bg, colspan = 0) =>
     `<tr><td${colspan ? ` colspan="${colspan}"` : ''} height="${h}"${bgAttr(bg)} style="padding:0; height:${h}px;${bgCss(bg)} font-size:1px; line-height:1px; ${X}">&nbsp;</td></tr>`;
@@ -285,6 +290,57 @@ ${social('LinkedIn', 'LINK-LINKEDIN')}${gap}${social('Instagram', 'LINK-INSTAGRA
     ? `<!--#loop #-->\n${blocks.join('\n<!--#loopsplit #-->\n')}\n<!--#/loop#-->`
     : blocks.join('\n');
 
+  const mobileCss = `@media only screen and (max-width: 620px) {
+    .container { width: 100% !important; }
+    .px { padding-left: 20px !important; padding-right: 20px !important; }
+    .stack { display: block !important; width: 100% !important; box-sizing: border-box; }
+    .stack-spacer { display: block !important; width: 100% !important; height: 24px !important; }
+    .spec-l { padding-bottom: 0 !important; border-bottom: 0 !important; }
+    .spec-v { padding-top: 2px !important; }
+    .h2, .h2 h2 { font-size: 24px !important; line-height: 28px !important; }
+    .lead, .lead p { font-size: 17px !important; line-height: 26px !important; }
+    .stat { font-size: 20px !important; line-height: 24px !important; }
+    .img-fluid { width: 100% !important; height: auto !important; }
+    .social td.sp { width: 8px !important; }
+  }`;
+
+  if (snippet) {
+    // Feste Spaltenbreiten in Prozent, damit der Ausschnitt in jede Inhaltsbreite passt –
+    // auch wenn das Newsletter-Tool den <style>-Block (Handy-Umbruch) entfernt. Dafür außerdem:
+    // Seitenrand 32 statt 48 px und die beiden Dokument-Karten immer untereinander (passt so bis 375 px Breite).
+    const cardSpacer = `<td class="stack-spacer" width="24" bgcolor="${WHITE}" style="padding:0; width:24px; background:${WHITE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>`;
+    if (!body.includes(cardSpacer)) throw new Error('Karten-Abstand nicht gefunden');
+    const fluid = body
+      .replace(`\n${cardSpacer}\n`, `</tr>\n${spacer(16, WHITE)}\n<tr>`)
+      .replaceAll(`class="stack" width="240" valign="top" bgcolor="${GREY}"`, `class="stack" width="100%" valign="top" bgcolor="${GREY}"`)
+      .replaceAll('style="padding:0 48px;', 'style="padding:0 32px;')
+      .replaceAll('class="stack" width="240"', 'class="stack" width="48%"')
+      .replaceAll('class="stack-spacer" width="24"', 'class="stack-spacer" width="4%"')
+      .replaceAll('padding:0; width:24px;', 'padding:0; width:4%;')
+      .replaceAll('class="stack spec-l" width="170"', 'class="stack spec-l" width="34%"')
+      .replaceAll('class="stack spec-l" width="190"', 'class="stack spec-l" width="38%"')
+      .replaceAll('<td width="150"', '<td width="30%"');
+    return `<!--
+  SCHMIDT Produkt-News: QuinLine® 74 Edge – nur Inhaltsbereich (Titelbild bis "Zum Kunden-Login")
+  zum Einfügen in ein HTML-Element Ihrer bestehenden CleverReach-Vorlage.
+  Vor dem Einfügen ersetzen: URL-TITELBILD und URL-BROSCHUERE durch die Bild-Adressen aus CleverReach.
+  Erzeugt aus source/template.mjs.
+-->
+<style>
+  .hy { -webkit-hyphens: auto; -ms-hyphens: auto; hyphens: auto; }
+  .btn-red:hover { background: #c30026 !important; }
+  ${mobileCss}
+</style>
+${T('class="container" width="100%" align="center" style="width:100%; max-width:600px;"')}
+<tr>
+<td style="padding:0;">
+${fluid}
+</td>
+</tr>
+</table>
+`;
+  }
+
   const scope = contentOnly
     ? `  Nur Inhaltsbereich: ohne Kopfzeile, ohne Social Media und Fußbereich (die kommen aus Ihrer CleverReach-Vorlage).\n`
     : '';
@@ -338,19 +394,7 @@ ${contentOnly ? '' : '  Platzhalter vor dem Versand ersetzen: LINK-LINKEDIN, LIN
   .btn-out:hover { background: #ffffff !important; }
   .btn-out:hover a { color: #123442 !important; }
 
-  @media only screen and (max-width: 620px) {
-    .container { width: 100% !important; }
-    .px { padding-left: 20px !important; padding-right: 20px !important; }
-    .stack { display: block !important; width: 100% !important; box-sizing: border-box; }
-    .stack-spacer { display: block !important; width: 100% !important; height: 24px !important; }
-    .spec-l { padding-bottom: 0 !important; border-bottom: 0 !important; }
-    .spec-v { padding-top: 2px !important; }
-    .h2, .h2 h2 { font-size: 24px !important; line-height: 28px !important; }
-    .lead, .lead p { font-size: 17px !important; line-height: 26px !important; }
-    .stat { font-size: 20px !important; line-height: 24px !important; }
-    .img-fluid { width: 100% !important; height: auto !important; }
-    .social td.sp { width: 8px !important; }
-  }
+  ${mobileCss}
 </style>
 </head>
 <body id="body" style="margin:0; padding:0; background:${PAGE}; word-spacing:normal;">${preheader}

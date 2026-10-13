@@ -145,6 +145,8 @@ ${tocItems
         ['Profilüberschlag', 'geradlinig und schlank, 25&nbsp;mm Höhe'],
         ['Design', 'kantige Glasleisten und Mitteldichtleisten'],
         ['Glasdicken', 'bis 50&nbsp;mm'],
+        ['Getriebe', 'mit Riegelbolzen- oder Hakenriegelgetriebe lieferbar'],
+        ['Sicherheit', 'Sicherheitspakete ohne Einschränkungen einsetzbar'],
         ['Systemtechnik', 'bewährte Merkmale analog Basis-System QuinLine®&nbsp;74'],
       ],
       { bg: WHITE, top: BLUE, topWidth: 2, line: HAIR, labelColor: BLUE, valueColor: '#000000', labelWidth: 150, pad: 12, size: 16 },

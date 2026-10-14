@@ -25,10 +25,21 @@ const T = (attrs = '') => `<table role="presentation" cellpadding="0" cellspacin
 const bgAttr = (bg) => (bg ? ` bgcolor="${bg}"` : '');
 const bgCss = (bg) => (bg ? ` background:${bg};` : '');
 
-export function render({ cr }) {
+// snippet: true -> nur der Inhaltsbereich als HTML-Ausschnitt (ohne <html>/<head>/<body>) zum Einfügen
+// in ein HTML-Element einer bestehenden Vorlage. Spaltenbreiten in Prozent, Bild-URLs als Platzhalter.
+// CleverReach-Links aus der bisherigen SCHMIDT-Vorlage ([…] sind CleverReach-Platzhalter, & als &amp; im href)
+const URL_ONLINE = 'https://262600.seu2.cleverreach.com/m/[MAILING_ID]/[HASH]';
+const URL_ABMELDEN = 'https://366524.eu2.cleverreach.com/rmftlp.php?cid=[CTID]&amp;mid=[MAILING_ID]&amp;h=[CTID]-[USER_ID_SECURE]';
+
+const SNIPPET_SRC = { 'keyvisual-ql74-edge.jpg': 'URL-TITELBILD', 'mockup-farbuebersicht-kompendium.jpg': 'URL-BROSCHUERE' };
+
+// pdf: true -> Fassung für das PDF: ohne CleverReach-Platzhalter (Anrede, Online-Version, Abmeldung, E-Mail).
+export function render({ cr, contentOnly = false, snippet = false, pdf = false }) {
+  if (snippet) [cr, contentOnly] = [false, true];
+  if (pdf) cr = false;
   const html = (inner) => (cr ? `<!--#html #-->${inner}<!--#/html#-->` : inner);
   const image = (inner) => (cr ? `<!--#image #-->${inner}<!--#/image#-->` : inner);
-  const src = (file) => (cr ? file : `images/${file}`);
+  const src = (file) => (snippet ? SNIPPET_SRC[file] : cr ? file : `images/${file}`);
 
   const spacer = (h, bg, colspan = 0) =>
     `<tr><td${colspan ? ` colspan="${colspan}"` : ''} height="${h}"${bgAttr(bg)} style="padding:0; height:${h}px;${bgCss(bg)} font-size:1px; line-height:1px; ${X}">&nbsp;</td></tr>`;
@@ -64,15 +75,15 @@ export function render({ cr }) {
     `<p style="margin:0 0 ${mb}px 0; ${F} font-size:${size}px; line-height:${lh}px; ${X} color:${color};${extra ? ' ' + extra : ''}">${inner}</p>`;
 
   const button = (href, label) =>
-    `${T()}<tr><td class="btn-red" bgcolor="${RED}" style="padding:13px 24px; background:${RED}; ${F} font-size:15px; line-height:18px; ${X} font-weight:700; color:${WHITE};">${html(`<a href="${href}" style="${F} font-size:15px; line-height:18px; font-weight:700; color:${WHITE}; text-decoration:none;">${label}</a>`)}</td></tr></table>`;
+    `${T()}<tr><td class="btn-red" bgcolor="${RED}" style="padding:13px 24px; background:${RED}; ${F} font-size:16px; line-height:20px; ${X} font-weight:700; color:${WHITE};">${html(`<a href="${href}" style="${F} font-size:16px; line-height:20px; font-weight:700; color:${WHITE}; text-decoration:none;">${label}</a>`)}</td></tr></table>`;
 
   // Zweispaltige Daten-Tabelle (Bezeichnung | Wert), mobil untereinander
   const specTable = (rows, { bg, top, topWidth, line, labelColor, valueColor, labelWidth, pad, size }) => {
     const tr = rows
       .map(([label, value]) =>
         `<tr>` +
-        `<td class="stack spec-l" width="${labelWidth}" valign="top"${bgAttr(bg)} style="padding:${pad}px 16px ${pad}px 0;${bgCss(bg)} border-bottom:1px solid ${line}; ${F} font-size:${size}px; line-height:22px; ${X} font-weight:700; color:${labelColor};">${html(label)}</td>` +
-        `<td class="stack spec-v hy" lang="de" valign="top"${bgAttr(bg)} style="padding:${pad}px 0;${bgCss(bg)} border-bottom:1px solid ${line}; ${F} font-size:${size}px; line-height:22px; ${X} color:${valueColor};">${html(value)}</td>` +
+        `<td class="stack spec-l" width="${labelWidth}" valign="top"${bgAttr(bg)} style="padding:${pad}px 16px ${pad}px 0;${bgCss(bg)} border-bottom:1px solid ${line}; ${F} font-size:${size}px; line-height:24px; ${X} font-weight:700; color:${labelColor};">${html(label)}</td>` +
+        `<td class="stack spec-v hy" lang="de" valign="top"${bgAttr(bg)} style="padding:${pad}px 0;${bgCss(bg)} border-bottom:1px solid ${line}; ${F} font-size:${size}px; line-height:24px; ${X} color:${valueColor};">${html(value)}</td>` +
         `</tr>`)
       .join('\n');
     return `${T('width="100%"')}\n<tr><td colspan="2" height="1"${bgAttr(bg)} style="padding:0; height:1px;${bgCss(bg)} border-top:${topWidth}px solid ${top}; font-size:1px; line-height:1px; ${X}">&nbsp;</td></tr>\n${tr}\n</table>`;
@@ -94,7 +105,7 @@ export function render({ cr }) {
   const intro = section(WHITE, [
     spacer(48, WHITE),
     text(WHITE, `
-${p('{SALUTATION[std:Sehr geehrte Damen und Herren][salutation:formal|de]} {LASTNAME},', { mb: 20 })}
+${p(pdf ? 'Sehr geehrte Damen und Herren,' : '{SALUTATION[std:Sehr geehrte Damen und Herren][salutation:formal|de]} {LASTNAME},', { mb: 20 })}
 ${p(`mit dem Profilsystem <strong style="color:${BLUE};">QuinLine® 74 Edge</strong> erweitern wir unser Hebeschiebetür-Programm um eine konsequent geradlinige Variante. Der schmale Flügelüberschlag und die eckigen Glasleisten verzichten bewusst auf Rundungen. So entsteht eine markante, nahezu rechtwinklige Kontur, die sich nahtlos in Objekte mit eckigen Fensterprofilen einfügt.`, { mb: 20 })}
 ${p('Gleichzeitig nimmt das System Glasdicken bis 50&nbsp;mm auf und ist damit bestens gerüstet für Dreifachverglasung, Schall- und Sicherheitsglas. So verbindet die Edge moderne Optik mit maximaler Flexibilität bei der Verglasung.', { mb: 28 })}
 ${p('Ihr Team der SCHMIDT GmbH', { color: BLUE, extra: 'font-weight:700;' })}
@@ -112,7 +123,7 @@ ${tocItems
   .map((item, i) => {
     const last = i === tocItems.length - 1;
     const border = last ? '' : ` border-bottom:1px solid ${HAIR};`;
-    return `<tr><td width="40" valign="top" bgcolor="${GREY}" style="padding:12px 0; background:${GREY};${border} ${F} font-size:16px; line-height:22px; ${X} font-weight:700; color:${RED};">0${i + 1}</td><td valign="top" bgcolor="${GREY}" style="padding:12px 0; background:${GREY};${border} ${F} font-size:16px; line-height:22px; ${X} color:${BLUE};">${html(item)}</td></tr>`;
+    return `<tr><td width="40" valign="top" bgcolor="${GREY}" style="padding:12px 0; background:${GREY};${border} ${F} font-size:16px; line-height:24px; ${X} font-weight:700; color:${RED};">0${i + 1}</td><td valign="top" bgcolor="${GREY}" style="padding:12px 0; background:${GREY};${border} ${F} font-size:16px; line-height:24px; ${X} color:${BLUE};">${html(item)}</td></tr>`;
   })
   .join('\n')}
 </table></td></tr>
@@ -125,20 +136,22 @@ ${tocItems
     spacer(16, WHITE),
     row(WHITE, rule(RED, WHITE)),
     spacer(24, WHITE),
-    text(WHITE, `\n${p('Bei der QuinLine® 74 Edge ändert sich vor allem die Optik, nicht die Technik: Das System basiert auf der bewährten QuinLine® 74 und übernimmt die wichtigsten Systemmerkmale. Für die Verarbeitung heißt das vertraute Abläufe, kombiniert mit einer schlanken, geradlinigen Profilgeometrie und einer großen Bandbreite bei der Verglasung.', { size: 18, lh: 27, color: BLUE })}\n`, { size: 18, lh: 27, color: BLUE }).replace('class="px hy"', 'class="px hy lead"'),
+    text(WHITE, `\n${p('Bei der QuinLine® 74 Edge ändert sich vor allem die Optik, nicht die Technik: Das System basiert auf der bewährten QuinLine® 74 und übernimmt die wichtigsten Systemmerkmale. Für die Verarbeitung heißt das vertraute Abläufe, kombiniert mit einer schlanken, geradlinigen Profilgeometrie und einer großen Bandbreite bei der Verglasung.', { size: 16, lh: 24, color: BLUE })}\n`, { size: 16, lh: 24, color: BLUE }),
     spacer(36, WHITE),
-    row(WHITE, html('Die wichtigsten Systemdaten auf einen Blick'), { style: `${F} font-size:17px; line-height:22px; ${X} font-weight:700; color:#000000;` }),
+    row(WHITE, html('Die wichtigsten Systemdaten auf einen Blick'), { style: `${F} font-size:20px; line-height:26px; ${X} font-weight:700; color:#000000;` }),
     spacer(12, WHITE),
     row(WHITE, specTable(
       [
-        ['Zargenprofil', '5 Kammern, Bautiefe 174&nbsp;mm, Ansicht 63&nbsp;mm'],
-        ['Flügelprofil', '5 Kammern, Bautiefe 74&nbsp;mm, Ansicht 92&nbsp;mm'],
+        ['Zargenprofil', '5 Kammern, Bautiefe 174&nbsp;mm, Ansicht&nbsp;63&nbsp;mm'],
+        ['Flügelprofil', '5 Kammern, Bautiefe 74&nbsp;mm, Ansicht&nbsp;92&nbsp;mm'],
         ['Profilüberschlag', 'geradlinig und schlank, 25&nbsp;mm Höhe'],
         ['Design', 'kantige Glasleisten und Mitteldichtleisten'],
         ['Glasdicken', 'bis 50&nbsp;mm'],
+        ['Getriebe', 'mit Riegelbolzen- oder Hakenriegelgetriebe lieferbar'],
+        ['Sicherheit', 'Sicherheitspakete ohne Einschränkungen einsetzbar'],
         ['Systemtechnik', 'bewährte Merkmale analog Basis-System QuinLine®&nbsp;74'],
       ],
-      { bg: WHITE, top: BLUE, topWidth: 2, line: HAIR, labelColor: BLUE, valueColor: '#000000', labelWidth: 170, pad: 12, size: 15 },
+      { bg: WHITE, top: BLUE, topWidth: 2, line: HAIR, labelColor: BLUE, valueColor: '#000000', labelWidth: 150, pad: 12, size: 16 },
     )),
   ]);
 
@@ -146,7 +159,7 @@ ${tocItems
     spacer(40, WHITE),
     row(WHITE, `${T(`width="100%" bgcolor="${GREY}" style="background:${GREY};"`)}
 <tr><td bgcolor="${GREY}" style="padding:28px 28px 28px 26px; background:${GREY}; border-left:6px solid ${RED}; ${F} font-size:16px; line-height:24px; ${X} color:#000000;">${html(`
-${p('Flügelmuster für Ihre Ausstellung?', { size: 20, lh: 24, color: BLUE, mb: 8, extra: 'font-weight:700;' })}
+${p('Flügelmuster für Ihre Ausstellung?', { size: 20, lh: 26, color: BLUE, mb: 8, extra: 'font-weight:700;' })}
 ${p(`Gerne senden wir Ihnen kostenlos ein Muster einer Flügelecke mit dem Edge-Profil. Schreiben Sie uns dazu einfach eine kurze Mail an <a href="mailto:verkauf@schmidt-boke.de" style="color:${RED}; text-decoration:none; font-weight:700; white-space:nowrap;">verkauf@schmidt-boke.de</a>.`, { mb: 20 })}
 `)}${button('mailto:verkauf@schmidt-boke.de?subject=Fl%C3%BCgelmuster%20QuinLine%C2%AE%2074%20Edge', 'Muster anfordern')}</td></tr>
 </table>`),
@@ -154,9 +167,9 @@ ${p(`Gerne senden wir Ihnen kostenlos ein Muster einer Flügelecke mit dem Edge-
   ]);
 
   const stat = (label, value) =>
-    `<td class="stack" width="240" valign="top" bgcolor="${BLUE}" style="padding:16px 0 0 0; background:${BLUE}; border-top:1px solid ${HAIR_BLUE}; ${F} font-size:14px; line-height:18px; ${X} color:${ON_BLUE};">${html(`
-${p(label, { size: 14, lh: 18, color: ON_BLUE, mb: 6 })}
-<p class="stat" style="margin:0; ${F} font-size:22px; line-height:27px; ${X} font-weight:700; color:${WHITE};">${value}</p>
+    `<td class="stack" width="240" valign="top" bgcolor="${BLUE}" style="padding:16px 0 0 0; background:${BLUE}; border-top:1px solid ${HAIR_BLUE}; ${F} font-size:14px; line-height:20px; ${X} color:${ON_BLUE};">${html(`
+${p(label, { size: 14, lh: 20, color: ON_BLUE, mb: 6 })}
+<p class="stat" style="margin:0; ${F} font-size:20px; line-height:26px; ${X} font-weight:700; color:${WHITE};">${value}</p>
 `)}</td>`;
 
   const thema2 = `${section(BLUE, [
@@ -166,18 +179,24 @@ ${p(label, { size: 14, lh: 18, color: ON_BLUE, mb: 6 })}
     row(BLUE, rule(YELLOW, BLUE)),
     spacer(32, BLUE),
     row(BLUE, `${T('width="100%"')}<tr>
-${stat('Standardschwelle', 'ab sofort bestellbar')}
+${stat('Standardschwelle', 'ab sofort<br>bestellbar')}
 <td class="stack-spacer" width="24" bgcolor="${BLUE}" style="padding:0; width:24px; background:${BLUE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>
-${stat('Niedrigschwelle und Renovierungsschwelle', 'ab Mitte November bestellbar')}
+${stat('Niedrig- &amp; Renovierungsschwelle', 'ab Mitte November<br>bestellbar')}
 </tr></table>`),
     spacer(36, BLUE),
-    row(BLUE, specTable(
-      [
-        ['Farbsortiment', 'weiß und cremeweiß durchgefärbt sowie Standard- und Sonderdekore gemäß Farbübersicht Stand 04/2026 (Download-Bereich im Kunden-Login)'],
-        ['Verglasungsdichtungen', 'schwarz und grau'],
-      ],
-      { bg: BLUE, top: HAIR_BLUE, topWidth: 1, line: HAIR_BLUE, labelColor: WHITE, valueColor: ON_BLUE, labelWidth: 190, pad: 14, size: 15 },
-    )),
+    row(BLUE, `${T('width="100%"')}
+<tr><td height="1" bgcolor="${BLUE}" style="padding:0; height:1px; background:${BLUE}; border-top:1px solid ${HAIR_BLUE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td></tr>
+${[
+  ['Farbsortiment', 'weiß und cremeweiß durchgefärbt sowie Standard- und Sonderdekore gemäß Farbübersicht Stand 04/2026 (Download-Bereich im <span style="white-space:nowrap;">Kunden-Login</span>)'],
+  ['Verglasungsdichtungen', 'schwarz und grau'],
+]
+  .map(([label, value]) =>
+    `<tr><td bgcolor="${BLUE}" style="padding:16px 0; background:${BLUE}; border-bottom:1px solid ${HAIR_BLUE}; ${F} font-size:16px; line-height:24px; ${X} color:${ON_BLUE};">${html(`
+${p(label, { size: 16, lh: 24, color: WHITE, mb: 4, extra: 'font-weight:700;' })}
+${p(value, { size: 16, lh: 24, color: ON_BLUE })}
+`)}</td></tr>`)
+  .join('\n')}
+</table>`),
     spacer(48, BLUE),
     `<tr><td height="8" bgcolor="${YELLOW}" style="padding:0; height:8px; background:${YELLOW}; font-size:8px; line-height:8px; ${X}">&nbsp;</td></tr>`,
   ])}`;
@@ -189,7 +208,7 @@ ${stat('Niedrigschwelle und Renovierungsschwelle', 'ab Mitte November bestellbar
     ['36–50&nbsp;mm', `<strong style="color:${BLUE};">ab Lager</strong>`, true],
   ];
   const glassCell = (inner, { first, bg, bold }) =>
-    `<td${first ? ' width="150"' : ''} bgcolor="${bg}" style="padding:14px ${first ? '16px' : '12px'} 14px ${first ? '12px' : '0'}; background:${bg}; border-bottom:1px solid ${HAIR}; ${F} font-size:16px; line-height:22px; ${X}${bold ? ' font-weight:700;' : ''} color:#000000;">${html(inner)}</td>`;
+    `<td${first ? ' width="150"' : ''} bgcolor="${bg}" style="padding:14px ${first ? '16px' : '12px'} 14px ${first ? '12px' : '0'}; background:${bg}; border-bottom:1px solid ${HAIR}; ${F} font-size:16px; line-height:24px; ${X}${bold ? ' font-weight:700;' : ''} color:#000000;">${html(inner)}</td>`;
   const glassHead = (label, first) =>
     `<td${first ? ' width="150"' : ''} bgcolor="${WHITE}" style="padding:0 ${first ? '16px' : '0'} 10px ${first ? '12px' : '0'}; background:${WHITE}; border-bottom:2px solid ${BLUE}; ${F} font-size:12px; line-height:16px; ${X} font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:${BLUE};">${html(label)}</td>`;
 
@@ -218,10 +237,10 @@ ${glass
   const divider = section(WHITE, [row(WHITE, hairline(HAIR, WHITE))]);
 
   const card = (stand, title, body, term) =>
-    `<td class="stack" width="240" valign="top" bgcolor="${GREY}" style="padding:20px 20px 22px 20px; background:${GREY}; border-top:4px solid ${BLUE}; ${F} font-size:15px; line-height:22px; ${X} color:#000000;">${html(`
+    `<td class="stack" width="240" valign="top" bgcolor="${GREY}" style="padding:20px 20px 22px 20px; background:${GREY}; border-top:4px solid ${BLUE}; ${F} font-size:16px; line-height:24px; ${X} color:#000000;">${html(`
 ${p(stand, { size: 12, lh: 16, color: '#6e7478', mb: 4, extra: 'font-weight:700; letter-spacing:1.4px; text-transform:uppercase;' })}
-${p(title, { size: 19, lh: 23, color: BLUE, mb: 10, extra: 'font-weight:700;' })}
-${p(body, { size: 15, lh: 22, mb: 14 })}
+${p(title, { size: 20, lh: 26, color: BLUE, mb: 10, extra: 'font-weight:700;' })}
+${p(body, { size: 16, lh: 24, mb: 14 })}
 ${p(`Suchbegriff im Kunden-Login:<br><strong style="color:#000000;">${term}</strong>`, { size: 14, lh: 20, color: '#6e7478' })}
 `)}</td>`;
 
@@ -234,7 +253,7 @@ ${p(`Suchbegriff im Kunden-Login:<br><strong style="color:#000000;">${term}</str
     row(WHITE, image(`<img src="${src('mockup-farbuebersicht-kompendium.jpg')}" width="504" height="371" class="img-fluid" alt="Farbübersicht 04/2026 und Typenübersicht aus dem Kompendium QuinLine® 74 Edge" style="display:block; width:504px; max-width:100%; height:auto; border:0; ${F} font-size:14px; color:#6e7478;">`), { attrs: 'align="center"' }),
     spacer(24, WHITE),
     row(WHITE, `${T('width="100%"')}<tr>
-${card('Stand 04/2026', 'Farbübersicht', 'Enthält bereits die verfügbaren Standard- und Sonderdekore für das neue System QuinLine® 74 Edge.', '„Farbübersicht“')}
+${card('Stand 04/2026', 'Farbübersicht', 'Enthält bereits die verfügbaren Standard- und Sonderdekore für das neue System QuinLine®&nbsp;74&nbsp;Edge.', '„Farbübersicht“')}
 <td class="stack-spacer" width="24" bgcolor="${WHITE}" style="padding:0; width:24px; background:${WHITE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>
 ${card('Stand 09/2026', 'Kompendium', 'Alle technischen Details: Typenübersicht, Elementgrößen, Verglasungsübersicht und Schnittzeichnungen.', '„Kompendium Edge“')}
 </tr></table>`),
@@ -246,7 +265,7 @@ ${card('Stand 09/2026', 'Kompendium', 'Alle technischen Details: Typenübersicht
   ]);
 
   const social = (label, href) =>
-    `<td class="btn-out" bgcolor="${BLUE}" style="padding:9px 16px; background:${BLUE}; border:1px solid ${WHITE}; ${F} font-size:14px; line-height:18px; ${X} font-weight:700; color:${WHITE};">${html(`<a href="${href}" style="${F} font-size:14px; line-height:18px; font-weight:700; color:${WHITE}; text-decoration:none;">${label}</a>`)}</td>`;
+    `<td bgcolor="${BLUE}" style="padding:0; background:${BLUE};">${T()}<tr><td class="btn-out" bgcolor="${BLUE}" style="padding:9px 16px; background:${BLUE}; border:1px solid ${WHITE}; ${F} font-size:14px; line-height:20px; ${X} font-weight:700; color:${WHITE};">${html(`<a href="${href}" style="${F} font-size:14px; line-height:20px; font-weight:700; color:${WHITE}; text-decoration:none;">${label}</a>`)}</td></tr></table></td>`;
   const gap = `<td class="sp" width="12" bgcolor="${BLUE}" style="padding:0; width:12px; background:${BLUE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>`;
 
   const footer = section(BLUE, [
@@ -254,19 +273,39 @@ ${card('Stand 09/2026', 'Kompendium', 'Alle technischen Details: Typenübersicht
     row(BLUE, html('Immer up to date – SCHMIDT auf Social Media'), { attrs: 'align="center"', style: `${F} font-size:20px; line-height:26px; ${X} font-weight:700; color:${WHITE};` }),
     spacer(20, BLUE),
     row(BLUE, `${T('class="social" align="center"')}<tr>
-${social('LinkedIn', 'LINK-LINKEDIN')}${gap}${social('Instagram', 'LINK-INSTAGRAM')}${gap}${social('Facebook', 'LINK-FACEBOOK')}
+${social('LinkedIn', 'https://www.linkedin.com/company/schmidt-die-hebeschiebetuer')}${gap}${social('Instagram', 'https://www.instagram.com/schmidt_die_hebeschiebetuer/')}${gap}${social('Facebook', 'https://www.facebook.com/schmidtdiehebeschiebetuer')}
 </tr></table>`, { attrs: 'align="center"' }),
     spacer(40, BLUE),
     row(BLUE, hairline(HAIR_BLUE, BLUE)),
     spacer(32, BLUE),
     row(BLUE, `<img src="${src('logo-schmidt-negativ.png')}" width="150" height="24" alt="SCHMIDT" style="display:block; margin:0 auto; width:150px; height:auto; border:0; ${F} font-size:20px; font-weight:700; color:${WHITE};">`, { attrs: 'align="center"' }),
     spacer(24, BLUE),
-    row(BLUE, html(`Weitere Informationen zu Neuheiten und Änderungen erhalten Sie regelmäßig in unserem Kunden-Login unter <a href="https://kunden-login.schmidt-boke.de/" style="color:${WHITE}; text-decoration:underline;">kunden-login.schmidt-boke.de</a>.`), { cls: 'hy', attrs: 'align="center" lang="de"', style: `${F} font-size:14px; line-height:21px; ${X} color:${ON_BLUE};` }),
-    spacer(16, BLUE),
-    row(BLUE, html(`SCHMIDT GmbH | Töllen Linde 3 | 33129 Delbrück-Boke<br>Telefon <a href="tel:+49525098450" style="color:#c5ced2; text-decoration:none;">+49 5250 9845-0</a> | <a href="mailto:kontakt@schmidt-boke.de" style="color:#c5ced2; text-decoration:none;">kontakt@schmidt-boke.de</a>`), { attrs: 'align="center"', style: `${F} font-size:13px; line-height:20px; ${X} color:#c5ced2;` }),
-    '<!-- Hier ggf. Abmeldelink und Impressum mit den Platzhaltern des Newsletter-Tools einfügen -->',
+    row(BLUE, html(`Weitere Informationen zu Neuheiten und Änderungen erhalten Sie regelmäßig in unserem Kunden-Login unter <a href="https://kunden-login.schmidt-boke.de/" style="color:${WHITE}; text-decoration:underline;">kunden-login.schmidt-boke.de</a>.`), { cls: 'hy', attrs: 'align="center" lang="de"', style: `${F} font-size:14px; line-height:20px; ${X} color:${ON_BLUE};` }),
     spacer(40, BLUE),
     `<tr><td height="8" bgcolor="${YELLOW}" style="padding:0; height:8px; background:${YELLOW}; font-size:8px; line-height:8px; ${X}">&nbsp;</td></tr>`,
+  ]);
+
+  // Pflichtangaben unter der Karte (aus der bisherigen SCHMIDT-Vorlage): Online-Version, Impressum, Abmeldung.
+  const legalText = (inner) =>
+    row(PAGE, html(inner), { attrs: 'align="center"', style: `${F} font-size:12px; line-height:18px; ${X} color:#4b565c;` });
+  const legalLink = (href, label) => `<a href="${href}" style="color:${RED}; font-weight:700; text-decoration:none;">${label}</a>`;
+  const plainLink = (href, label) => `<a href="${href}" style="color:#4b565c; text-decoration:none;">${label}</a>`;
+  const legal = section(PAGE, [
+    spacer(32, PAGE),
+    ...(pdf ? [] : [
+      legalText(`Wird diese Nachricht nicht richtig dargestellt, klicken Sie bitte ${legalLink(URL_ONLINE, 'hier')}.`),
+      spacer(24, PAGE),
+    ]),
+    legalText('SCHMIDT GmbH<br>Töllen Linde 3<br>33129 Delbrück-Boke<br>Deutschland'),
+    spacer(16, PAGE),
+    legalText(`${plainLink('tel:+49525098450', '+49 5250 9845-0')}<br>${plainLink('mailto:kontakt@schmidt-boke.de', 'kontakt@schmidt-boke.de')}<br>${plainLink('https://www.schmidt-boke.de', 'www.schmidt-boke.de')}`),
+    spacer(16, PAGE),
+    legalText('Geschäftsführer: Teresa Schmidt-Bertsch, Meinolf Funkenmeier<br>Register: Amtsgericht Paderborn, HRB 6481<br>Tax ID: DE 126 335 238'),
+    ...(pdf ? [] : [
+      spacer(16, PAGE),
+      legalText(`Wenn Sie diesen Newsletter (an: {EMAIL}) nicht mehr empfangen möchten, können Sie ihn ${legalLink(URL_ABMELDEN, 'hier abbestellen')}.`),
+    ]),
+    spacer(40, PAGE),
   ]);
 
   const blocks = [
@@ -285,16 +324,68 @@ ${social('LinkedIn', 'LINK-LINKEDIN')}${gap}${social('Instagram', 'LINK-INSTAGRA
     ? `<!--#loop #-->\n${blocks.join('\n<!--#loopsplit #-->\n')}\n<!--#/loop#-->`
     : blocks.join('\n');
 
-  const notes = cr
+  const mobileCss = `@media only screen and (max-width: 620px) {
+    .container { width: 100% !important; }
+    .px { padding-left: 20px !important; padding-right: 20px !important; }
+    .stack { display: block !important; width: 100% !important; box-sizing: border-box; }
+    .stack-spacer { display: block !important; width: 100% !important; height: 24px !important; }
+    .spec-l { padding-bottom: 0 !important; border-bottom: 0 !important; }
+    .spec-v { padding-top: 2px !important; }
+    .h2, .h2 h2 { font-size: 24px !important; line-height: 28px !important; }
+    .img-fluid { width: 100% !important; height: auto !important; }
+    .social td.sp { width: 8px !important; }
+  }`;
+
+  if (snippet) {
+    // Feste Spaltenbreiten in Prozent, damit der Ausschnitt in jede Inhaltsbreite passt –
+    // auch wenn das Newsletter-Tool den <style>-Block (Handy-Umbruch) entfernt. Dafür außerdem:
+    // Seitenrand 32 statt 48 px und die beiden Dokument-Karten immer untereinander (passt so bis 375 px Breite).
+    const cardSpacer = `<td class="stack-spacer" width="24" bgcolor="${WHITE}" style="padding:0; width:24px; background:${WHITE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>`;
+    if (!body.includes(cardSpacer)) throw new Error('Karten-Abstand nicht gefunden');
+    const fluid = body
+      .replace(`\n${cardSpacer}\n`, `</tr>\n${spacer(16, WHITE)}\n<tr>`)
+      .replaceAll(`class="stack" width="240" valign="top" bgcolor="${GREY}"`, `class="stack" width="100%" valign="top" bgcolor="${GREY}"`)
+      .replaceAll('style="padding:0 48px;', 'style="padding:0 32px;')
+      .replaceAll('class="stack" width="240"', 'class="stack" width="48%"')
+      .replaceAll('class="stack-spacer" width="24"', 'class="stack-spacer" width="4%"')
+      .replaceAll('padding:0; width:24px;', 'padding:0; width:4%;')
+      .replaceAll('class="stack spec-l" width="150"', 'class="stack spec-l" width="28%"')
+      .replaceAll('class="stack spec-l" width="190"', 'class="stack spec-l" width="38%"')
+      .replaceAll('<td width="150"', '<td width="30%"');
+    return `<!--
+  SCHMIDT Produkt-News: QuinLine® 74 Edge – nur Inhaltsbereich (Titelbild bis "Zum Kunden-Login")
+  zum Einfügen in ein HTML-Element Ihrer bestehenden CleverReach-Vorlage.
+  Vor dem Einfügen ersetzen: URL-TITELBILD und URL-BROSCHUERE durch die Bild-Adressen aus CleverReach.
+  Erzeugt aus source/template.mjs.
+-->
+<style>
+  .hy { -webkit-hyphens: auto; -ms-hyphens: auto; hyphens: auto; }
+  .btn-red:hover { background: #c30026 !important; }
+  ${mobileCss}
+</style>
+${T('class="container" width="100%" align="center" style="width:100%; max-width:600px;"')}
+<tr>
+<td style="padding:0;">
+${fluid}
+</td>
+</tr>
+</table>
+`;
+  }
+
+  const scope = contentOnly
+    ? `  Nur Inhaltsbereich: ohne Kopfzeile, ohne Social Media und Fußbereich (die kommen aus Ihrer CleverReach-Vorlage).\n`
+    : '';
+  const notes = scope + (cr
     ? `  Vorlage für CleverReach: die ZIP-Datei unter "Eigene Vorlagen" hochladen (nicht entpacken).
   Im Editor editierbar: Texte/Links (HTML-Markierungen), Bilder (IMAGE-Markierungen),
   Blöcke innerhalb von LOOP (verschieben, kopieren, löschen). Kopf- und Fußbereich sind fest, ihre Texte editierbar.
   Bilder beim Austauschen in der Breite lassen: Titelbild 600 px, Broschüren-Bild 504 px.`
     : `  Bilder unter images/ im Newsletter-Tool hochladen und die src-Pfade anpassen.
   keyvisual-ql74-edge.jpg und mockup-farbuebersicht-kompendium.jpg sind Ausschnitte aus Screenshots,
-  bitte durch die Originale ersetzen (Anzeigebreite 600 px bzw. 504 px).`;
+  bitte durch die Originale ersetzen (Anzeigebreite 600 px bzw. 504 px).`);
 
-  const preheader = cr
+  const preheader = cr || pdf
     ? ''
     : `\n<div style="display:none; font-size:1px; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden; mso-hide:all;">QuinLine® 74 Edge: die konsequent geradlinige Hebeschiebetür für Glasdicken bis 50 mm – Systemdaten, Verfügbarkeit, Glasleisten und Kompendium.${'&#847;&zwnj;&nbsp;'.repeat(20)}</div>\n`;
 
@@ -314,7 +405,6 @@ ${social('LinkedIn', 'LINK-LINKEDIN')}${gap}${social('Instagram', 'LINK-INSTAGRA
   Erzeugt aus source/template.mjs – Änderungen dort vornehmen und source/build.mjs ausführen.
   E-Mail-HTML: Tabellen-Layout, Inline-Styles, 600 px, Schrift Arial (Office-Schrift laut CD-Guideline), für Outlook gehärtet.
 ${notes}
-  Platzhalter vor dem Versand ersetzen: LINK-LINKEDIN, LINK-INSTAGRAM, LINK-FACEBOOK.
   Die Anrede-Variable {SALUTATION…} {LASTNAME} ist unverändert aus dem Original übernommen.
 -->
 <!--[if mso]>
@@ -336,19 +426,7 @@ ${notes}
   .btn-out:hover { background: #ffffff !important; }
   .btn-out:hover a { color: #123442 !important; }
 
-  @media only screen and (max-width: 620px) {
-    .container { width: 100% !important; }
-    .px { padding-left: 20px !important; padding-right: 20px !important; }
-    .stack { display: block !important; width: 100% !important; box-sizing: border-box; }
-    .stack-spacer { display: block !important; width: 100% !important; height: 24px !important; }
-    .spec-l { padding-bottom: 0 !important; border-bottom: 0 !important; }
-    .spec-v { padding-top: 2px !important; }
-    .h2, .h2 h2 { font-size: 24px !important; line-height: 28px !important; }
-    .lead, .lead p { font-size: 17px !important; line-height: 26px !important; }
-    .stat { font-size: 20px !important; line-height: 24px !important; }
-    .img-fluid { width: 100% !important; height: auto !important; }
-    .social td.sp { width: 8px !important; }
-  }
+  ${mobileCss}
 </style>
 </head>
 <body id="body" style="margin:0; padding:0; background:${PAGE}; word-spacing:normal;">${preheader}
@@ -360,16 +438,9 @@ ${T('class="container" width="600" style="width:600px; max-width:600px;"')}
 <tr>
 <td style="padding:0;">
 
-<!-- KOPFZEILE (fest) -->
-${header}
-
+${contentOnly ? '' : `<!-- KOPFZEILE (fest) -->\n${header}\n`}
 ${body}
-
-<!-- FOOTER (fest) -->
-${footer}
-
-${T('width="100%"')}${spacer(32, PAGE)}</table>
-
+${contentOnly ? '' : `\n<!-- FOOTER (fest) -->\n${footer}\n\n<!-- PFLICHTANGABEN (fest) -->\n${legal}\n`}
 </td>
 </tr>
 </table>

@@ -1,0 +1,31 @@
+# SCHMIDT Intern – Mitarbeiter-App
+
+Web-App für die Belegschaft im SCHMIDT Corporate Design, veröffentlicht als Seite auf claude.ai:
+https://claude.ai/artifact/95L3bzmEWkuLJ9gDAspXuH
+
+## Bereiche
+
+- **Aktuelles:** Neuigkeiten (mit Bereichs-Filter, Anheften, „Neu“-Markierung je Person), Termine, Schwarzes Brett
+- **Telefonbuch:** Suche, Abteilungs-Filter, Klick kopiert die volle Nummer (Zentrale +49 5250 9845 plus Durchwahl), Import einer Liste aus Excel/CSV
+- **Dokumente:** Dateien (PDF, Bild, Video, Text bis 20 MB) oder Links, Kategorien, Suche, dazu häufige Fragen
+
+## Rechte
+
+| Wer (Freigabe-Menü) | darf |
+|---|---|
+| Eigentümer, Bearbeiter („Redaktion“) | alles anlegen, ändern, löschen; Dateien hochladen |
+| Mitwirkende | alles lesen, eigene Aushänge am Schwarzen Brett |
+| Betrachter | nur lesen |
+
+Die Regeln liegen in der Datenablage der Seite (`news`, `termine`, `kontakte`, `dokumente`, `faq` nur Redaktion;
+`brett/<person>` schreibt jede Person selbst; `data/users/<person>/state` merkt sich, was jemand gelesen hat).
+
+## Bauen
+
+```bash
+node projects/mitarbeiter-app/source/build.mjs
+```
+
+Schreibt `renders/schmidt-intern.html`. Eingebettet werden Filson Pro (Latin-Subset aus
+`brand-guidelines/default/assets/fonts/`, als woff2 in `source/fonts/`) und die Wortmarke aus `logo-schmidt.svg`.
+Danach die Datei erneut auf dieselbe Adresse veröffentlichen; die Inhalte in der Datenablage bleiben erhalten.

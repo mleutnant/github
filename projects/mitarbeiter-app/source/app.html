@@ -1,0 +1,1218 @@
+<title>SCHMIDT Intern</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+@font-face{font-family:"Filson Pro";src:url(data:font/woff2;base64,__FONT_400__) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url(data:font/woff2;base64,__FONT_500__) format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url(data:font/woff2;base64,__FONT_700__) format("woff2");font-weight:700;font-style:normal;font-display:swap}
+
+/* Layout: blaue Kopf-Fläche mit gelber Fußlinie (SCHMIDT CD), darunter Register-Leiste;
+   weißer Inhalt mit Hauptspalte + Randspalte, Ecken überall 0. */
+:root{
+  --bg:#ffffff;
+  --tint:#eef1f2;
+  --line:#d0d7db;
+  --line-strong:#8f9ea5;
+  --ink:#000000;
+  --muted:#5b656b;
+  --heading:#123442;
+  --field:#123442;
+  --field-ink:#ffffff;
+  --field-muted:rgba(255,255,255,.8);
+  --chip-on:#123442;
+  --red:#e3002c;
+  --red-hover:#c30026;
+  --accent-ink:#c8002a;
+  --yellow:#f6a206;
+  --shadow-raised:0 10px 30px rgba(18,52,66,.14);
+  --backdrop:rgba(10,26,33,.55);
+  --font:"Filson Pro",Arial,Helvetica,sans-serif;
+  --ease:cubic-bezier(.2,.6,.2,1);
+  --dur-fast:140ms;
+  --dur:240ms;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0a1a21;--tint:#11283a;--line:#24404c;--line-strong:#5a7480;--ink:#eef2f3;--muted:#9fb1b8;
+    --heading:#ffffff;--field:#123442;--field-ink:#ffffff;--field-muted:rgba(255,255,255,.78);--chip-on:#2a5a72;
+    --red:#e3002c;--red-hover:#c30026;--accent-ink:#ff6680;--yellow:#f6a206;
+    --shadow-raised:0 10px 30px rgba(0,0,0,.45);--backdrop:rgba(0,0,0,.6);color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0a1a21;--tint:#11283a;--line:#24404c;--line-strong:#5a7480;--ink:#eef2f3;--muted:#9fb1b8;
+  --heading:#ffffff;--field:#123442;--field-ink:#ffffff;--field-muted:rgba(255,255,255,.78);--chip-on:#2a5a72;
+  --red:#e3002c;--red-hover:#c30026;--accent-ink:#ff6680;--yellow:#f6a206;
+  --shadow-raised:0 10px 30px rgba(0,0,0,.45);--backdrop:rgba(0,0,0,.6);color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-weight:500;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;font-kerning:normal}
+.wrap{max-width:1200px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:720px){.wrap{padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+h1,h2,h3{text-wrap:balance}
+
+/* Kopf */
+.masthead{background:var(--field);color:var(--field-ink);border-bottom:8px solid var(--yellow)}
+.mast-inner{padding-block:20px 30px;display:grid;gap:26px}
+.mast-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:inline-flex;align-items:center;gap:14px;color:var(--field-ink);text-decoration:none}
+.logo{height:30px;width:auto;display:block}
+.logo .bm{fill:var(--red)}
+.logo .wm{fill:currentColor}
+.brand-tag{font-weight:400;font-size:14px;letter-spacing:.08em;text-transform:uppercase;padding-left:14px;border-left:1px solid rgba(255,255,255,.4);line-height:1.1}
+.role{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid rgba(255,255,255,.5);padding:5px 9px;line-height:1}
+.greet{margin:0;font-weight:700;font-size:clamp(28px,4.4vw,42px);line-height:1.15;letter-spacing:-.01em}
+.today{margin:8px 0 0;color:var(--field-muted);font-size:15px;font-weight:400;font-variant-numeric:tabular-nums}
+
+/* Register */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs-inner{display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
+.tabs-inner::-webkit-scrollbar{display:none}
+.tab{display:inline-flex;align-items:center;gap:8px;padding:16px 0 12px;border-bottom:4px solid transparent;color:var(--muted);text-decoration:none;font-size:16px;white-space:nowrap;transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+.tab:hover{color:var(--accent-ink)}
+.tab[aria-current="page"]{color:var(--ink);border-bottom-color:var(--red)}
+.badge{min-width:20px;height:20px;padding:0 6px;background:var(--yellow);color:#000;font-size:12px;font-weight:700;display:inline-grid;place-items:center;font-variant-numeric:tabular-nums;line-height:1}
+
+.notice{background:var(--tint);border-bottom:1px solid var(--line)}
+.notice .wrap{padding-block:12px;font-size:15px}
+
+main.wrap{padding-block:36px 72px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:64px;align-items:start}
+@media (max-width:940px){.layout{grid-template-columns:minmax(0,1fr);gap:56px}}
+.aside{display:grid;gap:56px;min-width:0}
+.main{min-width:0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;margin-bottom:18px}
+h2{margin:0;font-size:28px;line-height:1.15;font-weight:700;color:var(--heading);letter-spacing:-.01em}
+.aside h2{font-size:21px}
+.sec-sub{margin:6px 0 0;color:var(--muted);font-size:15px;font-weight:400}
+
+/* Bedienelemente */
+.btn{font:inherit;font-weight:700;font-size:15px;line-height:1.1;padding:11px 16px;border:2px solid transparent;border-radius:0;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:background-color var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.6;cursor:progress}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red-hover)}
+.btn-outline{background:transparent;color:var(--heading);border-color:var(--heading)}
+.btn-outline:hover{background:var(--field);border-color:var(--field);color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--heading)}
+.btn-sm{font-size:14px;padding:8px 12px}
+.btn-text{font:inherit;font-size:14px;font-weight:500;background:none;border:0;padding:2px 0;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.btn-text:hover{color:var(--accent-ink)}
+.btn-text.armed{color:var(--accent-ink);font-weight:700}
+.actions{display:flex;gap:16px;flex-wrap:wrap}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.chip{font:inherit;font-size:14px;font-weight:500;padding:7px 12px;border:1px solid var(--line);border-radius:0;background:var(--bg);color:var(--ink);cursor:pointer;transition:border-color var(--dur-fast) var(--ease)}
+.chip:hover{border-color:var(--heading)}
+.chip[aria-pressed="true"]{background:var(--chip-on);border-color:var(--chip-on);color:#fff}
+
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:13px;color:var(--muted);font-weight:400}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--heading)}
+.flag{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 6px;line-height:1}
+.flag-new{background:var(--yellow);color:#000}
+.flag-pin{border:1px solid var(--heading);color:var(--heading);padding:2px 5px}
+
+/* Neuigkeiten */
+.post{padding:26px 0;border-top:1px solid var(--line)}
+.post:first-child{border-top:0;padding-top:0}
+.post.pinned{background:var(--tint);padding:24px;border-top:0;margin-bottom:6px}
+.post.pinned+.post{border-top:0}
+.post h3{margin:10px 0 10px;font-size:22px;line-height:1.2;font-weight:700;color:var(--heading)}
+.prose{max-width:62ch;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
+.prose p{margin:0 0 .75em}
+.prose p:last-child{margin-bottom:0}
+.prose a{color:var(--accent-ink);text-underline-offset:3px;overflow-wrap:anywhere}
+.clamped{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.byline{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.byline .actions{margin-left:auto}
+.avatar{width:24px;height:24px;object-fit:cover;background:var(--tint);flex:none;display:block}
+.person{color:var(--ink)}
+
+/* Termine */
+.list{list-style:none;margin:0;padding:0}
+.event{display:grid;grid-template-columns:56px minmax(0,1fr);gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.event:first-child{border-top:0;padding-top:0}
+.ev-date{border:2px solid var(--heading);text-align:center;padding:7px 0 6px;line-height:1;color:var(--heading);align-self:start}
+.ev-date.is-today{background:var(--field);border-color:var(--field);color:#fff}
+.ev-day{display:block;font-size:22px;font-weight:700;font-variant-numeric:tabular-nums lining-nums}
+.ev-mon{display:block;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-top:4px}
+.ev-title{font-weight:700;line-height:1.25}
+.ev-meta{font-size:14px;color:var(--muted);font-weight:400;margin-top:3px}
+.ev-note{font-size:14px;margin-top:4px}
+.ev-actions{margin-top:6px}
+
+/* Schwarzes Brett */
+.note{padding:16px 0;border-top:1px solid var(--line)}
+.note:first-child{border-top:0;padding-top:0}
+.kind{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 5px;border:1px solid currentColor;line-height:1}
+.kind-Biete{color:var(--heading)}
+.kind-Suche{color:var(--accent-ink)}
+.kind-Info{color:var(--muted)}
+.note-title{font-weight:700;margin-top:8px;line-height:1.3}
+.note-text{font-size:15px;margin-top:4px}
+.note .byline{margin-top:10px;font-size:13px}
+.more{margin-top:14px}
+
+/* Telefonbuch */
+.pb-top{display:flex;flex-wrap:wrap;gap:20px 40px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+.zentrale{font-size:15px;color:var(--muted);font-weight:400}
+.zentrale .copy{font-weight:700;color:var(--heading)}
+.search{display:grid;gap:6px;max-width:620px;margin-bottom:16px}
+.search label{font-size:14px;font-weight:700}
+.search input{width:100%;font:inherit;font-size:17px;padding:13px 16px;border:2px solid var(--heading);border-radius:0;background:var(--bg);color:var(--ink)}
+.count{font-size:14px;color:var(--muted);margin:0 0 6px;font-weight:400}
+.pb-row{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1.5fr) 112px minmax(0,1.4fr) minmax(0,2.1fr) auto;grid-template-areas:"name dept dw mob mail act";gap:16px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}
+.pb-row.head{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);border-top:0;padding:0 0 10px;border-bottom:2px solid var(--heading)}
+.pb-row.head+.pb-row{border-top:0}
+.c-name{grid-area:name;min-width:0}
+.c-dept{grid-area:dept;min-width:0;font-size:15px}
+.c-dw{grid-area:dw}
+.c-mob{grid-area:mob;min-width:0}
+.c-mail{grid-area:mail;min-width:0}
+.c-act{grid-area:act;justify-self:end}
+.p-name{font-weight:700;color:var(--heading);line-height:1.25}
+.p-fn,.p-room{font-size:14px;color:var(--muted);font-weight:400}
+.lbl{display:none}
+.copy{font:inherit;background:none;border:0;border-bottom:1px dashed var(--line-strong);padding:1px 0;color:inherit;cursor:pointer;text-align:left;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;transition:color var(--dur-fast) var(--ease)}
+.copy:hover{color:var(--accent-ink);border-bottom-color:currentColor}
+.dw{font-size:20px;font-weight:700;color:var(--heading)}
+@media (max-width:760px){
+  .pb-row.head{display:none}
+  .pb-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name dw" "dept dept" "mob mob" "mail mail" "act act";gap:6px 16px;padding:16px 0}
+  .c-act{justify-self:start;margin-top:4px}
+  .c-dw{justify-self:end;text-align:right}
+  .lbl{display:inline;font-size:13px;color:var(--muted);font-weight:400;margin-right:6px}
+  .c-dw .lbl{display:block;margin:0;font-size:11px;letter-spacing:.07em;text-transform:uppercase}
+}
+
+/* Dokumente */
+.doc{display:grid;grid-template-columns:48px minmax(0,1fr);gap:16px;align-items:start;padding:18px 0;border-top:1px solid var(--line)}
+.doc:first-child{border-top:0;padding-top:0}
+.ftype{position:relative;width:48px;height:58px;border:2px solid var(--heading);color:var(--heading);display:flex;align-items:flex-end;padding:0 0 6px 6px;font-size:11px;font-weight:700;letter-spacing:.04em;line-height:1}
+.ftype::after{content:"";position:absolute;top:-2px;right:7px;width:9px;height:2px;background:var(--bg)}
+.doc-title{font-weight:700;font-size:17px;line-height:1.3;color:var(--heading);text-decoration:none}
+a.doc-title:hover{color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
+.doc-desc{margin:4px 0 0;font-size:15px;max-width:62ch}
+.doc .meta{margin-top:6px}
+.doc .actions{margin-top:8px}
+
+.faq details{border-top:1px solid var(--line)}
+.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;padding:14px 34px 14px 0;font-weight:700;position:relative;color:var(--heading);line-height:1.3}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before,.faq summary::after{content:"";position:absolute;right:4px;top:50%;width:14px;height:2px;margin-top:-1px;background:currentColor;transition:transform var(--dur) var(--ease)}
+.faq summary::after{transform:rotate(90deg)}
+.faq details[open] summary::after{transform:rotate(0deg)}
+.faq .answer{padding:0 0 18px;font-size:15px}
+.faq .answer .actions{margin-top:10px}
+
+/* Leere Zustände */
+.empty{padding:24px;border:1px dashed var(--line-strong);display:grid;gap:10px;justify-items:start}
+.empty strong{color:var(--heading);font-size:17px;line-height:1.3}
+.empty p{margin:0;color:var(--muted);max-width:52ch;font-weight:400}
+.loading{color:var(--muted);font-weight:400;font-size:15px}
+
+/* Formular-Fenster */
+dialog#sheet{border:0;padding:0;width:min(580px,calc(100% - 32px));max-height:calc(100% - 48px);background:var(--bg);color:var(--ink);border-radius:0;box-shadow:var(--shadow-raised)}
+dialog#sheet[open]{display:flex;flex-direction:column}
+dialog#sheet::backdrop{background:var(--backdrop)}
+.sheet-head{background:var(--field);color:var(--field-ink);padding:18px 20px;border-bottom:8px solid var(--yellow);display:flex;justify-content:space-between;align-items:center;gap:12px;flex:none}
+.sheet-head h2{color:var(--field-ink);font-size:21px}
+.sheet-close{font:inherit;font-size:14px;background:none;border:1px solid rgba(255,255,255,.5);color:var(--field-ink);padding:6px 10px;cursor:pointer}
+.sheet-close:hover{background:rgba(255,255,255,.12)}
+#sheetBody{padding:20px;overflow:auto;min-height:0}
+.form{display:grid;gap:16px}
+.form-intro{margin:0;color:var(--muted);font-weight:400;font-size:15px}
+.field{display:grid;gap:6px;min-width:0}
+.field>label{font-size:14px;font-weight:700}
+.hint{font-size:13px;color:var(--muted);font-weight:400}
+.field input:not([type=checkbox]),.field select,.field textarea,.import-area{font:inherit;font-weight:500;font-size:16px;padding:10px 12px;border:1px solid var(--line-strong);border-radius:0;background:var(--bg);color:var(--ink);width:100%;min-width:0}
+.field textarea,.import-area{min-height:150px;resize:vertical;line-height:1.5}
+.field input[type=file]{padding:9px;font-size:15px}
+.check{display:flex;gap:10px;align-items:center;font-weight:500;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--field);margin:0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+.form-actions{display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap;margin-top:4px}
+.form-error{color:var(--accent-ink);font-weight:700;margin:0}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line)}
+.tbl-wrap table{border-collapse:collapse;font-size:14px;width:100%}
+.tbl-wrap th,.tbl-wrap td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap;font-weight:400}
+.tbl-wrap th{font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);background:var(--field);color:#fff;border:1px solid rgba(255,255,255,.18);padding:12px 16px;font-size:15px;opacity:0;pointer-events:none;transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);max-width:calc(100% - 32px);z-index:50}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+.foot{border-top:1px solid var(--line)}
+.foot .wrap{padding-block:20px;font-size:13px;color:var(--muted);font-weight:400;display:flex;gap:8px 24px;flex-wrap:wrap;justify-content:space-between}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app" lang="de">
+  <header class="masthead">
+    <div class="wrap mast-inner">
+      <div class="mast-top">
+        <a class="brand" href="#aktuelles" aria-label="SCHMIDT Intern, Aktuelles">
+          <svg class="logo" viewBox="62 62 398 65" aria-hidden="true" focusable="false">
+            <g class="bm">
+              <polygon points="142.83,75.14 142.83,83.44 151.26,83.44 151.26,116.95 142.83,116.95 142.83,125.25 159.56,125.25 159.56,75.14"/>
+              <polygon points="62.62,62.62 62.62,125.25 79.31,125.25 79.31,116.95 70.92,116.95 70.92,70.92 130.32,70.92 130.33,116.92 91.81,116.92 91.81,83.44 126.11,83.44 126.11,75.14 83.51,75.14 83.51,125.22 138.63,125.22 138.62,62.62"/>
+            </g>
+            <path class="wm" d="__LOGO_PATH__"/>
+          </svg>
+          <span class="brand-tag">Intern</span>
+        </a>
+        <span class="role" id="roleChip" hidden>Redaktion</span>
+      </div>
+      <div>
+        <h1 class="greet" id="greet">Guten Tag.</h1>
+        <p class="today" id="today"></p>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Bereiche">
+    <div class="wrap tabs-inner">
+      <a class="tab" href="#aktuelles" data-view="aktuelles">Aktuelles <span class="badge" id="newsBadge" hidden></span></a>
+      <a class="tab" href="#telefonbuch" data-view="telefonbuch">Telefonbuch</a>
+      <a class="tab" href="#dokumente" data-view="dokumente">Dokumente</a>
+    </div>
+  </nav>
+
+  <div class="notice" id="notice" hidden><div class="wrap" id="noticeText"></div></div>
+
+  <main class="wrap">
+    <section id="view-aktuelles" class="view" aria-labelledby="h-news">
+      <div class="layout">
+        <div class="main">
+          <div class="sec-head">
+            <div>
+              <h2 id="h-news">Neuigkeiten</h2>
+              <p class="sec-sub">Mitteilungen aus Geschäftsführung, Personal und den Abteilungen.</p>
+            </div>
+            <div id="newsTools"></div>
+          </div>
+          <div class="chips" id="newsChips" role="group" aria-label="Nach Bereich filtern"></div>
+          <div id="newsList"><p class="loading">Neuigkeiten werden geladen …</p></div>
+        </div>
+        <aside class="aside" aria-label="Termine und Schwarzes Brett">
+          <div>
+            <div class="sec-head"><h2 id="h-termine">Termine</h2><div id="termTools"></div></div>
+            <div id="termList"><p class="loading">Termine werden geladen …</p></div>
+          </div>
+          <div>
+            <div class="sec-head">
+              <div>
+                <h2 id="h-brett">Schwarzes Brett</h2>
+                <p class="sec-sub">Biete, suche, Fundsachen: Aushänge von allen.</p>
+              </div>
+              <div id="brettTools"></div>
+            </div>
+            <div id="brettList"><p class="loading">Aushänge werden geladen …</p></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="view-telefonbuch" class="view" aria-labelledby="h-pb" hidden>
+      <div class="pb-top">
+        <div>
+          <h2 id="h-pb">Telefonbuch</h2>
+          <p class="zentrale">Zentrale <button type="button" class="copy" data-copy="+49 5250 9845-0">+49 5250 9845-0</button>. Durchwahlen hängen an diese Nummer an.</p>
+        </div>
+        <div class="actions" id="pbTools"></div>
+      </div>
+      <div class="search">
+        <label for="pbSearch">Suchen</label>
+        <input id="pbSearch" type="search" placeholder="Name, Abteilung oder Durchwahl" autocomplete="off">
+      </div>
+      <div class="chips" id="deptChips" role="group" aria-label="Nach Abteilung filtern"></div>
+      <p class="count" id="pbCount" aria-live="polite"></p>
+      <div id="pbList"><p class="loading">Telefonbuch wird geladen …</p></div>
+    </section>
+
+    <section id="view-dokumente" class="view" aria-labelledby="h-docs" hidden>
+      <div class="layout">
+        <div class="main">
+          <div class="sec-head">
+            <div>
+              <h2 id="h-docs">Dokumente</h2>
+              <p class="sec-sub">Formulare, Anleitungen und Handbücher an einem Ort.</p>
+            </div>
+            <div class="actions" id="docTools"></div>
+          </div>
+          <div class="search">
+            <label for="docSearch" class="sr">Dokumente durchsuchen</label>
+            <input id="docSearch" type="search" placeholder="Dokument suchen" autocomplete="off">
+          </div>
+          <div class="chips" id="docChips" role="group" aria-label="Nach Kategorie filtern"></div>
+          <div id="docList"><p class="loading">Dokumente werden geladen …</p></div>
+        </div>
+        <aside class="aside faq" aria-labelledby="h-faq">
+          <div>
+            <div class="sec-head"><h2 id="h-faq">Häufige Fragen</h2><div id="faqTools"></div></div>
+            <div id="faqList"><p class="loading">Fragen werden geladen …</p></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap"><span>SCHMIDT GmbH · Delbrück-Boke</span><span>Nur für Mitarbeiterinnen und Mitarbeiter</span></div>
+  </footer>
+
+  <dialog id="sheet" aria-labelledby="sheetTitle">
+    <div class="sheet-head"><h2 id="sheetTitle">Bearbeiten</h2><button type="button" class="sheet-close" id="sheetClose">Schließen</button></div>
+    <div id="sheetBody"></div>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+const ZENTRALE = "+49 5250 9845";
+const NEWS_CATS = ["Geschäftsführung", "Personal", "Produktion", "Vertrieb", "IT", "Allgemein"];
+const DOC_CATS = ["Formulare", "Anleitungen", "Handbücher", "Arbeitssicherheit", "IT & Technik", "Personal", "Sonstiges"];
+const BRETT_KINDS = ["Biete", "Suche", "Info"];
+const BRETT_DAYS = 90;
+const WEEKDAYS = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+const MONTHS = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+const MON3 = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+
+const S = {
+  db: null, user: null, assets: null, uid: null, canEdit: false, offline: false,
+  view: "aktuelles",
+  news: [], termine: [], kontakte: [], dokumente: [], faq: [], brett: [],
+  ready: { news: false, termine: false, kontakte: false, dokumente: false, faq: false, brett: false },
+  seenAt: null, visitSeenAt: null, seenLoaded: false, marking: false, brettReadonly: false,
+  newsCat: "Alle", dept: "Alle", docCat: "Alle", pbQuery: "", docQuery: "",
+  brettAll: false, expanded: new Set(),
+};
+
+/* ---------- Helfer ---------- */
+const $ = (sel, root = document) => root.querySelector(sel);
+function h(tag, props, ...kids) {
+  const el = document.createElement(tag);
+  if (props) for (const [k, v] of Object.entries(props)) {
+    if (v == null || v === false) continue;
+    if (k === "class") el.className = v;
+    else if (k === "text") el.textContent = v;
+    else if (k.startsWith("on") && typeof v === "function") el.addEventListener(k.slice(2), v);
+    else if (k === "dataset") Object.assign(el.dataset, v);
+    else if (v === true) el.setAttribute(k, "");
+    else el.setAttribute(k, v);
+  }
+  for (const c of kids.flat(Infinity)) if (c != null && c !== false) el.append(c instanceof Node ? c : String(c));
+  return el;
+}
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const nowIso = () => new Date().toISOString();
+const rid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+function fold(s) {
+  return String(s || "").toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss");
+}
+function safeUrl(u) {
+  const s = String(u || "").trim();
+  return /^https?:\/\//i.test(s) ? s : null;
+}
+function appendLinked(el, text) {
+  const re = /https?:\/\/[^\s<>"]*[^\s<>".,;:!?)\]]/g;
+  let last = 0, m;
+  while ((m = re.exec(text))) {
+    el.append(text.slice(last, m.index));
+    el.append(h("a", { href: m[0], target: "_blank", rel: "noopener noreferrer" }, m[0]));
+    last = m.index + m[0].length;
+  }
+  el.append(text.slice(last));
+}
+function richText(str) {
+  const frag = document.createDocumentFragment();
+  String(str || "").trim().split(/\n\s*\n/).forEach((par) => {
+    const p = h("p");
+    par.split("\n").forEach((line, i) => { if (i) p.append(h("br")); appendLinked(p, line); });
+    frag.append(p);
+  });
+  return frag;
+}
+function isoWeek(d) {
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const day = t.getUTCDay() || 7;
+  t.setUTCDate(t.getUTCDate() + 4 - day);
+  const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+  return Math.ceil(((t - y0) / 864e5 + 1) / 7);
+}
+const pad = (n) => String(n).padStart(2, "0");
+const localDay = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+function fmtStamp(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return "";
+  const today = new Date(), y = new Date(); y.setDate(y.getDate() - 1);
+  const hm = `${pad(d.getHours())}:${pad(d.getMinutes())} Uhr`;
+  if (localDay(d) === localDay(today)) return "Heute, " + hm;
+  if (localDay(d) === localDay(y)) return "Gestern, " + hm;
+  return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
+}
+function parseDay(s) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || ""));
+  return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null;
+}
+function fmtSize(n) {
+  if (!n) return "";
+  if (n < 1024 * 1024) return Math.max(1, Math.round(n / 1024)) + " KB";
+  return (n / 1048576).toLocaleString("de-DE", { maximumFractionDigits: 1 }) + " MB";
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+}
+function copyText(value, label) {
+  const done = () => toast(`${label || value} kopiert`);
+  try {
+    navigator.clipboard.writeText(value).then(done, () => toast(`Bitte manuell kopieren: ${value}`));
+  } catch (e) { toast(`Bitte manuell kopieren: ${value}`); }
+}
+function copyBtn(display, value, cls) {
+  return h("button", { type: "button", class: "copy " + (cls || ""), title: `${value} kopieren`, onclick: () => copyText(value) }, display);
+}
+
+function errText(e) {
+  switch (e && e.code) {
+    case "invalid_argument": return "Speichern nicht möglich. Ihnen fehlt die Berechtigung, oder ein Text ist zu lang.";
+    case "quota_exceeded": return "Der Speicher der App ist voll. Bitte alte Einträge löschen.";
+    case "too_large": return "Die Datei ist zu groß. Erlaubt sind höchstens 20 MB.";
+    case "unsupported_type": return "Dieser Dateityp geht nicht. Bitte als PDF speichern oder als Link hinterlegen.";
+    case "revoked": case "not_granted": return "Der Zugriff wurde beendet. Bitte die Seite neu laden.";
+    default: return "Speichern hat nicht geklappt. Bitte gleich noch einmal versuchen.";
+  }
+}
+async function withRetry(fn) {
+  for (let attempt = 0; ; attempt++) {
+    try { return await fn(); }
+    catch (e) {
+      const code = e && e.code;
+      if ((code === "unavailable" || code === "store_unavailable") && attempt === 0) { await sleep(400 + Math.random() * 600); continue; }
+      if (code === "resource_exhausted" && attempt < 3) { await sleep(1500 * (attempt + 1)); continue; }
+      throw e;
+    }
+  }
+}
+function confirmBtn(label, onConfirm) {
+  const b = h("button", { type: "button", class: "btn-text" }, label);
+  let armed = false, t;
+  const reset = () => { armed = false; b.textContent = label; b.classList.remove("armed"); b.disabled = false; };
+  b.addEventListener("click", async () => {
+    if (!armed) {
+      armed = true; b.textContent = "Wirklich löschen?"; b.classList.add("armed");
+      t = setTimeout(reset, 4000);
+      return;
+    }
+    clearTimeout(t); b.disabled = true; b.textContent = "Wird gelöscht …";
+    try { await withRetry(onConfirm); toast("Gelöscht"); }
+    catch (e) { toast(errText(e)); reset(); }
+  });
+  return b;
+}
+function emptyState(title, text, ...buttons) {
+  return h("div", { class: "empty" }, h("strong", null, title), text ? h("p", null, text) : null,
+    buttons.length ? h("div", { class: "actions" }, buttons) : null);
+}
+
+/* ---------- Personen ---------- */
+function personEls(uid, fallback) {
+  if (!uid) return [h("span", { class: "person" }, fallback || "Redaktion")];
+  return [
+    h("img", { class: "avatar", alt: "", dataset: { avatar: uid }, hidden: true }),
+    h("span", { class: "person", dataset: { person: uid } }, "…"),
+  ];
+}
+async function fillPeople(root) {
+  const nameEls = root.querySelectorAll("[data-person]");
+  if (!nameEls.length) return;
+  const ids = [...new Set([...nameEls].map((el) => el.dataset.person))];
+  let ps = {};
+  if (S.user) { try { ps = await S.user.profiles(ids); } catch (e) { ps = {}; } }
+  nameEls.forEach((el) => { const p = ps[el.dataset.person]; el.textContent = (p && p.name) || "Unbekannt"; });
+  root.querySelectorAll("[data-avatar]").forEach((img) => {
+    const p = ps[img.dataset.avatar];
+    if (p && p.avatarUrl) { img.src = p.avatarUrl; img.hidden = false; }
+  });
+}
+
+/* ---------- Formular-Fenster ---------- */
+function openSheet({ title, intro, fields, values = {}, submitLabel = "Speichern", onSubmit, extra }) {
+  const dlg = $("#sheet"), body = $("#sheetBody");
+  $("#sheetTitle").textContent = title;
+  body.replaceChildren();
+  const form = h("form", { class: "form", novalidate: true });
+  if (intro) form.append(h("p", { class: "form-intro" }, intro));
+  const ctl = {}, rows = {};
+  const readVals = () => {
+    const v = {};
+    for (const f of fields) {
+      const c = ctl[f.name];
+      if (f.type === "checkbox") v[f.name] = c.checked;
+      else if (f.type === "file") v[f.name] = c.files && c.files[0] || null;
+      else v[f.name] = c.value.trim();
+    }
+    return v;
+  };
+  const sync = () => { const v = readVals(); for (const f of fields) if (f.showIf) rows[f.name].hidden = !f.showIf(v); };
+  let group = null;
+  for (const f of fields) {
+    const id = "f-" + f.name;
+    let input;
+    if (f.type === "textarea") input = h("textarea", { id, name: f.name, maxlength: f.max || 4000, placeholder: f.placeholder });
+    else if (f.type === "select") input = h("select", { id, name: f.name }, f.options.map((o) => h("option", { value: o }, o)));
+    else if (f.type === "checkbox") input = h("input", { id, name: f.name, type: "checkbox" });
+    else if (f.type === "file") input = h("input", { id, name: f.name, type: "file", accept: f.accept });
+    else input = h("input", { id, name: f.name, type: f.type || "text", maxlength: f.max || 200, placeholder: f.placeholder, list: f.list ? id + "-list" : null, autocomplete: "off" });
+    if (f.type === "checkbox") input.checked = !!values[f.name];
+    else if (f.type !== "file" && values[f.name] != null) input.value = values[f.name];
+    else if (f.type === "select" && f.default) input.value = f.default;
+    input.addEventListener("change", sync);
+    ctl[f.name] = input;
+    const row = f.type === "checkbox"
+      ? h("div", { class: "field" }, h("label", { class: "check", for: id }, input, h("span", null, f.label)), f.hint ? h("span", { class: "hint" }, f.hint) : null)
+      : h("div", { class: "field" }, h("label", { for: id }, f.label + (f.required ? "" : " (optional)")), input,
+          f.list ? h("datalist", { id: id + "-list" }, f.list.map((o) => h("option", { value: o }))) : null,
+          f.hint ? h("span", { class: "hint" }, f.hint) : null);
+    rows[f.name] = row;
+    if (f.pair) { group = h("div", { class: "row2" }, row); form.append(group); }
+    else if (f.pairEnd && group) { group.append(row); group = null; }
+    else form.append(row);
+  }
+  if (extra) form.append(extra);
+  const err = h("p", { class: "form-error", role: "alert", hidden: true });
+  const submit = h("button", { type: "submit", class: "btn btn-primary" }, submitLabel);
+  const cancel = h("button", { type: "button", class: "btn btn-ghost", onclick: () => dlg.close() }, "Abbrechen");
+  form.append(err, h("div", { class: "form-actions" }, cancel, submit));
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const v = readVals();
+    const missing = fields.find((f) => f.required && !(f.showIf && !f.showIf(v)) && !v[f.name] && !(f.type === "file" && f.optionalWhen && f.optionalWhen(values)));
+    if (missing) { err.textContent = `Bitte „${missing.label}“ ausfüllen.`; err.hidden = false; ctl[missing.name].focus(); return; }
+    for (const f of fields) if (f.validate && !(f.showIf && !f.showIf(v))) {
+      const msg = f.validate(v[f.name], v);
+      if (msg) { err.textContent = msg; err.hidden = false; ctl[f.name].focus(); return; }
+    }
+    submit.disabled = true; cancel.disabled = true;
+    const label = submit.textContent; submit.textContent = "Wird gespeichert …"; err.hidden = true;
+    try { await onSubmit(v, (msg) => { submit.textContent = msg; }); dlg.close(); toast("Gespeichert"); }
+    catch (e) { err.textContent = (e && e.userMessage) || errText(e); err.hidden = false; }
+    finally { submit.disabled = false; cancel.disabled = false; submit.textContent = label; }
+  });
+  body.append(form);
+  sync();
+  dlg.showModal();
+  const first = form.querySelector("input:not([type=checkbox]):not([type=file]),textarea,select");
+  if (first) first.focus();
+  return { form, ctl };
+}
+$("#sheetClose").addEventListener("click", () => $("#sheet").close());
+$("#sheet").addEventListener("click", (e) => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+
+/* ---------- Kopf ---------- */
+function renderHead(me) {
+  const d = new Date();
+  $("#today").textContent = `${WEEKDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()} · KW ${isoWeek(d)}`;
+  const hr = d.getHours();
+  const hello = hr < 11 ? "Guten Morgen" : hr < 18 ? "Guten Tag" : "Guten Abend";
+  const first = me && me.name ? me.name.trim().split(/\s+/)[0] : "";
+  $("#greet").textContent = first ? `${hello}, ${first}.` : `${hello}.`;
+  $("#roleChip").hidden = !S.canEdit;
+}
+
+/* ---------- Neuigkeiten ---------- */
+function unreadCount() {
+  if (!S.uid || !S.seenLoaded) return 0;
+  return S.news.filter((n) => n.createdAt && (!S.seenAt || n.createdAt > S.seenAt)).length;
+}
+function updateBadge() {
+  const n = unreadCount(), b = $("#newsBadge");
+  b.hidden = !n || S.view === "aktuelles";
+  b.textContent = n;
+  b.setAttribute("aria-label", `${n} neue Beiträge`);
+}
+async function maybeMarkSeen() {
+  if (!S.uid || !S.db || !S.seenLoaded || !S.ready.news || S.marking || S.view !== "aktuelles") return;
+  const latest = S.news.reduce((m, n) => (n.createdAt > m ? n.createdAt : m), "");
+  if (!latest || (S.seenAt && S.seenAt >= latest)) return;
+  S.marking = true;
+  const stamp = nowIso();
+  try { await S.db.doc(`data/users/${S.uid}/state`).set({ newsSeenAt: stamp }); S.seenAt = stamp; }
+  catch (e) { /* Lesestatus ist eine Bequemlichkeit; ohne Schreibrecht bleibt er lokal. */ S.seenAt = stamp; }
+  S.marking = false;
+  updateBadge();
+}
+function newsForm(item) {
+  openSheet({
+    title: item ? "Beitrag bearbeiten" : "Neuer Beitrag",
+    fields: [
+      { name: "category", label: "Bereich", type: "select", options: NEWS_CATS, required: true, default: "Allgemein", pair: true },
+      { name: "pinned", label: "Oben anheften", type: "checkbox", pairEnd: true, hint: "Bleibt über allen anderen Beiträgen stehen." },
+      { name: "title", label: "Überschrift", required: true, max: 140 },
+      { name: "body", label: "Text", type: "textarea", required: true, max: 8000, hint: "Absätze mit einer Leerzeile trennen. Links werden anklickbar." },
+    ],
+    values: item || { category: "Allgemein" },
+    submitLabel: item ? "Änderungen speichern" : "Veröffentlichen",
+    onSubmit: async (v) => {
+      const data = { category: v.category, pinned: !!v.pinned, title: v.title, body: v.body };
+      if (item) await withRetry(() => S.db.doc("news/" + item.id).update({ ...data, editedAt: nowIso() }));
+      else { const ref = S.db.collection("news").doc(); await withRetry(() => ref.set({ ...data, authorId: S.uid, createdAt: nowIso() })); }
+    },
+  });
+}
+function renderNews() {
+  const tools = $("#newsTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-primary", onclick: () => newsForm(null) }, "Beitrag schreiben"));
+
+  const chips = $("#newsChips"); chips.replaceChildren();
+  const cats = NEWS_CATS.filter((c) => S.news.some((n) => n.category === c));
+  if (S.newsCat !== "Alle" && !cats.includes(S.newsCat)) S.newsCat = "Alle";
+  chips.hidden = cats.length < 2;
+  ["Alle", ...cats].forEach((c) => chips.append(h("button", { type: "button", class: "chip", "aria-pressed": String(S.newsCat === c), onclick: () => { S.newsCat = c; renderNews(); } }, c)));
+
+  const list = $("#newsList");
+  if (!S.ready.news) { if (S.offline) list.replaceChildren(emptyState("Noch keine Neuigkeiten", "Sobald die Redaktion etwas veröffentlicht, steht es hier.")); updateBadge(); return; }
+  const items = S.news
+    .filter((n) => S.newsCat === "Alle" || n.category === S.newsCat)
+    .sort((a, b) => (b.pinned === true) - (a.pinned === true) || String(b.createdAt).localeCompare(String(a.createdAt)));
+  if (!items.length) {
+    list.replaceChildren(emptyState("Noch keine Neuigkeiten",
+      S.canEdit ? "Schreiben Sie den ersten Beitrag, etwa eine Begrüßung oder einen Hinweis zur nächsten Betriebsversammlung." : "Sobald die Redaktion etwas veröffentlicht, steht es hier.",
+      S.canEdit ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => newsForm(null) }, "Ersten Beitrag schreiben") : null));
+    updateBadge();
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  for (const n of items) {
+    const isNew = S.uid && S.seenLoaded && n.createdAt && (!S.visitSeenAt || n.createdAt > S.visitSeenAt);
+    const long = String(n.body || "").length > 520;
+    const open = S.expanded.has(n.id);
+    const body = h("div", { class: "prose" + (long && !open ? " clamped" : "") }, richText(n.body));
+    const art = h("article", { class: "post" + (n.pinned ? " pinned" : "") },
+      h("div", { class: "meta" },
+        h("span", { class: "eyebrow" }, n.category || "Allgemein"),
+        h("time", { datetime: n.createdAt }, fmtStamp(n.createdAt)),
+        n.pinned ? h("span", { class: "flag flag-pin" }, "Angeheftet") : null,
+        isNew ? h("span", { class: "flag flag-new" }, "Neu") : null),
+      h("h3", null, n.title || ""),
+      body,
+      long ? h("button", { type: "button", class: "btn-text more", onclick: () => { open ? S.expanded.delete(n.id) : S.expanded.add(n.id); renderNews(); } }, open ? "Weniger anzeigen" : "Weiterlesen") : null,
+      h("div", { class: "byline" }, personEls(n.authorId),
+        S.canEdit ? h("div", { class: "actions" },
+          h("button", { type: "button", class: "btn-text", onclick: () => newsForm(n) }, "Bearbeiten"),
+          confirmBtn("Löschen", () => S.db.doc("news/" + n.id).delete())) : null));
+    frag.append(art);
+  }
+  list.replaceChildren(frag);
+  fillPeople(list);
+  updateBadge();
+}
+
+/* ---------- Termine ---------- */
+function termForm(item) {
+  openSheet({
+    title: item ? "Termin bearbeiten" : "Neuer Termin",
+    fields: [
+      { name: "title", label: "Was", required: true, max: 120, placeholder: "z. B. Betriebsversammlung" },
+      { name: "date", label: "Datum", type: "date", required: true, pair: true },
+      { name: "time", label: "Uhrzeit", type: "time", pairEnd: true },
+      { name: "place", label: "Ort", max: 120, placeholder: "z. B. Kantine, Halle 2" },
+      { name: "note", label: "Hinweis", type: "textarea", max: 600 },
+    ],
+    values: item || {},
+    onSubmit: async (v) => {
+      const data = { title: v.title, date: v.date, time: v.time, place: v.place, note: v.note };
+      if (item) await withRetry(() => S.db.doc("termine/" + item.id).update(data));
+      else { const ref = S.db.collection("termine").doc(); await withRetry(() => ref.set({ ...data, createdAt: nowIso() })); }
+    },
+  });
+}
+function renderTermine() {
+  const tools = $("#termTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => termForm(null) }, "Termin eintragen"));
+  const list = $("#termList");
+  if (!S.ready.termine && !S.offline) return;
+  const today = localDay(new Date());
+  const items = S.termine.filter((t) => t.date && t.date >= today)
+    .sort((a, b) => (a.date + (a.time || "")).localeCompare(b.date + (b.time || ""))).slice(0, 8);
+  if (!items.length) {
+    list.replaceChildren(emptyState("Keine anstehenden Termine", S.canEdit ? "Tragen Sie Betriebsversammlungen, Werksferien oder Schulungen ein." : "Neue Termine erscheinen hier."));
+    return;
+  }
+  const ul = h("ul", { class: "list" });
+  for (const t of items) {
+    const d = parseDay(t.date);
+    const meta = [WEEKDAYS[d.getDay()].slice(0, 2), t.time ? t.time + " Uhr" : null, t.place || null].filter(Boolean).join(" · ");
+    ul.append(h("li", { class: "event" },
+      h("div", { class: "ev-date" + (t.date === today ? " is-today" : ""), "aria-hidden": "true" },
+        h("span", { class: "ev-day" }, d.getDate()), h("span", { class: "ev-mon" }, MON3[d.getMonth()])),
+      h("div", { style: "min-width:0" },
+        h("div", { class: "ev-title" }, t.title),
+        h("div", { class: "ev-meta" }, h("span", { class: "sr" }, `${d.getDate()}. ${MONTHS[d.getMonth()]}, `), meta),
+        t.note ? h("div", { class: "ev-note" }, t.note) : null,
+        S.canEdit ? h("div", { class: "actions ev-actions" },
+          h("button", { type: "button", class: "btn-text", onclick: () => termForm(t) }, "Bearbeiten"),
+          confirmBtn("Löschen", () => S.db.doc("termine/" + t.id).delete())) : null)));
+  }
+  list.replaceChildren(ul);
+}
+
+/* ---------- Schwarzes Brett ---------- */
+function canPostBrett() { return !!(S.db && S.uid && !S.brettReadonly); }
+async function writeBrett(ownerUid, mutate) {
+  const current = S.brett.find((b) => b.id === ownerUid);
+  const cutoff = new Date(Date.now() - BRETT_DAYS * 864e5).toISOString();
+  let posts = (current && Array.isArray(current.posts) ? current.posts : []).map((p) => ({ ...p }));
+  posts = mutate(posts).filter((p) => p.createdAt >= cutoff).slice(-30);
+  await withRetry(() => S.db.doc("brett/" + ownerUid).set({ posts, updatedAt: nowIso() }));
+}
+function brettForm() {
+  openSheet({
+    title: "Neuer Aushang",
+    intro: `Aushänge sehen alle Kolleginnen und Kollegen. Sie verschwinden nach ${BRETT_DAYS} Tagen von selbst.`,
+    fields: [
+      { name: "kind", label: "Art", type: "select", options: BRETT_KINDS, required: true, default: "Biete" },
+      { name: "title", label: "Überschrift", required: true, max: 100, placeholder: "z. B. Fahrgemeinschaft ab Paderborn" },
+      { name: "text", label: "Text", type: "textarea", required: true, max: 1200, hint: "Wie man Sie erreicht, z. B. Durchwahl oder Abteilung." },
+    ],
+    submitLabel: "Aushängen",
+    onSubmit: async (v) => {
+      try {
+        await writeBrett(S.uid, (posts) => [...posts, { id: rid(), kind: v.kind, title: v.title, text: v.text, createdAt: nowIso() }]);
+      } catch (e) {
+        if (e && e.code === "invalid_argument") { S.brettReadonly = true; renderBrett(); e.userMessage = "Sie haben für diese App nur Leserechte. Bitte die Redaktion um Zugriff als Mitwirkende bitten."; }
+        throw e;
+      }
+    },
+  });
+}
+function renderBrett() {
+  const tools = $("#brettTools"); tools.replaceChildren();
+  if (canPostBrett()) tools.append(h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: brettForm }, "Aushang erstellen"));
+  const list = $("#brettList");
+  if (!S.ready.brett && !S.offline) return;
+  const cutoff = new Date(Date.now() - BRETT_DAYS * 864e5).toISOString();
+  const all = [];
+  for (const doc of S.brett) for (const p of (Array.isArray(doc.posts) ? doc.posts : [])) {
+    if (p && p.createdAt >= cutoff) all.push({ ...p, owner: doc.id });
+  }
+  all.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  if (!all.length) {
+    list.replaceChildren(emptyState("Das Brett ist noch leer", "Mitfahrgelegenheit, Fundsache oder Kinderwagen abzugeben? Hier ist Platz dafür.",
+      canPostBrett() ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: brettForm }, "Ersten Aushang erstellen") : null));
+    return;
+  }
+  const shown = S.brettAll ? all : all.slice(0, 6);
+  const ul = h("ul", { class: "list" });
+  for (const p of shown) {
+    const mine = p.owner === S.uid;
+    ul.append(h("li", { class: "note" },
+      h("div", { class: "meta" }, h("span", { class: "kind kind-" + (BRETT_KINDS.includes(p.kind) ? p.kind : "Info") }, p.kind || "Info"), h("time", { datetime: p.createdAt }, fmtStamp(p.createdAt))),
+      h("div", { class: "note-title" }, p.title || ""),
+      h("div", { class: "note-text prose" }, richText(p.text)),
+      h("div", { class: "byline" }, personEls(p.owner),
+        (mine || S.canEdit) && S.db ? h("div", { class: "actions" },
+          confirmBtn(mine ? "Abhängen" : "Entfernen", () => writeBrett(p.owner, (posts) => posts.filter((x) => x.id !== p.id)))) : null)));
+  }
+  const frag = [ul];
+  if (all.length > 6) frag.push(h("button", { type: "button", class: "btn-text more", onclick: () => { S.brettAll = !S.brettAll; renderBrett(); } }, S.brettAll ? "Weniger anzeigen" : `Alle ${all.length} Aushänge anzeigen`));
+  list.replaceChildren(...frag);
+  fillPeople(list);
+}
+
+/* ---------- Telefonbuch ---------- */
+const lastName = (n) => { const parts = String(n || "").trim().split(/\s+/); return parts[parts.length - 1] || ""; };
+function fullNumber(dw) {
+  const s = String(dw || "").trim();
+  return /^\d{1,5}$/.test(s) ? `${ZENTRALE}-${s}` : s;
+}
+function departments() {
+  return [...new Set(S.kontakte.map((k) => (k.abteilung || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "de"));
+}
+function kontaktForm(item) {
+  openSheet({
+    title: item ? "Kontakt bearbeiten" : "Neuer Kontakt",
+    fields: [
+      { name: "name", label: "Vor- und Nachname", required: true, max: 120 },
+      { name: "abteilung", label: "Abteilung", max: 80, list: departments(), pair: true },
+      { name: "funktion", label: "Funktion", max: 120, pairEnd: true },
+      { name: "durchwahl", label: "Durchwahl", max: 40, placeholder: "z. B. 123", pair: true, hint: "Nur die Endziffern. Die Zentrale wird automatisch davor gesetzt." },
+      { name: "mobil", label: "Mobil", type: "tel", max: 40, pairEnd: true },
+      { name: "email", label: "E-Mail", type: "email", max: 160, validate: (x) => x && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x) ? "Die E-Mail-Adresse sieht unvollständig aus." : null },
+      { name: "raum", label: "Raum oder Standort", max: 80, placeholder: "z. B. Verwaltung, 1. OG" },
+    ],
+    values: item || {},
+    onSubmit: async (v) => {
+      const data = { name: v.name, abteilung: v.abteilung, funktion: v.funktion, durchwahl: v.durchwahl, mobil: v.mobil, email: v.email, raum: v.raum, updatedAt: nowIso() };
+      if (item) await withRetry(() => S.db.doc("kontakte/" + item.id).update(data));
+      else { const ref = S.db.collection("kontakte").doc(); await withRetry(() => ref.set(data)); }
+    },
+  });
+}
+
+/* Import aus Excel/CSV */
+const COLS = ["name", "abteilung", "funktion", "durchwahl", "mobil", "email", "raum"];
+const COL_LABEL = { name: "Name", abteilung: "Abteilung", funktion: "Funktion", durchwahl: "Durchwahl", mobil: "Mobil", email: "E-Mail", raum: "Raum" };
+const HEADER_MAP = {
+  name: ["name", "mitarbeiter", "mitarbeiterin", "person", "namevorname", "vornamename"], vorname: ["vorname"], nachname: ["nachname", "familienname"],
+  abteilung: ["abteilung", "bereich", "team", "kostenstelle"], funktion: ["funktion", "position", "rolle", "stelle", "taetigkeit", "titel"],
+  durchwahl: ["durchwahl", "dw", "tel", "telefon", "telefonnummer", "nebenstelle", "festnetz", "rufnummer"], mobil: ["mobil", "handy", "mobilnummer", "mobiltelefon"],
+  email: ["email", "emailadresse", "mail"], raum: ["raum", "standort", "buero", "gebaeude", "ort"],
+};
+function parseTable(text) {
+  const lines = String(text || "").replace(/\r\n?/g, "\n").split("\n").filter((l) => l.trim());
+  if (!lines.length) return [];
+  const head = lines[0];
+  const delim = ["\t", ";", ","].map((d) => [d, head.split(d).length]).sort((a, b) => b[1] - a[1])[0][0];
+  const rows = [];
+  for (const line of lines) {
+    const out = []; let cur = "", q = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (q) { if (c === '"' && line[i + 1] === '"') { cur += '"'; i++; } else if (c === '"') q = false; else cur += c; }
+      else if (c === '"') q = true;
+      else if (c === delim) { out.push(cur.trim()); cur = ""; }
+      else cur += c;
+    }
+    out.push(cur.trim());
+    rows.push(out);
+  }
+  return rows;
+}
+function rowsToContacts(rows) {
+  if (!rows.length) return [];
+  const norm = (s) => fold(s).replace(/[^a-z]/g, "");
+  const idx = {};
+  rows[0].forEach((cell, i) => {
+    const n = norm(cell);
+    for (const [key, alts] of Object.entries(HEADER_MAP)) if (alts.includes(n) && idx[key] == null) idx[key] = i;
+  });
+  const hasHeader = Object.keys(idx).length >= 2;
+  const body = hasHeader ? rows.slice(1) : rows;
+  return body.map((r) => {
+    const get = (k) => (idx[k] != null ? (r[idx[k]] || "") : "");
+    let c;
+    if (hasHeader) {
+      c = {}; for (const k of COLS) c[k] = get(k);
+      if (!c.name && (get("vorname") || get("nachname"))) c.name = [get("vorname"), get("nachname")].filter(Boolean).join(" ");
+    } else { c = {}; COLS.forEach((k, i) => { c[k] = r[i] || ""; }); }
+    for (const k of COLS) c[k] = String(c[k] || "").slice(0, 160);
+    return c;
+  }).filter((c) => c.name);
+}
+function importForm() {
+  const area = h("textarea", { id: "f-import", class: "import-area", placeholder: "Name\tAbteilung\tFunktion\tDurchwahl\tMobil\tE-Mail\tRaum" });
+  const file = h("input", { id: "f-import-file", type: "file", accept: ".csv,.txt,.tsv,text/csv,text/plain" });
+  const preview = h("div", { class: "field", "aria-live": "polite" });
+  let parsed = [];
+  const update = () => {
+    parsed = rowsToContacts(parseTable(area.value));
+    preview.replaceChildren();
+    if (!area.value.trim()) return;
+    if (!parsed.length) { preview.append(h("span", { class: "form-error" }, "Keine Zeile mit Namen erkannt.")); return; }
+    const existing = new Set(S.kontakte.map((k) => fold(k.name).trim()));
+    const upd = parsed.filter((c) => existing.has(fold(c.name).trim())).length;
+    preview.append(h("span", { class: "hint" }, `${parsed.length} Kontakte erkannt: ${parsed.length - upd} neu, ${upd} werden aktualisiert. Vorschau:`),
+      h("div", { class: "tbl-wrap" }, h("table", null,
+        h("thead", null, h("tr", null, COLS.map((k) => h("th", null, COL_LABEL[k])))),
+        h("tbody", null, parsed.slice(0, 5).map((c) => h("tr", null, COLS.map((k) => h("td", null, c[k]))))))));
+  };
+  area.addEventListener("input", update);
+  file.addEventListener("change", () => {
+    const f = file.files && file.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => { area.value = String(r.result || ""); update(); };
+    r.readAsText(f, "utf-8");
+  });
+  const extra = h("div", { class: "form" },
+    h("div", { class: "field" }, h("label", { for: "f-import" }, "Liste einfügen"), area,
+      h("span", { class: "hint" }, "In Excel die Zeilen samt Überschrift markieren, kopieren und hier einfügen. Erkannt werden Spalten wie Name, Vorname, Nachname, Abteilung, Funktion, Durchwahl, Mobil, E-Mail und Raum.")),
+    h("div", { class: "field" }, h("label", { for: "f-import-file" }, "Oder CSV-Datei wählen (optional)"), file),
+    preview);
+  openSheet({
+    title: "Liste importieren",
+    fields: [],
+    extra,
+    submitLabel: "Importieren",
+    onSubmit: async (_v, progress) => {
+      if (!parsed.length) { const e = new Error("leer"); e.userMessage = "Bitte zuerst eine Liste einfügen."; throw e; }
+      const byName = new Map(S.kontakte.map((k) => [fold(k.name).trim(), k]));
+      let i = 0;
+      for (const c of parsed) {
+        i++; progress(`${i} von ${parsed.length} …`);
+        const hit = byName.get(fold(c.name).trim());
+        const data = { updatedAt: nowIso() };
+        for (const k of COLS) if (c[k] || !hit) data[k] = c[k];
+        if (hit) await withRetry(() => S.db.doc("kontakte/" + hit.id).update(data));
+        else {
+          const ref = S.db.collection("kontakte").doc();
+          await withRetry(() => ref.set(data));
+          byName.set(fold(c.name).trim(), { id: ref.id, ...data });
+        }
+      }
+    },
+  });
+}
+function renderKontakte() {
+  const tools = $("#pbTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(
+    h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: importForm }, "Liste importieren"),
+    h("button", { type: "button", class: "btn btn-primary btn-sm", onclick: () => kontaktForm(null) }, "Kontakt anlegen"));
+
+  const depts = departments();
+  if (S.dept !== "Alle" && !depts.includes(S.dept)) S.dept = "Alle";
+  const chips = $("#deptChips"); chips.replaceChildren();
+  chips.hidden = depts.length < 2;
+  ["Alle", ...depts].forEach((d) => chips.append(h("button", { type: "button", class: "chip", "aria-pressed": String(S.dept === d), onclick: () => { S.dept = d; renderKontakte(); } }, d)));
+
+  const list = $("#pbList"), count = $("#pbCount");
+  if (!S.ready.kontakte && !S.offline) return;
+  if (!S.kontakte.length) {
+    count.textContent = "";
+    list.replaceChildren(emptyState("Das Telefonbuch ist noch leer",
+      S.canEdit ? "Legen Sie Kontakte einzeln an oder fügen Sie die Telefonliste direkt aus Excel ein." : "Die Redaktion trägt hier bald alle Durchwahlen ein.",
+      S.canEdit ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: importForm }, "Liste importieren") : null));
+    return;
+  }
+  const terms = fold(S.pbQuery).split(/\s+/).filter(Boolean);
+  const items = S.kontakte
+    .filter((k) => S.dept === "Alle" || (k.abteilung || "").trim() === S.dept)
+    .filter((k) => { if (!terms.length) return true; const hay = fold([k.name, k.abteilung, k.funktion, k.durchwahl, k.mobil, k.email, k.raum].join(" ")); return terms.every((t) => hay.includes(t)); })
+    .sort((a, b) => lastName(a.name).localeCompare(lastName(b.name), "de") || String(a.name).localeCompare(String(b.name), "de"));
+  count.textContent = items.length === 1 ? "1 Kontakt" : `${items.length} Kontakte`;
+  if (!items.length) { list.replaceChildren(emptyState("Niemand gefunden", "Anderen Suchbegriff versuchen oder den Abteilungsfilter auf „Alle“ stellen.")); return; }
+  const frag = document.createDocumentFragment();
+  frag.append(h("div", { class: "pb-row head", "aria-hidden": "true" },
+    h("div", { class: "c-name" }, "Name"), h("div", { class: "c-dept" }, "Abteilung"), h("div", { class: "c-dw" }, "Durchwahl"),
+    h("div", { class: "c-mob" }, "Mobil"), h("div", { class: "c-mail" }, "E-Mail"), h("div", { class: "c-act" })));
+  for (const k of items) {
+    const dw = String(k.durchwahl || "").trim();
+    frag.append(h("div", { class: "pb-row" },
+      h("div", { class: "c-name" }, h("div", { class: "p-name" }, k.name), k.funktion ? h("div", { class: "p-fn" }, k.funktion) : null),
+      h("div", { class: "c-dept" }, k.abteilung || "", k.raum ? h("div", { class: "p-room" }, k.raum) : null),
+      h("div", { class: "c-dw" }, dw ? [h("span", { class: "lbl" }, "Durchwahl"), copyBtn(dw, fullNumber(dw), "dw")] : null),
+      h("div", { class: "c-mob" }, k.mobil ? [h("span", { class: "lbl" }, "Mobil"), copyBtn(k.mobil, k.mobil)] : null),
+      h("div", { class: "c-mail" }, k.email ? [h("span", { class: "lbl" }, "E-Mail"), copyBtn(k.email, k.email)] : null),
+      h("div", { class: "c-act" }, S.canEdit ? h("div", { class: "actions" },
+        h("button", { type: "button", class: "btn-text", onclick: () => kontaktForm(k) }, "Bearbeiten"),
+        confirmBtn("Löschen", () => S.db.doc("kontakte/" + k.id).delete())) : null)));
+  }
+  list.replaceChildren(frag);
+}
+
+/* ---------- Dokumente ---------- */
+const TEXT_TYPES = { csv: "text/csv", md: "text/markdown", txt: "text/plain", json: "application/json" };
+function fileKind(d) {
+  if (d.kind === "link") return "LINK";
+  const t = String(d.contentType || ""), ext = String(d.fileName || "").split(".").pop().toLowerCase();
+  if (t === "application/pdf" || ext === "pdf") return "PDF";
+  if (t.startsWith("image/")) return "BILD";
+  if (t.startsWith("video/")) return "VIDEO";
+  if (ext === "csv") return "CSV";
+  return "TEXT";
+}
+function docHref(d) {
+  if (d.kind === "link") return safeUrl(d.url);
+  return d.assetId ? "/_blob/" + d.assetId : null;
+}
+function docForm(item) {
+  const canUpload = !!S.assets;
+  const kinds = canUpload ? ["Datei hochladen", "Link hinterlegen"] : ["Link hinterlegen"];
+  const values = item ? { ...item, art: item.kind === "link" ? "Link hinterlegen" : "Datei hochladen" } : { art: kinds[0], category: DOC_CATS[0] };
+  openSheet({
+    title: item ? "Dokument bearbeiten" : "Dokument hinzufügen",
+    fields: [
+      { name: "art", label: "Art", type: "select", options: item ? [values.art] : kinds, required: true },
+      { name: "title", label: "Titel", required: true, max: 140, placeholder: "z. B. Urlaubsantrag" },
+      { name: "category", label: "Kategorie", type: "select", options: DOC_CATS, required: true },
+      { name: "description", label: "Kurzbeschreibung", type: "textarea", max: 600 },
+      { name: "file", label: item ? "Neue Datei (ersetzt die alte)" : "Datei", type: "file", accept: ".pdf,.png,.jpg,.jpeg,.webp,.gif,.svg,.mp4,.webm,.txt,.csv,.md,.json",
+        required: !item, showIf: (v) => v.art === "Datei hochladen",
+        hint: "PDF, Bild, Video oder Text bis 20 MB. Word- und Excel-Dateien bitte als PDF speichern oder als Link hinterlegen." },
+      { name: "url", label: "Link", type: "url", required: true, max: 600, placeholder: "https://…", showIf: (v) => v.art === "Link hinterlegen",
+        hint: "Zum Beispiel ein Ordner auf SharePoint oder dem Firmenlaufwerk im Intranet.",
+        validate: (x) => (safeUrl(x) ? null : "Der Link muss mit https:// beginnen.") },
+    ],
+    values,
+    onSubmit: async (v, progress) => {
+      const data = { title: v.title, category: v.category, description: v.description, updatedAt: nowIso() };
+      if (v.art === "Link hinterlegen") {
+        data.kind = "link"; data.url = safeUrl(v.url);
+      } else if (v.file) {
+        progress("Datei wird hochgeladen …");
+        const ext = v.file.name.split(".").pop().toLowerCase();
+        const opts = TEXT_TYPES[ext] ? { type: TEXT_TYPES[ext] } : (v.file.type ? undefined : (ext === "pdf" ? { type: "application/pdf" } : undefined));
+        const res = await withRetry(() => S.assets.upload(v.file, opts));
+        Object.assign(data, { kind: "file", assetId: res.id, contentType: res.contentType, sizeBytes: res.sizeBytes, fileName: v.file.name });
+      }
+      if (item) {
+        await withRetry(() => S.db.doc("dokumente/" + item.id).update(data));
+        if (data.assetId && item.assetId && item.assetId !== data.assetId && S.assets) S.assets.delete(item.assetId).catch(() => {});
+      } else {
+        const ref = S.db.collection("dokumente").doc();
+        await withRetry(() => ref.set({ ...data, authorId: S.uid, createdAt: nowIso() }));
+      }
+    },
+  });
+}
+function renderDokumente() {
+  const tools = $("#docTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-primary btn-sm", onclick: () => docForm(null) }, "Dokument hinzufügen"));
+  const cats = DOC_CATS.filter((c) => S.dokumente.some((d) => d.category === c));
+  if (S.docCat !== "Alle" && !cats.includes(S.docCat)) S.docCat = "Alle";
+  const chips = $("#docChips"); chips.replaceChildren();
+  chips.hidden = cats.length < 2;
+  ["Alle", ...cats].forEach((c) => chips.append(h("button", { type: "button", class: "chip", "aria-pressed": String(S.docCat === c), onclick: () => { S.docCat = c; renderDokumente(); } }, c)));
+
+  const list = $("#docList");
+  if (!S.ready.dokumente && !S.offline) return;
+  if (!S.dokumente.length) {
+    list.replaceChildren(emptyState("Noch keine Dokumente",
+      S.canEdit ? "Laden Sie Formulare und Anleitungen als PDF hoch oder verlinken Sie den passenden Ordner." : "Formulare und Anleitungen stellt die Redaktion hier bereit.",
+      S.canEdit ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => docForm(null) }, "Erstes Dokument hinzufügen") : null));
+    return;
+  }
+  const terms = fold(S.docQuery).split(/\s+/).filter(Boolean);
+  const items = S.dokumente
+    .filter((d) => S.docCat === "Alle" || d.category === S.docCat)
+    .filter((d) => { if (!terms.length) return true; const hay = fold([d.title, d.description, d.category, d.fileName].join(" ")); return terms.every((t) => hay.includes(t)); })
+    .sort((a, b) => String(a.title).localeCompare(String(b.title), "de"));
+  if (!items.length) { list.replaceChildren(emptyState("Nichts gefunden", "Anderen Suchbegriff versuchen oder die Kategorie auf „Alle“ stellen.")); return; }
+  const ul = h("ul", { class: "list" });
+  for (const d of items) {
+    const href = docHref(d);
+    const meta = [d.category, d.kind === "link" ? "Externer Link" : fmtSize(d.sizeBytes), d.updatedAt ? "Stand " + fmtStamp(d.updatedAt) : null].filter(Boolean);
+    ul.append(h("li", { class: "doc" },
+      h("div", { class: "ftype", "aria-hidden": "true" }, fileKind(d)),
+      h("div", { style: "min-width:0" },
+        href ? h("a", { class: "doc-title", href, target: "_blank", rel: "noopener noreferrer" }, d.title) : h("span", { class: "doc-title" }, d.title),
+        d.description ? h("p", { class: "doc-desc" }, d.description) : null,
+        h("div", { class: "meta" }, meta.map((m) => h("span", null, m))),
+        S.canEdit ? h("div", { class: "actions" },
+          h("button", { type: "button", class: "btn-text", onclick: () => docForm(d) }, "Bearbeiten"),
+          confirmBtn("Löschen", async () => {
+            await S.db.doc("dokumente/" + d.id).delete();
+            if (d.assetId && S.assets) S.assets.delete(d.assetId).catch(() => {});
+          })) : null)));
+  }
+  list.replaceChildren(ul);
+}
+
+/* ---------- FAQ ---------- */
+function faqForm(item) {
+  openSheet({
+    title: item ? "Frage bearbeiten" : "Neue Frage",
+    fields: [
+      { name: "q", label: "Frage", required: true, max: 200, placeholder: "z. B. Wen rufe ich bei einem IT-Problem an?" },
+      { name: "a", label: "Antwort", type: "textarea", required: true, max: 3000 },
+      { name: "order", label: "Reihenfolge", type: "number", max: 4, hint: "Kleinere Zahlen stehen weiter oben." },
+    ],
+    values: item ? { ...item, order: item.order != null ? String(item.order) : "" } : {},
+    onSubmit: async (v) => {
+      const data = { q: v.q, a: v.a, order: v.order === "" ? 100 : Number(v.order) || 0 };
+      if (item) await withRetry(() => S.db.doc("faq/" + item.id).update(data));
+      else { const ref = S.db.collection("faq").doc(); await withRetry(() => ref.set({ ...data, createdAt: nowIso() })); }
+    },
+  });
+}
+function renderFaq() {
+  const tools = $("#faqTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => faqForm(null) }, "Frage hinzufügen"));
+  const list = $("#faqList");
+  if (!S.ready.faq && !S.offline) return;
+  if (!S.faq.length) { list.replaceChildren(emptyState("Noch keine Fragen", S.canEdit ? "Sammeln Sie hier, was neue Kolleginnen und Kollegen oft fragen." : null)); return; }
+  const items = [...S.faq].sort((a, b) => (a.order ?? 100) - (b.order ?? 100) || String(a.q).localeCompare(String(b.q), "de"));
+  const open = new Set([...list.querySelectorAll("details[open]")].map((d) => d.dataset.id));
+  list.replaceChildren(...items.map((f) => h("details", { dataset: { id: f.id }, open: open.has(f.id) },
+    h("summary", null, f.q),
+    h("div", { class: "answer prose" }, richText(f.a),
+      S.canEdit ? h("div", { class: "actions" },
+        h("button", { type: "button", class: "btn-text", onclick: () => faqForm(f) }, "Bearbeiten"),
+        confirmBtn("Löschen", () => S.db.doc("faq/" + f.id).delete())) : null))));
+}
+
+/* ---------- Navigation ---------- */
+const VIEWS = ["aktuelles", "telefonbuch", "dokumente"];
+function route() {
+  const v = (location.hash || "").slice(1);
+  const next = VIEWS.includes(v) ? v : "aktuelles";
+  const changed = next !== S.view;
+  S.view = next;
+  for (const name of VIEWS) $("#view-" + name).hidden = name !== next;
+  document.querySelectorAll(".tab").forEach((t) => { if (t.dataset.view === next) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
+  if (changed) window.scrollTo(0, 0);
+  updateBadge();
+  maybeMarkSeen();
+}
+window.addEventListener("hashchange", route);
+
+let pbTimer, docTimer;
+$("#pbSearch").addEventListener("input", (e) => { clearTimeout(pbTimer); pbTimer = setTimeout(() => { S.pbQuery = e.target.value; renderKontakte(); }, 120); });
+$("#docSearch").addEventListener("input", (e) => { clearTimeout(docTimer); docTimer = setTimeout(() => { S.docQuery = e.target.value; renderDokumente(); }, 120); });
+document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copyText(b.dataset.copy)));
+
+function renderAll() { renderNews(); renderTermine(); renderBrett(); renderKontakte(); renderDokumente(); renderFaq(); }
+
+function goOffline(msg) {
+  S.offline = true;
+  $("#noticeText").textContent = msg;
+  $("#notice").hidden = false;
+  renderAll();
+}
+
+/* ---------- Start ---------- */
+renderHead(null);
+route();
+
+const RENDER = { news: renderNews, termine: renderTermine, kontakte: renderKontakte, dokumente: renderDokumente, faq: renderFaq, brett: renderBrett };
+function subscribe(name) {
+  S.db.collection(name).onSnapshot((snap) => {
+    S[name] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    S.ready[name] = true;
+    RENDER[name]();
+    if (name === "news") maybeMarkSeen();
+  }, (e) => {
+    if (e && e.code === "revoked") goOffline("Der Zugriff auf die Inhalte wurde beendet. Bitte die Seite neu laden.");
+    else if (e && e.code === "unavailable") setTimeout(() => subscribe(name), 3000);
+  });
+}
+
+(async () => {
+  const c = window.claude;
+  if (!c || typeof c.use !== "function") { goOffline("Diese Seite zeigt ihre Inhalte nur, wenn sie über claude.ai mit dem Firmenkonto geöffnet wird."); return; }
+  const [db, user, assets] = await Promise.all([c.use("db"), c.use("user"), c.use("assets")].map((p) => p.catch(() => null)));
+  S.user = user; S.assets = assets;
+  let me = null;
+  if (user) { try { me = await user.me(); } catch (e) { me = null; } }
+  S.uid = me && me.id || null;
+  S.canEdit = !!(me && me.canEdit);
+  renderHead(me);
+  if (!db) { goOffline("Die Inhalte sind nur für angemeldete Mitarbeiterinnen und Mitarbeiter sichtbar. Bitte über claude.ai mit dem Firmenkonto anmelden."); return; }
+  S.db = db;
+  renderAll();
+  ["news", "termine", "brett", "kontakte", "dokumente", "faq"].forEach(subscribe);
+  if (S.uid) {
+    try {
+      const snap = await db.doc(`data/users/${S.uid}/state`).get();
+      S.seenAt = snap.exists ? (snap.data().newsSeenAt || null) : null;
+    } catch (e) { S.seenAt = null; }
+    S.visitSeenAt = S.seenAt; S.seenLoaded = true;
+    renderNews(); maybeMarkSeen();
+  }
+})();
+})();
+</script>

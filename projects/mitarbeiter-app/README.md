@@ -32,3 +32,13 @@ node projects/mitarbeiter-app/source/build.mjs
 Schreibt `renders/schmidt-intern.html`. Eingebettet werden Filson Pro (Latin-Subset aus
 `brand-guidelines/default/assets/fonts/`, als woff2 in `source/fonts/`) und die Wortmarke aus `logo-schmidt.svg`.
 Danach die Datei erneut auf dieselbe Adresse veröffentlichen; die Inhalte in der Datenablage bleiben erhalten.
+
+## Vorstellung für die Belegschaft (PDF)
+
+```bash
+node projects/mitarbeiter-app/source/vorstellung/build.cjs
+```
+
+Schreibt `renders/schmidt-intern-vorstellung.pdf` (8 Folien, 16:9). Die Abbildungen entstehen aus der gebauten App,
+angemeldet als Mitarbeiter aus der Produktion ohne Redaktionsrechte, mit erfundenen Beispielinhalten.
+Braucht Playwright und Python mit `segno` (QR-Code).

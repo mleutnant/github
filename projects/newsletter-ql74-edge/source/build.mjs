@@ -64,6 +64,46 @@ async function preview(width, file, scale) {
 await preview(760, 'preview-desktop.jpg', 1.5);
 await preview(390, 'preview-mobile.jpg', 1.35);
 
+// 3) PDF (A4) zum Weitergeben und Drucken: Hausschrift Filson Pro (im PDF eingebettet, Fließtext Medium,
+//    Titel Bold – laut CD-Guideline), weißer Seitenhintergrund, keine CleverReach-Platzhalter.
+{
+  const font = (file) => pathToFileURL(path.join(repo, 'brand-guidelines/default/assets/fonts', file)).href;
+  const page = await browser.newPage();
+  await page.goto(pathToFileURL(html).href, { waitUntil: 'networkidle' }); // Basis-URL für die Bildpfade
+  await page.setContent(render({ cr: false, pdf: true }), { waitUntil: 'networkidle' });
+  await page.addStyleTag({
+    content: `
+      @font-face { font-family: 'Filson Pro PDF'; src: url('${font('FilsonProMedium.otf')}'); font-weight: 400; }
+      @font-face { font-family: 'Filson Pro PDF'; src: url('${font('FilsonProBold.otf')}'); font-weight: 700; }
+      * { font-family: 'Filson Pro PDF', Arial, Helvetica, sans-serif !important; }
+      html, body, body > table, body > table > tbody > tr > td { background: #ffffff !important; }
+    `,
+  });
+  // Seitenaufteilung (5 Seiten A4): 1 Titel/Einleitung/Themen · 2 Thema 01 + Flügelmuster ·
+  // 3 Thema 02 + 03 · 4 Thema 04 · 5 Social Media + Pflichtangaben. Blöcke werden nie geteilt.
+  await page.evaluate(() => {
+    const newPage = ['BLOCK: Thema 01', 'BLOCK: Thema 02', 'BLOCK: Thema 04', 'FOOTER'];
+    const cell = document.querySelector('table.container > tbody > tr > td');
+    for (const t of cell.children) {
+      if (t.tagName !== 'TABLE') continue;
+      let c = t.previousSibling;
+      while (c && c.nodeType !== Node.COMMENT_NODE && c.nodeType !== Node.ELEMENT_NODE) c = c.previousSibling;
+      const name = c && c.nodeType === Node.COMMENT_NODE ? c.nodeValue.trim() : '';
+      t.style.breakInside = 'avoid';
+      if (newPage.some((n) => name.startsWith(n))) t.style.breakBefore = 'page';
+    }
+  });
+  await page.evaluate(() => document.fonts.ready);
+  await page.pdf({
+    path: path.join(renders, 'SCHMIDT_Newsletter_QuinLine74_Edge.pdf'),
+    format: 'A4',
+    printBackground: true,
+    scale: 0.85,
+    margin: { top: '10mm', bottom: '10mm', left: '0', right: '0' },
+  });
+  await page.close();
+}
+
 await browser.close();
 
 // 3) CleverReach-Pakete: HTML mit Editor-Markierungen + Bilder flach in einem ZIP (CleverReach erlaubt keine Unterordner).

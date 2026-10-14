@@ -33,8 +33,10 @@ const URL_ABMELDEN = 'https://366524.eu2.cleverreach.com/rmftlp.php?cid=[CTID]&a
 
 const SNIPPET_SRC = { 'keyvisual-ql74-edge.jpg': 'URL-TITELBILD', 'mockup-farbuebersicht-kompendium.jpg': 'URL-BROSCHUERE' };
 
-export function render({ cr, contentOnly = false, snippet = false }) {
+// pdf: true -> Fassung für das PDF: ohne CleverReach-Platzhalter (Anrede, Online-Version, Abmeldung, E-Mail).
+export function render({ cr, contentOnly = false, snippet = false, pdf = false }) {
   if (snippet) [cr, contentOnly] = [false, true];
+  if (pdf) cr = false;
   const html = (inner) => (cr ? `<!--#html #-->${inner}<!--#/html#-->` : inner);
   const image = (inner) => (cr ? `<!--#image #-->${inner}<!--#/image#-->` : inner);
   const src = (file) => (snippet ? SNIPPET_SRC[file] : cr ? file : `images/${file}`);
@@ -103,7 +105,7 @@ export function render({ cr, contentOnly = false, snippet = false }) {
   const intro = section(WHITE, [
     spacer(48, WHITE),
     text(WHITE, `
-${p('{SALUTATION[std:Sehr geehrte Damen und Herren][salutation:formal|de]} {LASTNAME},', { mb: 20 })}
+${p(pdf ? 'Sehr geehrte Damen und Herren,' : '{SALUTATION[std:Sehr geehrte Damen und Herren][salutation:formal|de]} {LASTNAME},', { mb: 20 })}
 ${p(`mit dem Profilsystem <strong style="color:${BLUE};">QuinLine® 74 Edge</strong> erweitern wir unser Hebeschiebetür-Programm um eine konsequent geradlinige Variante. Der schmale Flügelüberschlag und die eckigen Glasleisten verzichten bewusst auf Rundungen. So entsteht eine markante, nahezu rechtwinklige Kontur, die sich nahtlos in Objekte mit eckigen Fensterprofilen einfügt.`, { mb: 20 })}
 ${p('Gleichzeitig nimmt das System Glasdicken bis 50&nbsp;mm auf und ist damit bestens gerüstet für Dreifachverglasung, Schall- und Sicherheitsglas. So verbindet die Edge moderne Optik mit maximaler Flexibilität bei der Verglasung.', { mb: 28 })}
 ${p('Ihr Team der SCHMIDT GmbH', { color: BLUE, extra: 'font-weight:700;' })}
@@ -140,8 +142,8 @@ ${tocItems
     spacer(12, WHITE),
     row(WHITE, specTable(
       [
-        ['Zargenprofil', '5 Kammern, Bautiefe 174&nbsp;mm, Ansicht 63&nbsp;mm'],
-        ['Flügelprofil', '5 Kammern, Bautiefe 74&nbsp;mm, Ansicht 92&nbsp;mm'],
+        ['Zargenprofil', '5 Kammern, Bautiefe 174&nbsp;mm, Ansicht&nbsp;63&nbsp;mm'],
+        ['Flügelprofil', '5 Kammern, Bautiefe 74&nbsp;mm, Ansicht&nbsp;92&nbsp;mm'],
         ['Profilüberschlag', 'geradlinig und schlank, 25&nbsp;mm Höhe'],
         ['Design', 'kantige Glasleisten und Mitteldichtleisten'],
         ['Glasdicken', 'bis 50&nbsp;mm'],
@@ -290,15 +292,19 @@ ${social('LinkedIn', 'https://www.linkedin.com/company/schmidt-die-hebeschiebetu
   const plainLink = (href, label) => `<a href="${href}" style="color:#4b565c; text-decoration:none;">${label}</a>`;
   const legal = section(PAGE, [
     spacer(32, PAGE),
-    legalText(`Wird diese Nachricht nicht richtig dargestellt, klicken Sie bitte ${legalLink(URL_ONLINE, 'hier')}.`),
-    spacer(24, PAGE),
+    ...(pdf ? [] : [
+      legalText(`Wird diese Nachricht nicht richtig dargestellt, klicken Sie bitte ${legalLink(URL_ONLINE, 'hier')}.`),
+      spacer(24, PAGE),
+    ]),
     legalText('SCHMIDT GmbH<br>Töllen Linde 3<br>33129 Delbrück-Boke<br>Deutschland'),
     spacer(16, PAGE),
     legalText(`${plainLink('tel:+49525098450', '+49 5250 9845-0')}<br>${plainLink('mailto:kontakt@schmidt-boke.de', 'kontakt@schmidt-boke.de')}<br>${plainLink('https://www.schmidt-boke.de', 'www.schmidt-boke.de')}`),
     spacer(16, PAGE),
     legalText('Geschäftsführer: Teresa Schmidt-Bertsch, Meinolf Funkenmeier<br>Register: Amtsgericht Paderborn, HRB 6481<br>Tax ID: DE 126 335 238'),
-    spacer(16, PAGE),
-    legalText(`Wenn Sie diesen Newsletter (an: {EMAIL}) nicht mehr empfangen möchten, können Sie ihn ${legalLink(URL_ABMELDEN, 'hier abbestellen')}.`),
+    ...(pdf ? [] : [
+      spacer(16, PAGE),
+      legalText(`Wenn Sie diesen Newsletter (an: {EMAIL}) nicht mehr empfangen möchten, können Sie ihn ${legalLink(URL_ABMELDEN, 'hier abbestellen')}.`),
+    ]),
     spacer(40, PAGE),
   ]);
 
@@ -379,7 +385,7 @@ ${fluid}
   keyvisual-ql74-edge.jpg und mockup-farbuebersicht-kompendium.jpg sind Ausschnitte aus Screenshots,
   bitte durch die Originale ersetzen (Anzeigebreite 600 px bzw. 504 px).`);
 
-  const preheader = cr
+  const preheader = cr || pdf
     ? ''
     : `\n<div style="display:none; font-size:1px; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden; mso-hide:all;">QuinLine® 74 Edge: die konsequent geradlinige Hebeschiebetür für Glasdicken bis 50 mm – Systemdaten, Verfügbarkeit, Glasleisten und Kompendium.${'&#847;&zwnj;&nbsp;'.repeat(20)}</div>\n`;
 

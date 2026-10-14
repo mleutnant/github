@@ -5,9 +5,11 @@ https://claude.ai/artifact/95L3bzmEWkuLJ9gDAspXuH
 
 ## Bereiche
 
-- **Aktuelles:** Neuigkeiten (mit Bereichs-Filter, Anheften, „Neu“-Markierung je Person), Termine, Schwarzes Brett
+- **Aktuelles:** Neuigkeiten mit bis zu 6 Bildern (Bereichs-Filter, Anheften, „Neu“-Markierung je Person), Termine, Schwarzes Brett
+- **Wiki:** Artikel zu Alltagsfragen (z. B. Krankmeldung) mit „Kurz gesagt“, Schritten, Ansprechpartner und eigenem Link (`#wiki-<id>`);
+  Entwürfe sieht nur die Redaktion, Text in [eckigen Klammern] wird als offener Platzhalter markiert
 - **Telefonbuch:** Suche, Abteilungs-Filter, Klick kopiert die volle Nummer (Zentrale +49 5250 9845 plus Durchwahl), Import einer Liste aus Excel/CSV
-- **Dokumente:** Dateien (PDF, Bild, Video, Text bis 20 MB) oder Links, Kategorien, Suche, dazu häufige Fragen
+- **Dokumente:** Dateien (PDF, Bild, Video, Text bis 20 MB) oder Links, Kategorien, Suche, dazu die neuesten Wiki-Artikel
 
 ## Rechte
 
@@ -17,7 +19,8 @@ https://claude.ai/artifact/95L3bzmEWkuLJ9gDAspXuH
 | Mitwirkende | alles lesen, eigene Aushänge am Schwarzen Brett |
 | Betrachter | nur lesen |
 
-Die Regeln liegen in der Datenablage der Seite (`news`, `termine`, `kontakte`, `dokumente`, `faq` nur Redaktion;
+Die Regeln liegen in der Datenablage der Seite (`news`, `termine`, `kontakte`, `dokumente`, `wiki` schreibt nur die Redaktion,
+`wikiEntwurf` liest und schreibt nur die Redaktion;
 `brett/<person>` schreibt jede Person selbst; `data/users/<person>/state` merkt sich, was jemand gelesen hat).
 
 ## Bauen

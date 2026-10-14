@@ -73,6 +73,7 @@ h1,h2,h3{text-wrap:balance}
 .tab{display:inline-flex;align-items:center;gap:8px;padding:16px 0 12px;border-bottom:4px solid transparent;color:var(--muted);text-decoration:none;font-size:16px;white-space:nowrap;transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
 .tab:hover{color:var(--accent-ink)}
 .tab[aria-current="page"]{color:var(--ink);border-bottom-color:var(--red)}
+@media (max-width:480px){.tabs-inner{gap:18px}.tab{font-size:15px}}
 .badge{min-width:20px;height:20px;padding:0 6px;background:var(--yellow);color:#000;font-size:12px;font-weight:700;display:inline-grid;place-items:center;font-variant-numeric:tabular-nums;line-height:1}
 
 .notice{background:var(--tint);border-bottom:1px solid var(--line)}
@@ -199,15 +200,53 @@ a.doc-title:hover{color:var(--accent-ink);text-decoration:underline;text-underli
 .doc .meta{margin-top:6px}
 .doc .actions{margin-top:8px}
 
-.faq details{border-top:1px solid var(--line)}
-.faq details:last-child{border-bottom:1px solid var(--line)}
-.faq summary{list-style:none;cursor:pointer;padding:14px 34px 14px 0;font-weight:700;position:relative;color:var(--heading);line-height:1.3}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::before,.faq summary::after{content:"";position:absolute;right:4px;top:50%;width:14px;height:2px;margin-top:-1px;background:currentColor;transition:transform var(--dur) var(--ease)}
-.faq summary::after{transform:rotate(90deg)}
-.faq details[open] summary::after{transform:rotate(0deg)}
-.faq .answer{padding:0 0 18px;font-size:15px}
-.faq .answer .actions{margin-top:10px}
+/* Bilder in Beiträgen */
+.media{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:16px 0 18px;max-width:760px}
+.media.one{grid-template-columns:1fr}
+.media.odd a:first-child{grid-column:1/-1}
+.media a{display:block;background:var(--tint);min-width:0}
+.media img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.media.odd a:first-child img{aspect-ratio:16/9}
+.media.one img{aspect-ratio:auto;max-height:520px}
+.thumbs{display:flex;flex-wrap:wrap;gap:12px}
+.thumb{display:grid;gap:2px;width:96px}
+.thumb img{width:96px;height:72px;object-fit:cover;display:block;background:var(--tint)}
+.thumb.removed img{opacity:.25}
+
+/* Wiki */
+.wiki-group+.wiki-group{margin-top:36px}
+.group-title{margin:0;padding-bottom:10px;border-bottom:2px solid var(--heading);font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--heading)}
+.wiki-link{display:grid;gap:3px;padding:14px 0;border-top:1px solid var(--line);text-decoration:none;color:inherit}
+.wiki-links>.wiki-link:first-child{border-top:0}
+.wiki-link strong{color:var(--heading);font-size:17px;line-height:1.3;transition:color var(--dur-fast) var(--ease)}
+.wiki-link span{color:var(--muted);font-size:15px;font-weight:400}
+.wiki-link:hover strong{color:var(--accent-ink)}
+.drafts{border:2px solid var(--yellow);padding:16px 20px 4px;margin-bottom:28px}
+.drafts-head{display:grid;gap:2px;margin-bottom:4px}
+.drafts-head strong{color:var(--heading);font-size:17px}
+.back{display:inline-block;font-size:14px;color:var(--muted);margin-bottom:20px;text-underline-offset:3px}
+.back::before{content:"";display:inline-block;width:7px;height:7px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-right:8px;vertical-align:1px}
+.back:hover{color:var(--accent-ink)}
+.article h2{font-size:clamp(28px,3.6vw,38px);margin:10px 0 0}
+.kurz{background:var(--tint);padding:18px 20px;margin:22px 0 4px;max-width:720px}
+.kurz .eyebrow{display:block;margin-bottom:6px}
+.wbody{margin-top:22px}
+.prose h3{font-size:20px;line-height:1.25;color:var(--heading);margin:28px 0 8px}
+.prose h3:first-child{margin-top:0}
+.prose ul,.prose ol{list-style:none;padding:0;margin:0 0 .9em}
+.prose ul li{position:relative;padding-left:18px;margin:6px 0}
+.prose ul li::before{content:"";position:absolute;left:0;top:.28em;width:2px;height:1em;background:var(--red)}
+.prose ol{counter-reset:step}
+.prose ol li{counter-increment:step;position:relative;padding-left:46px;margin:14px 0;min-height:30px}
+.prose ol li::before{content:counter(step);position:absolute;left:0;top:-3px;width:30px;height:30px;border:2px solid var(--heading);color:var(--heading);font-weight:700;font-size:15px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.prose strong{font-weight:700}
+mark.ph{background:var(--yellow);color:#000;padding:0 3px}
+.draft-banner{background:var(--yellow);color:#000;padding:12px 16px;display:flex;gap:10px 16px;flex-wrap:wrap;align-items:center;justify-content:space-between;font-weight:700;margin-bottom:22px}
+.btn-dark{background:#123442;color:#fff}
+.btn-dark:hover{background:#24424f}
+.contact-box{border:2px solid var(--heading);padding:18px 20px;display:grid;gap:6px}
+.contact-box p{margin:0}
+.related .wiki-link strong{font-size:16px}
 
 /* Leere Zustände */
 .empty{padding:24px;border:1px dashed var(--line-strong);display:grid;gap:10px;justify-items:start}
@@ -278,6 +317,7 @@ dialog#sheet::backdrop{background:var(--backdrop)}
   <nav class="tabs" aria-label="Bereiche">
     <div class="wrap tabs-inner">
       <a class="tab" href="#aktuelles" data-view="aktuelles">Aktuelles <span class="badge" id="newsBadge" hidden></span></a>
+      <a class="tab" href="#wiki" data-view="wiki">Wiki</a>
       <a class="tab" href="#telefonbuch" data-view="telefonbuch">Telefonbuch</a>
       <a class="tab" href="#dokumente" data-view="dokumente">Dokumente</a>
     </div>
@@ -318,6 +358,36 @@ dialog#sheet::backdrop{background:var(--backdrop)}
       </div>
     </section>
 
+    <section id="view-wiki" class="view" aria-labelledby="h-wiki" hidden>
+      <div id="wikiIndex">
+        <div class="layout">
+          <div class="main">
+            <div class="sec-head">
+              <div>
+                <h2 id="h-wiki">SCHMIDT Wiki</h2>
+                <p class="sec-sub">Antworten auf Alltagsfragen, von der Krankmeldung bis zum IT-Problem.</p>
+              </div>
+              <div class="actions" id="wikiTools"></div>
+            </div>
+            <div id="wikiDrafts"></div>
+            <div class="search">
+              <label for="wikiSearch" class="sr">Wiki durchsuchen</label>
+              <input id="wikiSearch" type="search" placeholder="Wonach suchen Sie? z. B. krank, Urlaub" autocomplete="off">
+            </div>
+            <div class="chips" id="wikiChips" role="group" aria-label="Nach Thema filtern"></div>
+            <div id="wikiList"><p class="loading">Wiki wird geladen …</p></div>
+          </div>
+          <aside class="aside" aria-labelledby="h-wiki-recent">
+            <div>
+              <div class="sec-head"><h2 id="h-wiki-recent">Zuletzt aktualisiert</h2></div>
+              <div id="wikiRecent"><p class="loading">Wird geladen …</p></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <div id="wikiArticle" hidden></div>
+    </section>
+
     <section id="view-telefonbuch" class="view" aria-labelledby="h-pb" hidden>
       <div class="pb-top">
         <div>
@@ -352,10 +422,10 @@ dialog#sheet::backdrop{background:var(--backdrop)}
           <div class="chips" id="docChips" role="group" aria-label="Nach Kategorie filtern"></div>
           <div id="docList"><p class="loading">Dokumente werden geladen …</p></div>
         </div>
-        <aside class="aside faq" aria-labelledby="h-faq">
+        <aside class="aside" aria-labelledby="h-docwiki">
           <div>
-            <div class="sec-head"><h2 id="h-faq">Häufige Fragen</h2><div id="faqTools"></div></div>
-            <div id="faqList"><p class="loading">Fragen werden geladen …</p></div>
+            <div class="sec-head"><h2 id="h-docwiki">Im Wiki nachlesen</h2></div>
+            <div id="docWiki"><p class="loading">Wiki wird geladen …</p></div>
           </div>
         </aside>
       </div>
@@ -381,6 +451,9 @@ const ZENTRALE = "+49 5250 9845";
 const NEWS_CATS = ["Geschäftsführung", "Personal", "Produktion", "Vertrieb", "IT", "Allgemein"];
 const DOC_CATS = ["Formulare", "Anleitungen", "Handbücher", "Arbeitssicherheit", "IT & Technik", "Personal", "Sonstiges"];
 const BRETT_KINDS = ["Biete", "Suche", "Info"];
+const WIKI_CATS = ["Personal & Abwesenheit", "Arbeitszeit & Lohn", "Arbeitssicherheit", "IT & Technik", "Werk & Gebäude", "Neu bei SCHMIDT", "SCHMIDT Intern"];
+const WIKI_STATUS = ["Entwurf (nur Redaktion)", "Veröffentlicht"];
+const MAX_IMAGES = 6;
 const BRETT_DAYS = 90;
 const WEEKDAYS = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
 const MONTHS = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
@@ -389,10 +462,11 @@ const MON3 = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "O
 const S = {
   db: null, user: null, assets: null, uid: null, canEdit: false, offline: false,
   view: "aktuelles",
-  news: [], termine: [], kontakte: [], dokumente: [], faq: [], brett: [],
-  ready: { news: false, termine: false, kontakte: false, dokumente: false, faq: false, brett: false },
+  news: [], termine: [], kontakte: [], dokumente: [], brett: [], wiki: [], wikiDrafts: [],
+  ready: { news: false, termine: false, kontakte: false, dokumente: false, brett: false, wiki: false, wikiDrafts: false },
   seenAt: null, visitSeenAt: null, seenLoaded: false, marking: false, brettReadonly: false,
   newsCat: "Alle", dept: "Alle", docCat: "Alle", pbQuery: "", docQuery: "",
+  wikiCat: "Alle", wikiQuery: "", wikiId: null,
   brettAll: false, expanded: new Set(),
 };
 
@@ -422,25 +496,48 @@ function safeUrl(u) {
   const s = String(u || "").trim();
   return /^https?:\/\//i.test(s) ? s : null;
 }
-function appendLinked(el, text) {
-  const re = /https?:\/\/[^\s<>"]*[^\s<>".,;:!?)\]]/g;
+/* Leichtes Textformat: "## " Zwischenüberschrift, "1. " Schritte, "- " Aufzählung, **fett**,
+   Links werden anklickbar, [eckige Klammern] auf Wunsch als offene Platzhalter markiert. */
+function appendInline(el, text, opts) {
+  const re = /\*\*([^*\n]+)\*\*|(https?:\/\/[^\s<>"]*[^\s<>".,;:!?)\]])|(\[[^\]\n]{2,}\])/g;
   let last = 0, m;
   while ((m = re.exec(text))) {
     el.append(text.slice(last, m.index));
-    el.append(h("a", { href: m[0], target: "_blank", rel: "noopener noreferrer" }, m[0]));
+    if (m[1]) el.append(h("strong", null, m[1]));
+    else if (m[2]) el.append(h("a", { href: m[2], target: "_blank", rel: "noopener noreferrer" }, m[2]));
+    else el.append(opts && opts.marks ? h("mark", { class: "ph" }, m[3]) : m[3]);
     last = m.index + m[0].length;
   }
   el.append(text.slice(last));
 }
-function richText(str) {
+function richText(str, opts) {
   const frag = document.createDocumentFragment();
-  String(str || "").trim().split(/\n\s*\n/).forEach((par) => {
-    const p = h("p");
-    par.split("\n").forEach((line, i) => { if (i) p.append(h("br")); appendLinked(p, line); });
-    frag.append(p);
-  });
+  let list = null, para = null;
+  for (const raw of String(str || "").replace(/\r\n?/g, "\n").split("\n")) {
+    const line = raw.trim();
+    if (!line) { list = null; para = null; continue; }
+    let m;
+    if ((m = /^#{2,3}\s+(.*)$/.exec(line))) {
+      list = null; para = null;
+      const hd = h("h3"); appendInline(hd, m[1], opts); frag.append(hd);
+      continue;
+    }
+    const bullet = /^[-•]\s+(.*)$/.exec(line) || /^\*\s+(.*)$/.exec(line);
+    const step = /^\d+[.)]\s+(.*)$/.exec(line);
+    if (bullet || step) {
+      const tag = step ? "OL" : "UL";
+      if (!list || list.tagName !== tag) { para = null; list = h(tag.toLowerCase()); frag.append(list); }
+      const li = h("li"); appendInline(li, (step || bullet)[1], opts); list.append(li);
+      continue;
+    }
+    list = null;
+    if (!para) { para = h("p"); frag.append(para); } else para.append(h("br"));
+    appendInline(para, line, opts);
+  }
   return frag;
 }
+const plain = (str) => String(str || "").replace(/\*\*/g, "").replace(/^\s*(#{2,3}|[-•*]|\d+[.)])\s+/gm, "").replace(/\s+/g, " ").trim();
+const clip = (str, n) => (str.length > n ? str.slice(0, n - 1).replace(/\s+\S*$/, "") + " …" : str);
 function isoWeek(d) {
   const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   const day = t.getUTCDay() || 7;
@@ -508,18 +605,18 @@ async function withRetry(fn) {
     }
   }
 }
-function confirmBtn(label, onConfirm) {
-  const b = h("button", { type: "button", class: "btn-text" }, label);
+function confirmBtn(label, onConfirm, o = {}) {
+  const b = h("button", { type: "button", class: o.cls || "btn-text" }, label);
   let armed = false, t;
   const reset = () => { armed = false; b.textContent = label; b.classList.remove("armed"); b.disabled = false; };
   b.addEventListener("click", async () => {
     if (!armed) {
-      armed = true; b.textContent = "Wirklich löschen?"; b.classList.add("armed");
-      t = setTimeout(reset, 4000);
+      armed = true; b.textContent = o.armed || "Wirklich löschen?"; b.classList.add("armed");
+      t = setTimeout(reset, 5000);
       return;
     }
-    clearTimeout(t); b.disabled = true; b.textContent = "Wird gelöscht …";
-    try { await withRetry(onConfirm); toast("Gelöscht"); }
+    clearTimeout(t); b.disabled = true; b.textContent = o.busy || "Wird gelöscht …";
+    try { await withRetry(onConfirm); toast(o.done || "Gelöscht"); }
     catch (e) { toast(errText(e)); reset(); }
   });
   return b;
@@ -634,6 +731,35 @@ function renderHead(me) {
   $("#roleChip").hidden = !S.canEdit;
 }
 
+/* ---------- Bilder ---------- */
+const imgUrl = (id) => "/_blob/" + id;
+async function prepareImage(file) {
+  if (file.type === "image/gif" || file.type === "image/svg+xml") return { blob: file };
+  try {
+    const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+    const scale = Math.min(1, 1800 / Math.max(bmp.width, bmp.height));
+    const w = Math.round(bmp.width * scale), hgt = Math.round(bmp.height * scale);
+    const c = document.createElement("canvas"); c.width = w; c.height = hgt;
+    const ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, hgt); ctx.drawImage(bmp, 0, 0, w, hgt);
+    const blob = await new Promise((res) => c.toBlob(res, "image/jpeg", 0.85));
+    if (!blob) throw new Error("toBlob");
+    return { blob: scale < 1 || blob.size < file.size ? blob : file, w, h: hgt };
+  } catch (e) {
+    if (/^image\/(jpeg|png|webp)$/.test(file.type)) return { blob: file };
+    const err = new Error("format");
+    err.userMessage = `„${file.name}“ lässt sich nicht lesen. Bitte als JPG oder PNG speichern.`;
+    throw err;
+  }
+}
+function mediaEl(images, title) {
+  const list = (Array.isArray(images) ? images : []).filter((i) => i && /^[A-Za-z0-9_-]+$/.test(String(i.id || "")));
+  if (!list.length) return null;
+  const n = list.length;
+  return h("div", { class: "media" + (n === 1 ? " one" : n % 2 ? " odd" : "") },
+    list.map((img, i) => h("a", { href: imgUrl(img.id), target: "_blank", rel: "noopener noreferrer" },
+      h("img", { src: imgUrl(img.id), alt: n === 1 ? `Bild zum Beitrag „${title}“` : `Bild ${i + 1} von ${n} zum Beitrag „${title}“`, loading: "lazy", decoding: "async" }))));
+}
+
 /* ---------- Neuigkeiten ---------- */
 function unreadCount() {
   if (!S.uid || !S.seenLoaded) return 0;
@@ -657,20 +783,56 @@ async function maybeMarkSeen() {
   updateBadge();
 }
 function newsForm(item) {
+  const existing = item && Array.isArray(item.images) ? item.images : [];
+  const keep = new Set(existing.map((i) => i.id));
+  let imgInput = null, extra = null;
+  if (S.assets) {
+    imgInput = h("input", { id: "f-images", type: "file", accept: "image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif", multiple: true });
+    const thumbs = existing.length ? h("div", { class: "thumbs" }, existing.map((img) => {
+      const btn = h("button", { type: "button", class: "btn-text" }, "Entfernen");
+      const fig = h("div", { class: "thumb" }, h("img", { src: imgUrl(img.id), alt: "" }), btn);
+      btn.addEventListener("click", () => {
+        if (keep.has(img.id)) { keep.delete(img.id); fig.classList.add("removed"); btn.textContent = "Behalten"; }
+        else { keep.add(img.id); fig.classList.remove("removed"); btn.textContent = "Entfernen"; }
+      });
+      return fig;
+    })) : null;
+    extra = h("div", { class: "field" }, h("label", { for: "f-images" }, existing.length ? "Bilder" : "Bilder (optional)"), thumbs, imgInput,
+      h("span", { class: "hint" }, `Bis zu ${MAX_IMAGES} Bilder. Große Fotos werden automatisch verkleinert. Bitte nur Bilder verwenden, an denen SCHMIDT die Rechte hat und mit denen abgebildete Personen einverstanden sind.`));
+  }
   openSheet({
     title: item ? "Beitrag bearbeiten" : "Neuer Beitrag",
     fields: [
       { name: "category", label: "Bereich", type: "select", options: NEWS_CATS, required: true, default: "Allgemein", pair: true },
       { name: "pinned", label: "Oben anheften", type: "checkbox", pairEnd: true, hint: "Bleibt über allen anderen Beiträgen stehen." },
       { name: "title", label: "Überschrift", required: true, max: 140 },
-      { name: "body", label: "Text", type: "textarea", required: true, max: 8000, hint: "Absätze mit einer Leerzeile trennen. Links werden anklickbar." },
+      { name: "body", label: "Text", type: "textarea", required: true, max: 8000, hint: "Absätze mit einer Leerzeile trennen. „- “ am Zeilenanfang ergibt eine Aufzählung. Links werden anklickbar." },
     ],
+    extra,
     values: item || { category: "Allgemein" },
     submitLabel: item ? "Änderungen speichern" : "Veröffentlichen",
-    onSubmit: async (v) => {
+    onSubmit: async (v, progress) => {
       const data = { category: v.category, pinned: !!v.pinned, title: v.title, body: v.body };
-      if (item) await withRetry(() => S.db.doc("news/" + item.id).update({ ...data, editedAt: nowIso() }));
-      else { const ref = S.db.collection("news").doc(); await withRetry(() => ref.set({ ...data, authorId: S.uid, createdAt: nowIso() })); }
+      const files = imgInput ? [...(imgInput.files || [])] : [];
+      const kept = existing.filter((i) => keep.has(i.id));
+      if (kept.length + files.length > MAX_IMAGES) { const e = new Error("zu viele"); e.userMessage = `Höchstens ${MAX_IMAGES} Bilder pro Beitrag.`; throw e; }
+      const uploaded = [];
+      try {
+        for (let i = 0; i < files.length; i++) {
+          progress(`Bild ${i + 1} von ${files.length} wird hochgeladen …`);
+          const prepared = await prepareImage(files[i]);
+          const res = await withRetry(() => S.assets.upload(prepared.blob));
+          uploaded.push({ id: res.id, w: prepared.w || null, h: prepared.h || null });
+        }
+        if (imgInput) data.images = [...kept, ...uploaded];
+        progress("Wird gespeichert …");
+        if (item) await withRetry(() => S.db.doc("news/" + item.id).update({ ...data, editedAt: nowIso() }));
+        else { const ref = S.db.collection("news").doc(); await withRetry(() => ref.set({ ...data, authorId: S.uid, createdAt: nowIso() })); }
+      } catch (e) {
+        uploaded.forEach((u) => S.assets.delete(u.id).catch(() => {}));
+        throw e;
+      }
+      if (S.assets) existing.filter((i) => !keep.has(i.id)).forEach((i) => S.assets.delete(i.id).catch(() => {}));
     },
   });
 }
@@ -709,12 +871,16 @@ function renderNews() {
         n.pinned ? h("span", { class: "flag flag-pin" }, "Angeheftet") : null,
         isNew ? h("span", { class: "flag flag-new" }, "Neu") : null),
       h("h3", null, n.title || ""),
+      mediaEl(n.images, n.title || ""),
       body,
       long ? h("button", { type: "button", class: "btn-text more", onclick: () => { open ? S.expanded.delete(n.id) : S.expanded.add(n.id); renderNews(); } }, open ? "Weniger anzeigen" : "Weiterlesen") : null,
       h("div", { class: "byline" }, personEls(n.authorId),
         S.canEdit ? h("div", { class: "actions" },
           h("button", { type: "button", class: "btn-text", onclick: () => newsForm(n) }, "Bearbeiten"),
-          confirmBtn("Löschen", () => S.db.doc("news/" + n.id).delete())) : null));
+          confirmBtn("Löschen", async () => {
+            await S.db.doc("news/" + n.id).delete();
+            if (S.assets) (n.images || []).forEach((i) => S.assets.delete(i.id).catch(() => {}));
+          })) : null));
     frag.append(art);
   }
   list.replaceChildren(frag);
@@ -1112,46 +1278,155 @@ function renderDokumente() {
   list.replaceChildren(ul);
 }
 
-/* ---------- FAQ ---------- */
-function faqForm(item) {
+/* ---------- Wiki ---------- */
+/* Veröffentlichte Artikel liegen in "wiki" (lesen alle), Entwürfe in "wikiEntwurf" (nur Redaktion). */
+const PH_RE = /\[[^\]\n]{2,}\]/g;
+const placeholderCount = (a) => ([a.summary, a.body, a.kontakt].join("\n").match(PH_RE) || []).length;
+const byTitle = (a, b) => String(a.title).localeCompare(String(b.title), "de");
+function wikiAll() {
+  return [...S.wiki.map((a) => ({ ...a, _col: "wiki" })), ...(S.canEdit ? S.wikiDrafts.map((a) => ({ ...a, _col: "wikiEntwurf" })) : [])];
+}
+function slugify(str) { return fold(str).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "artikel"; }
+function wikiLink(a, sub) {
+  return h("a", { class: "wiki-link", href: "#wiki-" + a.id }, h("strong", null, a.title || "Ohne Titel"), sub ? h("span", null, sub) : null);
+}
+function wikiForm(item) {
   openSheet({
-    title: item ? "Frage bearbeiten" : "Neue Frage",
+    title: item ? "Artikel bearbeiten" : "Neuer Wiki-Artikel",
     fields: [
-      { name: "q", label: "Frage", required: true, max: 200, placeholder: "z. B. Wen rufe ich bei einem IT-Problem an?" },
-      { name: "a", label: "Antwort", type: "textarea", required: true, max: 3000 },
-      { name: "order", label: "Reihenfolge", type: "number", max: 4, hint: "Kleinere Zahlen stehen weiter oben." },
+      { name: "title", label: "Frage oder Thema", required: true, max: 140, placeholder: "z. B. Wie melde ich mich krank?" },
+      { name: "category", label: "Thema", type: "select", options: WIKI_CATS, required: true, pair: true },
+      { name: "status", label: "Status", type: "select", options: WIKI_STATUS, required: true, pairEnd: true },
+      { name: "summary", label: "Kurz gesagt", type: "textarea", max: 600, hint: "Ein, zwei Sätze. Stehen oben im Artikel und in der Übersicht." },
+      { name: "body", label: "Ausführlich", type: "textarea", max: 12000,
+        hint: "„## “ am Zeilenanfang ergibt eine Zwischenüberschrift, „1. “ einen Schritt, „- “ eine Aufzählung, **Text** wird fett. Text in [eckigen Klammern] markiert die App als offenen Platzhalter." },
+      { name: "kontakt", label: "Ansprechpartner", max: 200, placeholder: "z. B. Personalabteilung, Durchwahl 120" },
     ],
-    values: item ? { ...item, order: item.order != null ? String(item.order) : "" } : {},
+    values: item ? { ...item, status: item._col === "wiki" ? WIKI_STATUS[1] : WIKI_STATUS[0] } : { category: WIKI_CATS[0], status: WIKI_STATUS[0] },
     onSubmit: async (v) => {
-      const data = { q: v.q, a: v.a, order: v.order === "" ? 100 : Number(v.order) || 0 };
-      if (item) await withRetry(() => S.db.doc("faq/" + item.id).update(data));
-      else { const ref = S.db.collection("faq").doc(); await withRetry(() => ref.set({ ...data, createdAt: nowIso() })); }
+      const target = v.status === WIKI_STATUS[1] ? "wiki" : "wikiEntwurf";
+      let id = item ? item.id : slugify(v.title);
+      if (!item) { const taken = new Set(wikiAll().map((a) => a.id)); const base = id; let n = 2; while (taken.has(id)) id = `${base}-${n++}`; }
+      const data = { title: v.title, category: v.category, summary: v.summary, body: v.body, kontakt: v.kontakt,
+        createdAt: (item && item.createdAt) || nowIso(), updatedAt: nowIso(), updatedBy: S.uid };
+      await withRetry(() => S.db.doc(`${target}/${id}`).set(data));
+      if (item && item._col !== target) await withRetry(() => S.db.doc(`${item._col}/${id}`).delete());
+      location.hash = "wiki-" + id;
     },
   });
 }
-function renderFaq() {
-  const tools = $("#faqTools"); tools.replaceChildren();
-  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => faqForm(null) }, "Frage hinzufügen"));
-  const list = $("#faqList");
-  if (!S.ready.faq && !S.offline) return;
-  if (!S.faq.length) { list.replaceChildren(emptyState("Noch keine Fragen", S.canEdit ? "Sammeln Sie hier, was neue Kolleginnen und Kollegen oft fragen." : null)); return; }
-  const items = [...S.faq].sort((a, b) => (a.order ?? 100) - (b.order ?? 100) || String(a.q).localeCompare(String(b.q), "de"));
-  const open = new Set([...list.querySelectorAll("details[open]")].map((d) => d.dataset.id));
-  list.replaceChildren(...items.map((f) => h("details", { dataset: { id: f.id }, open: open.has(f.id) },
-    h("summary", null, f.q),
-    h("div", { class: "answer prose" }, richText(f.a),
-      S.canEdit ? h("div", { class: "actions" },
-        h("button", { type: "button", class: "btn-text", onclick: () => faqForm(f) }, "Bearbeiten"),
-        confirmBtn("Löschen", () => S.db.doc("faq/" + f.id).delete())) : null))));
+function publishBtn(a) {
+  const n = placeholderCount(a);
+  return confirmBtn("Veröffentlichen", async () => {
+    const { _col, id, ...data } = a;
+    await S.db.doc("wiki/" + id).set({ ...data, updatedAt: nowIso(), updatedBy: S.uid });
+    await S.db.doc("wikiEntwurf/" + id).delete();
+  }, { cls: "btn btn-dark btn-sm", armed: n ? `${n} Platzhalter offen. Trotzdem veröffentlichen?` : "Jetzt für alle veröffentlichen?", busy: "Wird veröffentlicht …", done: "Veröffentlicht" });
+}
+function renderWiki() {
+  const idx = $("#wikiIndex"), art = $("#wikiArticle");
+  if (S.wikiId) { idx.hidden = true; art.hidden = false; renderWikiArticle(); return; }
+  idx.hidden = false; art.hidden = true;
+
+  const tools = $("#wikiTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-primary btn-sm", onclick: () => wikiForm(null) }, "Artikel schreiben"));
+
+  const dr = $("#wikiDrafts"); dr.replaceChildren();
+  if (S.canEdit && S.wikiDrafts.length) {
+    const drafts = S.wikiDrafts.map((a) => ({ ...a, _col: "wikiEntwurf" })).sort(byTitle);
+    dr.append(h("div", { class: "drafts" },
+      h("div", { class: "drafts-head" }, h("strong", null, `Entwürfe (${drafts.length})`),
+        h("span", { class: "hint" }, "Nur für die Redaktion sichtbar. Gelb markierte Platzhalter ausfüllen, dann veröffentlichen.")),
+      h("div", { class: "wiki-links" }, drafts.map((a) => { const n = placeholderCount(a); return wikiLink(a, `${a.category} · ${n ? n + " Platzhalter offen" : "bereit zum Veröffentlichen"}`); }))));
+  }
+
+  const pub = S.wiki;
+  const cats = WIKI_CATS.filter((c) => pub.some((a) => a.category === c));
+  if (S.wikiCat !== "Alle" && !cats.includes(S.wikiCat)) S.wikiCat = "Alle";
+  const chips = $("#wikiChips"); chips.replaceChildren();
+  chips.hidden = cats.length < 2;
+  ["Alle", ...cats].forEach((c) => chips.append(h("button", { type: "button", class: "chip", "aria-pressed": String(S.wikiCat === c), onclick: () => { S.wikiCat = c; renderWiki(); } }, c)));
+
+  const list = $("#wikiList"), recent = $("#wikiRecent");
+  if (!S.ready.wiki && !S.offline) return;
+  const latest = [...pub].sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))).slice(0, 5);
+  recent.replaceChildren(latest.length ? h("div", { class: "wiki-links related" }, latest.map((a) => wikiLink(a, a.updatedAt ? "Stand " + fmtStamp(a.updatedAt) : null)))
+    : h("p", { class: "loading" }, "Noch keine Artikel."));
+  if (!pub.length) {
+    list.replaceChildren(emptyState("Das Wiki ist noch leer",
+      S.canEdit ? "Schreiben Sie den ersten Artikel oder veröffentlichen Sie einen der Entwürfe oben." : "Die Redaktion stellt hier bald Antworten auf Alltagsfragen bereit."));
+    return;
+  }
+  const terms = fold(S.wikiQuery).split(/\s+/).filter(Boolean);
+  const inCat = pub.filter((a) => S.wikiCat === "Alle" || a.category === S.wikiCat);
+  const sub = (a) => clip(plain(a.summary || a.body), 150);
+  if (terms.length) {
+    const hits = inCat.filter((a) => { const hay = fold([a.title, a.summary, a.body, a.category, a.kontakt].join(" ")); return terms.every((t) => hay.includes(t)); })
+      .sort((a, b) => (terms.every((t) => fold(b.title).includes(t)) - terms.every((t) => fold(a.title).includes(t))) || byTitle(a, b));
+    list.replaceChildren(hits.length
+      ? h("div", null, h("p", { class: "count" }, hits.length === 1 ? "1 Artikel gefunden" : `${hits.length} Artikel gefunden`), h("div", { class: "wiki-links" }, hits.map((a) => wikiLink(a, sub(a)))))
+      : emptyState("Nichts gefunden", "Anders formulieren oder die Redaktion fragen. Fehlende Themen nimmt sie gern auf."));
+    return;
+  }
+  const order = [...WIKI_CATS, ...new Set(inCat.map((a) => a.category).filter((c) => !WIKI_CATS.includes(c)))];
+  list.replaceChildren(...order.map((c) => {
+    const items = inCat.filter((a) => a.category === c).sort(byTitle);
+    return items.length ? h("section", { class: "wiki-group" }, h("h3", { class: "group-title" }, c), h("div", { class: "wiki-links" }, items.map((a) => wikiLink(a, sub(a))))) : null;
+  }).filter(Boolean));
+}
+function renderWikiArticle() {
+  const art = $("#wikiArticle");
+  const a = wikiAll().find((x) => x.id === S.wikiId);
+  const back = h("a", { class: "back", href: "#wiki" }, "Alle Wiki-Artikel");
+  if (!a) {
+    const loading = !S.offline && (!S.ready.wiki || (S.canEdit && !S.ready.wikiDrafts));
+    art.replaceChildren(back, loading ? h("p", { class: "loading" }, "Artikel wird geladen …")
+      : emptyState("Artikel nicht gefunden", "Vielleicht wurde er umbenannt oder gelöscht. Suchen Sie im Wiki nach dem Thema."));
+    return;
+  }
+  const draft = a._col === "wikiEntwurf";
+  const marks = S.canEdit;
+  const n = placeholderCount(a);
+  const related = S.wiki.filter((x) => x.category === a.category && x.id !== a.id).sort(byTitle).slice(0, 6);
+  const kontakt = a.kontakt ? h("p") : null;
+  if (kontakt) appendInline(kontakt, a.kontakt, { marks });
+  art.replaceChildren(h("div", { class: "layout" },
+    h("article", { class: "main article", "aria-labelledby": "h-article" },
+      back,
+      draft ? h("div", { class: "draft-banner" }, h("span", null, n ? `Entwurf, nur für die Redaktion sichtbar. ${n} Platzhalter offen.` : "Entwurf, nur für die Redaktion sichtbar."), S.db ? publishBtn(a) : null) : null,
+      h("div", { class: "meta" }, h("span", { class: "eyebrow" }, a.category || "Wiki"), a.updatedAt ? h("span", null, "Stand " + fmtStamp(a.updatedAt)) : null),
+      h("h2", { id: "h-article" }, a.title),
+      a.summary ? h("div", { class: "kurz" }, h("span", { class: "eyebrow" }, "Kurz gesagt"), h("div", { class: "prose" }, richText(a.summary, { marks }))) : null,
+      a.body ? h("div", { class: "prose wbody" }, richText(a.body, { marks })) : null,
+      h("div", { class: "byline" },
+        a.updatedBy ? [h("span", null, "Zuletzt bearbeitet von"), personEls(a.updatedBy)] : null,
+        S.canEdit && S.db ? h("div", { class: "actions" },
+          h("button", { type: "button", class: "btn-text", onclick: () => wikiForm(a) }, "Bearbeiten"),
+          confirmBtn("Löschen", async () => { await S.db.doc(`${a._col}/${a.id}`).delete(); location.hash = "wiki"; })) : null)),
+    h("aside", { class: "aside" },
+      kontakt ? h("div", { class: "contact-box" }, h("span", { class: "eyebrow" }, "Ansprechpartner"), kontakt) : null,
+      related.length ? h("div", null, h("div", { class: "sec-head" }, h("h2", null, "Mehr zu " + a.category)), h("div", { class: "wiki-links related" }, related.map((r) => wikiLink(r)))) : null)));
+  fillPeople(art);
+}
+function renderDocWiki() {
+  const box = $("#docWiki");
+  if (!S.ready.wiki && !S.offline) return;
+  const items = [...S.wiki].sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))).slice(0, 5);
+  box.replaceChildren(
+    items.length ? h("div", { class: "wiki-links related" }, items.map((a) => wikiLink(a))) : h("p", { class: "loading" }, "Noch keine Wiki-Artikel."),
+    h("p", null, h("a", { class: "btn btn-outline btn-sm", href: "#wiki" }, "Zum Wiki")));
 }
 
 /* ---------- Navigation ---------- */
-const VIEWS = ["aktuelles", "telefonbuch", "dokumente"];
+const VIEWS = ["aktuelles", "wiki", "telefonbuch", "dokumente"];
 function route() {
-  const v = (location.hash || "").slice(1);
-  const next = VIEWS.includes(v) ? v : "aktuelles";
-  const changed = next !== S.view;
-  S.view = next;
+  const raw = (location.hash || "").slice(1);
+  let next = raw, wikiId = null;
+  if (raw.startsWith("wiki-")) { next = "wiki"; wikiId = raw.slice(5); }
+  if (!VIEWS.includes(next)) next = "aktuelles";
+  const changed = next !== S.view || wikiId !== S.wikiId;
+  S.view = next; S.wikiId = wikiId;
+  if (next === "wiki") renderWiki();
   for (const name of VIEWS) $("#view-" + name).hidden = name !== next;
   document.querySelectorAll(".tab").forEach((t) => { if (t.dataset.view === next) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
   if (changed) window.scrollTo(0, 0);
@@ -1162,10 +1437,12 @@ window.addEventListener("hashchange", route);
 
 let pbTimer, docTimer;
 $("#pbSearch").addEventListener("input", (e) => { clearTimeout(pbTimer); pbTimer = setTimeout(() => { S.pbQuery = e.target.value; renderKontakte(); }, 120); });
+let wikiTimer;
+$("#wikiSearch").addEventListener("input", (e) => { clearTimeout(wikiTimer); wikiTimer = setTimeout(() => { S.wikiQuery = e.target.value; renderWiki(); }, 120); });
 $("#docSearch").addEventListener("input", (e) => { clearTimeout(docTimer); docTimer = setTimeout(() => { S.docQuery = e.target.value; renderDokumente(); }, 120); });
 document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copyText(b.dataset.copy)));
 
-function renderAll() { renderNews(); renderTermine(); renderBrett(); renderKontakte(); renderDokumente(); renderFaq(); }
+function renderAll() { renderNews(); renderTermine(); renderBrett(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); }
 
 function goOffline(msg) {
   S.offline = true;
@@ -1178,9 +1455,11 @@ function goOffline(msg) {
 renderHead(null);
 route();
 
-const RENDER = { news: renderNews, termine: renderTermine, kontakte: renderKontakte, dokumente: renderDokumente, faq: renderFaq, brett: renderBrett };
+const RENDER = { news: renderNews, termine: renderTermine, kontakte: renderKontakte, dokumente: renderDokumente, brett: renderBrett,
+  wiki: () => { renderWiki(); renderDocWiki(); }, wikiDrafts: renderWiki };
+const SOURCES = { wikiDrafts: "wikiEntwurf" };
 function subscribe(name) {
-  S.db.collection(name).onSnapshot((snap) => {
+  S.db.collection(SOURCES[name] || name).onSnapshot((snap) => {
     S[name] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     S.ready[name] = true;
     RENDER[name]();
@@ -1204,7 +1483,8 @@ function subscribe(name) {
   if (!db) { goOffline("Die Inhalte sind nur für angemeldete Mitarbeiterinnen und Mitarbeiter sichtbar. Bitte über claude.ai mit dem Firmenkonto anmelden."); return; }
   S.db = db;
   renderAll();
-  ["news", "termine", "brett", "kontakte", "dokumente", "faq"].forEach(subscribe);
+  ["news", "termine", "brett", "kontakte", "dokumente", "wiki"].forEach(subscribe);
+  if (S.canEdit) subscribe("wikiDrafts");
   if (S.uid) {
     try {
       const snap = await db.doc(`data/users/${S.uid}/state`).get();

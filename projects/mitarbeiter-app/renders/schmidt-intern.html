@@ -1023,23 +1023,19 @@ function upcomingBdays() {
   return S.geburtstage.filter(validBday).map((b) => { const d = nextBirthday(b, t0); return { b, d, n: daysUntil(d, t0) }; })
     .sort((a, b) => a.d - b.d);
 }
-const whenText = (x) => (x.n === 0 ? "heute" : x.n === 1 ? "morgen" : `${WEEKDAYS[x.d.getDay()].slice(0, 2)}, ${pad(x.d.getDate())}.${pad(x.d.getMonth() + 1)}.`);
 function namesEl(list) {
   const nm = (b) => (b.selbst ? h("span", { class: "person", dataset: { person: b.id } }, "…") : h("span", { class: "person" }, b.name || "Ohne Namen"));
   if (list.length === 1) return [nm(list[0].b)];
   if (list.length === 2) return [nm(list[0].b), " und ", nm(list[1].b)];
   return [nm(list[0].b), ` und ${list.length - 1} weitere`];
 }
+/* Hinweis über den Neuigkeiten: nur an Tagen, an denen jemand Geburtstag hat */
 function renderGbNext() {
   const box = $("#gbNext");
-  const up = upcomingBdays();
-  if (!S.ready.geburtstage || !up.length) { box.hidden = true; return; }
-  const next = up.filter((x) => +x.d === +up[0].d);
-  const first = next[0];
-  const sentence = first.n === 0 ? ["Heute hat ", namesEl(next), " Geburtstag."]
-    : first.n === 1 ? ["Morgen hat ", namesEl(next), " Geburtstag."]
-    : ["Nächster Geburtstag: ", namesEl(next), `, ${whenText(first)}`];
-  box.className = "gb-next" + (first.n === 0 ? " is-today" : "");
+  const today = S.ready.geburtstage ? upcomingBdays().filter((x) => x.n === 0) : [];
+  if (!today.length) { box.hidden = true; return; }
+  const sentence = ["Heute ", today.length === 1 ? "hat " : "haben ", namesEl(today), " Geburtstag."];
+  box.className = "gb-next is-today";
   box.replaceChildren(h("span", { class: "eyebrow" }, "Geburtstag"), h("p", null, sentence), h("a", { class: "btn-text", href: "#geburtstage" }, "Kalender"));
   box.hidden = false;
   fillPeople(box);
@@ -1579,6 +1575,13 @@ function goOffline(msg) {
 /* ---------- Start ---------- */
 renderHead(null);
 route();
+let shownDay = localDay(new Date());
+setInterval(() => {
+  const d = localDay(new Date());
+  if (d === shownDay) return;
+  shownDay = d;
+  renderHead(S.me); renderTermine(); renderGeburtstage(); renderKalender();
+}, 60000);
 
 const RENDER = { news: renderNews, termine: renderTermine, kontakte: renderKontakte, dokumente: renderDokumente,
   wiki: () => { renderWiki(); renderDocWiki(); }, wikiDrafts: renderWiki,

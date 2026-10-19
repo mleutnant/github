@@ -38,11 +38,6 @@ const MOCK = `<script>
       { id: "t2", title: "Erste-Hilfe-Kurs", date: day(9), time: "08:00", place: "Schulungsraum" },
       { id: "t3", title: "Werksferien beginnen", date: day(70) },
     ],
-    brett: [
-      { id: "u_me", posts: [{ id: "p1", kind: "Biete", title: "Rasenmäher, gut erhalten", text: "Benzin, 46 cm Schnittbreite. Gegen eine Kiste Wasser. Halle 2, Frühschicht.", createdAt: iso(0.04) }] },
-      { id: "u_erika", posts: [{ id: "p2", kind: "Suche", title: "Fahrgemeinschaft ab Paderborn", text: "Montag bis Freitag zur Frühschicht. Gern im Wechsel fahren.", createdAt: iso(1) }] },
-      { id: "u_max", posts: [{ id: "p3", kind: "Info", title: "Schlüsselbund gefunden", text: "Am Mitarbeiterparkplatz, liegt am Empfang.", createdAt: iso(2) }] },
-    ],
     kontakte: [
       { id: "k1", name: "Max Mustermann", abteilung: "Produktion", funktion: "Schichtleitung Frühschicht", durchwahl: "210", mobil: "+49 170 1234567", raum: "Halle 2" },
       { id: "k2", name: "Erika Mustermann", abteilung: "Personal", funktion: "Personalreferentin", durchwahl: "120", email: "erika.mustermann@schmidt-boke.de", raum: "Verwaltung, 1. OG" },
@@ -100,14 +95,6 @@ const SHOTS = [
   { name: "bilder", hash: "", scrollTo: ".post:nth-of-type(2)", offset: 70 },
   { name: "gb", hash: "", scrollTo: "#h-gb", offset: 76 },
   { name: "kalender", hash: "#geburtstage" },
-  { name: "brett", hash: "", scrollTo: "#h-brett", offset: 76 },
-  { name: "aushang", hash: "", scrollTo: "#h-brett", offset: 76, act: async (p) => {
-    await p.click("#brettTools button");
-    await p.selectOption("#f-kind", "Suche");
-    await p.fill("#f-title", "Fahrgemeinschaft ab Delbrück");
-    await p.fill("#f-text", "Zur Spätschicht, Montag bis Freitag. Halle 3, Durchwahl 245.");
-    await p.evaluate(() => document.activeElement && document.activeElement.blur());
-  } },
   { name: "wiki", hash: "#wiki" },
   { name: "artikel", hash: "#wiki-krankmeldung" },
   { name: "telefonbuch", hash: "#telefonbuch", scrollTo: "#h-pb", offset: 70, act: async (p) => {
@@ -199,7 +186,7 @@ function slides(img) {
     <div class="rrule"></div>
   </div>
   <div class="cols">
-    <div><h3>Aktuelles</h3>${bullets(["Mitteilungen aus Geschäftsführung, Personal und Produktion", "Termine und Geburtstage", "Schwarzes Brett für alle"])}</div>
+    <div><h3>Aktuelles</h3>${bullets(["Mitteilungen aus Geschäftsführung, Personal und Produktion", "Termine der nächsten Wochen", "Geburtstage, immer der nächste im Blick"])}</div>
     <div><h3>Wiki</h3>${bullets(["Antworten auf Alltagsfragen", "Von der Krankmeldung bis zum Arbeitsunfall", "Mit Ansprechpartner"])}</div>
     <div><h3>Telefonbuch</h3>${bullets(["Alle Kolleginnen und Kollegen", "Suche nach Name, Abteilung oder Durchwahl", "Antippen kopiert die Nummer"])}</div>
     <div><h3>Dokumente</h3>${bullets(["Formulare wie der Urlaubsantrag", "Anleitungen und Arbeitsschutz", "Immer die aktuelle Fassung"])}</div>
@@ -219,17 +206,12 @@ function slides(img) {
       "Im Kalender sehen Sie das ganze Jahr, Monat für Monat",
       "Freiwillig: Sie tragen Ihren Geburtstag selbst ein, nur Tag und Monat, und können ihn jederzeit entfernen",
     ], [phone(img.gb, "Geburtstage unter Aktuelles"), phone(img.kalender, "Geburtstagskalender am Handy")]),
-    featureSlide(5, "Schwarzes Brett", "Ihr Aushang, ohne Pinnwand", [
-      "Biete, Suche oder Info: Jede und jeder kann einen Aushang machen",
-      "Ihr Name steht dabei, damit man weiß, wen man ansprechen kann",
-      "Eigene Aushänge können Sie abhängen, nach 90 Tagen verschwinden sie von selbst",
-    ], [phone(img.brett, "Schwarzes Brett am Handy"), phone(img.aushang, "Neuen Aushang schreiben")]),
-    featureSlide(6, "Wiki", "Antworten auf Alltagsfragen", [
+    featureSlide(5, "Wiki", "Antworten auf Alltagsfragen", [
       "Wie melde ich mich krank? Wie tausche ich eine Schicht? Was tun bei einem Arbeitsunfall?",
       "Oben steht kurz das Wichtigste, darunter Schritt für Schritt",
       "Mit Ansprechpartner, damit Sie wissen, wen Sie fragen können",
     ], [phone(img.wiki, "Wiki-Übersicht am Handy"), phone(img.artikel, "Wiki-Artikel zur Krankmeldung")]),
-    featureSlide(7, "Telefonbuch und Dokumente", "Jede Durchwahl, jedes Formular", [
+    featureSlide(6, "Telefonbuch und Dokumente", "Jede Durchwahl, jedes Formular", [
       "Suchen nach Name, Abteilung oder Durchwahl",
       "Durchwahl antippen: Die ganze Nummer mit Vorwahl ist kopiert",
       "Formulare, Anleitungen und Arbeitsschutz zum Öffnen am Handy",
@@ -240,11 +222,11 @@ function slides(img) {
     <div class="kicker">Am PC und am Terminal</div>
     <h2>Mehr Platz, gleiche App</h2>
     <div class="rrule"></div>
-    ${bullets(["Am großen Bildschirm stehen Neuigkeiten, Termine und Schwarzes Brett nebeneinander", "Ideal für das gemeinsame Terminal in Pausenraum oder Halle", "Kein Programm zu installieren, die App läuft im Browser"])}
+    ${bullets(["Am großen Bildschirm stehen Neuigkeiten, Termine und Geburtstage nebeneinander", "Ideal für das gemeinsame Terminal in Pausenraum oder Halle", "Kein Programm zu installieren, die App läuft im Browser"])}
   </div>
   <div class="field"></div><div class="field-rule"></div>
   <figure class="browser"><div class="bar"><span></span></div><img src="${img.pc}" alt="Startseite der App am PC"></figure>
-  ${note}${foot(8)}
+  ${note}${foot(7)}
 </section>`,
     `<section class="slide closing">
   <div class="blue-full">
@@ -257,7 +239,7 @@ function slides(img) {
     <div class="qr-box">${qr}<p>Zur App</p></div>
   </div>
   <div class="yfoot"></div>
-  ${foot(9)}
+  ${foot(8)}
 </section>`,
   ].join("\n");
 }

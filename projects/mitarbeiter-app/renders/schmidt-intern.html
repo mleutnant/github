@@ -170,16 +170,6 @@ h2{margin:0;font-size:28px;line-height:1.15;font-weight:700;color:var(--heading)
 .bday .actions{flex-basis:100%;gap:12px}
 .month-empty{color:var(--muted);font-size:14px;padding:10px 0;font-weight:400;margin:0}
 
-/* Schwarzes Brett */
-.note{padding:16px 0;border-top:1px solid var(--line)}
-.note:first-child{border-top:0;padding-top:0}
-.kind{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 5px;border:1px solid currentColor;line-height:1}
-.kind-Biete{color:var(--heading)}
-.kind-Suche{color:var(--accent-ink)}
-.kind-Info{color:var(--muted)}
-.note-title{font-weight:700;margin-top:8px;line-height:1.3}
-.note-text{font-size:15px;margin-top:4px}
-.note .byline{margin-top:10px;font-size:13px}
 .more{margin-top:14px}
 
 /* Telefonbuch */
@@ -365,7 +355,7 @@ dialog#sheet::backdrop{background:var(--backdrop)}
           <div class="chips" id="newsChips" role="group" aria-label="Nach Bereich filtern"></div>
           <div id="newsList"><p class="loading">Neuigkeiten werden geladen …</p></div>
         </div>
-        <aside class="aside" aria-label="Termine und Schwarzes Brett">
+        <aside class="aside" aria-label="Termine und Geburtstage">
           <div>
             <div class="sec-head"><h2 id="h-termine">Termine</h2><div id="termTools"></div></div>
             <div id="termList"><p class="loading">Termine werden geladen …</p></div>
@@ -373,16 +363,6 @@ dialog#sheet::backdrop{background:var(--backdrop)}
           <div>
             <div class="sec-head"><h2 id="h-gb">Geburtstage</h2><div id="gbTools"></div></div>
             <div id="gbList"><p class="loading">Geburtstage werden geladen …</p></div>
-          </div>
-          <div>
-            <div class="sec-head">
-              <div>
-                <h2 id="h-brett">Schwarzes Brett</h2>
-                <p class="sec-sub">Biete, suche, Fundsachen: Aushänge von allen.</p>
-              </div>
-              <div id="brettTools"></div>
-            </div>
-            <div id="brettList"><p class="loading">Aushänge werden geladen …</p></div>
           </div>
         </aside>
       </div>
@@ -493,11 +473,9 @@ dialog#sheet::backdrop{background:var(--backdrop)}
 const ZENTRALE = "+49 5250 9845";
 const NEWS_CATS = ["Geschäftsführung", "Personal", "Produktion", "Vertrieb", "IT", "Allgemein"];
 const DOC_CATS = ["Formulare", "Anleitungen", "Handbücher", "Arbeitssicherheit", "IT & Technik", "Personal", "Sonstiges"];
-const BRETT_KINDS = ["Biete", "Suche", "Info"];
 const WIKI_CATS = ["Personal & Abwesenheit", "Arbeitszeit & Lohn", "Arbeitssicherheit", "IT & Technik", "Werk & Gebäude", "Neu bei SCHMIDT", "SCHMIDT Intern"];
 const WIKI_STATUS = ["Entwurf (nur Redaktion)", "Veröffentlicht"];
 const MAX_IMAGES = 6;
-const BRETT_DAYS = 90;
 const WEEKDAYS = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
 const MONTHS = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 const MON3 = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
@@ -505,13 +483,13 @@ const MON3 = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "O
 const S = {
   db: null, user: null, assets: null, uid: null, canEdit: false, offline: false,
   view: "aktuelles",
-  news: [], termine: [], kontakte: [], dokumente: [], brett: [], wiki: [], wikiDrafts: [], geburtstage: [],
-  ready: { news: false, termine: false, kontakte: false, dokumente: false, brett: false, wiki: false, wikiDrafts: false, geburtstage: false },
+  news: [], termine: [], kontakte: [], dokumente: [], wiki: [], wikiDrafts: [], geburtstage: [],
+  ready: { news: false, termine: false, kontakte: false, dokumente: false, wiki: false, wikiDrafts: false, geburtstage: false },
   me: null, gbReadonly: false,
-  seenAt: null, visitSeenAt: null, seenLoaded: false, marking: false, brettReadonly: false,
+  seenAt: null, visitSeenAt: null, seenLoaded: false, marking: false,
   newsCat: "Alle", dept: "Alle", docCat: "Alle", pbQuery: "", docQuery: "",
   wikiCat: "Alle", wikiQuery: "", wikiId: null,
-  brettAll: false, expanded: new Set(),
+  expanded: new Set(),
 };
 
 /* ---------- Helfer ---------- */
@@ -532,7 +510,6 @@ function h(tag, props, ...kids) {
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const nowIso = () => new Date().toISOString();
-const rid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 function fold(s) {
   return String(s || "").toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss");
 }
@@ -1147,69 +1124,6 @@ function renderKalender() {
   fillPeople(cal);
 }
 
-/* ---------- Schwarzes Brett ---------- */
-function canPostBrett() { return !!(S.db && S.uid && !S.brettReadonly); }
-async function writeBrett(ownerUid, mutate) {
-  const current = S.brett.find((b) => b.id === ownerUid);
-  const cutoff = new Date(Date.now() - BRETT_DAYS * 864e5).toISOString();
-  let posts = (current && Array.isArray(current.posts) ? current.posts : []).map((p) => ({ ...p }));
-  posts = mutate(posts).filter((p) => p.createdAt >= cutoff).slice(-30);
-  await withRetry(() => S.db.doc("brett/" + ownerUid).set({ posts, updatedAt: nowIso() }));
-}
-function brettForm() {
-  openSheet({
-    title: "Neuer Aushang",
-    intro: `Aushänge sehen alle Kolleginnen und Kollegen. Sie verschwinden nach ${BRETT_DAYS} Tagen von selbst.`,
-    fields: [
-      { name: "kind", label: "Art", type: "select", options: BRETT_KINDS, required: true, default: "Biete" },
-      { name: "title", label: "Überschrift", required: true, max: 100, placeholder: "z. B. Fahrgemeinschaft ab Paderborn" },
-      { name: "text", label: "Text", type: "textarea", required: true, max: 1200, hint: "Wie man Sie erreicht, z. B. Durchwahl oder Abteilung." },
-    ],
-    submitLabel: "Aushängen",
-    onSubmit: async (v) => {
-      try {
-        await writeBrett(S.uid, (posts) => [...posts, { id: rid(), kind: v.kind, title: v.title, text: v.text, createdAt: nowIso() }]);
-      } catch (e) {
-        if (e && e.code === "invalid_argument") { S.brettReadonly = true; renderBrett(); e.userMessage = "Sie haben für diese App nur Leserechte. Bitte die Redaktion um Zugriff als Mitwirkende bitten."; }
-        throw e;
-      }
-    },
-  });
-}
-function renderBrett() {
-  const tools = $("#brettTools"); tools.replaceChildren();
-  if (canPostBrett()) tools.append(h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: brettForm }, "Aushang erstellen"));
-  const list = $("#brettList");
-  if (!S.ready.brett && !S.offline) return;
-  const cutoff = new Date(Date.now() - BRETT_DAYS * 864e5).toISOString();
-  const all = [];
-  for (const doc of S.brett) for (const p of (Array.isArray(doc.posts) ? doc.posts : [])) {
-    if (p && p.createdAt >= cutoff) all.push({ ...p, owner: doc.id });
-  }
-  all.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
-  if (!all.length) {
-    list.replaceChildren(emptyState("Das Brett ist noch leer", "Mitfahrgelegenheit, Fundsache oder Kinderwagen abzugeben? Hier ist Platz dafür.",
-      canPostBrett() ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: brettForm }, "Ersten Aushang erstellen") : null));
-    return;
-  }
-  const shown = S.brettAll ? all : all.slice(0, 6);
-  const ul = h("ul", { class: "list" });
-  for (const p of shown) {
-    const mine = p.owner === S.uid;
-    ul.append(h("li", { class: "note" },
-      h("div", { class: "meta" }, h("span", { class: "kind kind-" + (BRETT_KINDS.includes(p.kind) ? p.kind : "Info") }, p.kind || "Info"), h("time", { datetime: p.createdAt }, fmtStamp(p.createdAt))),
-      h("div", { class: "note-title" }, p.title || ""),
-      h("div", { class: "note-text prose" }, richText(p.text)),
-      h("div", { class: "byline" }, personEls(p.owner),
-        (mine || S.canEdit) && S.db ? h("div", { class: "actions" },
-          confirmBtn(mine ? "Abhängen" : "Entfernen", () => writeBrett(p.owner, (posts) => posts.filter((x) => x.id !== p.id)))) : null)));
-  }
-  const frag = [ul];
-  if (all.length > 6) frag.push(h("button", { type: "button", class: "btn-text more", onclick: () => { S.brettAll = !S.brettAll; renderBrett(); } }, S.brettAll ? "Weniger anzeigen" : `Alle ${all.length} Aushänge anzeigen`));
-  list.replaceChildren(...frag);
-  fillPeople(list);
-}
-
 /* ---------- Telefonbuch ---------- */
 const lastName = (n) => { const parts = String(n || "").trim().split(/\s+/); return parts[parts.length - 1] || ""; };
 function fullNumber(dw) {
@@ -1653,7 +1567,7 @@ $("#wikiSearch").addEventListener("input", (e) => { clearTimeout(wikiTimer); wik
 $("#docSearch").addEventListener("input", (e) => { clearTimeout(docTimer); docTimer = setTimeout(() => { S.docQuery = e.target.value; renderDokumente(); }, 120); });
 document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copyText(b.dataset.copy)));
 
-function renderAll() { renderNews(); renderTermine(); renderGeburtstage(); renderKalender(); renderBrett(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); }
+function renderAll() { renderNews(); renderTermine(); renderGeburtstage(); renderKalender(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); }
 
 function goOffline(msg) {
   S.offline = true;
@@ -1666,7 +1580,7 @@ function goOffline(msg) {
 renderHead(null);
 route();
 
-const RENDER = { news: renderNews, termine: renderTermine, kontakte: renderKontakte, dokumente: renderDokumente, brett: renderBrett,
+const RENDER = { news: renderNews, termine: renderTermine, kontakte: renderKontakte, dokumente: renderDokumente,
   wiki: () => { renderWiki(); renderDocWiki(); }, wikiDrafts: renderWiki,
   geburtstage: () => { renderGeburtstage(); renderKalender(); renderHead(S.me); } };
 const SOURCES = { wikiDrafts: "wikiEntwurf" };
@@ -1696,7 +1610,7 @@ function subscribe(name) {
   if (!db) { goOffline("Die Inhalte sind nur für angemeldete Mitarbeiterinnen und Mitarbeiter sichtbar. Bitte über claude.ai mit dem Firmenkonto anmelden."); return; }
   S.db = db;
   renderAll();
-  ["news", "termine", "geburtstage", "brett", "kontakte", "dokumente", "wiki"].forEach(subscribe);
+  ["news", "termine", "geburtstage", "kontakte", "dokumente", "wiki"].forEach(subscribe);
   if (S.canEdit) subscribe("wikiDrafts");
   if (S.uid) {
     try {

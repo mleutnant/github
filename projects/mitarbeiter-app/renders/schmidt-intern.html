@@ -147,6 +147,14 @@ h2{margin:0;font-size:28px;line-height:1.15;font-weight:700;color:var(--heading)
 
 /* Geburtstage */
 .gb-none{margin:0 0 10px;color:var(--muted);font-weight:400;font-size:15px}
+/* Nächster Geburtstag oben in der Übersicht, nur wenn die Randspalte unter den Neuigkeiten steht */
+.gb-next{display:none;align-items:center;gap:6px 14px;flex-wrap:wrap;border:2px solid var(--heading);padding:12px 14px;margin-bottom:28px;font-size:15px;line-height:1.35}
+.gb-next.is-today{background:var(--tint)}
+.gb-next p{margin:0;flex:1 1 220px;min-width:0}
+.gb-next .person{font-weight:700;color:var(--heading)}
+.gb-next .eyebrow{flex-basis:100%}
+.gb-next .btn-text{align-self:flex-end}
+@media (max-width:940px){.gb-next{display:flex}}
 .gb-mine{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;background:var(--tint);padding:16px 20px;margin-bottom:36px}
 .gb-mine p{margin:0;max-width:62ch}
 .months{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:36px 40px}
@@ -346,6 +354,7 @@ dialog#sheet::backdrop{background:var(--backdrop)}
     <section id="view-aktuelles" class="view" aria-labelledby="h-news">
       <div class="layout">
         <div class="main">
+          <div class="gb-next" id="gbNext" hidden></div>
           <div class="sec-head">
             <div>
               <h2 id="h-news">Neuigkeiten</h2>
@@ -1032,22 +1041,51 @@ function otherBdayForm(item) {
   });
 }
 function canSetOwnBday() { return !!(S.db && S.uid && !S.gbReadonly); }
+function upcomingBdays() {
+  const t0 = todayMidnight();
+  return S.geburtstage.filter(validBday).map((b) => { const d = nextBirthday(b, t0); return { b, d, n: daysUntil(d, t0) }; })
+    .sort((a, b) => a.d - b.d);
+}
+const whenText = (x) => (x.n === 0 ? "heute" : x.n === 1 ? "morgen" : `${WEEKDAYS[x.d.getDay()].slice(0, 2)}, ${pad(x.d.getDate())}.${pad(x.d.getMonth() + 1)}.`);
+function namesEl(list) {
+  const nm = (b) => (b.selbst ? h("span", { class: "person", dataset: { person: b.id } }, "…") : h("span", { class: "person" }, b.name || "Ohne Namen"));
+  if (list.length === 1) return [nm(list[0].b)];
+  if (list.length === 2) return [nm(list[0].b), " und ", nm(list[1].b)];
+  return [nm(list[0].b), ` und ${list.length - 1} weitere`];
+}
+function renderGbNext() {
+  const box = $("#gbNext");
+  const up = upcomingBdays();
+  if (!S.ready.geburtstage || !up.length) { box.hidden = true; return; }
+  const next = up.filter((x) => +x.d === +up[0].d);
+  const first = next[0];
+  const sentence = first.n === 0 ? ["Heute hat ", namesEl(next), " Geburtstag."]
+    : first.n === 1 ? ["Morgen hat ", namesEl(next), " Geburtstag."]
+    : ["Nächster Geburtstag: ", namesEl(next), `, ${whenText(first)}`];
+  box.className = "gb-next" + (first.n === 0 ? " is-today" : "");
+  box.replaceChildren(h("span", { class: "eyebrow" }, "Geburtstag"), h("p", null, sentence), h("a", { class: "btn-text", href: "#geburtstage" }, "Kalender"));
+  box.hidden = false;
+  fillPeople(box);
+}
 function renderGeburtstage() {
   const tools = $("#gbTools");
   tools.replaceChildren(h("a", { class: "btn-text", href: "#geburtstage" }, "Kalender"));
   const list = $("#gbList");
   if (!S.ready.geburtstage && !S.offline) return;
-  const t0 = todayMidnight();
-  const all = S.geburtstage.filter(validBday);
-  const soon = all.map((b) => ({ b, d: nextBirthday(b, t0) })).filter((x) => daysUntil(x.d, t0) < 14)
-    .sort((a, b) => a.d - b.d);
+  renderGbNext();
+  const up = upcomingBdays();
+  let soon = up.filter((x) => x.n < 14);
   const parts = [];
+  if (!soon.length && up.length) {
+    /* Niemand in den nächsten zwei Wochen: trotzdem den nächsten Geburtstag zeigen */
+    soon = up.filter((x) => +x.d === +up[0].d);
+    parts.push(h("p", { class: "gb-none" }, "In den nächsten zwei Wochen hat niemand Geburtstag. Als Nächstes:"));
+  }
   if (!soon.length) {
-    parts.push(h("p", { class: "gb-none" }, all.length ? "In den nächsten zwei Wochen hat niemand Geburtstag." : "Noch keine Geburtstage eingetragen."));
+    parts.push(h("p", { class: "gb-none" }, "Noch keine Geburtstage eingetragen."));
   } else {
     const ul = h("ul", { class: "list" });
-    for (const { b, d } of soon.slice(0, 6)) {
-      const n = daysUntil(d, t0);
+    for (const { b, d, n } of soon.slice(0, 6)) {
       const when = n === 0 ? "Heute" : n === 1 ? "Morgen" : `${WEEKDAYS[d.getDay()].slice(0, 2)}, ${pad(d.getDate())}.${pad(d.getMonth() + 1)}.`;
       ul.append(h("li", { class: "event" },
         h("div", { class: "ev-date" + (n === 0 ? " is-today" : ""), "aria-hidden": "true" },

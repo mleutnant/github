@@ -215,7 +215,7 @@ function slides(img) {
       "Die nächsten Termine auf einen Blick, heute ist blau hervorgehoben",
     ], [phone(img.start, "Neuigkeiten am Handy"), phone(img.bilder, "Beitrag mit Fotos am Handy")]),
     featureSlide(4, "Geburtstage", "Wer hat heute Geburtstag?", [
-      "Die Geburtstage der nächsten zwei Wochen stehen unter Aktuelles",
+      "Unter Aktuelles sehen Sie immer, wer als Nächstes Geburtstag hat",
       "Im Kalender sehen Sie das ganze Jahr, Monat für Monat",
       "Freiwillig: Sie tragen Ihren Geburtstag selbst ein, nur Tag und Monat, und können ihn jederzeit entfernen",
     ], [phone(img.gb, "Geburtstage unter Aktuelles"), phone(img.kalender, "Geburtstagskalender am Handy")]),

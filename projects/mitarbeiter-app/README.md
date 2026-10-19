@@ -6,7 +6,7 @@ https://claude.ai/artifact/95L3bzmEWkuLJ9gDAspXuH
 ## Bereiche
 
 - **Aktuelles:** Neuigkeiten mit bis zu 6 Bildern (Bereichs-Filter, Anheften, „Neu“-Markierung je Person), Termine,
-  Geburtstage der nächsten 14 Tage, Schwarzes Brett
+  Geburtstage der nächsten 14 Tage (mindestens immer der nächste; am Handy zusätzlich als Zeile oben), Schwarzes Brett
 - **Geburtstagskalender** (`#geburtstage`): ganzes Jahr nach Monaten. Freiwillig: jede Person trägt Tag und Monat selbst ein
   (kein Jahr) und kann den Eintrag entfernen; die Redaktion kann Einträge für Personen ohne App-Zugang anlegen
 - **Wiki:** Artikel zu Alltagsfragen (z. B. Krankmeldung) mit „Kurz gesagt“, Schritten, Ansprechpartner und eigenem Link (`#wiki-<id>`);

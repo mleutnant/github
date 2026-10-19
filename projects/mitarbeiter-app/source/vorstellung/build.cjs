@@ -56,6 +56,15 @@ const MOCK = `<script>
       { id: "d3", kind: "link", title: "Montageanleitung QuinLine® 74", category: "Anleitungen", url: "https://schmidt-boke.de", updatedAt: iso(12) },
       { id: "d4", kind: "file", title: "WLAN für Gäste", category: "IT & Technik", assetId: "x3", contentType: "application/pdf", sizeBytes: 96000, updatedAt: iso(60) },
     ],
+    geburtstage: [
+      { id: "u_max", selbst: true, tag: 14, monat: 10, abteilung: "Produktion" },
+      { id: "g1", name: "Tom Beispiel", abteilung: "Versand", tag: 16, monat: 10 },
+      { id: "u_erika", selbst: true, tag: 22, monat: 10, abteilung: "Personal" },
+      { id: "g2", name: "Paul Probe", abteilung: "Produktion", tag: 3, monat: 11 },
+      { id: "g3", name: "Lisa Muster", abteilung: "IT", tag: 9, monat: 12 },
+      { id: "g4", name: "Anna Beispiel", abteilung: "Vertrieb", tag: 28, monat: 1 },
+      { id: "g5", name: "Ben Muster", abteilung: "Produktion", tag: 17, monat: 3 },
+    ],
     wiki: [
       { id: "krankmeldung", title: "Wie melde ich mich krank?", category: "Personal & Abwesenheit", updatedAt: iso(3), updatedBy: "u_erika",
         summary: "Melden Sie sich vor Arbeitsbeginn krank und sagen Sie, wie lange Sie voraussichtlich fehlen. Dauert die Krankheit länger als drei Kalendertage, brauchen Sie eine ärztliche Krankschreibung.",
@@ -89,6 +98,8 @@ const PHONE = { width: 390, height: 844 };
 const SHOTS = [
   { name: "start", hash: "" },
   { name: "bilder", hash: "", scrollTo: ".post:nth-of-type(2)", offset: 70 },
+  { name: "gb", hash: "", scrollTo: "#h-gb", offset: 76 },
+  { name: "kalender", hash: "#geburtstage" },
   { name: "brett", hash: "", scrollTo: "#h-brett", offset: 76 },
   { name: "aushang", hash: "", scrollTo: "#h-brett", offset: 76, act: async (p) => {
     await p.click("#brettTools button");
@@ -188,7 +199,7 @@ function slides(img) {
     <div class="rrule"></div>
   </div>
   <div class="cols">
-    <div><h3>Aktuelles</h3>${bullets(["Mitteilungen aus Geschäftsführung, Personal und Produktion", "Termine wie Betriebsversammlung oder Schulungen", "Schwarzes Brett für alle"])}</div>
+    <div><h3>Aktuelles</h3>${bullets(["Mitteilungen aus Geschäftsführung, Personal und Produktion", "Termine und Geburtstage", "Schwarzes Brett für alle"])}</div>
     <div><h3>Wiki</h3>${bullets(["Antworten auf Alltagsfragen", "Von der Krankmeldung bis zum Arbeitsunfall", "Mit Ansprechpartner"])}</div>
     <div><h3>Telefonbuch</h3>${bullets(["Alle Kolleginnen und Kollegen", "Suche nach Name, Abteilung oder Durchwahl", "Antippen kopiert die Nummer"])}</div>
     <div><h3>Dokumente</h3>${bullets(["Formulare wie der Urlaubsantrag", "Anleitungen und Arbeitsschutz", "Immer die aktuelle Fassung"])}</div>
@@ -203,17 +214,22 @@ function slides(img) {
       "Ein gelbes „Neu“ zeigt, was Sie noch nicht gelesen haben",
       "Die nächsten Termine auf einen Blick, heute ist blau hervorgehoben",
     ], [phone(img.start, "Neuigkeiten am Handy"), phone(img.bilder, "Beitrag mit Fotos am Handy")]),
-    featureSlide(4, "Schwarzes Brett", "Ihr Aushang, ohne Pinnwand", [
+    featureSlide(4, "Geburtstage", "Wer hat heute Geburtstag?", [
+      "Die Geburtstage der nächsten zwei Wochen stehen unter Aktuelles",
+      "Im Kalender sehen Sie das ganze Jahr, Monat für Monat",
+      "Freiwillig: Sie tragen Ihren Geburtstag selbst ein, nur Tag und Monat, und können ihn jederzeit entfernen",
+    ], [phone(img.gb, "Geburtstage unter Aktuelles"), phone(img.kalender, "Geburtstagskalender am Handy")]),
+    featureSlide(5, "Schwarzes Brett", "Ihr Aushang, ohne Pinnwand", [
       "Biete, Suche oder Info: Jede und jeder kann einen Aushang machen",
       "Ihr Name steht dabei, damit man weiß, wen man ansprechen kann",
       "Eigene Aushänge können Sie abhängen, nach 90 Tagen verschwinden sie von selbst",
     ], [phone(img.brett, "Schwarzes Brett am Handy"), phone(img.aushang, "Neuen Aushang schreiben")]),
-    featureSlide(5, "Wiki", "Antworten auf Alltagsfragen", [
+    featureSlide(6, "Wiki", "Antworten auf Alltagsfragen", [
       "Wie melde ich mich krank? Wie tausche ich eine Schicht? Was tun bei einem Arbeitsunfall?",
       "Oben steht kurz das Wichtigste, darunter Schritt für Schritt",
       "Mit Ansprechpartner, damit Sie wissen, wen Sie fragen können",
     ], [phone(img.wiki, "Wiki-Übersicht am Handy"), phone(img.artikel, "Wiki-Artikel zur Krankmeldung")]),
-    featureSlide(6, "Telefonbuch und Dokumente", "Jede Durchwahl, jedes Formular", [
+    featureSlide(7, "Telefonbuch und Dokumente", "Jede Durchwahl, jedes Formular", [
       "Suchen nach Name, Abteilung oder Durchwahl",
       "Durchwahl antippen: Die ganze Nummer mit Vorwahl ist kopiert",
       "Formulare, Anleitungen und Arbeitsschutz zum Öffnen am Handy",
@@ -228,7 +244,7 @@ function slides(img) {
   </div>
   <div class="field"></div><div class="field-rule"></div>
   <figure class="browser"><div class="bar"><span></span></div><img src="${img.pc}" alt="Startseite der App am PC"></figure>
-  ${note}${foot(7)}
+  ${note}${foot(8)}
 </section>`,
     `<section class="slide closing">
   <div class="blue-full">
@@ -241,7 +257,7 @@ function slides(img) {
     <div class="qr-box">${qr}<p>Zur App</p></div>
   </div>
   <div class="yfoot"></div>
-  ${foot(8)}
+  ${foot(9)}
 </section>`,
   ].join("\n");
 }

@@ -145,6 +145,23 @@ h2{margin:0;font-size:28px;line-height:1.15;font-weight:700;color:var(--heading)
 .ev-note{font-size:14px;margin-top:4px}
 .ev-actions{margin-top:6px}
 
+/* Geburtstage */
+.gb-none{margin:0 0 10px;color:var(--muted);font-weight:400;font-size:15px}
+.gb-mine{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;background:var(--tint);padding:16px 20px;margin-bottom:36px}
+.gb-mine p{margin:0;max-width:62ch}
+.months{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:36px 40px}
+.month h3{margin:0;padding-bottom:8px;border-bottom:2px solid var(--heading);font-size:18px;line-height:1.2;color:var(--heading);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.month h3 span{font-size:13px;color:var(--muted);font-weight:400}
+.month.is-now h3{border-bottom-color:var(--red)}
+.bday{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}
+.bday:first-child{border-top:0}
+.bday-d{font-weight:700;font-variant-numeric:tabular-nums;color:var(--heading);line-height:1.4}
+.bday-n{min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;line-height:1.4}
+.bday-n .avatar{width:20px;height:20px}
+.bday-sub{flex-basis:100%;font-size:13px;color:var(--muted);font-weight:400}
+.bday .actions{flex-basis:100%;gap:12px}
+.month-empty{color:var(--muted);font-size:14px;padding:10px 0;font-weight:400;margin:0}
+
 /* Schwarzes Brett */
 .note{padding:16px 0;border-top:1px solid var(--line)}
 .note:first-child{border-top:0;padding-top:0}
@@ -345,6 +362,10 @@ dialog#sheet::backdrop{background:var(--backdrop)}
             <div id="termList"><p class="loading">Termine werden geladen …</p></div>
           </div>
           <div>
+            <div class="sec-head"><h2 id="h-gb">Geburtstage</h2><div id="gbTools"></div></div>
+            <div id="gbList"><p class="loading">Geburtstage werden geladen …</p></div>
+          </div>
+          <div>
             <div class="sec-head">
               <div>
                 <h2 id="h-brett">Schwarzes Brett</h2>
@@ -356,6 +377,19 @@ dialog#sheet::backdrop{background:var(--backdrop)}
           </div>
         </aside>
       </div>
+    </section>
+
+    <section id="view-geburtstage" class="view" aria-labelledby="h-gbk" hidden>
+      <a class="back" href="#aktuelles">Aktuelles</a>
+      <div class="sec-head">
+        <div>
+          <h2 id="h-gbk">Geburtstagskalender</h2>
+          <p class="sec-sub">Eingetragen ist nur, wer zugestimmt hat. Gespeichert werden Tag und Monat, kein Jahr.</p>
+        </div>
+        <div class="actions" id="gbkTools"></div>
+      </div>
+      <div id="gbMine"></div>
+      <div id="gbCal"><p class="loading">Geburtstage werden geladen …</p></div>
     </section>
 
     <section id="view-wiki" class="view" aria-labelledby="h-wiki" hidden>
@@ -462,8 +496,9 @@ const MON3 = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "O
 const S = {
   db: null, user: null, assets: null, uid: null, canEdit: false, offline: false,
   view: "aktuelles",
-  news: [], termine: [], kontakte: [], dokumente: [], brett: [], wiki: [], wikiDrafts: [],
-  ready: { news: false, termine: false, kontakte: false, dokumente: false, brett: false, wiki: false, wikiDrafts: false },
+  news: [], termine: [], kontakte: [], dokumente: [], brett: [], wiki: [], wikiDrafts: [], geburtstage: [],
+  ready: { news: false, termine: false, kontakte: false, dokumente: false, brett: false, wiki: false, wikiDrafts: false, geburtstage: false },
+  me: null, gbReadonly: false,
   seenAt: null, visitSeenAt: null, seenLoaded: false, marking: false, brettReadonly: false,
   newsCat: "Alle", dept: "Alle", docCat: "Alle", pbQuery: "", docQuery: "",
   wikiCat: "Alle", wikiQuery: "", wikiId: null,
@@ -727,7 +762,10 @@ function renderHead(me) {
   const hr = d.getHours();
   const hello = hr < 11 ? "Guten Morgen" : hr < 18 ? "Guten Tag" : "Guten Abend";
   const first = me && me.name ? me.name.trim().split(/\s+/)[0] : "";
-  $("#greet").textContent = first ? `${hello}, ${first}.` : `${hello}.`;
+  const own = S.uid ? S.geburtstage.find((b) => b.id === S.uid && b.selbst && validBday(b)) : null;
+  const isBirthday = own && localDay(nextBirthday(own, todayMidnight())) === localDay(d);
+  const greeting = isBirthday ? "Alles Gute zum Geburtstag" : hello;
+  $("#greet").textContent = first ? `${greeting}, ${first}.` : `${greeting}.`;
   $("#roleChip").hidden = !S.canEdit;
 }
 
@@ -935,6 +973,140 @@ function renderTermine() {
           confirmBtn("Löschen", () => S.db.doc("termine/" + t.id).delete())) : null)));
   }
   list.replaceChildren(ul);
+}
+
+/* ---------- Geburtstage ---------- */
+/* Eigene Einträge liegen unter geburtstage/<eigene id> (selbst: true), Einträge der Redaktion
+   unter einer zufälligen id mit Namen. Gespeichert werden nur Tag und Monat. */
+const DAYS_IN = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const isLeap = (y) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+function todayMidnight() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+function validBday(b) {
+  return b && Number.isInteger(b.tag) && Number.isInteger(b.monat) && b.monat >= 1 && b.monat <= 12 && b.tag >= 1 && b.tag <= DAYS_IN[b.monat - 1];
+}
+function nextBirthday(b, from) {
+  const at = (y) => new Date(y, b.monat - 1, b.monat === 2 && b.tag === 29 && !isLeap(y) ? 28 : b.tag);
+  const d = at(from.getFullYear());
+  return d < from ? at(from.getFullYear() + 1) : d;
+}
+const daysUntil = (d, from) => Math.round((d - from) / 864e5);
+function bdayName(b) { return b.selbst ? personEls(b.id) : [h("span", { class: "person" }, b.name || "Ohne Namen")]; }
+function ownBday() { return S.uid ? S.geburtstage.find((b) => b.id === S.uid && b.selbst && validBday(b)) : null; }
+function bdayFields(withName) {
+  return [
+    withName ? { name: "name", label: "Vor- und Nachname", required: true, max: 120 } : null,
+    { name: "tag", label: "Tag", type: "select", options: Array.from({ length: 31 }, (_, i) => String(i + 1)), required: true, pair: true },
+    { name: "monat", label: "Monat", type: "select", options: MONTHS, required: true, pairEnd: true,
+      validate: (m, v) => { const mi = MONTHS.indexOf(m); return Number(v.tag) > DAYS_IN[mi] ? `Den ${v.tag}. ${m} gibt es nicht.` : null; } },
+    { name: "abteilung", label: "Abteilung", max: 80, list: departments() },
+  ].filter(Boolean);
+}
+const bdayData = (v) => ({ tag: Number(v.tag), monat: MONTHS.indexOf(v.monat) + 1, abteilung: v.abteilung, updatedAt: nowIso() });
+function ownBdayForm() {
+  const own = ownBday();
+  openSheet({
+    title: own ? "Geburtstag ändern" : "Geburtstag eintragen",
+    intro: "Nur Tag und Monat, kein Jahr. Alle Kolleginnen und Kollegen sehen den Eintrag im Geburtstagskalender. Sie können ihn jederzeit wieder entfernen.",
+    fields: bdayFields(false),
+    values: own ? { tag: String(own.tag), monat: MONTHS[own.monat - 1], abteilung: own.abteilung } : {},
+    onSubmit: async (v) => {
+      try { await withRetry(() => S.db.doc("geburtstage/" + S.uid).set({ ...bdayData(v), selbst: true })); }
+      catch (e) {
+        if (e && e.code === "invalid_argument") { S.gbReadonly = true; renderGeburtstage(); renderKalender(); e.userMessage = "Sie haben für diese App nur Leserechte. Bitte die Redaktion um Zugriff als Mitwirkende bitten."; }
+        throw e;
+      }
+    },
+  });
+}
+function otherBdayForm(item) {
+  openSheet({
+    title: item ? "Geburtstag bearbeiten" : "Geburtstag für jemanden eintragen",
+    intro: "Bitte nur mit Einverständnis der Person eintragen. Gespeichert werden Tag und Monat, kein Jahr. Wer die App selbst nutzt, kann den Geburtstag auch selbst eintragen.",
+    fields: bdayFields(true),
+    values: item ? { name: item.name, tag: String(item.tag), monat: MONTHS[item.monat - 1], abteilung: item.abteilung } : {},
+    onSubmit: async (v) => {
+      const data = { ...bdayData(v), name: v.name };
+      const ref = item ? S.db.doc("geburtstage/" + item.id) : S.db.collection("geburtstage").doc();
+      await withRetry(() => ref.set(data));
+    },
+  });
+}
+function canSetOwnBday() { return !!(S.db && S.uid && !S.gbReadonly); }
+function renderGeburtstage() {
+  const tools = $("#gbTools");
+  tools.replaceChildren(h("a", { class: "btn-text", href: "#geburtstage" }, "Kalender"));
+  const list = $("#gbList");
+  if (!S.ready.geburtstage && !S.offline) return;
+  const t0 = todayMidnight();
+  const all = S.geburtstage.filter(validBday);
+  const soon = all.map((b) => ({ b, d: nextBirthday(b, t0) })).filter((x) => daysUntil(x.d, t0) < 14)
+    .sort((a, b) => a.d - b.d);
+  const parts = [];
+  if (!soon.length) {
+    parts.push(h("p", { class: "gb-none" }, all.length ? "In den nächsten zwei Wochen hat niemand Geburtstag." : "Noch keine Geburtstage eingetragen."));
+  } else {
+    const ul = h("ul", { class: "list" });
+    for (const { b, d } of soon.slice(0, 6)) {
+      const n = daysUntil(d, t0);
+      const when = n === 0 ? "Heute" : n === 1 ? "Morgen" : `${WEEKDAYS[d.getDay()].slice(0, 2)}, ${pad(d.getDate())}.${pad(d.getMonth() + 1)}.`;
+      ul.append(h("li", { class: "event" },
+        h("div", { class: "ev-date" + (n === 0 ? " is-today" : ""), "aria-hidden": "true" },
+          h("span", { class: "ev-day" }, d.getDate()), h("span", { class: "ev-mon" }, MON3[d.getMonth()])),
+        h("div", { style: "min-width:0" },
+          h("div", { class: "ev-title bday-n" }, bdayName(b)),
+          h("div", { class: "ev-meta" }, [n === 0 ? "Hat heute Geburtstag" : when, b.abteilung || null].filter(Boolean).join(" · ")))));
+    }
+    parts.push(ul);
+    if (soon.length > 6) parts.push(h("a", { class: "btn-text more", href: "#geburtstage" }, `${soon.length - 6} weitere im Kalender`));
+  }
+  if (canSetOwnBday() && !ownBday()) parts.push(h("button", { type: "button", class: "btn-text more", onclick: ownBdayForm }, "Eigenen Geburtstag eintragen"));
+  list.replaceChildren(...parts);
+  fillPeople(list);
+}
+function renderKalender() {
+  const tools = $("#gbkTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => otherBdayForm(null) }, "Für jemanden eintragen"));
+
+  const mine = $("#gbMine"); mine.replaceChildren();
+  if (canSetOwnBday()) {
+    const own = ownBday();
+    mine.append(h("div", { class: "gb-mine" },
+      own ? h("p", null, h("strong", null, `Ihr Geburtstag: ${own.tag}. ${MONTHS[own.monat - 1]}.`), " Für alle Kolleginnen und Kollegen sichtbar.")
+          : h("p", null, h("strong", null, "Ihr Geburtstag ist nicht eingetragen."), " Wenn Sie möchten, tragen Sie Tag und Monat ein, ohne Jahr."),
+      h("div", { class: "actions" },
+        h("button", { type: "button", class: own ? "btn btn-ghost btn-sm" : "btn btn-primary btn-sm", onclick: ownBdayForm }, own ? "Ändern" : "Eintragen"),
+        own ? confirmBtn("Entfernen", () => S.db.doc("geburtstage/" + S.uid).delete(), { armed: "Wirklich entfernen?", busy: "Wird entfernt …", done: "Entfernt" }) : null)));
+  }
+
+  const cal = $("#gbCal");
+  if (!S.ready.geburtstage && !S.offline) return;
+  const all = S.geburtstage.filter(validBday);
+  if (!all.length) {
+    cal.replaceChildren(emptyState("Noch keine Geburtstage eingetragen",
+      "Jede und jeder kann den eigenen Geburtstag eintragen. Ohne Eintrag erscheint niemand im Kalender."));
+    return;
+  }
+  const now = new Date(), t0 = todayMidnight();
+  const order = Array.from({ length: 12 }, (_, i) => (now.getMonth() + i) % 12);
+  const grid = h("div", { class: "months" });
+  for (const m of order) {
+    const items = all.filter((b) => b.monat === m + 1).sort((a, b) => a.tag - b.tag || String(a.name || "").localeCompare(String(b.name || ""), "de"));
+    grid.append(h("section", { class: "month" + (m === now.getMonth() ? " is-now" : "") },
+      h("h3", null, MONTHS[m], items.length ? h("span", null, items.length === 1 ? "1 Geburtstag" : `${items.length} Geburtstage`) : null),
+      items.length ? h("div", null, items.map((b) => {
+        const isToday = localDay(nextBirthday(b, t0)) === localDay(t0);
+        const mod = S.canEdit && S.db;
+        return h("div", { class: "bday" },
+          h("div", { class: "bday-d" }, `${b.tag}.`),
+          h("div", { class: "bday-n" }, bdayName(b), isToday ? h("span", { class: "flag flag-new" }, "Heute") : null,
+            b.abteilung ? h("span", { class: "bday-sub" }, b.abteilung) : null,
+            mod ? h("div", { class: "actions" },
+              b.selbst ? null : h("button", { type: "button", class: "btn-text", onclick: () => otherBdayForm(b) }, "Bearbeiten"),
+              confirmBtn(b.selbst ? "Entfernen" : "Löschen", () => S.db.doc("geburtstage/" + b.id).delete())) : null));
+      })) : h("p", { class: "month-empty" }, "Keine Geburtstage")));
+  }
+  cal.replaceChildren(grid);
+  fillPeople(cal);
 }
 
 /* ---------- Schwarzes Brett ---------- */
@@ -1418,7 +1590,7 @@ function renderDocWiki() {
 }
 
 /* ---------- Navigation ---------- */
-const VIEWS = ["aktuelles", "wiki", "telefonbuch", "dokumente"];
+const VIEWS = ["aktuelles", "geburtstage", "wiki", "telefonbuch", "dokumente"];
 function route() {
   const raw = (location.hash || "").slice(1);
   let next = raw, wikiId = null;
@@ -1428,7 +1600,8 @@ function route() {
   S.view = next; S.wikiId = wikiId;
   if (next === "wiki") renderWiki();
   for (const name of VIEWS) $("#view-" + name).hidden = name !== next;
-  document.querySelectorAll(".tab").forEach((t) => { if (t.dataset.view === next) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
+  const tabView = next === "geburtstage" ? "aktuelles" : next;
+  document.querySelectorAll(".tab").forEach((t) => { if (t.dataset.view === tabView) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
   if (changed) window.scrollTo(0, 0);
   updateBadge();
   maybeMarkSeen();
@@ -1442,7 +1615,7 @@ $("#wikiSearch").addEventListener("input", (e) => { clearTimeout(wikiTimer); wik
 $("#docSearch").addEventListener("input", (e) => { clearTimeout(docTimer); docTimer = setTimeout(() => { S.docQuery = e.target.value; renderDokumente(); }, 120); });
 document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copyText(b.dataset.copy)));
 
-function renderAll() { renderNews(); renderTermine(); renderBrett(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); }
+function renderAll() { renderNews(); renderTermine(); renderGeburtstage(); renderKalender(); renderBrett(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); }
 
 function goOffline(msg) {
   S.offline = true;
@@ -1456,7 +1629,8 @@ renderHead(null);
 route();
 
 const RENDER = { news: renderNews, termine: renderTermine, kontakte: renderKontakte, dokumente: renderDokumente, brett: renderBrett,
-  wiki: () => { renderWiki(); renderDocWiki(); }, wikiDrafts: renderWiki };
+  wiki: () => { renderWiki(); renderDocWiki(); }, wikiDrafts: renderWiki,
+  geburtstage: () => { renderGeburtstage(); renderKalender(); renderHead(S.me); } };
 const SOURCES = { wikiDrafts: "wikiEntwurf" };
 function subscribe(name) {
   S.db.collection(SOURCES[name] || name).onSnapshot((snap) => {
@@ -1479,11 +1653,12 @@ function subscribe(name) {
   if (user) { try { me = await user.me(); } catch (e) { me = null; } }
   S.uid = me && me.id || null;
   S.canEdit = !!(me && me.canEdit);
+  S.me = me;
   renderHead(me);
   if (!db) { goOffline("Die Inhalte sind nur für angemeldete Mitarbeiterinnen und Mitarbeiter sichtbar. Bitte über claude.ai mit dem Firmenkonto anmelden."); return; }
   S.db = db;
   renderAll();
-  ["news", "termine", "brett", "kontakte", "dokumente", "wiki"].forEach(subscribe);
+  ["news", "termine", "geburtstage", "brett", "kontakte", "dokumente", "wiki"].forEach(subscribe);
   if (S.canEdit) subscribe("wikiDrafts");
   if (S.uid) {
     try {

@@ -5,7 +5,10 @@ https://claude.ai/artifact/95L3bzmEWkuLJ9gDAspXuH
 
 ## Bereiche
 
-- **Aktuelles:** Neuigkeiten mit bis zu 6 Bildern (Bereichs-Filter, Anheften, „Neu“-Markierung je Person), Termine, Schwarzes Brett
+- **Aktuelles:** Neuigkeiten mit bis zu 6 Bildern (Bereichs-Filter, Anheften, „Neu“-Markierung je Person), Termine,
+  Geburtstage der nächsten 14 Tage, Schwarzes Brett
+- **Geburtstagskalender** (`#geburtstage`): ganzes Jahr nach Monaten. Freiwillig: jede Person trägt Tag und Monat selbst ein
+  (kein Jahr) und kann den Eintrag entfernen; die Redaktion kann Einträge für Personen ohne App-Zugang anlegen
 - **Wiki:** Artikel zu Alltagsfragen (z. B. Krankmeldung) mit „Kurz gesagt“, Schritten, Ansprechpartner und eigenem Link (`#wiki-<id>`);
   Entwürfe sieht nur die Redaktion, Text in [eckigen Klammern] wird als offener Platzhalter markiert
 - **Telefonbuch:** Suche, Abteilungs-Filter, Klick kopiert die volle Nummer (Zentrale +49 5250 9845 plus Durchwahl), Import einer Liste aus Excel/CSV
@@ -21,7 +24,8 @@ https://claude.ai/artifact/95L3bzmEWkuLJ9gDAspXuH
 
 Die Regeln liegen in der Datenablage der Seite (`news`, `termine`, `kontakte`, `dokumente`, `wiki` schreibt nur die Redaktion,
 `wikiEntwurf` liest und schreibt nur die Redaktion;
-`brett/<person>` schreibt jede Person selbst; `data/users/<person>/state` merkt sich, was jemand gelesen hat).
+`brett/<person>` und `geburtstage/<person>` schreibt jede Person selbst, Geburtstage lesen nur Mitwirkende und höher
+(also keine Besucher von außerhalb der Organisation); `data/users/<person>/state` merkt sich, was jemand gelesen hat).
 
 ## Bauen
 
@@ -39,6 +43,6 @@ Danach die Datei erneut auf dieselbe Adresse veröffentlichen; die Inhalte in de
 node projects/mitarbeiter-app/source/vorstellung/build.cjs
 ```
 
-Schreibt `renders/schmidt-intern-vorstellung.pdf` (8 Folien, 16:9). Die Abbildungen entstehen aus der gebauten App,
+Schreibt `renders/schmidt-intern-vorstellung.pdf` (9 Folien, 16:9). Die Abbildungen entstehen aus der gebauten App,
 angemeldet als Mitarbeiter aus der Produktion ohne Redaktionsrechte, mit erfundenen Beispielinhalten.
 Braucht Playwright und Python mit `segno` (QR-Code).

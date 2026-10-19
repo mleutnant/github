@@ -147,14 +147,17 @@ h2{margin:0;font-size:28px;line-height:1.15;font-weight:700;color:var(--heading)
 
 /* Geburtstage */
 .gb-none{margin:0 0 10px;color:var(--muted);font-weight:400;font-size:15px}
-/* Nächster Geburtstag oben in der Übersicht, nur wenn die Randspalte unter den Neuigkeiten steht */
-.gb-next{display:none;align-items:center;gap:6px 14px;flex-wrap:wrap;border:2px solid var(--heading);padding:12px 14px;margin-bottom:28px;font-size:15px;line-height:1.35}
-.gb-next.is-today{background:var(--tint)}
-.gb-next p{margin:0;flex:1 1 220px;min-width:0}
-.gb-next .person{font-weight:700;color:var(--heading)}
-.gb-next .eyebrow{flex-basis:100%}
-.gb-next .btn-text{align-self:flex-end}
-@media (max-width:940px){.gb-next{display:flex}}
+/* Geburtstags-Hinweis über den Neuigkeiten, nur am Geburtstag: blaue Fläche mit gelber Fußlinie,
+   Geschenk im Stil der SCHMIDT-Icons (weiß auf Blau), Konfetti aus eckigen Schnipseln in den Hausfarben */
+.gb-next{position:relative;overflow:hidden;display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px 16px;background:var(--field);color:#fff;border-bottom:8px solid var(--yellow);padding:20px 22px 22px;margin-bottom:32px}
+.gb-gift{width:52px;height:52px;display:block;color:#fff;position:relative}
+.gb-next .eyebrow{color:rgba(255,255,255,.82);position:relative}
+.gb-head{grid-column:1/-1;margin:2px 0 0;font-size:clamp(22px,2.6vw,28px);line-height:1.2;font-weight:700;letter-spacing:-.01em;text-wrap:balance;position:relative}
+.gb-head .person{color:#fff}
+.gb-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline;font-size:14px;color:rgba(255,255,255,.82);font-weight:400;position:relative}
+.gb-foot a{color:#fff;text-underline-offset:3px}
+.gb-confetti{position:absolute;top:0;right:0;width:190px;height:74px;pointer-events:none}
+@media (max-width:480px){.gb-confetti{width:84px}}
 .gb-mine{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;background:var(--tint);padding:16px 20px;margin-bottom:36px}
 .gb-mine p{margin:0;max-width:62ch}
 .months{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:36px 40px}
@@ -1030,13 +1033,33 @@ function namesEl(list) {
   return [nm(list[0].b), ` und ${list.length - 1} weitere`];
 }
 /* Hinweis über den Neuigkeiten: nur an Tagen, an denen jemand Geburtstag hat */
+const GIFT_SVG = `<svg class="gb-gift" viewBox="0 0 113.39 113.39" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linejoin="round" stroke-linecap="butt">
+<rect x="17" y="40" width="79.4" height="16" rx="4"/>
+<path d="M25,56V77M25,85V93q0,4 4,4H84.4q4,0 4,-4V56"/>
+<path d="M56.7,40V97"/>
+<path d="M56.7,40C49,28.5 32,22.5 32,31.5c0,7.5 13,8.5 24.7,8.5"/>
+<path d="M56.7,40C64.4,28.5 81.4,22.5 81.4,31.5c0,7.5 -13,8.5 -24.7,8.5"/>
+</svg>`;
+const CONFETTI_SVG = (() => {
+  const Y = "#f6a206", R = "#e3002c", W = "#ffffff";
+  const bits = [[176, 8, 5, 14, 20, Y], [160, 30, 6, 6, 15, W], [182, 44, 4, 12, -30, R], [140, 10, 5, 12, -25, R], [128, 40, 5, 5, 40, Y],
+    [150, 56, 4, 10, 60, Y], [112, 18, 4, 9, 30, W], [100, 48, 5, 5, 10, R], [84, 8, 4, 11, -40, Y], [70, 34, 4, 4, 25, W], [168, 64, 5, 5, 0, W], [56, 14, 3, 8, 50, R]];
+  return `<svg class="gb-confetti" viewBox="0 0 190 74" preserveAspectRatio="xMaxYMin slice" aria-hidden="true" focusable="false">${bits
+    .map(([x, y, w, hh, r, c]) => `<rect x="${x}" y="${y}" width="${w}" height="${hh}" fill="${c}" transform="rotate(${r} ${x + w / 2} ${y + hh / 2})"/>`).join("")}</svg>`;
+})();
+function svgFrom(markup) { const t = document.createElement("template"); t.innerHTML = markup.trim(); return t.content.firstChild; }
 function renderGbNext() {
   const box = $("#gbNext");
   const today = S.ready.geburtstage ? upcomingBdays().filter((x) => x.n === 0) : [];
   if (!today.length) { box.hidden = true; return; }
-  const sentence = ["Heute ", today.length === 1 ? "hat " : "haben ", namesEl(today), " Geburtstag."];
-  box.className = "gb-next is-today";
-  box.replaceChildren(h("span", { class: "eyebrow" }, "Geburtstag"), h("p", null, sentence), h("a", { class: "btn-text", href: "#geburtstage" }, "Kalender"));
+  const onlyMe = today.length === 1 && today[0].b.selbst && today[0].b.id === S.uid;
+  const head = onlyMe ? ["Heute ist Ihr Geburtstag."] : ["Heute ", today.length === 1 ? "hat " : "haben ", namesEl(today), " Geburtstag."];
+  const depts = onlyMe ? [] : [...new Set(today.map((x) => x.b.abteilung).filter(Boolean))];
+  box.replaceChildren(
+    svgFrom(CONFETTI_SVG), svgFrom(GIFT_SVG),
+    h("span", { class: "eyebrow" }, onlyMe ? "Alles Gute" : "Herzlichen Glückwunsch"),
+    h("p", { class: "gb-head" }, head),
+    h("div", { class: "gb-foot" }, depts.length ? h("span", null, depts.join(" · ")) : null, h("a", { href: "#geburtstage" }, "Zum Geburtstagskalender")));
   box.hidden = false;
   fillPeople(box);
 }

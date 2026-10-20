@@ -60,6 +60,10 @@ const MOCK = `<script>
       { id: "g4", name: "Anna Beispiel", abteilung: "Vertrieb", tag: 28, monat: 1 },
       { id: "g5", name: "Ben Muster", abteilung: "Produktion", tag: 17, monat: 3 },
     ],
+    benefits: [
+      {"id": "kita-zuschuss", "title": "Zuschuss zum Kita-Beitrag", "category": "Familie", "highlight": "bis 100 €", "highlightSub": "im Monat", "summary": "SCHMIDT beteiligt sich mit bis zu 100 € im Monat an den Kita-Kosten für Ihr Kind, solange es noch nicht zur Schule geht.", "body": "## So geht es\\n1. Den aktuellen Beitragsbescheid oder die Rechnung der Kita bei der Personalabteilung einreichen.\\n2. Der Zuschuss kommt dann jeden Monat mit Ihrer Gehaltsabrechnung.\\n3. Ändert sich der Beitrag oder wechselt Ihr Kind die Kita, geben Sie bitte einen neuen Nachweis ab.\\n\\n## Gut zu wissen\\n- Der Zuschuss ist steuer- und sozialversicherungsfrei, solange Ihr Kind noch nicht schulpflichtig ist.\\n- Er ist höchstens so hoch wie der tatsächliche Kita-Beitrag.", "kontakt": "Personalabteilung", "url": "", "order": 1, "updatedAt": iso(3)},
+      {"id": "corporate-benefits", "title": "Corporate Benefits", "category": "Einkaufen & Freizeit", "highlight": "Rabatte", "highlightSub": "bei vielen bekannten Marken", "summary": "Mit der Corporate Benefits App kaufen Sie bei vielen Marken und Online-Shops günstiger ein, etwa für Mode, Technik, Reisen und Freizeit.", "body": "## So geht es\\n1. Den Zugang zur Registrierung bekommen Sie von der Personalabteilung.\\n2. Einmal registrieren und die App Corporate Benefits auf dem Handy installieren. Das Portal funktioniert auch im Browser.\\n3. Angebot auswählen und den Rabatt direkt beim Einkauf nutzen.\\n\\n## Gut zu wissen\\n- Die Angebote wechseln regelmäßig. Vor größeren Einkäufen lohnt sich ein Blick in die App.", "kontakt": "Personalabteilung", "url": "", "order": 2, "updatedAt": iso(3)},
+    ],
     wiki: [
       { id: "krankmeldung", title: "Wie melde ich mich krank?", category: "Personal & Abwesenheit", updatedAt: iso(3), updatedBy: "u_erika",
         summary: "Melden Sie sich vor Arbeitsbeginn krank und sagen Sie, wie lange Sie voraussichtlich fehlen. Dauert die Krankheit länger als drei Kalendertage, brauchen Sie eine ärztliche Krankschreibung.",
@@ -97,6 +101,8 @@ const SHOTS = [
   { name: "kalender", hash: "#geburtstage" },
   { name: "wiki", hash: "#wiki" },
   { name: "artikel", hash: "#wiki-krankmeldung" },
+  { name: "benefits", hash: "#benefits" },
+  { name: "kita", hash: "#benefit-kita-zuschuss" },
   { name: "telefonbuch", hash: "#telefonbuch", scrollTo: "#h-pb", offset: 70, act: async (p) => {
     await p.click("button.dw >> text=410");
   } },
@@ -182,12 +188,13 @@ function slides(img) {
   ${LOGO("left")}
   <div class="head">
     <div class="kicker">Überblick</div>
-    <h2>Vier Bereiche, eine App</h2>
+    <h2>Fünf Bereiche, eine App</h2>
     <div class="rrule"></div>
   </div>
   <div class="cols">
     <div><h3>Aktuelles</h3>${bullets(["Mitteilungen aus Geschäftsführung, Personal und Produktion", "Termine der nächsten Wochen", "Geburtstage, immer der nächste im Blick"])}</div>
     <div><h3>Wiki</h3>${bullets(["Antworten auf Alltagsfragen", "Von der Krankmeldung bis zum Arbeitsunfall", "Mit Ansprechpartner"])}</div>
+    <div><h3>Benefits</h3>${bullets(["Zuschüsse wie der Kita-Beitrag", "Rabatte über Corporate Benefits", "So bekommen Sie es, Schritt für Schritt"])}</div>
     <div><h3>Telefonbuch</h3>${bullets(["Alle Kolleginnen und Kollegen", "Suche nach Name, Abteilung oder Durchwahl", "Antippen kopiert die Nummer"])}</div>
     <div><h3>Dokumente</h3>${bullets(["Formulare wie der Urlaubsantrag", "Anleitungen und Arbeitsschutz", "Immer die aktuelle Fassung"])}</div>
   </div>
@@ -211,7 +218,12 @@ function slides(img) {
       "Oben steht kurz das Wichtigste, darunter Schritt für Schritt",
       "Mit Ansprechpartner, damit Sie wissen, wen Sie fragen können",
     ], [phone(img.wiki, "Wiki-Übersicht am Handy"), phone(img.artikel, "Wiki-Artikel zur Krankmeldung")]),
-    featureSlide(6, "Telefonbuch und Dokumente", "Jede Durchwahl, jedes Formular", [
+    featureSlide(6, "Benefits", "Was SCHMIDT zusätzlich bietet", [
+      "Alle Zusatzleistungen an einem Ort, vom Kita-Zuschuss bis zu Mitarbeiterrabatten",
+      "Der Wert steht groß dabei, darunter Schritt für Schritt, wie Sie ihn bekommen",
+      "Mit Ansprechpartner, damit Fragen schnell geklärt sind",
+    ], [phone(img.benefits, "Benefits-Übersicht am Handy"), phone(img.kita, "Kita-Zuschuss im Detail")]),
+    featureSlide(7, "Telefonbuch und Dokumente", "Jede Durchwahl, jedes Formular", [
       "Suchen nach Name, Abteilung oder Durchwahl",
       "Durchwahl antippen: Die ganze Nummer mit Vorwahl ist kopiert",
       "Formulare, Anleitungen und Arbeitsschutz zum Öffnen am Handy",
@@ -226,7 +238,7 @@ function slides(img) {
   </div>
   <div class="field"></div><div class="field-rule"></div>
   <figure class="browser"><div class="bar"><span></span></div><img src="${img.pc}" alt="Startseite der App am PC"></figure>
-  ${note}${foot(7)}
+  ${note}${foot(8)}
 </section>`,
     `<section class="slide closing">
   <div class="blue-full">
@@ -239,7 +251,7 @@ function slides(img) {
     <div class="qr-box">${qr}<p>Zur App</p></div>
   </div>
   <div class="yfoot"></div>
-  ${foot(8)}
+  ${foot(9)}
 </section>`,
   ].join("\n");
 }
@@ -281,7 +293,7 @@ ul.b li::before{content:"";position:absolute;left:0;top:5px;width:2px;height:18p
 .phone{margin:0;width:278px;padding:10px;background:#0b1418;border-radius:40px;box-shadow:0 18px 44px rgba(18,52,66,.28)}
 .phone img{display:block;width:258px;height:558px;border-radius:30px;object-fit:cover;object-position:top}
 .overview .head{position:absolute;left:56px;top:120px}
-.overview .cols{position:absolute;left:56px;right:56px;top:298px;display:grid;grid-template-columns:repeat(4,1fr);gap:40px}
+.overview .cols{position:absolute;left:56px;right:56px;top:262px;display:grid;grid-template-columns:repeat(5,1fr);gap:32px}
 .overview ul.b{font-size:16px}
 .overview ul.b li{margin-bottom:10px}
 .overview ul.b li::before{top:3px;height:17px}

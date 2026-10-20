@@ -23,6 +23,7 @@
   --red-hover:#c30026;
   --accent-ink:#c8002a;
   --yellow:#f6a206;
+  --shadow-card:0 2px 14px rgba(18,52,66,.10);
   --shadow-raised:0 10px 30px rgba(18,52,66,.14);
   --backdrop:rgba(10,26,33,.55);
   --font:"Filson Pro",Arial,Helvetica,sans-serif;
@@ -35,14 +36,14 @@
     --bg:#0a1a21;--tint:#11283a;--line:#24404c;--line-strong:#5a7480;--ink:#eef2f3;--muted:#9fb1b8;
     --heading:#ffffff;--field:#123442;--field-ink:#ffffff;--field-muted:rgba(255,255,255,.78);--chip-on:#2a5a72;
     --red:#e3002c;--red-hover:#c30026;--accent-ink:#ff6680;--yellow:#f6a206;
-    --shadow-raised:0 10px 30px rgba(0,0,0,.45);--backdrop:rgba(0,0,0,.6);color-scheme:dark;
+    --shadow-card:0 2px 14px rgba(0,0,0,.35);--shadow-raised:0 10px 30px rgba(0,0,0,.45);--backdrop:rgba(0,0,0,.6);color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0a1a21;--tint:#11283a;--line:#24404c;--line-strong:#5a7480;--ink:#eef2f3;--muted:#9fb1b8;
   --heading:#ffffff;--field:#123442;--field-ink:#ffffff;--field-muted:rgba(255,255,255,.78);--chip-on:#2a5a72;
   --red:#e3002c;--red-hover:#c30026;--accent-ink:#ff6680;--yellow:#f6a206;
-  --shadow-raised:0 10px 30px rgba(0,0,0,.45);--backdrop:rgba(0,0,0,.6);color-scheme:dark;
+  --shadow-card:0 2px 14px rgba(0,0,0,.35);--shadow-raised:0 10px 30px rgba(0,0,0,.45);--backdrop:rgba(0,0,0,.6);color-scheme:dark;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -73,7 +74,8 @@ h1,h2,h3{text-wrap:balance}
 .tab{display:inline-flex;align-items:center;gap:8px;padding:16px 0 12px;border-bottom:4px solid transparent;color:var(--muted);text-decoration:none;font-size:16px;white-space:nowrap;transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
 .tab:hover{color:var(--accent-ink)}
 .tab[aria-current="page"]{color:var(--ink);border-bottom-color:var(--red)}
-@media (max-width:480px){.tabs-inner{gap:18px}.tab{font-size:15px}}
+.t-short{display:none}
+@media (max-width:480px){.tabs-inner{gap:16px}.tab{font-size:14px}.t-long{display:none}.t-short{display:inline}}
 .badge{min-width:20px;height:20px;padding:0 6px;background:var(--yellow);color:#000;font-size:12px;font-weight:700;display:inline-grid;place-items:center;font-variant-numeric:tabular-nums;line-height:1}
 
 .notice{background:var(--tint);border-bottom:1px solid var(--line)}
@@ -266,6 +268,20 @@ mark.ph{background:var(--yellow);color:#000;padding:0 3px}
 .contact-box p{margin:0}
 .related .wiki-link strong{font-size:16px}
 
+/* Benefits */
+.benefits{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px}
+.benefit{display:flex;flex-direction:column;gap:8px;padding:24px;border:1px solid var(--line);background:var(--bg);color:inherit;text-decoration:none;transition:border-color var(--dur-fast) var(--ease),box-shadow var(--dur) var(--ease)}
+.benefit:hover{border-color:var(--heading);box-shadow:var(--shadow-card)}
+.b-kicker{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-ink)}
+.b-title{font-size:19px;font-weight:700;line-height:1.25;color:var(--heading);text-wrap:balance}
+.b-value{font-size:34px;font-weight:700;line-height:1.05;color:var(--heading);letter-spacing:-.01em;font-variant-numeric:lining-nums;margin-top:8px}
+.b-value small{display:block;font-size:14px;font-weight:500;color:var(--muted);letter-spacing:0;margin-top:4px}
+.b-sum{font-size:15px;font-weight:400;margin-top:4px;flex:1}
+.b-more{font-size:14px;color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px;margin-top:8px}
+.benefit:hover .b-more{text-decoration-thickness:2px}
+.article .b-value{font-size:44px;margin-top:20px}
+.offer-box{display:grid;gap:12px;justify-items:start}
+
 /* Leere Zustände */
 .empty{padding:24px;border:1px dashed var(--line-strong);display:grid;gap:10px;justify-items:start}
 .empty strong{color:var(--heading);font-size:17px;line-height:1.3}
@@ -336,7 +352,8 @@ dialog#sheet::backdrop{background:var(--backdrop)}
     <div class="wrap tabs-inner">
       <a class="tab" href="#aktuelles" data-view="aktuelles">Aktuelles <span class="badge" id="newsBadge" hidden></span></a>
       <a class="tab" href="#wiki" data-view="wiki">Wiki</a>
-      <a class="tab" href="#telefonbuch" data-view="telefonbuch">Telefonbuch</a>
+      <a class="tab" href="#benefits" data-view="benefits">Benefits</a>
+      <a class="tab" href="#telefonbuch" data-view="telefonbuch" aria-label="Telefonbuch"><span class="t-long">Telefonbuch</span><span class="t-short">Telefon</span></a>
       <a class="tab" href="#dokumente" data-view="dokumente">Dokumente</a>
     </div>
   </nav>
@@ -414,6 +431,21 @@ dialog#sheet::backdrop{background:var(--backdrop)}
       <div id="wikiArticle" hidden></div>
     </section>
 
+    <section id="view-benefits" class="view" aria-labelledby="h-ben" hidden>
+      <div id="benIndex">
+        <div class="sec-head">
+          <div>
+            <h2 id="h-ben">Benefits</h2>
+            <p class="sec-sub">Was SCHMIDT Ihnen zusätzlich zum Gehalt bietet.</p>
+          </div>
+          <div class="actions" id="benTools"></div>
+        </div>
+        <div class="chips" id="benChips" role="group" aria-label="Nach Thema filtern"></div>
+        <div id="benList"><p class="loading">Benefits werden geladen …</p></div>
+      </div>
+      <div id="benDetail" hidden></div>
+    </section>
+
     <section id="view-telefonbuch" class="view" aria-labelledby="h-pb" hidden>
       <div class="pb-top">
         <div>
@@ -476,6 +508,7 @@ dialog#sheet::backdrop{background:var(--backdrop)}
 const ZENTRALE = "+49 5250 9845";
 const NEWS_CATS = ["Geschäftsführung", "Personal", "Produktion", "Vertrieb", "IT", "Allgemein"];
 const DOC_CATS = ["Formulare", "Anleitungen", "Handbücher", "Arbeitssicherheit", "IT & Technik", "Personal", "Sonstiges"];
+const BEN_CATS = ["Familie", "Einkaufen & Freizeit", "Gesundheit & Sport", "Mobilität", "Vorsorge & Finanzen", "Weiterbildung", "Sonstiges"];
 const WIKI_CATS = ["Personal & Abwesenheit", "Arbeitszeit & Lohn", "Arbeitssicherheit", "IT & Technik", "Werk & Gebäude", "Neu bei SCHMIDT", "SCHMIDT Intern"];
 const WIKI_STATUS = ["Entwurf (nur Redaktion)", "Veröffentlicht"];
 const MAX_IMAGES = 6;
@@ -486,12 +519,12 @@ const MON3 = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "O
 const S = {
   db: null, user: null, assets: null, uid: null, canEdit: false, offline: false,
   view: "aktuelles",
-  news: [], termine: [], kontakte: [], dokumente: [], wiki: [], wikiDrafts: [], geburtstage: [],
-  ready: { news: false, termine: false, kontakte: false, dokumente: false, wiki: false, wikiDrafts: false, geburtstage: false },
+  news: [], termine: [], kontakte: [], dokumente: [], wiki: [], wikiDrafts: [], geburtstage: [], benefits: [],
+  ready: { news: false, termine: false, kontakte: false, dokumente: false, wiki: false, wikiDrafts: false, geburtstage: false, benefits: false },
   me: null, gbReadonly: false,
   seenAt: null, visitSeenAt: null, seenLoaded: false, marking: false,
   newsCat: "Alle", dept: "Alle", docCat: "Alle", pbQuery: "", docQuery: "",
-  wikiCat: "Alle", wikiQuery: "", wikiId: null,
+  wikiCat: "Alle", wikiQuery: "", wikiId: null, benCat: "Alle", benefitId: null,
   expanded: new Set(),
 };
 
@@ -1560,20 +1593,121 @@ function renderDocWiki() {
     h("p", null, h("a", { class: "btn btn-outline btn-sm", href: "#wiki" }, "Zum Wiki")));
 }
 
+/* ---------- Benefits ---------- */
+function benefitForm(item) {
+  openSheet({
+    title: item ? "Benefit bearbeiten" : "Neuer Benefit",
+    fields: [
+      { name: "title", label: "Titel", required: true, max: 120, placeholder: "z. B. Zuschuss zum Kita-Beitrag" },
+      { name: "category", label: "Thema", type: "select", options: BEN_CATS, required: true },
+      { name: "highlight", label: "Wert, groß angezeigt", max: 24, placeholder: "z. B. bis 100 €", pair: true },
+      { name: "highlightSub", label: "Zusatz zum Wert", max: 40, placeholder: "z. B. im Monat", pairEnd: true },
+      { name: "summary", label: "Kurz gesagt", type: "textarea", required: true, max: 600, hint: "Ein, zwei Sätze. Stehen auf der Karte und oben im Benefit." },
+      { name: "body", label: "So bekommen Sie es", type: "textarea", max: 8000,
+        hint: "„## “ am Zeilenanfang ergibt eine Zwischenüberschrift, „1. “ einen Schritt, „- “ eine Aufzählung, **Text** wird fett." },
+      { name: "kontakt", label: "Ansprechpartner", max: 200, placeholder: "z. B. Personalabteilung, Durchwahl 120" },
+      { name: "url", label: "Link zum Angebot", type: "url", max: 600, placeholder: "https://…",
+        validate: (x) => (x && !safeUrl(x) ? "Der Link muss mit https:// beginnen." : null) },
+      { name: "order", label: "Reihenfolge", type: "number", max: 4, hint: "Kleinere Zahlen stehen weiter vorn." },
+    ],
+    values: item ? { ...item, order: item.order != null ? String(item.order) : "" } : { category: BEN_CATS[0] },
+    onSubmit: async (v) => {
+      let id = item ? item.id : slugify(v.title);
+      if (!item) { const taken = new Set(S.benefits.map((b) => b.id)); const base = id; let n = 2; while (taken.has(id)) id = `${base}-${n++}`; }
+      const data = { title: v.title, category: v.category, highlight: v.highlight, highlightSub: v.highlightSub, summary: v.summary, body: v.body,
+        kontakt: v.kontakt, url: safeUrl(v.url) || "", order: v.order === "" ? 100 : Number(v.order) || 0,
+        createdAt: (item && item.createdAt) || nowIso(), updatedAt: nowIso(), updatedBy: S.uid };
+      await withRetry(() => S.db.doc("benefits/" + id).set(data));
+      location.hash = "benefit-" + id;
+    },
+  });
+}
+const byOrder = (a, b) => (a.order ?? 100) - (b.order ?? 100) || String(a.title).localeCompare(String(b.title), "de");
+function benefitValue(b) {
+  return b.highlight ? h("div", { class: "b-value" }, b.highlight, b.highlightSub ? h("small", null, b.highlightSub) : null) : null;
+}
+function renderBenefits() {
+  const idx = $("#benIndex"), det = $("#benDetail");
+  if (S.benefitId) { idx.hidden = true; det.hidden = false; renderBenefitDetail(); return; }
+  idx.hidden = false; det.hidden = true;
+  const tools = $("#benTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-primary btn-sm", onclick: () => benefitForm(null) }, "Benefit hinzufügen"));
+  const cats = BEN_CATS.filter((c) => S.benefits.some((b) => b.category === c));
+  if (S.benCat !== "Alle" && !cats.includes(S.benCat)) S.benCat = "Alle";
+  const chips = $("#benChips"); chips.replaceChildren();
+  chips.hidden = cats.length < 2;
+  ["Alle", ...cats].forEach((c) => chips.append(h("button", { type: "button", class: "chip", "aria-pressed": String(S.benCat === c), onclick: () => { S.benCat = c; renderBenefits(); } }, c)));
+  const list = $("#benList");
+  if (!S.ready.benefits && !S.offline) return;
+  if (!S.benefits.length) {
+    list.replaceChildren(emptyState("Noch keine Benefits eingetragen",
+      S.canEdit ? "Tragen Sie Zuschüsse, Rabatte und andere Zusatzleistungen ein, mit Wert, Schritten und Ansprechpartner." : "Die Redaktion stellt hier bald alle Zusatzleistungen vor.",
+      S.canEdit ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => benefitForm(null) }, "Ersten Benefit hinzufügen") : null));
+    return;
+  }
+  const items = S.benefits.filter((b) => S.benCat === "Alle" || b.category === S.benCat).sort(byOrder);
+  list.replaceChildren(h("div", { class: "benefits" }, items.map((b) => h("a", { class: "benefit", href: "#benefit-" + b.id },
+    h("span", { class: "b-kicker" }, b.category || "Benefit"),
+    h("span", { class: "b-title" }, b.title),
+    benefitValue(b),
+    b.summary ? h("span", { class: "b-sum" }, clip(plain(b.summary), 170)) : null,
+    h("span", { class: "b-more" }, "Mehr erfahren")))));
+}
+function renderBenefitDetail() {
+  const det = $("#benDetail");
+  const b = S.benefits.find((x) => x.id === S.benefitId);
+  const back = h("a", { class: "back", href: "#benefits" }, "Alle Benefits");
+  if (!b) {
+    det.replaceChildren(back, !S.ready.benefits && !S.offline ? h("p", { class: "loading" }, "Benefit wird geladen …")
+      : emptyState("Benefit nicht gefunden", "Vielleicht wurde er geändert oder entfernt. Alle aktuellen Benefits finden Sie in der Übersicht."));
+    return;
+  }
+  const others = S.benefits.filter((x) => x.id !== b.id).sort(byOrder).slice(0, 6);
+  const link = safeUrl(b.url);
+  const kontakt = b.kontakt ? h("p") : null;
+  if (kontakt) appendInline(kontakt, b.kontakt, {});
+  det.replaceChildren(h("div", { class: "layout" },
+    h("article", { class: "main article", "aria-labelledby": "h-benefit" },
+      back,
+      h("div", { class: "meta" }, h("span", { class: "eyebrow" }, b.category || "Benefit"), b.updatedAt ? h("span", null, "Stand " + fmtStamp(b.updatedAt)) : null),
+      h("h2", { id: "h-benefit" }, b.title),
+      benefitValue(b),
+      b.summary ? h("div", { class: "kurz" }, h("span", { class: "eyebrow" }, "Kurz gesagt"), h("div", { class: "prose" }, richText(b.summary))) : null,
+      b.body ? h("div", { class: "prose wbody" }, richText(b.body)) : null,
+      S.canEdit && S.db ? h("div", { class: "byline" }, h("div", { class: "actions" },
+        h("button", { type: "button", class: "btn-text", onclick: () => benefitForm(b) }, "Bearbeiten"),
+        confirmBtn("Löschen", async () => { await S.db.doc("benefits/" + b.id).delete(); location.hash = "benefits"; }))) : null),
+    h("aside", { class: "aside" },
+      kontakt || link ? h("div", { class: "contact-box offer-box" },
+        kontakt ? [h("span", { class: "eyebrow" }, "Ansprechpartner"), kontakt] : null,
+        link ? h("a", { class: "btn btn-primary btn-sm", href: link, target: "_blank", rel: "noopener noreferrer" }, "Zum Angebot") : null) : null,
+      others.length ? h("div", null, h("div", { class: "sec-head" }, h("h2", null, "Weitere Benefits")),
+        h("div", { class: "wiki-links related" }, others.map((o) => h("a", { class: "wiki-link", href: "#benefit-" + o.id },
+          h("strong", null, o.title), o.highlight ? h("span", null, [o.highlight, o.highlightSub].filter(Boolean).join(" ")) : null)))) : null)));
+}
+
 /* ---------- Navigation ---------- */
-const VIEWS = ["aktuelles", "geburtstage", "wiki", "telefonbuch", "dokumente"];
+const VIEWS = ["aktuelles", "geburtstage", "wiki", "benefits", "telefonbuch", "dokumente"];
 function route() {
   const raw = (location.hash || "").slice(1);
-  let next = raw, wikiId = null;
+  let next = raw, wikiId = null, benefitId = null;
   if (raw.startsWith("wiki-")) { next = "wiki"; wikiId = raw.slice(5); }
+  if (raw.startsWith("benefit-")) { next = "benefits"; benefitId = raw.slice(8); }
   if (!VIEWS.includes(next)) next = "aktuelles";
-  const changed = next !== S.view || wikiId !== S.wikiId;
-  S.view = next; S.wikiId = wikiId;
+  const changed = next !== S.view || wikiId !== S.wikiId || benefitId !== S.benefitId;
+  S.view = next; S.wikiId = wikiId; S.benefitId = benefitId;
   if (next === "wiki") renderWiki();
+  if (next === "benefits") renderBenefits();
   for (const name of VIEWS) $("#view-" + name).hidden = name !== next;
   const tabView = next === "geburtstage" ? "aktuelles" : next;
   document.querySelectorAll(".tab").forEach((t) => { if (t.dataset.view === tabView) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
   if (changed) window.scrollTo(0, 0);
+  /* Auf schmalen Bildschirmen lässt sich die Reiterleiste wischen: aktiven Reiter sichtbar halten */
+  const bar = $(".tabs-inner"), active = bar.querySelector('[aria-current="page"]');
+  if (active && bar.scrollWidth > bar.clientWidth) {
+    const left = active.offsetLeft - bar.offsetLeft, right = left + active.offsetWidth;
+    if (left < bar.scrollLeft || right > bar.scrollLeft + bar.clientWidth) bar.scrollLeft = Math.max(0, left - 16);
+  }
   updateBadge();
   maybeMarkSeen();
 }
@@ -1586,7 +1720,7 @@ $("#wikiSearch").addEventListener("input", (e) => { clearTimeout(wikiTimer); wik
 $("#docSearch").addEventListener("input", (e) => { clearTimeout(docTimer); docTimer = setTimeout(() => { S.docQuery = e.target.value; renderDokumente(); }, 120); });
 document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copyText(b.dataset.copy)));
 
-function renderAll() { renderNews(); renderTermine(); renderGeburtstage(); renderKalender(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); }
+function renderAll() { renderNews(); renderTermine(); renderGeburtstage(); renderKalender(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); renderBenefits(); }
 
 function goOffline(msg) {
   S.offline = true;
@@ -1607,7 +1741,7 @@ setInterval(() => {
 }, 60000);
 
 const RENDER = { news: renderNews, termine: renderTermine, kontakte: renderKontakte, dokumente: renderDokumente,
-  wiki: () => { renderWiki(); renderDocWiki(); }, wikiDrafts: renderWiki,
+  wiki: () => { renderWiki(); renderDocWiki(); }, wikiDrafts: renderWiki, benefits: renderBenefits,
   geburtstage: () => { renderGeburtstage(); renderKalender(); renderHead(S.me); } };
 const SOURCES = { wikiDrafts: "wikiEntwurf" };
 function subscribe(name) {
@@ -1636,7 +1770,7 @@ function subscribe(name) {
   if (!db) { goOffline("Die Inhalte sind nur für angemeldete Mitarbeiterinnen und Mitarbeiter sichtbar. Bitte über claude.ai mit dem Firmenkonto anmelden."); return; }
   S.db = db;
   renderAll();
-  ["news", "termine", "geburtstage", "kontakte", "dokumente", "wiki"].forEach(subscribe);
+  ["news", "termine", "geburtstage", "kontakte", "dokumente", "wiki", "benefits"].forEach(subscribe);
   if (S.canEdit) subscribe("wikiDrafts");
   if (S.uid) {
     try {

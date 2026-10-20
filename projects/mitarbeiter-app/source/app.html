@@ -1086,7 +1086,7 @@ function renderGbNext() {
   const today = S.ready.geburtstage ? upcomingBdays().filter((x) => x.n === 0) : [];
   if (!today.length) { box.hidden = true; return; }
   const onlyMe = today.length === 1 && today[0].b.selbst && today[0].b.id === S.uid;
-  const head = onlyMe ? ["Heute ist Ihr Geburtstag."] : ["Heute ", today.length === 1 ? "hat " : "haben ", namesEl(today), " Geburtstag."];
+  const head = onlyMe ? ["Sie haben heute Geburtstag."] : [namesEl(today), today.length === 1 ? " hat" : " haben", " heute Geburtstag."];
   const depts = onlyMe ? [] : [...new Set(today.map((x) => x.b.abteilung).filter(Boolean))];
   box.replaceChildren(
     svgFrom(CONFETTI_SVG), svgFrom(GIFT_SVG),

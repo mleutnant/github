@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Seitenkonzept QuinLine® 74 Edge</title>
+<!-- Inhalt = Doc „Seitenkonzept QuinLine® 74 Edge“ (claude.ai/artifact/XGnxtC6TRgygvB4XMDaqxB), Stand rev 10 vom 26.10.2026 -->
+<style>
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProRegular.otf") format("opentype");font-weight:400}
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProMedium.otf") format("opentype");font-weight:500}
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProBold.otf") format("opentype");font-weight:700}
+
+:root{
+  --white:#ffffff; --black:#000000; --blue:#123442; --red:#e3002c; --yellow:#f6a206;
+  --blue-70:#4b656f; --blue-20:#d0d7db; --blue-08:#eef1f2;
+  --grey-05:#f6f6f6; --grey-30:#c9c9c9; --grey-60:#6e7478;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Filson Pro",Arial,Helvetica,sans-serif;
+  font-weight:500; font-size:9.6pt; line-height:1.5; color:var(--black);
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  hyphens:auto; -webkit-hyphens:auto; font-kerning:normal;
+}
+p{margin:0 0 2.2mm}
+a{color:var(--blue);text-decoration:none}
+b,strong{font-weight:700}
+code{font-family:"Filson Pro",Arial,sans-serif;font-weight:500;background:var(--blue-08);padding:0.2mm 1.2mm}
+
+/* Kopf */
+.masthead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:7mm}
+.masthead img{height:11mm;display:block}
+.masthead .meta{font-weight:400;font-size:8pt;line-height:1.3;color:var(--grey-60);text-align:right}
+.hero{background:var(--blue);color:var(--white);padding:9mm 9mm 8mm;border-bottom:8px solid var(--yellow);margin-bottom:8mm}
+.hero .eyebrow{font-weight:700;font-size:7.5pt;letter-spacing:.06em;text-transform:uppercase;opacity:.92;margin-bottom:3mm}
+.hero h1{font-weight:700;font-size:24pt;line-height:1.15;letter-spacing:-0.01em;margin:0 0 4mm;hyphens:manual}
+.hero .sub{font-size:10.5pt;line-height:1.4;opacity:.92;max-width:150mm}
+
+/* Überschriften */
+h2{font-weight:700;font-size:15pt;line-height:1.15;letter-spacing:-0.01em;margin:0 0 2mm;hyphens:manual;color:var(--blue)}
+h2 + .rule{height:4px;width:28mm;background:var(--red);margin:0 0 5mm}
+h2,h2 + .rule,.lead{break-after:avoid}
+h3{font-weight:700;font-size:10.5pt;line-height:1.25;margin:5mm 0 2mm;hyphens:manual;color:var(--blue);break-after:avoid}
+.section{margin:0 0 9mm;break-inside:avoid}
+.section.long{break-inside:auto}
+.lead{max-width:165mm;margin-bottom:4mm}
+.pagebreak{break-before:page}
+.label{font-weight:700;margin:3mm 0 1.5mm}
+
+/* Aufzählungen (Markenregel: senkrechter Strich) */
+ul.bar{list-style:none;margin:0 0 3mm;padding:0}
+ul.bar > li{position:relative;padding-left:4.6mm;margin:0 0 1.8mm}
+ul.bar > li::before{content:"";position:absolute;left:0;top:0.32em;width:2px;height:1.05em;background:var(--black)}
+ul.check{list-style:none;margin:0 0 3mm;padding:0}
+ul.check > li{position:relative;padding-left:6.5mm;margin:0 0 2mm;break-inside:avoid}
+ul.check > li::before{content:"";position:absolute;left:0;top:0.18em;width:3.4mm;height:3.4mm;border:1.2px solid var(--blue)}
+
+/* Gliederung H1–H3 */
+ol.outline{list-style:none;margin:0 0 3mm;padding:0;counter-reset:o}
+ol.outline > li{counter-increment:o;position:relative;padding:1.6mm 0 1.6mm 9mm;border-bottom:1px solid var(--grey-30)}
+ol.outline > li::before{content:counter(o);position:absolute;left:0;top:1.6mm;font-weight:700;color:var(--red)}
+ol.outline ul{list-style:none;margin:1mm 0 0;padding:0}
+ol.outline ul li{padding:0.6mm 0 0.6mm 4.6mm;position:relative}
+ol.outline ul li::before{content:"";position:absolute;left:0;top:0.45em;width:5px;height:5px;background:var(--blue)}
+.lvl{display:inline-block;min-width:8mm;font-weight:700;font-size:7.4pt;letter-spacing:.05em;color:var(--grey-60)}
+
+/* Tabellen */
+table{border-collapse:collapse;width:100%;font-size:8.8pt;line-height:1.38;margin-bottom:3mm}
+th{font-weight:700;text-align:left;font-size:7.4pt;letter-spacing:.05em;text-transform:uppercase;color:var(--grey-60);padding:0 2mm 2mm;border-bottom:2px solid var(--black)}
+td{padding:2mm;border-bottom:1px solid var(--grey-30);vertical-align:top}
+tr{break-inside:avoid}
+td.k{font-weight:700;width:42mm}
+table.seo td:nth-child(1){width:22mm;font-weight:700}
+table.seo td:nth-child(2){width:28mm}
+table.seo td:nth-child(3){width:46mm}
+table.links td:nth-child(1){width:46mm;font-weight:700}
+table.links td:nth-child(2){width:52mm}
+table.img td:nth-child(1){width:26mm;font-weight:700}
+table.img td:nth-child(3){width:24mm;white-space:nowrap}
+table.pages td:nth-child(1){width:38mm;font-weight:700}
+table.pages td:nth-child(2){width:52mm}
+.cnt{font-weight:400;color:var(--grey-60);white-space:nowrap}
+
+/* Texte zum Einfügen */
+.copy{border-left:4px solid var(--blue);background:var(--grey-05);padding:3mm 4mm 1.5mm;margin:0 0 3mm;break-inside:avoid}
+.copy.long{break-inside:auto}
+.btn{display:inline-block;background:var(--red);color:var(--white);font-weight:700;font-size:8pt;padding:1mm 2.6mm;margin-right:1.5mm}
+.note{font-weight:400;font-size:8.2pt;color:var(--grey-60);margin:0 0 3mm}
+.foot{border-top:2px solid var(--black);padding-top:3mm;margin-top:6mm;font-weight:400;font-size:8pt;color:var(--grey-60)}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <img src="../../../brand-guidelines/default/assets/logo-schmidt.svg" alt="SCHMIDT">
+  <div class="meta">Konzept für Agentur und CMS<br>Stand: 26.10.2026</div>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">Neue Produktseite auf schmidt-boke.de</div>
+  <h1>Seitenkonzept QuinLine® 74 Edge</h1>
+  <div class="sub">Eigene Produktseite direkt unter QuinLine® 74: Einordnung, SEO, Überschriften, Texte, Bilder, Verlinkung und offene Punkte</div>
+</div>
+
+<!-- 1 Ziel und Einordnung -->
+<div class="section">
+  <h2>Ziel und Einordnung</h2><div class="rule"></div>
+  <p class="lead">Die QuinLine® 74 Edge bekommt eine eigene Produktseite, die in Navigation und Adresse direkt unter QuinLine® 74 hängt. So bleibt klar, dass die Edge eine QuinLine® 74 ist, und sie hat trotzdem eine eigene Adresse für Newsletter, Messe, Vertrieb und Suchmaschinen.</p>
+  <table>
+    <tr><th>Punkt</th><th>Festlegung</th></tr>
+    <tr><td class="k">Adresse</td><td><code>/de/produkte/system-quinline-74-edge/</code> (passend zu <code>/de/produkte/system-quinline-74/</code> und <code>/de/produkte/system-quinline-84/</code>)</td></tr>
+    <tr><td class="k">Navigation</td><td>Produkte → direkt unter „System QuinLine® 74“, Menüname „QuinLine® 74 Edge“</td></tr>
+    <tr><td class="k">Zielgruppen</td><td>Planer und Architekten (Optik, eckige Fassaden), Fensterhersteller und Monteure (Technik, Verfügbarkeit, Muster), private Bauherren (Design)</td></tr>
+    <tr><td class="k">Ziele der Seite</td><td>Edge vorstellen, Unterschied zur QuinLine® 74 zeigen, Flügelmuster-Anfragen und Besuche im Kunden-Login auslösen</td></tr>
+    <tr><td class="k">Abgrenzung</td><td>Gemeinsame Technik (Schwellen, Sicherheit, Sonderausstattung) nur kurz nennen und auf die QuinLine® 74-Seite verlinken, nicht kopieren</td></tr>
+  </table>
+  <p class="label">Warum keine Unterseite als Abschnitt auf der QuinLine® 74-Seite:</p>
+  <ul class="bar">
+    <li>Die QuinLine® 74-Seite hat schon 9 Hauptabschnitte und 26 Unterabschnitte; Seobility meldet dort „zu viele Überschriften“.</li>
+    <li>Die Edge hat genug eigenen Inhalt: eigene Optik, Systemdaten, Liefertermine, Glasleisten, Kompendium und Musterangebot.</li>
+    <li>Nur eine eigene Seite kann für Suchen wie „Hebeschiebetür eckig“ oder „geradlinige Hebeschiebetür“ gefunden werden.</li>
+  </ul>
+  <p class="note">Grundlage: Seobility-Crawl von schmidt-boke.de (Projekt „Schmidt“, 42 indexierbare Seiten).</p>
+</div>
+
+<!-- 2 SEO -->
+<div class="section">
+  <h2>SEO: Title-Tag und Meta-Description</h2><div class="rule"></div>
+  <p class="lead">Empfehlung: Variante 1, weil Planer und Architekten nach der Optik suchen und die QuinLine® 74-Seite die technischen Suchen schon abdeckt. Variante 2 passt, wenn die Seite vor allem Fensterbauer ansprechen soll.</p>
+  <table class="seo">
+    <tr><th>Variante</th><th>Fokus</th><th>Title-Tag</th><th>Meta-Description</th></tr>
+    <tr><td>1 (empfohlen)</td><td>Optik, Planer und Bauherren</td><td>QuinLine® 74 Edge – geradlinige Hebeschiebetür | SCHMIDT <span class="cnt">(56 Zeichen)</span></td><td>Eckige Glasleisten, schmaler Flügelüberschlag: Die QuinLine® 74 Edge passt zu Objekten mit eckigen Fensterprofilen. Jetzt Systemdaten entdecken. <span class="cnt">(144 Zeichen)</span></td></tr>
+    <tr><td>2</td><td>Technik, Fensterbauer</td><td>Hebeschiebetür eckig: QuinLine® 74 Edge | SCHMIDT GmbH <span class="cnt">(54 Zeichen)</span></td><td>Bewährte QuinLine® 74 Technik in kantiger Optik: Glasdicken bis 50 mm, 25 mm schmaler Überschlag. Fordern Sie jetzt Ihr kostenloses Flügelmuster an. <span class="cnt">(148 Zeichen)</span></td></tr>
+  </table>
+  <p><b>Suchbegriffe für die Seite:</b> Hauptbegriff „QuinLine 74 Edge“; dazu „Hebeschiebetür eckig“, „geradlinige Hebeschiebetür“, „Hebeschiebetür kantige Glasleisten“ und „Kunststoff-Hebeschiebetür eckige Profile“. Die Suchvolumen sind noch nicht geprüft (siehe Offene Punkte).</p>
+</div>
+
+<!-- 3 Überschriften -->
+<div class="section">
+  <h2>Seitenaufbau: Überschriften</h2><div class="rule"></div>
+  <p class="lead">Die Seite bekommt eine H1, sieben H2-Abschnitte und nur dort H3, wo ein Abschnitt mehrere Unterpunkte hat. Die Reihenfolge führt vom Unterschied über die Daten zur Anfrage.</p>
+  <ol class="outline">
+    <li><span class="lvl">H1</span><b>QuinLine® 74 Edge: die geradlinige Hebeschiebetür mit eckigen Profilen</b></li>
+    <li><span class="lvl">H2</span>Was die QuinLine® 74 Edge von der QuinLine® 74 unterscheidet
+      <ul>
+        <li><span class="lvl">H3</span>Schmaler, geradliniger Flügelüberschlag</li>
+        <li><span class="lvl">H3</span>Kantige Glasleisten und Mitteldichtleisten</li>
+        <li><span class="lvl">H3</span>Bewährte Technik der QuinLine® 74</li>
+      </ul></li>
+    <li><span class="lvl">H2</span>Systemdaten der QuinLine® 74 Edge</li>
+    <li><span class="lvl">H2</span>Verfügbarkeit, Schwellen und Farben
+      <ul>
+        <li><span class="lvl">H3</span>Schwellen: ab wann bestellbar</li>
+        <li><span class="lvl">H3</span>Farbsortiment und Verglasungsdichtungen</li>
+      </ul></li>
+    <li><span class="lvl">H2</span>Glasleisten-Sortiment für Glasdicken bis 50 mm</li>
+    <li><span class="lvl">H2</span>Kompendium und Farbübersicht im Kunden-Login</li>
+    <li><span class="lvl">H2</span>Flügelmuster für Ihre Ausstellung anfordern</li>
+    <li><span class="lvl">H2</span>Sie haben Fragen?</li>
+  </ol>
+  <p><b>Warum diese H1:</b> Sie beginnt mit dem Hauptbegriff „QuinLine® 74 Edge“, enthält „geradlinige Hebeschiebetür“ und „eckig“ und hat 70 Zeichen. Alternative: „QuinLine® 74 Edge – Hebeschiebetür in konsequent geradliniger Optik“.</p>
+  <p><b>Bewusst so entschieden:</b> „Sie haben Fragen?“ übernimmt die Kontakt-Überschrift der anderen Produktseiten. Keine H3 mit dem bloßen Produktnamen, denn genau das meldet Seobility auf der QuinLine® 74-Seite als doppelte Überschrift.</p>
+</div>
+
+<!-- 4 Texte -->
+<div class="section long pagebreak">
+  <h2>Texte für die Seite</h2><div class="rule"></div>
+  <p class="lead">Alle Texte sind fertig zum Einfügen und beruhen auf dem Newsletter zur Edge; neue Fakten sind nicht hinzugekommen.</p>
+
+  <h3>Einstieg (unter der H1)</h3>
+  <div class="copy">
+    <p>Mit dem Profilsystem QuinLine® 74 Edge erweitern wir unser Hebeschiebetür-Programm um eine konsequent geradlinige Variante. Der schmale Flügelüberschlag und die eckigen Glasleisten verzichten bewusst auf Rundungen. So entsteht eine markante, nahezu rechtwinklige Kontur, die sich nahtlos in Objekte mit eckigen Fensterprofilen einfügt.</p>
+    <p>Gleichzeitig nimmt das System Glasdicken bis 50 mm auf und ist damit bestens gerüstet für Dreifachverglasung, Schall- und Sicherheitsglas.</p>
+    <p><span class="btn">Systemdaten ansehen</span> Sprung zu Systemdaten · <span class="btn">Flügelmuster anfordern</span> Sprung zum Muster-Abschnitt</p>
+  </div>
+
+  <h3>Was die QuinLine® 74 Edge von der QuinLine® 74 unterscheidet</h3>
+  <div class="copy">
+    <p>Bei der QuinLine® 74 Edge ändert sich vor allem die Optik, nicht die Technik.</p>
+    <ul class="bar">
+      <li><b>Schmaler, geradliniger Flügelüberschlag:</b> Der Profilüberschlag ist geradlinig und schlank, mit 25 mm Höhe.</li>
+      <li><b>Kantige Glasleisten und Mitteldichtleisten:</b> Glasleisten und Mitteldichtleisten sind eckig statt gerundet und setzen die klare Linie bis ins Detail fort.</li>
+      <li><b>Bewährte Technik der QuinLine® 74:</b> Das System basiert auf der QuinLine® 74 und übernimmt ihre wichtigsten Systemmerkmale. Für die Verarbeitung bedeutet das vertraute Abläufe. Mehr zur Technik auf der Seite <a href="https://schmidt-boke.de/de/produkte/system-quinline-74/">System QuinLine® 74</a>.</li>
+    </ul>
+  </div>
+
+  <h3>Systemdaten der QuinLine® 74 Edge</h3>
+  <table>
+    <tr><th>Merkmal</th><th>QuinLine® 74 Edge</th></tr>
+    <tr><td class="k">Zargenprofil</td><td>5 Kammern, Bautiefe 174 mm, Ansicht 63 mm</td></tr>
+    <tr><td class="k">Flügelprofil</td><td>5 Kammern, Bautiefe 74 mm, Ansicht 92 mm</td></tr>
+    <tr><td class="k">Profilüberschlag</td><td>geradlinig und schlank, 25 mm Höhe</td></tr>
+    <tr><td class="k">Design</td><td>kantige Glasleisten und Mitteldichtleisten</td></tr>
+    <tr><td class="k">Glasdicken</td><td>bis 50 mm</td></tr>
+    <tr><td class="k">Getriebe</td><td>mit Riegelbolzen- oder Hakenriegelgetriebe lieferbar</td></tr>
+    <tr><td class="k">Sicherheit</td><td>Sicherheitspakete ohne Einschränkungen einsetzbar (<a href="https://schmidt-boke.de/de/produkte/sicherheit/">Sicherheit</a>)</td></tr>
+    <tr><td class="k">Systemtechnik</td><td>bewährte Merkmale analog Basis-System QuinLine® 74</td></tr>
+  </table>
+
+  <h3>Verfügbarkeit, Schwellen und Farben</h3>
+  <div class="copy">
+    <ul class="bar">
+      <li><b>Schwellen:</b> Mit Standardschwelle ist die QuinLine® 74 Edge ab sofort bestellbar, mit Niedrigschwelle und Renovierungsschwelle ab Mitte November.</li>
+      <li><b>Farbsortiment:</b> weiß und cremeweiß durchgefärbt sowie Standard- und Sonderdekore gemäß Farbübersicht Stand 04/2026. Alle Farben zeigt unsere <a href="https://schmidt-boke.de/de/produkte/farbwelt/">Farbwelt</a>.</li>
+      <li><b>Verglasungsdichtungen:</b> schwarz und grau.</li>
+    </ul>
+  </div>
+
+  <h3>Glasleisten-Sortiment für Glasdicken bis 50 mm</h3>
+  <p>Gängige Glasdicken halten wir ab Lager vor, alle weiteren fertigen wir auftragsbezogen.</p>
+  <table>
+    <tr><th>Glasdicke</th><th>Verfügbarkeit</th></tr>
+    <tr><td class="k">20–27 mm</td><td>auftragsbezogen</td></tr>
+    <tr><td class="k">28–31 mm</td><td>weiß ab Lager, Dekor auftragsbezogen</td></tr>
+    <tr><td class="k">32–35 mm</td><td>auftragsbezogen</td></tr>
+    <tr><td class="k">36–50 mm</td><td>ab Lager</td></tr>
+  </table>
+  <p>Eckausführung: auf Gehrung gestoßen.</p>
+
+  <h3>Kompendium und Farbübersicht im Kunden-Login</h3>
+  <div class="copy">
+    <p>Im Kompendium zur QuinLine® 74 Edge (Stand 09/2026) finden Sie alle technischen Details: Typenübersicht, Elementgrößen, Verglasungsübersicht und Schnittzeichnungen. Die Farbübersicht (Stand 04/2026) enthält bereits alle verfügbaren Standard- und Sonderdekore für die Edge.</p>
+    <p>Beides liegt im Download-Bereich des Kunden-Logins. Am schnellsten finden Sie die Dokumente über die Suche im linken Menü mit den Begriffen „Kompendium Edge“ und „Farbübersicht“.</p>
+    <p><span class="btn">Zum Kunden-Login</span> → https://kunden-login.schmidt-boke.de/</p>
+  </div>
+
+  <h3>Flügelmuster für Ihre Ausstellung anfordern</h3>
+  <div class="copy">
+    <p>Gerne senden wir Ihnen kostenlos ein Muster einer Flügelecke mit dem Edge-Profil. Schreiben Sie uns dazu einfach eine kurze Mail an verkauf@schmidt-boke.de.</p>
+    <p><span class="btn">Muster anfordern</span> → mailto:verkauf@schmidt-boke.de mit Betreff „Flügelmuster QuinLine® 74 Edge“</p>
+  </div>
+
+  <h3>Sie haben Fragen?</h3>
+  <p>Den Kontaktblock der anderen Produktseiten unverändert übernehmen.</p>
+</div>
+
+<!-- 5 Bilder -->
+<div class="section">
+  <h2>Bilder und Grafiken</h2><div class="rule"></div>
+  <p class="lead">Zwei Bilder sind schon da, vier müssen neu entstehen. Am wichtigsten ist die Vergleichsgrafik, weil sie den Unterschied auf einen Blick zeigt.</p>
+  <table class="img">
+    <tr><th>Abschnitt</th><th>Bild</th><th>Stand</th><th>Hinweis</th></tr>
+    <tr><td>Einstieg</td><td>Key Visual „QuinLine® 74 Edge“</td><td>vorhanden (Newsletter)</td><td>Als Web-Fassung ohne eingebautes Logo, da der Seitenkopf das Logo schon zeigt</td></tr>
+    <tr><td>Unterschied</td><td>Vergleich QuinLine® 74 (gerundet) und Edge (eckig): Überschlag und Glasleiste nebeneinander</td><td>neu</td><td>Aus den Schnittzeichnungen im Kompendium ableiten, gleicher Maßstab</td></tr>
+    <tr><td>Unterschied</td><td>Detailfoto der Flügelecke auf Gehrung</td><td>neu</td><td>Kann auch im Muster-Abschnitt stehen</td></tr>
+    <tr><td>Systemdaten</td><td>Systemschnitt Zarge und Flügel</td><td>neu</td><td>Aus dem Kompendium (Stand 09/2026)</td></tr>
+    <tr><td>Kompendium</td><td>Mockup Farbübersicht und Kompendium</td><td>vorhanden (Newsletter)</td><td>Original statt Screenshot-Ausschnitt verwenden</td></tr>
+    <tr><td>Einstieg oder Unterschied</td><td>Einbausituation mit eckigen Fensterprofilen</td><td>später</td><td>Erstes Referenzobjekt fotografieren, Tageslicht, Blick von innen nach außen (CD-Bildstil)</td></tr>
+  </table>
+</div>
+
+<!-- 6 Verlinkung -->
+<div class="section">
+  <h2>Verlinkung</h2><div class="rule"></div>
+  <p class="lead">Sieben Stellen führen auf die Edge-Seite, sieben Links führen von ihr weg. Linktexte nennen das Ziel beim Namen, nie „hier klicken“.</p>
+  <p class="label">Links zur Edge-Seite</p>
+  <table class="links">
+    <tr><th>Von</th><th>Stelle</th><th>Linktext</th></tr>
+    <tr><td>Hauptnavigation</td><td>Produkte, direkt unter „System QuinLine® 74“</td><td>QuinLine® 74 Edge</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/produkte/">Produkte</a></td><td>neue Kachel neben QuinLine® 74 und 84</td><td>QuinLine® 74 Edge – die geradlinige Variante</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/produkte/system-quinline-74/">System QuinLine® 74</a></td><td>Abschnitt „Systemunterschiede“</td><td>Zur QuinLine® 74 Edge</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/kunde/planer-und-architekten/">Planer und Architekten</a></td><td>Abschnitt zu Systemen und Design</td><td>geradlinige Hebeschiebetür QuinLine® 74 Edge</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/kunde/fensterhersteller-und-monteure/">Fensterhersteller und Monteure</a></td><td>Abschnitt zu Systemen</td><td>QuinLine® 74 Edge: Systemdaten und Flügelmuster</td></tr>
+    <tr><td>News (neue Meldung)</td><td>im Text und als Knopf</td><td>Mehr zur QuinLine® 74 Edge</td></tr>
+    <tr><td>Newsletter QuinLine® 74 Edge</td><td>Einleitung oder Fußbereich</td><td>QuinLine® 74 Edge auf unserer Website</td></tr>
+  </table>
+  <p class="label">Links von der Edge-Seite</p>
+  <table class="links">
+    <tr><th>Nach</th><th>Stelle</th><th>Linktext</th></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/produkte/system-quinline-74/">System QuinLine® 74</a></td><td>Unterschied, „Bewährte Technik“</td><td>System QuinLine® 74</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/produkte/sicherheit/">Sicherheit</a></td><td>Systemdaten, Zeile Sicherheit</td><td>Sicherheit</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/produkte/pakete/">Ausstattungspakete</a></td><td>Systemdaten, Zeile Sicherheit</td><td>Sicherheitspakete</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/produkte/farbwelt/">Farbwelt</a></td><td>Verfügbarkeit, Farbsortiment</td><td>Farbwelt</td></tr>
+    <tr><td><a href="https://kunden-login.schmidt-boke.de/">Kunden-Login</a></td><td>Kompendium und Farbübersicht</td><td>Zum Kunden-Login</td></tr>
+    <tr><td>verkauf@schmidt-boke.de</td><td>Flügelmuster</td><td>Muster anfordern</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/kontakt/">Kontakt</a></td><td>Sie haben Fragen?</td><td>wie auf den anderen Produktseiten</td></tr>
+  </table>
+</div>
+
+<!-- 7 Änderungen an bestehenden Seiten -->
+<div class="section">
+  <h2>Änderungen an bestehenden Seiten</h2><div class="rule"></div>
+  <p class="lead">Fünf bestehende Seiten bekommen einen kurzen Hinweis auf die Edge. Auf der QuinLine® 74-Seite bitte keine neue Überschrift einbauen, sie hat schon zu viele.</p>
+  <table class="pages">
+    <tr><th>Seite</th><th>Änderung</th><th>Text</th></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/produkte/system-quinline-74/">System QuinLine® 74</a></td><td>Teaser im Abschnitt „Systemunterschiede“, mit kleiner Vergleichsgrafik und Knopf „Zur QuinLine® 74 Edge“</td><td>Die QuinLine® 74 gibt es auch als Edge: mit schmalem, geradlinigem Flügelüberschlag und kantigen Glasleisten, für Objekte mit eckigen Fensterprofilen. Technik und Verarbeitung bleiben gleich.</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/produkte/">Produkte</a></td><td>neue Kachel mit Key Visual</td><td>QuinLine® 74 Edge – die geradlinige Variante der QuinLine® 74: schmaler Überschlag, kantige Glasleisten, Glasdicken bis 50 mm.</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/kunde/planer-und-architekten/">Planer und Architekten</a></td><td>ein Satz mit Link im Abschnitt zu Systemen</td><td>Für Fassaden mit eckigen Fensterprofilen gibt es die QuinLine® 74 Edge mit nahezu rechtwinkliger Kontur.</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/kunde/fensterhersteller-und-monteure/">Fensterhersteller und Monteure</a></td><td>ein Satz mit Link im Abschnitt zu Systemen</td><td>Neu im Programm: die QuinLine® 74 Edge. Gleiche Verarbeitung wie bei der QuinLine® 74, dazu kostenlose Flügelmuster für Ihre Ausstellung.</td></tr>
+    <tr><td><a href="https://schmidt-boke.de/de/unternehmen/news/">News</a></td><td>neue Meldung, Titel „Neu: QuinLine® 74 Edge – die geradlinige Hebeschiebetür“</td><td>Einleitungstext aus dem Newsletter, danach Knopf „Mehr zur QuinLine® 74 Edge“</td></tr>
+  </table>
+</div>
+
+<!-- 8 Offene Punkte -->
+<div class="section">
+  <h2>Offene Punkte vor dem Livegang</h2><div class="rule"></div>
+  <p class="lead">Acht Punkte sind vor dem Livegang zu klären; die ersten drei bestimmen Text und Bilder direkt.</p>
+  <ul class="check">
+    <li>Liefertermin Niedrig- und Renovierungsschwelle: „ab Mitte November“ durch ein Datum ersetzen und nach dem Start auf „bestellbar“ umstellen, denn die Seite bleibt länger online als der Newsletter.</li>
+    <li>Original-Bilder von der Agentur: Key Visual als Web-Fassung ohne Logo und das Mockup von Farbübersicht und Kompendium.</li>
+    <li>Vergleichsgrafik (gerundet und eckig) und Systemschnitt aus den Kompendium-Zeichnungen erstellen lassen.</li>
+    <li>Bezeichnungen „Getriebe“ und „Sicherheit“ in der Systemdaten-Tabelle bestätigen.</li>
+    <li>Suchvolumen der Suchbegriffe prüfen (Seobility-Keyword-Recherche) und danach die Title-Variante festlegen.</li>
+    <li>Klären, ob Kompendium und Farbübersicht nur im Kunden-Login bleiben oder auch auf die öffentliche Downloads-Seite kommen.</li>
+    <li>Klären, ob die Edge mit eVOMATIC® und InScreen kombinierbar ist; wenn ja, je einen Satz mit Link ergänzen.</li>
+    <li>Englische und französische Fassung einplanen, da die Website dreisprachig ist.</li>
+  </ul>
+  <div class="foot">SCHMIDT GmbH · Seitenkonzept QuinLine® 74 Edge · Stand 26.10.2026</div>
+</div>
+
+</body>
+</html>

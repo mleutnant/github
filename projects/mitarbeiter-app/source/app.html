@@ -1,0 +1,1785 @@
+<title>SCHMIDT Intern</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+@font-face{font-family:"Filson Pro";src:url(data:font/woff2;base64,__FONT_400__) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url(data:font/woff2;base64,__FONT_500__) format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"Filson Pro";src:url(data:font/woff2;base64,__FONT_700__) format("woff2");font-weight:700;font-style:normal;font-display:swap}
+
+/* Layout: blaue Kopf-Fläche mit gelber Fußlinie (SCHMIDT CD), darunter Register-Leiste;
+   weißer Inhalt mit Hauptspalte + Randspalte, Ecken überall 0. */
+:root{
+  --bg:#ffffff;
+  --tint:#eef1f2;
+  --line:#d0d7db;
+  --line-strong:#8f9ea5;
+  --ink:#000000;
+  --muted:#5b656b;
+  --heading:#123442;
+  --field:#123442;
+  --field-ink:#ffffff;
+  --field-muted:rgba(255,255,255,.8);
+  --chip-on:#123442;
+  --red:#e3002c;
+  --red-hover:#c30026;
+  --accent-ink:#c8002a;
+  --yellow:#f6a206;
+  --shadow-card:0 2px 14px rgba(18,52,66,.10);
+  --shadow-raised:0 10px 30px rgba(18,52,66,.14);
+  --backdrop:rgba(10,26,33,.55);
+  --font:"Filson Pro",Arial,Helvetica,sans-serif;
+  --ease:cubic-bezier(.2,.6,.2,1);
+  --dur-fast:140ms;
+  --dur:240ms;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0a1a21;--tint:#11283a;--line:#24404c;--line-strong:#5a7480;--ink:#eef2f3;--muted:#9fb1b8;
+    --heading:#ffffff;--field:#123442;--field-ink:#ffffff;--field-muted:rgba(255,255,255,.78);--chip-on:#2a5a72;
+    --red:#e3002c;--red-hover:#c30026;--accent-ink:#ff6680;--yellow:#f6a206;
+    --shadow-card:0 2px 14px rgba(0,0,0,.35);--shadow-raised:0 10px 30px rgba(0,0,0,.45);--backdrop:rgba(0,0,0,.6);color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0a1a21;--tint:#11283a;--line:#24404c;--line-strong:#5a7480;--ink:#eef2f3;--muted:#9fb1b8;
+  --heading:#ffffff;--field:#123442;--field-ink:#ffffff;--field-muted:rgba(255,255,255,.78);--chip-on:#2a5a72;
+  --red:#e3002c;--red-hover:#c30026;--accent-ink:#ff6680;--yellow:#f6a206;
+  --shadow-card:0 2px 14px rgba(0,0,0,.35);--shadow-raised:0 10px 30px rgba(0,0,0,.45);--backdrop:rgba(0,0,0,.6);color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-weight:500;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;font-kerning:normal}
+.wrap{max-width:1200px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:720px){.wrap{padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+h1,h2,h3{text-wrap:balance}
+
+/* Kopf */
+.masthead{background:var(--field);color:var(--field-ink);border-bottom:8px solid var(--yellow)}
+.mast-inner{padding-block:20px 30px;display:grid;gap:26px}
+.mast-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:inline-flex;align-items:center;gap:14px;color:var(--field-ink);text-decoration:none}
+.logo{height:30px;width:auto;display:block}
+.logo .bm{fill:var(--red)}
+.logo .wm{fill:currentColor}
+.brand-tag{font-weight:400;font-size:14px;letter-spacing:.08em;text-transform:uppercase;padding-left:14px;border-left:1px solid rgba(255,255,255,.4);line-height:1.1}
+.role{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid rgba(255,255,255,.5);padding:5px 9px;line-height:1}
+.greet{margin:0;font-weight:700;font-size:clamp(28px,4.4vw,42px);line-height:1.15;letter-spacing:-.01em}
+.today{margin:8px 0 0;color:var(--field-muted);font-size:15px;font-weight:400;font-variant-numeric:tabular-nums}
+
+/* Register */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs-inner{display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
+.tabs-inner::-webkit-scrollbar{display:none}
+.tab{display:inline-flex;align-items:center;gap:8px;padding:16px 0 12px;border-bottom:4px solid transparent;color:var(--muted);text-decoration:none;font-size:16px;white-space:nowrap;transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+.tab:hover{color:var(--accent-ink)}
+.tab[aria-current="page"]{color:var(--ink);border-bottom-color:var(--red)}
+.t-short{display:none}
+@media (max-width:480px){.tabs-inner{gap:16px}.tab{font-size:14px}.t-long{display:none}.t-short{display:inline}}
+.badge{min-width:20px;height:20px;padding:0 6px;background:var(--yellow);color:#000;font-size:12px;font-weight:700;display:inline-grid;place-items:center;font-variant-numeric:tabular-nums;line-height:1}
+
+.notice{background:var(--tint);border-bottom:1px solid var(--line)}
+.notice .wrap{padding-block:12px;font-size:15px}
+
+main.wrap{padding-block:36px 72px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:64px;align-items:start}
+@media (max-width:940px){.layout{grid-template-columns:minmax(0,1fr);gap:56px}}
+.aside{display:grid;gap:56px;min-width:0}
+.main{min-width:0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;margin-bottom:18px}
+h2{margin:0;font-size:28px;line-height:1.15;font-weight:700;color:var(--heading);letter-spacing:-.01em}
+.aside h2{font-size:21px}
+.sec-sub{margin:6px 0 0;color:var(--muted);font-size:15px;font-weight:400}
+
+/* Bedienelemente */
+.btn{font:inherit;font-weight:700;font-size:15px;line-height:1.1;padding:11px 16px;border:2px solid transparent;border-radius:0;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:background-color var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.6;cursor:progress}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red-hover)}
+.btn-outline{background:transparent;color:var(--heading);border-color:var(--heading)}
+.btn-outline:hover{background:var(--field);border-color:var(--field);color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--heading)}
+.btn-sm{font-size:14px;padding:8px 12px}
+.btn-text{font:inherit;font-size:14px;font-weight:500;background:none;border:0;padding:2px 0;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.btn-text:hover{color:var(--accent-ink)}
+.btn-text.armed{color:var(--accent-ink);font-weight:700}
+.actions{display:flex;gap:16px;flex-wrap:wrap}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.chip{font:inherit;font-size:14px;font-weight:500;padding:7px 12px;border:1px solid var(--line);border-radius:0;background:var(--bg);color:var(--ink);cursor:pointer;transition:border-color var(--dur-fast) var(--ease)}
+.chip:hover{border-color:var(--heading)}
+.chip[aria-pressed="true"]{background:var(--chip-on);border-color:var(--chip-on);color:#fff}
+
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:13px;color:var(--muted);font-weight:400}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--heading)}
+.flag{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 6px;line-height:1}
+.flag-new{background:var(--yellow);color:#000}
+.flag-pin{border:1px solid var(--heading);color:var(--heading);padding:2px 5px}
+
+/* Neuigkeiten */
+.post{padding:26px 0;border-top:1px solid var(--line)}
+.post:first-child{border-top:0;padding-top:0}
+.post.pinned{background:var(--tint);padding:24px;border-top:0;margin-bottom:6px}
+.post.pinned+.post{border-top:0}
+.post h3{margin:10px 0 10px;font-size:22px;line-height:1.2;font-weight:700;color:var(--heading)}
+.prose{max-width:62ch;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
+.prose p{margin:0 0 .75em}
+.prose p:last-child{margin-bottom:0}
+.prose a{color:var(--accent-ink);text-underline-offset:3px;overflow-wrap:anywhere}
+.clamped{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.byline{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.byline .actions{margin-left:auto}
+.avatar{width:24px;height:24px;object-fit:cover;background:var(--tint);flex:none;display:block}
+.person{color:var(--ink)}
+
+/* Termine */
+.list{list-style:none;margin:0;padding:0}
+.event{display:grid;grid-template-columns:56px minmax(0,1fr);gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.event:first-child{border-top:0;padding-top:0}
+.ev-date{border:2px solid var(--heading);text-align:center;padding:7px 0 6px;line-height:1;color:var(--heading);align-self:start}
+.ev-date.is-today{background:var(--field);border-color:var(--field);color:#fff}
+.ev-day{display:block;font-size:22px;font-weight:700;font-variant-numeric:tabular-nums lining-nums}
+.ev-mon{display:block;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-top:4px}
+.ev-title{font-weight:700;line-height:1.25}
+.ev-meta{font-size:14px;color:var(--muted);font-weight:400;margin-top:3px}
+.ev-note{font-size:14px;margin-top:4px}
+.ev-actions{margin-top:6px}
+
+/* Geburtstage */
+.gb-none{margin:0 0 10px;color:var(--muted);font-weight:400;font-size:15px}
+/* Geburtstags-Hinweis über den Neuigkeiten, nur am Geburtstag: blaue Fläche mit gelber Fußlinie,
+   Geschenk im Stil der SCHMIDT-Icons (weiß auf Blau), Konfetti aus eckigen Schnipseln in den Hausfarben */
+.gb-next{position:relative;overflow:hidden;display:grid;grid-template-columns:52px minmax(0,1fr);align-items:center;gap:10px 16px;background:var(--field);color:#fff;border-bottom:8px solid var(--yellow);padding:20px 22px 22px;margin-bottom:32px}
+.gb-gift{width:52px;height:52px;display:block;color:#fff;position:relative}
+.gb-next .eyebrow{color:rgba(255,255,255,.82);position:relative}
+.gb-head{grid-column:1/-1;margin:2px 0 0;font-size:clamp(22px,2.6vw,28px);line-height:1.2;font-weight:700;letter-spacing:-.01em;text-wrap:balance;position:relative}
+.gb-head .person{color:#fff}
+.gb-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline;font-size:14px;color:rgba(255,255,255,.82);font-weight:400;position:relative}
+.gb-foot a{color:#fff;text-underline-offset:3px}
+.gb-confetti{position:absolute;top:0;right:0;width:190px;height:74px;pointer-events:none}
+@media (max-width:480px){.gb-confetti{width:84px}}
+.gb-mine{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;background:var(--tint);padding:16px 20px;margin-bottom:36px}
+.gb-mine p{margin:0;max-width:62ch}
+.months{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:36px 40px}
+.month h3{margin:0;padding-bottom:8px;border-bottom:2px solid var(--heading);font-size:18px;line-height:1.2;color:var(--heading);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.month h3 span{font-size:13px;color:var(--muted);font-weight:400}
+.month.is-now h3{border-bottom-color:var(--red)}
+.bday{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}
+.bday:first-child{border-top:0}
+.bday-d{font-weight:700;font-variant-numeric:tabular-nums;color:var(--heading);line-height:1.4}
+.bday-n{min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;line-height:1.4}
+.bday-n .avatar{width:20px;height:20px}
+.bday-sub{flex-basis:100%;font-size:13px;color:var(--muted);font-weight:400}
+.bday .actions{flex-basis:100%;gap:12px}
+.month-empty{color:var(--muted);font-size:14px;padding:10px 0;font-weight:400;margin:0}
+
+.more{margin-top:14px}
+
+/* Telefonbuch */
+.pb-top{display:flex;flex-wrap:wrap;gap:20px 40px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+.zentrale{font-size:15px;color:var(--muted);font-weight:400}
+.zentrale .copy{font-weight:700;color:var(--heading)}
+.search{display:grid;gap:6px;max-width:620px;margin-bottom:16px}
+.search label{font-size:14px;font-weight:700}
+.search input{width:100%;font:inherit;font-size:17px;padding:13px 16px;border:2px solid var(--heading);border-radius:0;background:var(--bg);color:var(--ink)}
+.count{font-size:14px;color:var(--muted);margin:0 0 6px;font-weight:400}
+.pb-row{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1.5fr) 112px minmax(0,1.4fr) minmax(0,2.1fr) auto;grid-template-areas:"name dept dw mob mail act";gap:16px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}
+.pb-row.head{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);border-top:0;padding:0 0 10px;border-bottom:2px solid var(--heading)}
+.pb-row.head+.pb-row{border-top:0}
+.c-name{grid-area:name;min-width:0}
+.c-dept{grid-area:dept;min-width:0;font-size:15px}
+.c-dw{grid-area:dw}
+.c-mob{grid-area:mob;min-width:0}
+.c-mail{grid-area:mail;min-width:0}
+.c-act{grid-area:act;justify-self:end}
+.p-name{font-weight:700;color:var(--heading);line-height:1.25}
+.p-fn,.p-room{font-size:14px;color:var(--muted);font-weight:400}
+.lbl{display:none}
+.copy{font:inherit;background:none;border:0;border-bottom:1px dashed var(--line-strong);padding:1px 0;color:inherit;cursor:pointer;text-align:left;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;transition:color var(--dur-fast) var(--ease)}
+.copy:hover{color:var(--accent-ink);border-bottom-color:currentColor}
+.dw{font-size:20px;font-weight:700;color:var(--heading)}
+@media (max-width:760px){
+  .pb-row.head{display:none}
+  .pb-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name dw" "dept dept" "mob mob" "mail mail" "act act";gap:6px 16px;padding:16px 0}
+  .c-act{justify-self:start;margin-top:4px}
+  .c-dw{justify-self:end;text-align:right}
+  .lbl{display:inline;font-size:13px;color:var(--muted);font-weight:400;margin-right:6px}
+  .c-dw .lbl{display:block;margin:0;font-size:11px;letter-spacing:.07em;text-transform:uppercase}
+}
+
+/* Dokumente */
+.doc{display:grid;grid-template-columns:48px minmax(0,1fr);gap:16px;align-items:start;padding:18px 0;border-top:1px solid var(--line)}
+.doc:first-child{border-top:0;padding-top:0}
+.ftype{position:relative;width:48px;height:58px;border:2px solid var(--heading);color:var(--heading);display:flex;align-items:flex-end;padding:0 0 6px 6px;font-size:11px;font-weight:700;letter-spacing:.04em;line-height:1}
+.ftype::after{content:"";position:absolute;top:-2px;right:7px;width:9px;height:2px;background:var(--bg)}
+.doc-title{font-weight:700;font-size:17px;line-height:1.3;color:var(--heading);text-decoration:none}
+a.doc-title:hover{color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
+.doc-desc{margin:4px 0 0;font-size:15px;max-width:62ch}
+.doc .meta{margin-top:6px}
+.doc .actions{margin-top:8px}
+
+/* Bilder in Beiträgen */
+.media{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:16px 0 18px;max-width:760px}
+.media.one{grid-template-columns:1fr}
+.media.odd a:first-child{grid-column:1/-1}
+.media a{display:block;background:var(--tint);min-width:0}
+.media img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.media.odd a:first-child img{aspect-ratio:16/9}
+.media.one img{aspect-ratio:auto;max-height:520px}
+.thumbs{display:flex;flex-wrap:wrap;gap:12px}
+.thumb{display:grid;gap:2px;width:96px}
+.thumb img{width:96px;height:72px;object-fit:cover;display:block;background:var(--tint)}
+.thumb.removed img{opacity:.25}
+
+/* Wiki */
+.wiki-group+.wiki-group{margin-top:36px}
+.group-title{margin:0;padding-bottom:10px;border-bottom:2px solid var(--heading);font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--heading)}
+.wiki-link{display:grid;gap:3px;padding:14px 0;border-top:1px solid var(--line);text-decoration:none;color:inherit}
+.wiki-links>.wiki-link:first-child{border-top:0}
+.wiki-link strong{color:var(--heading);font-size:17px;line-height:1.3;transition:color var(--dur-fast) var(--ease)}
+.wiki-link span{color:var(--muted);font-size:15px;font-weight:400}
+.wiki-link:hover strong{color:var(--accent-ink)}
+.drafts{border:2px solid var(--yellow);padding:16px 20px 4px;margin-bottom:28px}
+.drafts-head{display:grid;gap:2px;margin-bottom:4px}
+.drafts-head strong{color:var(--heading);font-size:17px}
+.back{display:inline-block;font-size:14px;color:var(--muted);margin-bottom:20px;text-underline-offset:3px}
+.back::before{content:"";display:inline-block;width:7px;height:7px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-right:8px;vertical-align:1px}
+.back:hover{color:var(--accent-ink)}
+.article h2{font-size:clamp(28px,3.6vw,38px);margin:10px 0 0}
+.kurz{background:var(--tint);padding:18px 20px;margin:22px 0 4px;max-width:720px}
+.kurz .eyebrow{display:block;margin-bottom:6px}
+.wbody{margin-top:22px}
+.prose h3{font-size:20px;line-height:1.25;color:var(--heading);margin:28px 0 8px}
+.prose h3:first-child{margin-top:0}
+.prose ul,.prose ol{list-style:none;padding:0;margin:0 0 .9em}
+.prose ul li{position:relative;padding-left:18px;margin:6px 0}
+.prose ul li::before{content:"";position:absolute;left:0;top:.28em;width:2px;height:1em;background:var(--red)}
+.prose ol{counter-reset:step}
+.prose ol li{counter-increment:step;position:relative;padding-left:46px;margin:14px 0;min-height:30px}
+.prose ol li::before{content:counter(step);position:absolute;left:0;top:-3px;width:30px;height:30px;border:2px solid var(--heading);color:var(--heading);font-weight:700;font-size:15px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.prose strong{font-weight:700}
+mark.ph{background:var(--yellow);color:#000;padding:0 3px}
+.draft-banner{background:var(--yellow);color:#000;padding:12px 16px;display:flex;gap:10px 16px;flex-wrap:wrap;align-items:center;justify-content:space-between;font-weight:700;margin-bottom:22px}
+.btn-dark{background:#123442;color:#fff}
+.btn-dark:hover{background:#24424f}
+.contact-box{border:2px solid var(--heading);padding:18px 20px;display:grid;gap:6px}
+.contact-box p{margin:0}
+.related .wiki-link strong{font-size:16px}
+
+/* Benefits */
+.benefits{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px}
+.benefit{display:flex;flex-direction:column;gap:8px;padding:24px;border:1px solid var(--line);background:var(--bg);color:inherit;text-decoration:none;transition:border-color var(--dur-fast) var(--ease),box-shadow var(--dur) var(--ease)}
+.benefit:hover{border-color:var(--heading);box-shadow:var(--shadow-card)}
+.b-kicker{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-ink)}
+.b-title{font-size:19px;font-weight:700;line-height:1.25;color:var(--heading);text-wrap:balance}
+.b-value{font-size:34px;font-weight:700;line-height:1.05;color:var(--heading);letter-spacing:-.01em;font-variant-numeric:lining-nums;margin-top:8px}
+.b-value small{display:block;font-size:14px;font-weight:500;color:var(--muted);letter-spacing:0;margin-top:4px}
+.b-sum{font-size:15px;font-weight:400;margin-top:4px;flex:1}
+.b-more{font-size:14px;color:var(--accent-ink);text-decoration:underline;text-underline-offset:3px;margin-top:8px}
+.benefit:hover .b-more{text-decoration-thickness:2px}
+.article .b-value{font-size:44px;margin-top:20px}
+.offer-box{display:grid;gap:12px;justify-items:start}
+
+/* Leere Zustände */
+.empty{padding:24px;border:1px dashed var(--line-strong);display:grid;gap:10px;justify-items:start}
+.empty strong{color:var(--heading);font-size:17px;line-height:1.3}
+.empty p{margin:0;color:var(--muted);max-width:52ch;font-weight:400}
+.loading{color:var(--muted);font-weight:400;font-size:15px}
+
+/* Formular-Fenster */
+dialog#sheet{border:0;padding:0;width:min(580px,calc(100% - 32px));max-height:calc(100% - 48px);background:var(--bg);color:var(--ink);border-radius:0;box-shadow:var(--shadow-raised)}
+dialog#sheet[open]{display:flex;flex-direction:column}
+dialog#sheet::backdrop{background:var(--backdrop)}
+.sheet-head{background:var(--field);color:var(--field-ink);padding:18px 20px;border-bottom:8px solid var(--yellow);display:flex;justify-content:space-between;align-items:center;gap:12px;flex:none}
+.sheet-head h2{color:var(--field-ink);font-size:21px}
+.sheet-close{font:inherit;font-size:14px;background:none;border:1px solid rgba(255,255,255,.5);color:var(--field-ink);padding:6px 10px;cursor:pointer}
+.sheet-close:hover{background:rgba(255,255,255,.12)}
+#sheetBody{padding:20px;overflow:auto;min-height:0}
+.form{display:grid;gap:16px}
+.form-intro{margin:0;color:var(--muted);font-weight:400;font-size:15px}
+.field{display:grid;gap:6px;min-width:0}
+.field>label{font-size:14px;font-weight:700}
+.hint{font-size:13px;color:var(--muted);font-weight:400}
+.field input:not([type=checkbox]),.field select,.field textarea,.import-area{font:inherit;font-weight:500;font-size:16px;padding:10px 12px;border:1px solid var(--line-strong);border-radius:0;background:var(--bg);color:var(--ink);width:100%;min-width:0}
+.field textarea,.import-area{min-height:150px;resize:vertical;line-height:1.5}
+.field input[type=file]{padding:9px;font-size:15px}
+.check{display:flex;gap:10px;align-items:center;font-weight:500;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--field);margin:0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+.form-actions{display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap;margin-top:4px}
+.form-error{color:var(--accent-ink);font-weight:700;margin:0}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line)}
+.tbl-wrap table{border-collapse:collapse;font-size:14px;width:100%}
+.tbl-wrap th,.tbl-wrap td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;white-space:nowrap;font-weight:400}
+.tbl-wrap th{font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);background:var(--field);color:#fff;border:1px solid rgba(255,255,255,.18);padding:12px 16px;font-size:15px;opacity:0;pointer-events:none;transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);max-width:calc(100% - 32px);z-index:50}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+.foot{border-top:1px solid var(--line)}
+.foot .wrap{padding-block:20px;font-size:13px;color:var(--muted);font-weight:400;display:flex;gap:8px 24px;flex-wrap:wrap;justify-content:space-between}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app" lang="de">
+  <header class="masthead">
+    <div class="wrap mast-inner">
+      <div class="mast-top">
+        <a class="brand" href="#aktuelles" aria-label="SCHMIDT Intern, Aktuelles">
+          <svg class="logo" viewBox="62 62 398 65" aria-hidden="true" focusable="false">
+            <g class="bm">
+              <polygon points="142.83,75.14 142.83,83.44 151.26,83.44 151.26,116.95 142.83,116.95 142.83,125.25 159.56,125.25 159.56,75.14"/>
+              <polygon points="62.62,62.62 62.62,125.25 79.31,125.25 79.31,116.95 70.92,116.95 70.92,70.92 130.32,70.92 130.33,116.92 91.81,116.92 91.81,83.44 126.11,83.44 126.11,75.14 83.51,75.14 83.51,125.22 138.63,125.22 138.62,62.62"/>
+            </g>
+            <path class="wm" d="__LOGO_PATH__"/>
+          </svg>
+          <span class="brand-tag">Intern</span>
+        </a>
+        <span class="role" id="roleChip" hidden>Redaktion</span>
+      </div>
+      <div>
+        <h1 class="greet" id="greet">Guten Tag.</h1>
+        <p class="today" id="today"></p>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Bereiche">
+    <div class="wrap tabs-inner">
+      <a class="tab" href="#aktuelles" data-view="aktuelles">Aktuelles <span class="badge" id="newsBadge" hidden></span></a>
+      <a class="tab" href="#wiki" data-view="wiki">Wiki</a>
+      <a class="tab" href="#benefits" data-view="benefits">Benefits</a>
+      <a class="tab" href="#telefonbuch" data-view="telefonbuch" aria-label="Telefonbuch"><span class="t-long">Telefonbuch</span><span class="t-short">Telefon</span></a>
+      <a class="tab" href="#dokumente" data-view="dokumente">Dokumente</a>
+    </div>
+  </nav>
+
+  <div class="notice" id="notice" hidden><div class="wrap" id="noticeText"></div></div>
+
+  <main class="wrap">
+    <section id="view-aktuelles" class="view" aria-labelledby="h-news">
+      <div class="layout">
+        <div class="main">
+          <div class="gb-next" id="gbNext" hidden></div>
+          <div class="sec-head">
+            <div>
+              <h2 id="h-news">Neuigkeiten</h2>
+              <p class="sec-sub">Mitteilungen aus Geschäftsführung, Personal und den Abteilungen.</p>
+            </div>
+            <div id="newsTools"></div>
+          </div>
+          <div class="chips" id="newsChips" role="group" aria-label="Nach Bereich filtern"></div>
+          <div id="newsList"><p class="loading">Neuigkeiten werden geladen …</p></div>
+        </div>
+        <aside class="aside" aria-label="Termine und Geburtstage">
+          <div>
+            <div class="sec-head"><h2 id="h-termine">Termine</h2><div id="termTools"></div></div>
+            <div id="termList"><p class="loading">Termine werden geladen …</p></div>
+          </div>
+          <div>
+            <div class="sec-head"><h2 id="h-gb">Geburtstage</h2><div id="gbTools"></div></div>
+            <div id="gbList"><p class="loading">Geburtstage werden geladen …</p></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="view-geburtstage" class="view" aria-labelledby="h-gbk" hidden>
+      <a class="back" href="#aktuelles">Aktuelles</a>
+      <div class="sec-head">
+        <div>
+          <h2 id="h-gbk">Geburtstagskalender</h2>
+          <p class="sec-sub">Eingetragen ist nur, wer zugestimmt hat. Gespeichert werden Tag und Monat, kein Jahr.</p>
+        </div>
+        <div class="actions" id="gbkTools"></div>
+      </div>
+      <div id="gbMine"></div>
+      <div id="gbCal"><p class="loading">Geburtstage werden geladen …</p></div>
+    </section>
+
+    <section id="view-wiki" class="view" aria-labelledby="h-wiki" hidden>
+      <div id="wikiIndex">
+        <div class="layout">
+          <div class="main">
+            <div class="sec-head">
+              <div>
+                <h2 id="h-wiki">SCHMIDT Wiki</h2>
+                <p class="sec-sub">Antworten auf Alltagsfragen, von der Krankmeldung bis zum IT-Problem.</p>
+              </div>
+              <div class="actions" id="wikiTools"></div>
+            </div>
+            <div id="wikiDrafts"></div>
+            <div class="search">
+              <label for="wikiSearch" class="sr">Wiki durchsuchen</label>
+              <input id="wikiSearch" type="search" placeholder="Wonach suchen Sie? z. B. krank, Urlaub" autocomplete="off">
+            </div>
+            <div class="chips" id="wikiChips" role="group" aria-label="Nach Thema filtern"></div>
+            <div id="wikiList"><p class="loading">Wiki wird geladen …</p></div>
+          </div>
+          <aside class="aside" aria-labelledby="h-wiki-recent">
+            <div>
+              <div class="sec-head"><h2 id="h-wiki-recent">Zuletzt aktualisiert</h2></div>
+              <div id="wikiRecent"><p class="loading">Wird geladen …</p></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <div id="wikiArticle" hidden></div>
+    </section>
+
+    <section id="view-benefits" class="view" aria-labelledby="h-ben" hidden>
+      <div id="benIndex">
+        <div class="sec-head">
+          <div>
+            <h2 id="h-ben">Benefits</h2>
+            <p class="sec-sub">Was SCHMIDT Ihnen zusätzlich zum Gehalt bietet.</p>
+          </div>
+          <div class="actions" id="benTools"></div>
+        </div>
+        <div class="chips" id="benChips" role="group" aria-label="Nach Thema filtern"></div>
+        <div id="benList"><p class="loading">Benefits werden geladen …</p></div>
+      </div>
+      <div id="benDetail" hidden></div>
+    </section>
+
+    <section id="view-telefonbuch" class="view" aria-labelledby="h-pb" hidden>
+      <div class="pb-top">
+        <div>
+          <h2 id="h-pb">Telefonbuch</h2>
+          <p class="zentrale">Zentrale <button type="button" class="copy" data-copy="+49 5250 9845-0">+49 5250 9845-0</button>. Durchwahlen hängen an diese Nummer an.</p>
+        </div>
+        <div class="actions" id="pbTools"></div>
+      </div>
+      <div class="search">
+        <label for="pbSearch">Suchen</label>
+        <input id="pbSearch" type="search" placeholder="Name, Abteilung oder Durchwahl" autocomplete="off">
+      </div>
+      <div class="chips" id="deptChips" role="group" aria-label="Nach Abteilung filtern"></div>
+      <p class="count" id="pbCount" aria-live="polite"></p>
+      <div id="pbList"><p class="loading">Telefonbuch wird geladen …</p></div>
+    </section>
+
+    <section id="view-dokumente" class="view" aria-labelledby="h-docs" hidden>
+      <div class="layout">
+        <div class="main">
+          <div class="sec-head">
+            <div>
+              <h2 id="h-docs">Dokumente</h2>
+              <p class="sec-sub">Formulare, Anleitungen und Handbücher an einem Ort.</p>
+            </div>
+            <div class="actions" id="docTools"></div>
+          </div>
+          <div class="search">
+            <label for="docSearch" class="sr">Dokumente durchsuchen</label>
+            <input id="docSearch" type="search" placeholder="Dokument suchen" autocomplete="off">
+          </div>
+          <div class="chips" id="docChips" role="group" aria-label="Nach Kategorie filtern"></div>
+          <div id="docList"><p class="loading">Dokumente werden geladen …</p></div>
+        </div>
+        <aside class="aside" aria-labelledby="h-docwiki">
+          <div>
+            <div class="sec-head"><h2 id="h-docwiki">Im Wiki nachlesen</h2></div>
+            <div id="docWiki"><p class="loading">Wiki wird geladen …</p></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap"><span>SCHMIDT GmbH · Delbrück-Boke</span><span>Nur für Mitarbeiterinnen und Mitarbeiter</span></div>
+  </footer>
+
+  <dialog id="sheet" aria-labelledby="sheetTitle">
+    <div class="sheet-head"><h2 id="sheetTitle">Bearbeiten</h2><button type="button" class="sheet-close" id="sheetClose">Schließen</button></div>
+    <div id="sheetBody"></div>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+const ZENTRALE = "+49 5250 9845";
+const NEWS_CATS = ["Geschäftsführung", "Personal", "Produktion", "Vertrieb", "IT", "Allgemein"];
+const DOC_CATS = ["Formulare", "Anleitungen", "Handbücher", "Arbeitssicherheit", "IT & Technik", "Personal", "Sonstiges"];
+const BEN_CATS = ["Familie", "Einkaufen & Freizeit", "Gesundheit & Sport", "Mobilität", "Vorsorge & Finanzen", "Weiterbildung", "Sonstiges"];
+const WIKI_CATS = ["Personal & Abwesenheit", "Arbeitszeit & Lohn", "Arbeitssicherheit", "IT & Technik", "Werk & Gebäude", "Neu bei SCHMIDT", "SCHMIDT Intern"];
+const WIKI_STATUS = ["Entwurf (nur Redaktion)", "Veröffentlicht"];
+const MAX_IMAGES = 6;
+const WEEKDAYS = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+const MONTHS = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+const MON3 = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+
+const S = {
+  db: null, user: null, assets: null, uid: null, canEdit: false, offline: false,
+  view: "aktuelles",
+  news: [], termine: [], kontakte: [], dokumente: [], wiki: [], wikiDrafts: [], geburtstage: [], benefits: [],
+  ready: { news: false, termine: false, kontakte: false, dokumente: false, wiki: false, wikiDrafts: false, geburtstage: false, benefits: false },
+  me: null, gbReadonly: false,
+  seenAt: null, visitSeenAt: null, seenLoaded: false, marking: false,
+  newsCat: "Alle", dept: "Alle", docCat: "Alle", pbQuery: "", docQuery: "",
+  wikiCat: "Alle", wikiQuery: "", wikiId: null, benCat: "Alle", benefitId: null,
+  expanded: new Set(),
+};
+
+/* ---------- Helfer ---------- */
+const $ = (sel, root = document) => root.querySelector(sel);
+function h(tag, props, ...kids) {
+  const el = document.createElement(tag);
+  if (props) for (const [k, v] of Object.entries(props)) {
+    if (v == null || v === false) continue;
+    if (k === "class") el.className = v;
+    else if (k === "text") el.textContent = v;
+    else if (k.startsWith("on") && typeof v === "function") el.addEventListener(k.slice(2), v);
+    else if (k === "dataset") Object.assign(el.dataset, v);
+    else if (v === true) el.setAttribute(k, "");
+    else el.setAttribute(k, v);
+  }
+  for (const c of kids.flat(Infinity)) if (c != null && c !== false) el.append(c instanceof Node ? c : String(c));
+  return el;
+}
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const nowIso = () => new Date().toISOString();
+function fold(s) {
+  return String(s || "").toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss");
+}
+function safeUrl(u) {
+  const s = String(u || "").trim();
+  return /^https?:\/\//i.test(s) ? s : null;
+}
+/* Leichtes Textformat: "## " Zwischenüberschrift, "1. " Schritte, "- " Aufzählung, **fett**,
+   Links werden anklickbar, [eckige Klammern] auf Wunsch als offene Platzhalter markiert. */
+function appendInline(el, text, opts) {
+  const re = /\*\*([^*\n]+)\*\*|(https?:\/\/[^\s<>"]*[^\s<>".,;:!?)\]])|(\[[^\]\n]{2,}\])/g;
+  let last = 0, m;
+  while ((m = re.exec(text))) {
+    el.append(text.slice(last, m.index));
+    if (m[1]) el.append(h("strong", null, m[1]));
+    else if (m[2]) el.append(h("a", { href: m[2], target: "_blank", rel: "noopener noreferrer" }, m[2]));
+    else el.append(opts && opts.marks ? h("mark", { class: "ph" }, m[3]) : m[3]);
+    last = m.index + m[0].length;
+  }
+  el.append(text.slice(last));
+}
+function richText(str, opts) {
+  const frag = document.createDocumentFragment();
+  let list = null, para = null;
+  for (const raw of String(str || "").replace(/\r\n?/g, "\n").split("\n")) {
+    const line = raw.trim();
+    if (!line) { list = null; para = null; continue; }
+    let m;
+    if ((m = /^#{2,3}\s+(.*)$/.exec(line))) {
+      list = null; para = null;
+      const hd = h("h3"); appendInline(hd, m[1], opts); frag.append(hd);
+      continue;
+    }
+    const bullet = /^[-•]\s+(.*)$/.exec(line) || /^\*\s+(.*)$/.exec(line);
+    const step = /^\d+[.)]\s+(.*)$/.exec(line);
+    if (bullet || step) {
+      const tag = step ? "OL" : "UL";
+      if (!list || list.tagName !== tag) { para = null; list = h(tag.toLowerCase()); frag.append(list); }
+      const li = h("li"); appendInline(li, (step || bullet)[1], opts); list.append(li);
+      continue;
+    }
+    list = null;
+    if (!para) { para = h("p"); frag.append(para); } else para.append(h("br"));
+    appendInline(para, line, opts);
+  }
+  return frag;
+}
+const plain = (str) => String(str || "").replace(/\*\*/g, "").replace(/^\s*(#{2,3}|[-•*]|\d+[.)])\s+/gm, "").replace(/\s+/g, " ").trim();
+const clip = (str, n) => (str.length > n ? str.slice(0, n - 1).replace(/\s+\S*$/, "") + " …" : str);
+function isoWeek(d) {
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const day = t.getUTCDay() || 7;
+  t.setUTCDate(t.getUTCDate() + 4 - day);
+  const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+  return Math.ceil(((t - y0) / 864e5 + 1) / 7);
+}
+const pad = (n) => String(n).padStart(2, "0");
+const localDay = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+function fmtStamp(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return "";
+  const today = new Date(), y = new Date(); y.setDate(y.getDate() - 1);
+  const hm = `${pad(d.getHours())}:${pad(d.getMinutes())} Uhr`;
+  if (localDay(d) === localDay(today)) return "Heute, " + hm;
+  if (localDay(d) === localDay(y)) return "Gestern, " + hm;
+  return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
+}
+function parseDay(s) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || ""));
+  return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null;
+}
+function fmtSize(n) {
+  if (!n) return "";
+  if (n < 1024 * 1024) return Math.max(1, Math.round(n / 1024)) + " KB";
+  return (n / 1048576).toLocaleString("de-DE", { maximumFractionDigits: 1 }) + " MB";
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+}
+function copyText(value, label) {
+  const done = () => toast(`${label || value} kopiert`);
+  try {
+    navigator.clipboard.writeText(value).then(done, () => toast(`Bitte manuell kopieren: ${value}`));
+  } catch (e) { toast(`Bitte manuell kopieren: ${value}`); }
+}
+function copyBtn(display, value, cls) {
+  return h("button", { type: "button", class: "copy " + (cls || ""), title: `${value} kopieren`, onclick: () => copyText(value) }, display);
+}
+
+function errText(e) {
+  switch (e && e.code) {
+    case "invalid_argument": return "Speichern nicht möglich. Ihnen fehlt die Berechtigung, oder ein Text ist zu lang.";
+    case "quota_exceeded": return "Der Speicher der App ist voll. Bitte alte Einträge löschen.";
+    case "too_large": return "Die Datei ist zu groß. Erlaubt sind höchstens 20 MB.";
+    case "unsupported_type": return "Dieser Dateityp geht nicht. Bitte als PDF speichern oder als Link hinterlegen.";
+    case "revoked": case "not_granted": return "Der Zugriff wurde beendet. Bitte die Seite neu laden.";
+    default: return "Speichern hat nicht geklappt. Bitte gleich noch einmal versuchen.";
+  }
+}
+async function withRetry(fn) {
+  for (let attempt = 0; ; attempt++) {
+    try { return await fn(); }
+    catch (e) {
+      const code = e && e.code;
+      if ((code === "unavailable" || code === "store_unavailable") && attempt === 0) { await sleep(400 + Math.random() * 600); continue; }
+      if (code === "resource_exhausted" && attempt < 3) { await sleep(1500 * (attempt + 1)); continue; }
+      throw e;
+    }
+  }
+}
+function confirmBtn(label, onConfirm, o = {}) {
+  const b = h("button", { type: "button", class: o.cls || "btn-text" }, label);
+  let armed = false, t;
+  const reset = () => { armed = false; b.textContent = label; b.classList.remove("armed"); b.disabled = false; };
+  b.addEventListener("click", async () => {
+    if (!armed) {
+      armed = true; b.textContent = o.armed || "Wirklich löschen?"; b.classList.add("armed");
+      t = setTimeout(reset, 5000);
+      return;
+    }
+    clearTimeout(t); b.disabled = true; b.textContent = o.busy || "Wird gelöscht …";
+    try { await withRetry(onConfirm); toast(o.done || "Gelöscht"); }
+    catch (e) { toast(errText(e)); reset(); }
+  });
+  return b;
+}
+function emptyState(title, text, ...buttons) {
+  return h("div", { class: "empty" }, h("strong", null, title), text ? h("p", null, text) : null,
+    buttons.length ? h("div", { class: "actions" }, buttons) : null);
+}
+
+/* ---------- Personen ---------- */
+function personEls(uid, fallback) {
+  if (!uid) return [h("span", { class: "person" }, fallback || "Redaktion")];
+  return [
+    h("img", { class: "avatar", alt: "", dataset: { avatar: uid }, hidden: true }),
+    h("span", { class: "person", dataset: { person: uid } }, "…"),
+  ];
+}
+async function fillPeople(root) {
+  const nameEls = root.querySelectorAll("[data-person]");
+  if (!nameEls.length) return;
+  const ids = [...new Set([...nameEls].map((el) => el.dataset.person))];
+  let ps = {};
+  if (S.user) { try { ps = await S.user.profiles(ids); } catch (e) { ps = {}; } }
+  nameEls.forEach((el) => { const p = ps[el.dataset.person]; el.textContent = (p && p.name) || "Unbekannt"; });
+  root.querySelectorAll("[data-avatar]").forEach((img) => {
+    const p = ps[img.dataset.avatar];
+    if (p && p.avatarUrl) { img.src = p.avatarUrl; img.hidden = false; }
+  });
+}
+
+/* ---------- Formular-Fenster ---------- */
+function openSheet({ title, intro, fields, values = {}, submitLabel = "Speichern", onSubmit, extra }) {
+  const dlg = $("#sheet"), body = $("#sheetBody");
+  $("#sheetTitle").textContent = title;
+  body.replaceChildren();
+  const form = h("form", { class: "form", novalidate: true });
+  if (intro) form.append(h("p", { class: "form-intro" }, intro));
+  const ctl = {}, rows = {};
+  const readVals = () => {
+    const v = {};
+    for (const f of fields) {
+      const c = ctl[f.name];
+      if (f.type === "checkbox") v[f.name] = c.checked;
+      else if (f.type === "file") v[f.name] = c.files && c.files[0] || null;
+      else v[f.name] = c.value.trim();
+    }
+    return v;
+  };
+  const sync = () => { const v = readVals(); for (const f of fields) if (f.showIf) rows[f.name].hidden = !f.showIf(v); };
+  let group = null;
+  for (const f of fields) {
+    const id = "f-" + f.name;
+    let input;
+    if (f.type === "textarea") input = h("textarea", { id, name: f.name, maxlength: f.max || 4000, placeholder: f.placeholder });
+    else if (f.type === "select") input = h("select", { id, name: f.name }, f.options.map((o) => h("option", { value: o }, o)));
+    else if (f.type === "checkbox") input = h("input", { id, name: f.name, type: "checkbox" });
+    else if (f.type === "file") input = h("input", { id, name: f.name, type: "file", accept: f.accept });
+    else input = h("input", { id, name: f.name, type: f.type || "text", maxlength: f.max || 200, placeholder: f.placeholder, list: f.list ? id + "-list" : null, autocomplete: "off" });
+    if (f.type === "checkbox") input.checked = !!values[f.name];
+    else if (f.type !== "file" && values[f.name] != null) input.value = values[f.name];
+    else if (f.type === "select" && f.default) input.value = f.default;
+    input.addEventListener("change", sync);
+    ctl[f.name] = input;
+    const row = f.type === "checkbox"
+      ? h("div", { class: "field" }, h("label", { class: "check", for: id }, input, h("span", null, f.label)), f.hint ? h("span", { class: "hint" }, f.hint) : null)
+      : h("div", { class: "field" }, h("label", { for: id }, f.label + (f.required ? "" : " (optional)")), input,
+          f.list ? h("datalist", { id: id + "-list" }, f.list.map((o) => h("option", { value: o }))) : null,
+          f.hint ? h("span", { class: "hint" }, f.hint) : null);
+    rows[f.name] = row;
+    if (f.pair) { group = h("div", { class: "row2" }, row); form.append(group); }
+    else if (f.pairEnd && group) { group.append(row); group = null; }
+    else form.append(row);
+  }
+  if (extra) form.append(extra);
+  const err = h("p", { class: "form-error", role: "alert", hidden: true });
+  const submit = h("button", { type: "submit", class: "btn btn-primary" }, submitLabel);
+  const cancel = h("button", { type: "button", class: "btn btn-ghost", onclick: () => dlg.close() }, "Abbrechen");
+  form.append(err, h("div", { class: "form-actions" }, cancel, submit));
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const v = readVals();
+    const missing = fields.find((f) => f.required && !(f.showIf && !f.showIf(v)) && !v[f.name] && !(f.type === "file" && f.optionalWhen && f.optionalWhen(values)));
+    if (missing) { err.textContent = `Bitte „${missing.label}“ ausfüllen.`; err.hidden = false; ctl[missing.name].focus(); return; }
+    for (const f of fields) if (f.validate && !(f.showIf && !f.showIf(v))) {
+      const msg = f.validate(v[f.name], v);
+      if (msg) { err.textContent = msg; err.hidden = false; ctl[f.name].focus(); return; }
+    }
+    submit.disabled = true; cancel.disabled = true;
+    const label = submit.textContent; submit.textContent = "Wird gespeichert …"; err.hidden = true;
+    try { await onSubmit(v, (msg) => { submit.textContent = msg; }); dlg.close(); toast("Gespeichert"); }
+    catch (e) { err.textContent = (e && e.userMessage) || errText(e); err.hidden = false; }
+    finally { submit.disabled = false; cancel.disabled = false; submit.textContent = label; }
+  });
+  body.append(form);
+  sync();
+  dlg.showModal();
+  const first = form.querySelector("input:not([type=checkbox]):not([type=file]),textarea,select");
+  if (first) first.focus();
+  return { form, ctl };
+}
+$("#sheetClose").addEventListener("click", () => $("#sheet").close());
+$("#sheet").addEventListener("click", (e) => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+
+/* ---------- Kopf ---------- */
+function renderHead(me) {
+  const d = new Date();
+  $("#today").textContent = `${WEEKDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()} · KW ${isoWeek(d)}`;
+  const hr = d.getHours();
+  const hello = hr < 11 ? "Guten Morgen" : hr < 18 ? "Guten Tag" : "Guten Abend";
+  const first = me && me.name ? me.name.trim().split(/\s+/)[0] : "";
+  const own = S.uid ? S.geburtstage.find((b) => b.id === S.uid && b.selbst && validBday(b)) : null;
+  const isBirthday = own && localDay(nextBirthday(own, todayMidnight())) === localDay(d);
+  const greeting = isBirthday ? "Alles Gute zum Geburtstag" : hello;
+  $("#greet").textContent = first ? `${greeting}, ${first}.` : `${greeting}.`;
+  $("#roleChip").hidden = !S.canEdit;
+}
+
+/* ---------- Bilder ---------- */
+const imgUrl = (id) => "/_blob/" + id;
+async function prepareImage(file) {
+  if (file.type === "image/gif" || file.type === "image/svg+xml") return { blob: file };
+  try {
+    const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+    const scale = Math.min(1, 1800 / Math.max(bmp.width, bmp.height));
+    const w = Math.round(bmp.width * scale), hgt = Math.round(bmp.height * scale);
+    const c = document.createElement("canvas"); c.width = w; c.height = hgt;
+    const ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, hgt); ctx.drawImage(bmp, 0, 0, w, hgt);
+    const blob = await new Promise((res) => c.toBlob(res, "image/jpeg", 0.85));
+    if (!blob) throw new Error("toBlob");
+    return { blob: scale < 1 || blob.size < file.size ? blob : file, w, h: hgt };
+  } catch (e) {
+    if (/^image\/(jpeg|png|webp)$/.test(file.type)) return { blob: file };
+    const err = new Error("format");
+    err.userMessage = `„${file.name}“ lässt sich nicht lesen. Bitte als JPG oder PNG speichern.`;
+    throw err;
+  }
+}
+function mediaEl(images, title) {
+  const list = (Array.isArray(images) ? images : []).filter((i) => i && /^[A-Za-z0-9_-]+$/.test(String(i.id || "")));
+  if (!list.length) return null;
+  const n = list.length;
+  return h("div", { class: "media" + (n === 1 ? " one" : n % 2 ? " odd" : "") },
+    list.map((img, i) => h("a", { href: imgUrl(img.id), target: "_blank", rel: "noopener noreferrer" },
+      h("img", { src: imgUrl(img.id), alt: n === 1 ? `Bild zum Beitrag „${title}“` : `Bild ${i + 1} von ${n} zum Beitrag „${title}“`, loading: "lazy", decoding: "async" }))));
+}
+
+/* ---------- Neuigkeiten ---------- */
+function unreadCount() {
+  if (!S.uid || !S.seenLoaded) return 0;
+  return S.news.filter((n) => n.createdAt && (!S.seenAt || n.createdAt > S.seenAt)).length;
+}
+function updateBadge() {
+  const n = unreadCount(), b = $("#newsBadge");
+  b.hidden = !n || S.view === "aktuelles";
+  b.textContent = n;
+  b.setAttribute("aria-label", `${n} neue Beiträge`);
+}
+async function maybeMarkSeen() {
+  if (!S.uid || !S.db || !S.seenLoaded || !S.ready.news || S.marking || S.view !== "aktuelles") return;
+  const latest = S.news.reduce((m, n) => (n.createdAt > m ? n.createdAt : m), "");
+  if (!latest || (S.seenAt && S.seenAt >= latest)) return;
+  S.marking = true;
+  const stamp = nowIso();
+  try { await S.db.doc(`data/users/${S.uid}/state`).set({ newsSeenAt: stamp }); S.seenAt = stamp; }
+  catch (e) { /* Lesestatus ist eine Bequemlichkeit; ohne Schreibrecht bleibt er lokal. */ S.seenAt = stamp; }
+  S.marking = false;
+  updateBadge();
+}
+function newsForm(item) {
+  const existing = item && Array.isArray(item.images) ? item.images : [];
+  const keep = new Set(existing.map((i) => i.id));
+  let imgInput = null, extra = null;
+  if (S.assets) {
+    imgInput = h("input", { id: "f-images", type: "file", accept: "image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif", multiple: true });
+    const thumbs = existing.length ? h("div", { class: "thumbs" }, existing.map((img) => {
+      const btn = h("button", { type: "button", class: "btn-text" }, "Entfernen");
+      const fig = h("div", { class: "thumb" }, h("img", { src: imgUrl(img.id), alt: "" }), btn);
+      btn.addEventListener("click", () => {
+        if (keep.has(img.id)) { keep.delete(img.id); fig.classList.add("removed"); btn.textContent = "Behalten"; }
+        else { keep.add(img.id); fig.classList.remove("removed"); btn.textContent = "Entfernen"; }
+      });
+      return fig;
+    })) : null;
+    extra = h("div", { class: "field" }, h("label", { for: "f-images" }, existing.length ? "Bilder" : "Bilder (optional)"), thumbs, imgInput,
+      h("span", { class: "hint" }, `Bis zu ${MAX_IMAGES} Bilder. Große Fotos werden automatisch verkleinert. Bitte nur Bilder verwenden, an denen SCHMIDT die Rechte hat und mit denen abgebildete Personen einverstanden sind.`));
+  }
+  openSheet({
+    title: item ? "Beitrag bearbeiten" : "Neuer Beitrag",
+    fields: [
+      { name: "category", label: "Bereich", type: "select", options: NEWS_CATS, required: true, default: "Allgemein", pair: true },
+      { name: "pinned", label: "Oben anheften", type: "checkbox", pairEnd: true, hint: "Bleibt über allen anderen Beiträgen stehen." },
+      { name: "title", label: "Überschrift", required: true, max: 140 },
+      { name: "body", label: "Text", type: "textarea", required: true, max: 8000, hint: "Absätze mit einer Leerzeile trennen. „- “ am Zeilenanfang ergibt eine Aufzählung. Links werden anklickbar." },
+    ],
+    extra,
+    values: item || { category: "Allgemein" },
+    submitLabel: item ? "Änderungen speichern" : "Veröffentlichen",
+    onSubmit: async (v, progress) => {
+      const data = { category: v.category, pinned: !!v.pinned, title: v.title, body: v.body };
+      const files = imgInput ? [...(imgInput.files || [])] : [];
+      const kept = existing.filter((i) => keep.has(i.id));
+      if (kept.length + files.length > MAX_IMAGES) { const e = new Error("zu viele"); e.userMessage = `Höchstens ${MAX_IMAGES} Bilder pro Beitrag.`; throw e; }
+      const uploaded = [];
+      try {
+        for (let i = 0; i < files.length; i++) {
+          progress(`Bild ${i + 1} von ${files.length} wird hochgeladen …`);
+          const prepared = await prepareImage(files[i]);
+          const res = await withRetry(() => S.assets.upload(prepared.blob));
+          uploaded.push({ id: res.id, w: prepared.w || null, h: prepared.h || null });
+        }
+        if (imgInput) data.images = [...kept, ...uploaded];
+        progress("Wird gespeichert …");
+        if (item) await withRetry(() => S.db.doc("news/" + item.id).update({ ...data, editedAt: nowIso() }));
+        else { const ref = S.db.collection("news").doc(); await withRetry(() => ref.set({ ...data, authorId: S.uid, createdAt: nowIso() })); }
+      } catch (e) {
+        uploaded.forEach((u) => S.assets.delete(u.id).catch(() => {}));
+        throw e;
+      }
+      if (S.assets) existing.filter((i) => !keep.has(i.id)).forEach((i) => S.assets.delete(i.id).catch(() => {}));
+    },
+  });
+}
+function renderNews() {
+  const tools = $("#newsTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-primary", onclick: () => newsForm(null) }, "Beitrag schreiben"));
+
+  const chips = $("#newsChips"); chips.replaceChildren();
+  const cats = NEWS_CATS.filter((c) => S.news.some((n) => n.category === c));
+  if (S.newsCat !== "Alle" && !cats.includes(S.newsCat)) S.newsCat = "Alle";
+  chips.hidden = cats.length < 2;
+  ["Alle", ...cats].forEach((c) => chips.append(h("button", { type: "button", class: "chip", "aria-pressed": String(S.newsCat === c), onclick: () => { S.newsCat = c; renderNews(); } }, c)));
+
+  const list = $("#newsList");
+  if (!S.ready.news) { if (S.offline) list.replaceChildren(emptyState("Noch keine Neuigkeiten", "Sobald die Redaktion etwas veröffentlicht, steht es hier.")); updateBadge(); return; }
+  const items = S.news
+    .filter((n) => S.newsCat === "Alle" || n.category === S.newsCat)
+    .sort((a, b) => (b.pinned === true) - (a.pinned === true) || String(b.createdAt).localeCompare(String(a.createdAt)));
+  if (!items.length) {
+    list.replaceChildren(emptyState("Noch keine Neuigkeiten",
+      S.canEdit ? "Schreiben Sie den ersten Beitrag, etwa eine Begrüßung oder einen Hinweis zur nächsten Betriebsversammlung." : "Sobald die Redaktion etwas veröffentlicht, steht es hier.",
+      S.canEdit ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => newsForm(null) }, "Ersten Beitrag schreiben") : null));
+    updateBadge();
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  for (const n of items) {
+    const isNew = S.uid && S.seenLoaded && n.createdAt && (!S.visitSeenAt || n.createdAt > S.visitSeenAt);
+    const long = String(n.body || "").length > 520;
+    const open = S.expanded.has(n.id);
+    const body = h("div", { class: "prose" + (long && !open ? " clamped" : "") }, richText(n.body));
+    const art = h("article", { class: "post" + (n.pinned ? " pinned" : "") },
+      h("div", { class: "meta" },
+        h("span", { class: "eyebrow" }, n.category || "Allgemein"),
+        h("time", { datetime: n.createdAt }, fmtStamp(n.createdAt)),
+        n.pinned ? h("span", { class: "flag flag-pin" }, "Angeheftet") : null,
+        isNew ? h("span", { class: "flag flag-new" }, "Neu") : null),
+      h("h3", null, n.title || ""),
+      mediaEl(n.images, n.title || ""),
+      body,
+      long ? h("button", { type: "button", class: "btn-text more", onclick: () => { open ? S.expanded.delete(n.id) : S.expanded.add(n.id); renderNews(); } }, open ? "Weniger anzeigen" : "Weiterlesen") : null,
+      h("div", { class: "byline" }, personEls(n.authorId),
+        S.canEdit ? h("div", { class: "actions" },
+          h("button", { type: "button", class: "btn-text", onclick: () => newsForm(n) }, "Bearbeiten"),
+          confirmBtn("Löschen", async () => {
+            await S.db.doc("news/" + n.id).delete();
+            if (S.assets) (n.images || []).forEach((i) => S.assets.delete(i.id).catch(() => {}));
+          })) : null));
+    frag.append(art);
+  }
+  list.replaceChildren(frag);
+  fillPeople(list);
+  updateBadge();
+}
+
+/* ---------- Termine ---------- */
+function termForm(item) {
+  openSheet({
+    title: item ? "Termin bearbeiten" : "Neuer Termin",
+    fields: [
+      { name: "title", label: "Was", required: true, max: 120, placeholder: "z. B. Betriebsversammlung" },
+      { name: "date", label: "Datum", type: "date", required: true, pair: true },
+      { name: "time", label: "Uhrzeit", type: "time", pairEnd: true },
+      { name: "place", label: "Ort", max: 120, placeholder: "z. B. Kantine, Halle 2" },
+      { name: "note", label: "Hinweis", type: "textarea", max: 600 },
+    ],
+    values: item || {},
+    onSubmit: async (v) => {
+      const data = { title: v.title, date: v.date, time: v.time, place: v.place, note: v.note };
+      if (item) await withRetry(() => S.db.doc("termine/" + item.id).update(data));
+      else { const ref = S.db.collection("termine").doc(); await withRetry(() => ref.set({ ...data, createdAt: nowIso() })); }
+    },
+  });
+}
+function renderTermine() {
+  const tools = $("#termTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => termForm(null) }, "Termin eintragen"));
+  const list = $("#termList");
+  if (!S.ready.termine && !S.offline) return;
+  const today = localDay(new Date());
+  const items = S.termine.filter((t) => t.date && t.date >= today)
+    .sort((a, b) => (a.date + (a.time || "")).localeCompare(b.date + (b.time || ""))).slice(0, 8);
+  if (!items.length) {
+    list.replaceChildren(emptyState("Keine anstehenden Termine", S.canEdit ? "Tragen Sie Betriebsversammlungen, Werksferien oder Schulungen ein." : "Neue Termine erscheinen hier."));
+    return;
+  }
+  const ul = h("ul", { class: "list" });
+  for (const t of items) {
+    const d = parseDay(t.date);
+    const meta = [WEEKDAYS[d.getDay()].slice(0, 2), t.time ? t.time + " Uhr" : null, t.place || null].filter(Boolean).join(" · ");
+    ul.append(h("li", { class: "event" },
+      h("div", { class: "ev-date" + (t.date === today ? " is-today" : ""), "aria-hidden": "true" },
+        h("span", { class: "ev-day" }, d.getDate()), h("span", { class: "ev-mon" }, MON3[d.getMonth()])),
+      h("div", { style: "min-width:0" },
+        h("div", { class: "ev-title" }, t.title),
+        h("div", { class: "ev-meta" }, h("span", { class: "sr" }, `${d.getDate()}. ${MONTHS[d.getMonth()]}, `), meta),
+        t.note ? h("div", { class: "ev-note" }, t.note) : null,
+        S.canEdit ? h("div", { class: "actions ev-actions" },
+          h("button", { type: "button", class: "btn-text", onclick: () => termForm(t) }, "Bearbeiten"),
+          confirmBtn("Löschen", () => S.db.doc("termine/" + t.id).delete())) : null)));
+  }
+  list.replaceChildren(ul);
+}
+
+/* ---------- Geburtstage ---------- */
+/* Eigene Einträge liegen unter geburtstage/<eigene id> (selbst: true), Einträge der Redaktion
+   unter einer zufälligen id mit Namen. Gespeichert werden nur Tag und Monat. */
+const DAYS_IN = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const isLeap = (y) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+function todayMidnight() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+function validBday(b) {
+  return b && Number.isInteger(b.tag) && Number.isInteger(b.monat) && b.monat >= 1 && b.monat <= 12 && b.tag >= 1 && b.tag <= DAYS_IN[b.monat - 1];
+}
+function nextBirthday(b, from) {
+  const at = (y) => new Date(y, b.monat - 1, b.monat === 2 && b.tag === 29 && !isLeap(y) ? 28 : b.tag);
+  const d = at(from.getFullYear());
+  return d < from ? at(from.getFullYear() + 1) : d;
+}
+const daysUntil = (d, from) => Math.round((d - from) / 864e5);
+function bdayName(b) { return b.selbst ? personEls(b.id) : [h("span", { class: "person" }, b.name || "Ohne Namen")]; }
+function ownBday() { return S.uid ? S.geburtstage.find((b) => b.id === S.uid && b.selbst && validBday(b)) : null; }
+function bdayFields(withName) {
+  return [
+    withName ? { name: "name", label: "Vor- und Nachname", required: true, max: 120 } : null,
+    { name: "tag", label: "Tag", type: "select", options: Array.from({ length: 31 }, (_, i) => String(i + 1)), required: true, pair: true },
+    { name: "monat", label: "Monat", type: "select", options: MONTHS, required: true, pairEnd: true,
+      validate: (m, v) => { const mi = MONTHS.indexOf(m); return Number(v.tag) > DAYS_IN[mi] ? `Den ${v.tag}. ${m} gibt es nicht.` : null; } },
+    { name: "abteilung", label: "Abteilung", max: 80, list: departments() },
+  ].filter(Boolean);
+}
+const bdayData = (v) => ({ tag: Number(v.tag), monat: MONTHS.indexOf(v.monat) + 1, abteilung: v.abteilung, updatedAt: nowIso() });
+function ownBdayForm() {
+  const own = ownBday();
+  openSheet({
+    title: own ? "Geburtstag ändern" : "Geburtstag eintragen",
+    intro: "Nur Tag und Monat, kein Jahr. Alle Kolleginnen und Kollegen sehen den Eintrag im Geburtstagskalender. Sie können ihn jederzeit wieder entfernen.",
+    fields: bdayFields(false),
+    values: own ? { tag: String(own.tag), monat: MONTHS[own.monat - 1], abteilung: own.abteilung } : {},
+    onSubmit: async (v) => {
+      try { await withRetry(() => S.db.doc("geburtstage/" + S.uid).set({ ...bdayData(v), selbst: true })); }
+      catch (e) {
+        if (e && e.code === "invalid_argument") { S.gbReadonly = true; renderGeburtstage(); renderKalender(); e.userMessage = "Sie haben für diese App nur Leserechte. Bitte die Redaktion um Zugriff als Mitwirkende bitten."; }
+        throw e;
+      }
+    },
+  });
+}
+function otherBdayForm(item) {
+  openSheet({
+    title: item ? "Geburtstag bearbeiten" : "Geburtstag für jemanden eintragen",
+    intro: "Bitte nur mit Einverständnis der Person eintragen. Gespeichert werden Tag und Monat, kein Jahr. Wer die App selbst nutzt, kann den Geburtstag auch selbst eintragen.",
+    fields: bdayFields(true),
+    values: item ? { name: item.name, tag: String(item.tag), monat: MONTHS[item.monat - 1], abteilung: item.abteilung } : {},
+    onSubmit: async (v) => {
+      const data = { ...bdayData(v), name: v.name };
+      const ref = item ? S.db.doc("geburtstage/" + item.id) : S.db.collection("geburtstage").doc();
+      await withRetry(() => ref.set(data));
+    },
+  });
+}
+function canSetOwnBday() { return !!(S.db && S.uid && !S.gbReadonly); }
+function upcomingBdays() {
+  const t0 = todayMidnight();
+  return S.geburtstage.filter(validBday).map((b) => { const d = nextBirthday(b, t0); return { b, d, n: daysUntil(d, t0) }; })
+    .sort((a, b) => a.d - b.d);
+}
+function namesEl(list) {
+  const nm = (b) => (b.selbst ? h("span", { class: "person", dataset: { person: b.id } }, "…") : h("span", { class: "person" }, b.name || "Ohne Namen"));
+  if (list.length === 1) return [nm(list[0].b)];
+  if (list.length === 2) return [nm(list[0].b), " und ", nm(list[1].b)];
+  return [nm(list[0].b), ` und ${list.length - 1} weitere`];
+}
+/* Hinweis über den Neuigkeiten: nur an Tagen, an denen jemand Geburtstag hat */
+const GIFT_SVG = `<svg class="gb-gift" viewBox="0 0 113.39 113.39" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linejoin="round" stroke-linecap="butt">
+<rect x="17" y="40" width="79.4" height="16" rx="4"/>
+<path d="M25,56V77M25,85V93q0,4 4,4H84.4q4,0 4,-4V56"/>
+<path d="M56.7,40V97"/>
+<path d="M56.7,40C49,28.5 32,22.5 32,31.5c0,7.5 13,8.5 24.7,8.5"/>
+<path d="M56.7,40C64.4,28.5 81.4,22.5 81.4,31.5c0,7.5 -13,8.5 -24.7,8.5"/>
+</svg>`;
+const CONFETTI_SVG = (() => {
+  const Y = "#f6a206", R = "#e3002c", W = "#ffffff";
+  const bits = [[176, 8, 5, 14, 20, Y], [160, 30, 6, 6, 15, W], [182, 44, 4, 12, -30, R], [140, 10, 5, 12, -25, R], [128, 40, 5, 5, 40, Y],
+    [150, 56, 4, 10, 60, Y], [112, 18, 4, 9, 30, W], [100, 48, 5, 5, 10, R], [84, 8, 4, 11, -40, Y], [70, 34, 4, 4, 25, W], [168, 64, 5, 5, 0, W], [56, 14, 3, 8, 50, R]];
+  return `<svg class="gb-confetti" viewBox="0 0 190 74" preserveAspectRatio="xMaxYMin slice" aria-hidden="true" focusable="false">${bits
+    .map(([x, y, w, hh, r, c]) => `<rect x="${x}" y="${y}" width="${w}" height="${hh}" fill="${c}" transform="rotate(${r} ${x + w / 2} ${y + hh / 2})"/>`).join("")}</svg>`;
+})();
+function svgFrom(markup) { const t = document.createElement("template"); t.innerHTML = markup.trim(); return t.content.firstChild; }
+function renderGbNext() {
+  const box = $("#gbNext");
+  const today = S.ready.geburtstage ? upcomingBdays().filter((x) => x.n === 0) : [];
+  if (!today.length) { box.hidden = true; return; }
+  const onlyMe = today.length === 1 && today[0].b.selbst && today[0].b.id === S.uid;
+  const head = onlyMe ? ["Sie haben heute Geburtstag."] : [namesEl(today), today.length === 1 ? " hat" : " haben", " heute Geburtstag."];
+  const depts = onlyMe ? [] : [...new Set(today.map((x) => x.b.abteilung).filter(Boolean))];
+  box.replaceChildren(
+    svgFrom(CONFETTI_SVG), svgFrom(GIFT_SVG),
+    h("span", { class: "eyebrow" }, onlyMe ? "Alles Gute" : "Herzlichen Glückwunsch"),
+    h("p", { class: "gb-head" }, head),
+    h("div", { class: "gb-foot" }, depts.length ? h("span", null, depts.join(" · ")) : null, h("a", { href: "#geburtstage" }, "Zum Geburtstagskalender")));
+  box.hidden = false;
+  fillPeople(box);
+}
+function renderGeburtstage() {
+  const tools = $("#gbTools");
+  tools.replaceChildren(h("a", { class: "btn-text", href: "#geburtstage" }, "Kalender"));
+  const list = $("#gbList");
+  if (!S.ready.geburtstage && !S.offline) return;
+  renderGbNext();
+  const up = upcomingBdays();
+  let soon = up.filter((x) => x.n < 14);
+  const parts = [];
+  if (!soon.length && up.length) {
+    /* Niemand in den nächsten zwei Wochen: trotzdem den nächsten Geburtstag zeigen */
+    soon = up.filter((x) => +x.d === +up[0].d);
+    parts.push(h("p", { class: "gb-none" }, "In den nächsten zwei Wochen hat niemand Geburtstag. Als Nächstes:"));
+  }
+  if (!soon.length) {
+    parts.push(h("p", { class: "gb-none" }, "Noch keine Geburtstage eingetragen."));
+  } else {
+    const ul = h("ul", { class: "list" });
+    for (const { b, d, n } of soon.slice(0, 6)) {
+      const when = n === 0 ? "Heute" : n === 1 ? "Morgen" : `${WEEKDAYS[d.getDay()].slice(0, 2)}, ${pad(d.getDate())}.${pad(d.getMonth() + 1)}.`;
+      ul.append(h("li", { class: "event" },
+        h("div", { class: "ev-date" + (n === 0 ? " is-today" : ""), "aria-hidden": "true" },
+          h("span", { class: "ev-day" }, d.getDate()), h("span", { class: "ev-mon" }, MON3[d.getMonth()])),
+        h("div", { style: "min-width:0" },
+          h("div", { class: "ev-title bday-n" }, bdayName(b)),
+          h("div", { class: "ev-meta" }, [n === 0 ? "Hat heute Geburtstag" : when, b.abteilung || null].filter(Boolean).join(" · ")))));
+    }
+    parts.push(ul);
+    if (soon.length > 6) parts.push(h("a", { class: "btn-text more", href: "#geburtstage" }, `${soon.length - 6} weitere im Kalender`));
+  }
+  if (canSetOwnBday() && !ownBday()) parts.push(h("button", { type: "button", class: "btn-text more", onclick: ownBdayForm }, "Eigenen Geburtstag eintragen"));
+  list.replaceChildren(...parts);
+  fillPeople(list);
+}
+function renderKalender() {
+  const tools = $("#gbkTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => otherBdayForm(null) }, "Für jemanden eintragen"));
+
+  const mine = $("#gbMine"); mine.replaceChildren();
+  if (canSetOwnBday()) {
+    const own = ownBday();
+    mine.append(h("div", { class: "gb-mine" },
+      own ? h("p", null, h("strong", null, `Ihr Geburtstag: ${own.tag}. ${MONTHS[own.monat - 1]}.`), " Für alle Kolleginnen und Kollegen sichtbar.")
+          : h("p", null, h("strong", null, "Ihr Geburtstag ist nicht eingetragen."), " Wenn Sie möchten, tragen Sie Tag und Monat ein, ohne Jahr."),
+      h("div", { class: "actions" },
+        h("button", { type: "button", class: own ? "btn btn-ghost btn-sm" : "btn btn-primary btn-sm", onclick: ownBdayForm }, own ? "Ändern" : "Eintragen"),
+        own ? confirmBtn("Entfernen", () => S.db.doc("geburtstage/" + S.uid).delete(), { armed: "Wirklich entfernen?", busy: "Wird entfernt …", done: "Entfernt" }) : null)));
+  }
+
+  const cal = $("#gbCal");
+  if (!S.ready.geburtstage && !S.offline) return;
+  const all = S.geburtstage.filter(validBday);
+  if (!all.length) {
+    cal.replaceChildren(emptyState("Noch keine Geburtstage eingetragen",
+      "Jede und jeder kann den eigenen Geburtstag eintragen. Ohne Eintrag erscheint niemand im Kalender."));
+    return;
+  }
+  const now = new Date(), t0 = todayMidnight();
+  const order = Array.from({ length: 12 }, (_, i) => (now.getMonth() + i) % 12);
+  const grid = h("div", { class: "months" });
+  for (const m of order) {
+    const items = all.filter((b) => b.monat === m + 1).sort((a, b) => a.tag - b.tag || String(a.name || "").localeCompare(String(b.name || ""), "de"));
+    grid.append(h("section", { class: "month" + (m === now.getMonth() ? " is-now" : "") },
+      h("h3", null, MONTHS[m], items.length ? h("span", null, items.length === 1 ? "1 Geburtstag" : `${items.length} Geburtstage`) : null),
+      items.length ? h("div", null, items.map((b) => {
+        const isToday = localDay(nextBirthday(b, t0)) === localDay(t0);
+        const mod = S.canEdit && S.db;
+        return h("div", { class: "bday" },
+          h("div", { class: "bday-d" }, `${b.tag}.`),
+          h("div", { class: "bday-n" }, bdayName(b), isToday ? h("span", { class: "flag flag-new" }, "Heute") : null,
+            b.abteilung ? h("span", { class: "bday-sub" }, b.abteilung) : null,
+            mod ? h("div", { class: "actions" },
+              b.selbst ? null : h("button", { type: "button", class: "btn-text", onclick: () => otherBdayForm(b) }, "Bearbeiten"),
+              confirmBtn(b.selbst ? "Entfernen" : "Löschen", () => S.db.doc("geburtstage/" + b.id).delete())) : null));
+      })) : h("p", { class: "month-empty" }, "Keine Geburtstage")));
+  }
+  cal.replaceChildren(grid);
+  fillPeople(cal);
+}
+
+/* ---------- Telefonbuch ---------- */
+const lastName = (n) => { const parts = String(n || "").trim().split(/\s+/); return parts[parts.length - 1] || ""; };
+function fullNumber(dw) {
+  const s = String(dw || "").trim();
+  return /^\d{1,5}$/.test(s) ? `${ZENTRALE}-${s}` : s;
+}
+function departments() {
+  return [...new Set(S.kontakte.map((k) => (k.abteilung || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "de"));
+}
+function kontaktForm(item) {
+  openSheet({
+    title: item ? "Kontakt bearbeiten" : "Neuer Kontakt",
+    fields: [
+      { name: "name", label: "Vor- und Nachname", required: true, max: 120 },
+      { name: "abteilung", label: "Abteilung", max: 80, list: departments(), pair: true },
+      { name: "funktion", label: "Funktion", max: 120, pairEnd: true },
+      { name: "durchwahl", label: "Durchwahl", max: 40, placeholder: "z. B. 123", pair: true, hint: "Nur die Endziffern. Die Zentrale wird automatisch davor gesetzt." },
+      { name: "mobil", label: "Mobil", type: "tel", max: 40, pairEnd: true },
+      { name: "email", label: "E-Mail", type: "email", max: 160, validate: (x) => x && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x) ? "Die E-Mail-Adresse sieht unvollständig aus." : null },
+      { name: "raum", label: "Raum oder Standort", max: 80, placeholder: "z. B. Verwaltung, 1. OG" },
+    ],
+    values: item || {},
+    onSubmit: async (v) => {
+      const data = { name: v.name, abteilung: v.abteilung, funktion: v.funktion, durchwahl: v.durchwahl, mobil: v.mobil, email: v.email, raum: v.raum, updatedAt: nowIso() };
+      if (item) await withRetry(() => S.db.doc("kontakte/" + item.id).update(data));
+      else { const ref = S.db.collection("kontakte").doc(); await withRetry(() => ref.set(data)); }
+    },
+  });
+}
+
+/* Import aus Excel/CSV */
+const COLS = ["name", "abteilung", "funktion", "durchwahl", "mobil", "email", "raum"];
+const COL_LABEL = { name: "Name", abteilung: "Abteilung", funktion: "Funktion", durchwahl: "Durchwahl", mobil: "Mobil", email: "E-Mail", raum: "Raum" };
+const HEADER_MAP = {
+  name: ["name", "mitarbeiter", "mitarbeiterin", "person", "namevorname", "vornamename"], vorname: ["vorname"], nachname: ["nachname", "familienname"],
+  abteilung: ["abteilung", "bereich", "team", "kostenstelle"], funktion: ["funktion", "position", "rolle", "stelle", "taetigkeit", "titel"],
+  durchwahl: ["durchwahl", "dw", "tel", "telefon", "telefonnummer", "nebenstelle", "festnetz", "rufnummer"], mobil: ["mobil", "handy", "mobilnummer", "mobiltelefon"],
+  email: ["email", "emailadresse", "mail"], raum: ["raum", "standort", "buero", "gebaeude", "ort"],
+};
+function parseTable(text) {
+  const lines = String(text || "").replace(/\r\n?/g, "\n").split("\n").filter((l) => l.trim());
+  if (!lines.length) return [];
+  const head = lines[0];
+  const delim = ["\t", ";", ","].map((d) => [d, head.split(d).length]).sort((a, b) => b[1] - a[1])[0][0];
+  const rows = [];
+  for (const line of lines) {
+    const out = []; let cur = "", q = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (q) { if (c === '"' && line[i + 1] === '"') { cur += '"'; i++; } else if (c === '"') q = false; else cur += c; }
+      else if (c === '"') q = true;
+      else if (c === delim) { out.push(cur.trim()); cur = ""; }
+      else cur += c;
+    }
+    out.push(cur.trim());
+    rows.push(out);
+  }
+  return rows;
+}
+function rowsToContacts(rows) {
+  if (!rows.length) return [];
+  const norm = (s) => fold(s).replace(/[^a-z]/g, "");
+  const idx = {};
+  rows[0].forEach((cell, i) => {
+    const n = norm(cell);
+    for (const [key, alts] of Object.entries(HEADER_MAP)) if (alts.includes(n) && idx[key] == null) idx[key] = i;
+  });
+  const hasHeader = Object.keys(idx).length >= 2;
+  const body = hasHeader ? rows.slice(1) : rows;
+  return body.map((r) => {
+    const get = (k) => (idx[k] != null ? (r[idx[k]] || "") : "");
+    let c;
+    if (hasHeader) {
+      c = {}; for (const k of COLS) c[k] = get(k);
+      if (!c.name && (get("vorname") || get("nachname"))) c.name = [get("vorname"), get("nachname")].filter(Boolean).join(" ");
+    } else { c = {}; COLS.forEach((k, i) => { c[k] = r[i] || ""; }); }
+    for (const k of COLS) c[k] = String(c[k] || "").slice(0, 160);
+    return c;
+  }).filter((c) => c.name);
+}
+function importForm() {
+  const area = h("textarea", { id: "f-import", class: "import-area", placeholder: "Name\tAbteilung\tFunktion\tDurchwahl\tMobil\tE-Mail\tRaum" });
+  const file = h("input", { id: "f-import-file", type: "file", accept: ".csv,.txt,.tsv,text/csv,text/plain" });
+  const preview = h("div", { class: "field", "aria-live": "polite" });
+  let parsed = [];
+  const update = () => {
+    parsed = rowsToContacts(parseTable(area.value));
+    preview.replaceChildren();
+    if (!area.value.trim()) return;
+    if (!parsed.length) { preview.append(h("span", { class: "form-error" }, "Keine Zeile mit Namen erkannt.")); return; }
+    const existing = new Set(S.kontakte.map((k) => fold(k.name).trim()));
+    const upd = parsed.filter((c) => existing.has(fold(c.name).trim())).length;
+    preview.append(h("span", { class: "hint" }, `${parsed.length} Kontakte erkannt: ${parsed.length - upd} neu, ${upd} werden aktualisiert. Vorschau:`),
+      h("div", { class: "tbl-wrap" }, h("table", null,
+        h("thead", null, h("tr", null, COLS.map((k) => h("th", null, COL_LABEL[k])))),
+        h("tbody", null, parsed.slice(0, 5).map((c) => h("tr", null, COLS.map((k) => h("td", null, c[k]))))))));
+  };
+  area.addEventListener("input", update);
+  file.addEventListener("change", () => {
+    const f = file.files && file.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => { area.value = String(r.result || ""); update(); };
+    r.readAsText(f, "utf-8");
+  });
+  const extra = h("div", { class: "form" },
+    h("div", { class: "field" }, h("label", { for: "f-import" }, "Liste einfügen"), area,
+      h("span", { class: "hint" }, "In Excel die Zeilen samt Überschrift markieren, kopieren und hier einfügen. Erkannt werden Spalten wie Name, Vorname, Nachname, Abteilung, Funktion, Durchwahl, Mobil, E-Mail und Raum.")),
+    h("div", { class: "field" }, h("label", { for: "f-import-file" }, "Oder CSV-Datei wählen (optional)"), file),
+    preview);
+  openSheet({
+    title: "Liste importieren",
+    fields: [],
+    extra,
+    submitLabel: "Importieren",
+    onSubmit: async (_v, progress) => {
+      if (!parsed.length) { const e = new Error("leer"); e.userMessage = "Bitte zuerst eine Liste einfügen."; throw e; }
+      const byName = new Map(S.kontakte.map((k) => [fold(k.name).trim(), k]));
+      let i = 0;
+      for (const c of parsed) {
+        i++; progress(`${i} von ${parsed.length} …`);
+        const hit = byName.get(fold(c.name).trim());
+        const data = { updatedAt: nowIso() };
+        for (const k of COLS) if (c[k] || !hit) data[k] = c[k];
+        if (hit) await withRetry(() => S.db.doc("kontakte/" + hit.id).update(data));
+        else {
+          const ref = S.db.collection("kontakte").doc();
+          await withRetry(() => ref.set(data));
+          byName.set(fold(c.name).trim(), { id: ref.id, ...data });
+        }
+      }
+    },
+  });
+}
+function renderKontakte() {
+  const tools = $("#pbTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(
+    h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: importForm }, "Liste importieren"),
+    h("button", { type: "button", class: "btn btn-primary btn-sm", onclick: () => kontaktForm(null) }, "Kontakt anlegen"));
+
+  const depts = departments();
+  if (S.dept !== "Alle" && !depts.includes(S.dept)) S.dept = "Alle";
+  const chips = $("#deptChips"); chips.replaceChildren();
+  chips.hidden = depts.length < 2;
+  ["Alle", ...depts].forEach((d) => chips.append(h("button", { type: "button", class: "chip", "aria-pressed": String(S.dept === d), onclick: () => { S.dept = d; renderKontakte(); } }, d)));
+
+  const list = $("#pbList"), count = $("#pbCount");
+  if (!S.ready.kontakte && !S.offline) return;
+  if (!S.kontakte.length) {
+    count.textContent = "";
+    list.replaceChildren(emptyState("Das Telefonbuch ist noch leer",
+      S.canEdit ? "Legen Sie Kontakte einzeln an oder fügen Sie die Telefonliste direkt aus Excel ein." : "Die Redaktion trägt hier bald alle Durchwahlen ein.",
+      S.canEdit ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: importForm }, "Liste importieren") : null));
+    return;
+  }
+  const terms = fold(S.pbQuery).split(/\s+/).filter(Boolean);
+  const items = S.kontakte
+    .filter((k) => S.dept === "Alle" || (k.abteilung || "").trim() === S.dept)
+    .filter((k) => { if (!terms.length) return true; const hay = fold([k.name, k.abteilung, k.funktion, k.durchwahl, k.mobil, k.email, k.raum].join(" ")); return terms.every((t) => hay.includes(t)); })
+    .sort((a, b) => lastName(a.name).localeCompare(lastName(b.name), "de") || String(a.name).localeCompare(String(b.name), "de"));
+  count.textContent = items.length === 1 ? "1 Kontakt" : `${items.length} Kontakte`;
+  if (!items.length) { list.replaceChildren(emptyState("Niemand gefunden", "Anderen Suchbegriff versuchen oder den Abteilungsfilter auf „Alle“ stellen.")); return; }
+  const frag = document.createDocumentFragment();
+  frag.append(h("div", { class: "pb-row head", "aria-hidden": "true" },
+    h("div", { class: "c-name" }, "Name"), h("div", { class: "c-dept" }, "Abteilung"), h("div", { class: "c-dw" }, "Durchwahl"),
+    h("div", { class: "c-mob" }, "Mobil"), h("div", { class: "c-mail" }, "E-Mail"), h("div", { class: "c-act" })));
+  for (const k of items) {
+    const dw = String(k.durchwahl || "").trim();
+    frag.append(h("div", { class: "pb-row" },
+      h("div", { class: "c-name" }, h("div", { class: "p-name" }, k.name), k.funktion ? h("div", { class: "p-fn" }, k.funktion) : null),
+      h("div", { class: "c-dept" }, k.abteilung || "", k.raum ? h("div", { class: "p-room" }, k.raum) : null),
+      h("div", { class: "c-dw" }, dw ? [h("span", { class: "lbl" }, "Durchwahl"), copyBtn(dw, fullNumber(dw), "dw")] : null),
+      h("div", { class: "c-mob" }, k.mobil ? [h("span", { class: "lbl" }, "Mobil"), copyBtn(k.mobil, k.mobil)] : null),
+      h("div", { class: "c-mail" }, k.email ? [h("span", { class: "lbl" }, "E-Mail"), copyBtn(k.email, k.email)] : null),
+      h("div", { class: "c-act" }, S.canEdit ? h("div", { class: "actions" },
+        h("button", { type: "button", class: "btn-text", onclick: () => kontaktForm(k) }, "Bearbeiten"),
+        confirmBtn("Löschen", () => S.db.doc("kontakte/" + k.id).delete())) : null)));
+  }
+  list.replaceChildren(frag);
+}
+
+/* ---------- Dokumente ---------- */
+const TEXT_TYPES = { csv: "text/csv", md: "text/markdown", txt: "text/plain", json: "application/json" };
+function fileKind(d) {
+  if (d.kind === "link") return "LINK";
+  const t = String(d.contentType || ""), ext = String(d.fileName || "").split(".").pop().toLowerCase();
+  if (t === "application/pdf" || ext === "pdf") return "PDF";
+  if (t.startsWith("image/")) return "BILD";
+  if (t.startsWith("video/")) return "VIDEO";
+  if (ext === "csv") return "CSV";
+  return "TEXT";
+}
+function docHref(d) {
+  if (d.kind === "link") return safeUrl(d.url);
+  return d.assetId ? "/_blob/" + d.assetId : null;
+}
+function docForm(item) {
+  const canUpload = !!S.assets;
+  const kinds = canUpload ? ["Datei hochladen", "Link hinterlegen"] : ["Link hinterlegen"];
+  const values = item ? { ...item, art: item.kind === "link" ? "Link hinterlegen" : "Datei hochladen" } : { art: kinds[0], category: DOC_CATS[0] };
+  openSheet({
+    title: item ? "Dokument bearbeiten" : "Dokument hinzufügen",
+    fields: [
+      { name: "art", label: "Art", type: "select", options: item ? [values.art] : kinds, required: true },
+      { name: "title", label: "Titel", required: true, max: 140, placeholder: "z. B. Urlaubsantrag" },
+      { name: "category", label: "Kategorie", type: "select", options: DOC_CATS, required: true },
+      { name: "description", label: "Kurzbeschreibung", type: "textarea", max: 600 },
+      { name: "file", label: item ? "Neue Datei (ersetzt die alte)" : "Datei", type: "file", accept: ".pdf,.png,.jpg,.jpeg,.webp,.gif,.svg,.mp4,.webm,.txt,.csv,.md,.json",
+        required: !item, showIf: (v) => v.art === "Datei hochladen",
+        hint: "PDF, Bild, Video oder Text bis 20 MB. Word- und Excel-Dateien bitte als PDF speichern oder als Link hinterlegen." },
+      { name: "url", label: "Link", type: "url", required: true, max: 600, placeholder: "https://…", showIf: (v) => v.art === "Link hinterlegen",
+        hint: "Zum Beispiel ein Ordner auf SharePoint oder dem Firmenlaufwerk im Intranet.",
+        validate: (x) => (safeUrl(x) ? null : "Der Link muss mit https:// beginnen.") },
+    ],
+    values,
+    onSubmit: async (v, progress) => {
+      const data = { title: v.title, category: v.category, description: v.description, updatedAt: nowIso() };
+      if (v.art === "Link hinterlegen") {
+        data.kind = "link"; data.url = safeUrl(v.url);
+      } else if (v.file) {
+        progress("Datei wird hochgeladen …");
+        const ext = v.file.name.split(".").pop().toLowerCase();
+        const opts = TEXT_TYPES[ext] ? { type: TEXT_TYPES[ext] } : (v.file.type ? undefined : (ext === "pdf" ? { type: "application/pdf" } : undefined));
+        const res = await withRetry(() => S.assets.upload(v.file, opts));
+        Object.assign(data, { kind: "file", assetId: res.id, contentType: res.contentType, sizeBytes: res.sizeBytes, fileName: v.file.name });
+      }
+      if (item) {
+        await withRetry(() => S.db.doc("dokumente/" + item.id).update(data));
+        if (data.assetId && item.assetId && item.assetId !== data.assetId && S.assets) S.assets.delete(item.assetId).catch(() => {});
+      } else {
+        const ref = S.db.collection("dokumente").doc();
+        await withRetry(() => ref.set({ ...data, authorId: S.uid, createdAt: nowIso() }));
+      }
+    },
+  });
+}
+function renderDokumente() {
+  const tools = $("#docTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-primary btn-sm", onclick: () => docForm(null) }, "Dokument hinzufügen"));
+  const cats = DOC_CATS.filter((c) => S.dokumente.some((d) => d.category === c));
+  if (S.docCat !== "Alle" && !cats.includes(S.docCat)) S.docCat = "Alle";
+  const chips = $("#docChips"); chips.replaceChildren();
+  chips.hidden = cats.length < 2;
+  ["Alle", ...cats].forEach((c) => chips.append(h("button", { type: "button", class: "chip", "aria-pressed": String(S.docCat === c), onclick: () => { S.docCat = c; renderDokumente(); } }, c)));
+
+  const list = $("#docList");
+  if (!S.ready.dokumente && !S.offline) return;
+  if (!S.dokumente.length) {
+    list.replaceChildren(emptyState("Noch keine Dokumente",
+      S.canEdit ? "Laden Sie Formulare und Anleitungen als PDF hoch oder verlinken Sie den passenden Ordner." : "Formulare und Anleitungen stellt die Redaktion hier bereit.",
+      S.canEdit ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => docForm(null) }, "Erstes Dokument hinzufügen") : null));
+    return;
+  }
+  const terms = fold(S.docQuery).split(/\s+/).filter(Boolean);
+  const items = S.dokumente
+    .filter((d) => S.docCat === "Alle" || d.category === S.docCat)
+    .filter((d) => { if (!terms.length) return true; const hay = fold([d.title, d.description, d.category, d.fileName].join(" ")); return terms.every((t) => hay.includes(t)); })
+    .sort((a, b) => String(a.title).localeCompare(String(b.title), "de"));
+  if (!items.length) { list.replaceChildren(emptyState("Nichts gefunden", "Anderen Suchbegriff versuchen oder die Kategorie auf „Alle“ stellen.")); return; }
+  const ul = h("ul", { class: "list" });
+  for (const d of items) {
+    const href = docHref(d);
+    const meta = [d.category, d.kind === "link" ? "Externer Link" : fmtSize(d.sizeBytes), d.updatedAt ? "Stand " + fmtStamp(d.updatedAt) : null].filter(Boolean);
+    ul.append(h("li", { class: "doc" },
+      h("div", { class: "ftype", "aria-hidden": "true" }, fileKind(d)),
+      h("div", { style: "min-width:0" },
+        href ? h("a", { class: "doc-title", href, target: "_blank", rel: "noopener noreferrer" }, d.title) : h("span", { class: "doc-title" }, d.title),
+        d.description ? h("p", { class: "doc-desc" }, d.description) : null,
+        h("div", { class: "meta" }, meta.map((m) => h("span", null, m))),
+        S.canEdit ? h("div", { class: "actions" },
+          h("button", { type: "button", class: "btn-text", onclick: () => docForm(d) }, "Bearbeiten"),
+          confirmBtn("Löschen", async () => {
+            await S.db.doc("dokumente/" + d.id).delete();
+            if (d.assetId && S.assets) S.assets.delete(d.assetId).catch(() => {});
+          })) : null)));
+  }
+  list.replaceChildren(ul);
+}
+
+/* ---------- Wiki ---------- */
+/* Veröffentlichte Artikel liegen in "wiki" (lesen alle), Entwürfe in "wikiEntwurf" (nur Redaktion). */
+const PH_RE = /\[[^\]\n]{2,}\]/g;
+const placeholderCount = (a) => ([a.summary, a.body, a.kontakt].join("\n").match(PH_RE) || []).length;
+const byTitle = (a, b) => String(a.title).localeCompare(String(b.title), "de");
+function wikiAll() {
+  return [...S.wiki.map((a) => ({ ...a, _col: "wiki" })), ...(S.canEdit ? S.wikiDrafts.map((a) => ({ ...a, _col: "wikiEntwurf" })) : [])];
+}
+function slugify(str) { return fold(str).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "artikel"; }
+function wikiLink(a, sub) {
+  return h("a", { class: "wiki-link", href: "#wiki-" + a.id }, h("strong", null, a.title || "Ohne Titel"), sub ? h("span", null, sub) : null);
+}
+function wikiForm(item) {
+  openSheet({
+    title: item ? "Artikel bearbeiten" : "Neuer Wiki-Artikel",
+    fields: [
+      { name: "title", label: "Frage oder Thema", required: true, max: 140, placeholder: "z. B. Wie melde ich mich krank?" },
+      { name: "category", label: "Thema", type: "select", options: WIKI_CATS, required: true, pair: true },
+      { name: "status", label: "Status", type: "select", options: WIKI_STATUS, required: true, pairEnd: true },
+      { name: "summary", label: "Kurz gesagt", type: "textarea", max: 600, hint: "Ein, zwei Sätze. Stehen oben im Artikel und in der Übersicht." },
+      { name: "body", label: "Ausführlich", type: "textarea", max: 12000,
+        hint: "„## “ am Zeilenanfang ergibt eine Zwischenüberschrift, „1. “ einen Schritt, „- “ eine Aufzählung, **Text** wird fett. Text in [eckigen Klammern] markiert die App als offenen Platzhalter." },
+      { name: "kontakt", label: "Ansprechpartner", max: 200, placeholder: "z. B. Personalabteilung, Durchwahl 120" },
+    ],
+    values: item ? { ...item, status: item._col === "wiki" ? WIKI_STATUS[1] : WIKI_STATUS[0] } : { category: WIKI_CATS[0], status: WIKI_STATUS[0] },
+    onSubmit: async (v) => {
+      const target = v.status === WIKI_STATUS[1] ? "wiki" : "wikiEntwurf";
+      let id = item ? item.id : slugify(v.title);
+      if (!item) { const taken = new Set(wikiAll().map((a) => a.id)); const base = id; let n = 2; while (taken.has(id)) id = `${base}-${n++}`; }
+      const data = { title: v.title, category: v.category, summary: v.summary, body: v.body, kontakt: v.kontakt,
+        createdAt: (item && item.createdAt) || nowIso(), updatedAt: nowIso(), updatedBy: S.uid };
+      await withRetry(() => S.db.doc(`${target}/${id}`).set(data));
+      if (item && item._col !== target) await withRetry(() => S.db.doc(`${item._col}/${id}`).delete());
+      location.hash = "wiki-" + id;
+    },
+  });
+}
+function publishBtn(a) {
+  const n = placeholderCount(a);
+  return confirmBtn("Veröffentlichen", async () => {
+    const { _col, id, ...data } = a;
+    await S.db.doc("wiki/" + id).set({ ...data, updatedAt: nowIso(), updatedBy: S.uid });
+    await S.db.doc("wikiEntwurf/" + id).delete();
+  }, { cls: "btn btn-dark btn-sm", armed: n ? `${n} Platzhalter offen. Trotzdem veröffentlichen?` : "Jetzt für alle veröffentlichen?", busy: "Wird veröffentlicht …", done: "Veröffentlicht" });
+}
+function renderWiki() {
+  const idx = $("#wikiIndex"), art = $("#wikiArticle");
+  if (S.wikiId) { idx.hidden = true; art.hidden = false; renderWikiArticle(); return; }
+  idx.hidden = false; art.hidden = true;
+
+  const tools = $("#wikiTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-primary btn-sm", onclick: () => wikiForm(null) }, "Artikel schreiben"));
+
+  const dr = $("#wikiDrafts"); dr.replaceChildren();
+  if (S.canEdit && S.wikiDrafts.length) {
+    const drafts = S.wikiDrafts.map((a) => ({ ...a, _col: "wikiEntwurf" })).sort(byTitle);
+    dr.append(h("div", { class: "drafts" },
+      h("div", { class: "drafts-head" }, h("strong", null, `Entwürfe (${drafts.length})`),
+        h("span", { class: "hint" }, "Nur für die Redaktion sichtbar. Gelb markierte Platzhalter ausfüllen, dann veröffentlichen.")),
+      h("div", { class: "wiki-links" }, drafts.map((a) => { const n = placeholderCount(a); return wikiLink(a, `${a.category} · ${n ? n + " Platzhalter offen" : "bereit zum Veröffentlichen"}`); }))));
+  }
+
+  const pub = S.wiki;
+  const cats = WIKI_CATS.filter((c) => pub.some((a) => a.category === c));
+  if (S.wikiCat !== "Alle" && !cats.includes(S.wikiCat)) S.wikiCat = "Alle";
+  const chips = $("#wikiChips"); chips.replaceChildren();
+  chips.hidden = cats.length < 2;
+  ["Alle", ...cats].forEach((c) => chips.append(h("button", { type: "button", class: "chip", "aria-pressed": String(S.wikiCat === c), onclick: () => { S.wikiCat = c; renderWiki(); } }, c)));
+
+  const list = $("#wikiList"), recent = $("#wikiRecent");
+  if (!S.ready.wiki && !S.offline) return;
+  const latest = [...pub].sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))).slice(0, 5);
+  recent.replaceChildren(latest.length ? h("div", { class: "wiki-links related" }, latest.map((a) => wikiLink(a, a.updatedAt ? "Stand " + fmtStamp(a.updatedAt) : null)))
+    : h("p", { class: "loading" }, "Noch keine Artikel."));
+  if (!pub.length) {
+    list.replaceChildren(emptyState("Das Wiki ist noch leer",
+      S.canEdit ? "Schreiben Sie den ersten Artikel oder veröffentlichen Sie einen der Entwürfe oben." : "Die Redaktion stellt hier bald Antworten auf Alltagsfragen bereit."));
+    return;
+  }
+  const terms = fold(S.wikiQuery).split(/\s+/).filter(Boolean);
+  const inCat = pub.filter((a) => S.wikiCat === "Alle" || a.category === S.wikiCat);
+  const sub = (a) => clip(plain(a.summary || a.body), 150);
+  if (terms.length) {
+    const hits = inCat.filter((a) => { const hay = fold([a.title, a.summary, a.body, a.category, a.kontakt].join(" ")); return terms.every((t) => hay.includes(t)); })
+      .sort((a, b) => (terms.every((t) => fold(b.title).includes(t)) - terms.every((t) => fold(a.title).includes(t))) || byTitle(a, b));
+    list.replaceChildren(hits.length
+      ? h("div", null, h("p", { class: "count" }, hits.length === 1 ? "1 Artikel gefunden" : `${hits.length} Artikel gefunden`), h("div", { class: "wiki-links" }, hits.map((a) => wikiLink(a, sub(a)))))
+      : emptyState("Nichts gefunden", "Anders formulieren oder die Redaktion fragen. Fehlende Themen nimmt sie gern auf."));
+    return;
+  }
+  const order = [...WIKI_CATS, ...new Set(inCat.map((a) => a.category).filter((c) => !WIKI_CATS.includes(c)))];
+  list.replaceChildren(...order.map((c) => {
+    const items = inCat.filter((a) => a.category === c).sort(byTitle);
+    return items.length ? h("section", { class: "wiki-group" }, h("h3", { class: "group-title" }, c), h("div", { class: "wiki-links" }, items.map((a) => wikiLink(a, sub(a))))) : null;
+  }).filter(Boolean));
+}
+function renderWikiArticle() {
+  const art = $("#wikiArticle");
+  const a = wikiAll().find((x) => x.id === S.wikiId);
+  const back = h("a", { class: "back", href: "#wiki" }, "Alle Wiki-Artikel");
+  if (!a) {
+    const loading = !S.offline && (!S.ready.wiki || (S.canEdit && !S.ready.wikiDrafts));
+    art.replaceChildren(back, loading ? h("p", { class: "loading" }, "Artikel wird geladen …")
+      : emptyState("Artikel nicht gefunden", "Vielleicht wurde er umbenannt oder gelöscht. Suchen Sie im Wiki nach dem Thema."));
+    return;
+  }
+  const draft = a._col === "wikiEntwurf";
+  const marks = S.canEdit;
+  const n = placeholderCount(a);
+  const related = S.wiki.filter((x) => x.category === a.category && x.id !== a.id).sort(byTitle).slice(0, 6);
+  const kontakt = a.kontakt ? h("p") : null;
+  if (kontakt) appendInline(kontakt, a.kontakt, { marks });
+  art.replaceChildren(h("div", { class: "layout" },
+    h("article", { class: "main article", "aria-labelledby": "h-article" },
+      back,
+      draft ? h("div", { class: "draft-banner" }, h("span", null, n ? `Entwurf, nur für die Redaktion sichtbar. ${n} Platzhalter offen.` : "Entwurf, nur für die Redaktion sichtbar."), S.db ? publishBtn(a) : null) : null,
+      h("div", { class: "meta" }, h("span", { class: "eyebrow" }, a.category || "Wiki"), a.updatedAt ? h("span", null, "Stand " + fmtStamp(a.updatedAt)) : null),
+      h("h2", { id: "h-article" }, a.title),
+      a.summary ? h("div", { class: "kurz" }, h("span", { class: "eyebrow" }, "Kurz gesagt"), h("div", { class: "prose" }, richText(a.summary, { marks }))) : null,
+      a.body ? h("div", { class: "prose wbody" }, richText(a.body, { marks })) : null,
+      h("div", { class: "byline" },
+        a.updatedBy ? [h("span", null, "Zuletzt bearbeitet von"), personEls(a.updatedBy)] : null,
+        S.canEdit && S.db ? h("div", { class: "actions" },
+          h("button", { type: "button", class: "btn-text", onclick: () => wikiForm(a) }, "Bearbeiten"),
+          confirmBtn("Löschen", async () => { await S.db.doc(`${a._col}/${a.id}`).delete(); location.hash = "wiki"; })) : null)),
+    h("aside", { class: "aside" },
+      kontakt ? h("div", { class: "contact-box" }, h("span", { class: "eyebrow" }, "Ansprechpartner"), kontakt) : null,
+      related.length ? h("div", null, h("div", { class: "sec-head" }, h("h2", null, "Mehr zu " + a.category)), h("div", { class: "wiki-links related" }, related.map((r) => wikiLink(r)))) : null)));
+  fillPeople(art);
+}
+function renderDocWiki() {
+  const box = $("#docWiki");
+  if (!S.ready.wiki && !S.offline) return;
+  const items = [...S.wiki].sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))).slice(0, 5);
+  box.replaceChildren(
+    items.length ? h("div", { class: "wiki-links related" }, items.map((a) => wikiLink(a))) : h("p", { class: "loading" }, "Noch keine Wiki-Artikel."),
+    h("p", null, h("a", { class: "btn btn-outline btn-sm", href: "#wiki" }, "Zum Wiki")));
+}
+
+/* ---------- Benefits ---------- */
+function benefitForm(item) {
+  openSheet({
+    title: item ? "Benefit bearbeiten" : "Neuer Benefit",
+    fields: [
+      { name: "title", label: "Titel", required: true, max: 120, placeholder: "z. B. Zuschuss zum Kita-Beitrag" },
+      { name: "category", label: "Thema", type: "select", options: BEN_CATS, required: true },
+      { name: "highlight", label: "Wert, groß angezeigt", max: 24, placeholder: "z. B. bis 100 €", pair: true },
+      { name: "highlightSub", label: "Zusatz zum Wert", max: 40, placeholder: "z. B. im Monat", pairEnd: true },
+      { name: "summary", label: "Kurz gesagt", type: "textarea", required: true, max: 600, hint: "Ein, zwei Sätze. Stehen auf der Karte und oben im Benefit." },
+      { name: "body", label: "So bekommen Sie es", type: "textarea", max: 8000,
+        hint: "„## “ am Zeilenanfang ergibt eine Zwischenüberschrift, „1. “ einen Schritt, „- “ eine Aufzählung, **Text** wird fett." },
+      { name: "kontakt", label: "Ansprechpartner", max: 200, placeholder: "z. B. Personalabteilung, Durchwahl 120" },
+      { name: "url", label: "Link zum Angebot", type: "url", max: 600, placeholder: "https://…",
+        validate: (x) => (x && !safeUrl(x) ? "Der Link muss mit https:// beginnen." : null) },
+      { name: "order", label: "Reihenfolge", type: "number", max: 4, hint: "Kleinere Zahlen stehen weiter vorn." },
+    ],
+    values: item ? { ...item, order: item.order != null ? String(item.order) : "" } : { category: BEN_CATS[0] },
+    onSubmit: async (v) => {
+      let id = item ? item.id : slugify(v.title);
+      if (!item) { const taken = new Set(S.benefits.map((b) => b.id)); const base = id; let n = 2; while (taken.has(id)) id = `${base}-${n++}`; }
+      const data = { title: v.title, category: v.category, highlight: v.highlight, highlightSub: v.highlightSub, summary: v.summary, body: v.body,
+        kontakt: v.kontakt, url: safeUrl(v.url) || "", order: v.order === "" ? 100 : Number(v.order) || 0,
+        createdAt: (item && item.createdAt) || nowIso(), updatedAt: nowIso(), updatedBy: S.uid };
+      await withRetry(() => S.db.doc("benefits/" + id).set(data));
+      location.hash = "benefit-" + id;
+    },
+  });
+}
+const byOrder = (a, b) => (a.order ?? 100) - (b.order ?? 100) || String(a.title).localeCompare(String(b.title), "de");
+function benefitValue(b) {
+  return b.highlight ? h("div", { class: "b-value" }, b.highlight, b.highlightSub ? h("small", null, b.highlightSub) : null) : null;
+}
+function renderBenefits() {
+  const idx = $("#benIndex"), det = $("#benDetail");
+  if (S.benefitId) { idx.hidden = true; det.hidden = false; renderBenefitDetail(); return; }
+  idx.hidden = false; det.hidden = true;
+  const tools = $("#benTools"); tools.replaceChildren();
+  if (S.canEdit && S.db) tools.append(h("button", { type: "button", class: "btn btn-primary btn-sm", onclick: () => benefitForm(null) }, "Benefit hinzufügen"));
+  const cats = BEN_CATS.filter((c) => S.benefits.some((b) => b.category === c));
+  if (S.benCat !== "Alle" && !cats.includes(S.benCat)) S.benCat = "Alle";
+  const chips = $("#benChips"); chips.replaceChildren();
+  chips.hidden = cats.length < 2;
+  ["Alle", ...cats].forEach((c) => chips.append(h("button", { type: "button", class: "chip", "aria-pressed": String(S.benCat === c), onclick: () => { S.benCat = c; renderBenefits(); } }, c)));
+  const list = $("#benList");
+  if (!S.ready.benefits && !S.offline) return;
+  if (!S.benefits.length) {
+    list.replaceChildren(emptyState("Noch keine Benefits eingetragen",
+      S.canEdit ? "Tragen Sie Zuschüsse, Rabatte und andere Zusatzleistungen ein, mit Wert, Schritten und Ansprechpartner." : "Die Redaktion stellt hier bald alle Zusatzleistungen vor.",
+      S.canEdit ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => benefitForm(null) }, "Ersten Benefit hinzufügen") : null));
+    return;
+  }
+  const items = S.benefits.filter((b) => S.benCat === "Alle" || b.category === S.benCat).sort(byOrder);
+  list.replaceChildren(h("div", { class: "benefits" }, items.map((b) => h("a", { class: "benefit", href: "#benefit-" + b.id },
+    h("span", { class: "b-kicker" }, b.category || "Benefit"),
+    h("span", { class: "b-title" }, b.title),
+    benefitValue(b),
+    b.summary ? h("span", { class: "b-sum" }, clip(plain(b.summary), 170)) : null,
+    h("span", { class: "b-more" }, "Mehr erfahren")))));
+}
+function renderBenefitDetail() {
+  const det = $("#benDetail");
+  const b = S.benefits.find((x) => x.id === S.benefitId);
+  const back = h("a", { class: "back", href: "#benefits" }, "Alle Benefits");
+  if (!b) {
+    det.replaceChildren(back, !S.ready.benefits && !S.offline ? h("p", { class: "loading" }, "Benefit wird geladen …")
+      : emptyState("Benefit nicht gefunden", "Vielleicht wurde er geändert oder entfernt. Alle aktuellen Benefits finden Sie in der Übersicht."));
+    return;
+  }
+  const others = S.benefits.filter((x) => x.id !== b.id).sort(byOrder).slice(0, 6);
+  const link = safeUrl(b.url);
+  const kontakt = b.kontakt ? h("p") : null;
+  if (kontakt) appendInline(kontakt, b.kontakt, {});
+  det.replaceChildren(h("div", { class: "layout" },
+    h("article", { class: "main article", "aria-labelledby": "h-benefit" },
+      back,
+      h("div", { class: "meta" }, h("span", { class: "eyebrow" }, b.category || "Benefit"), b.updatedAt ? h("span", null, "Stand " + fmtStamp(b.updatedAt)) : null),
+      h("h2", { id: "h-benefit" }, b.title),
+      benefitValue(b),
+      b.summary ? h("div", { class: "kurz" }, h("span", { class: "eyebrow" }, "Kurz gesagt"), h("div", { class: "prose" }, richText(b.summary))) : null,
+      b.body ? h("div", { class: "prose wbody" }, richText(b.body)) : null,
+      S.canEdit && S.db ? h("div", { class: "byline" }, h("div", { class: "actions" },
+        h("button", { type: "button", class: "btn-text", onclick: () => benefitForm(b) }, "Bearbeiten"),
+        confirmBtn("Löschen", async () => { await S.db.doc("benefits/" + b.id).delete(); location.hash = "benefits"; }))) : null),
+    h("aside", { class: "aside" },
+      kontakt || link ? h("div", { class: "contact-box offer-box" },
+        kontakt ? [h("span", { class: "eyebrow" }, "Ansprechpartner"), kontakt] : null,
+        link ? h("a", { class: "btn btn-primary btn-sm", href: link, target: "_blank", rel: "noopener noreferrer" }, "Zum Angebot") : null) : null,
+      others.length ? h("div", null, h("div", { class: "sec-head" }, h("h2", null, "Weitere Benefits")),
+        h("div", { class: "wiki-links related" }, others.map((o) => h("a", { class: "wiki-link", href: "#benefit-" + o.id },
+          h("strong", null, o.title), o.highlight ? h("span", null, [o.highlight, o.highlightSub].filter(Boolean).join(" ")) : null)))) : null)));
+}
+
+/* ---------- Navigation ---------- */
+const VIEWS = ["aktuelles", "geburtstage", "wiki", "benefits", "telefonbuch", "dokumente"];
+function route() {
+  const raw = (location.hash || "").slice(1);
+  let next = raw, wikiId = null, benefitId = null;
+  if (raw.startsWith("wiki-")) { next = "wiki"; wikiId = raw.slice(5); }
+  if (raw.startsWith("benefit-")) { next = "benefits"; benefitId = raw.slice(8); }
+  if (!VIEWS.includes(next)) next = "aktuelles";
+  const changed = next !== S.view || wikiId !== S.wikiId || benefitId !== S.benefitId;
+  S.view = next; S.wikiId = wikiId; S.benefitId = benefitId;
+  if (next === "wiki") renderWiki();
+  if (next === "benefits") renderBenefits();
+  for (const name of VIEWS) $("#view-" + name).hidden = name !== next;
+  const tabView = next === "geburtstage" ? "aktuelles" : next;
+  document.querySelectorAll(".tab").forEach((t) => { if (t.dataset.view === tabView) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
+  if (changed) window.scrollTo(0, 0);
+  /* Auf schmalen Bildschirmen lässt sich die Reiterleiste wischen: aktiven Reiter sichtbar halten */
+  const bar = $(".tabs-inner"), active = bar.querySelector('[aria-current="page"]');
+  if (active && bar.scrollWidth > bar.clientWidth) {
+    const left = active.offsetLeft - bar.offsetLeft, right = left + active.offsetWidth;
+    if (left < bar.scrollLeft || right > bar.scrollLeft + bar.clientWidth) bar.scrollLeft = Math.max(0, left - 16);
+  }
+  updateBadge();
+  maybeMarkSeen();
+}
+window.addEventListener("hashchange", route);
+
+let pbTimer, docTimer;
+$("#pbSearch").addEventListener("input", (e) => { clearTimeout(pbTimer); pbTimer = setTimeout(() => { S.pbQuery = e.target.value; renderKontakte(); }, 120); });
+let wikiTimer;
+$("#wikiSearch").addEventListener("input", (e) => { clearTimeout(wikiTimer); wikiTimer = setTimeout(() => { S.wikiQuery = e.target.value; renderWiki(); }, 120); });
+$("#docSearch").addEventListener("input", (e) => { clearTimeout(docTimer); docTimer = setTimeout(() => { S.docQuery = e.target.value; renderDokumente(); }, 120); });
+document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copyText(b.dataset.copy)));
+
+function renderAll() { renderNews(); renderTermine(); renderGeburtstage(); renderKalender(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); renderBenefits(); }
+
+function goOffline(msg) {
+  S.offline = true;
+  $("#noticeText").textContent = msg;
+  $("#notice").hidden = false;
+  renderAll();
+}
+
+/* ---------- Start ---------- */
+renderHead(null);
+route();
+let shownDay = localDay(new Date());
+setInterval(() => {
+  const d = localDay(new Date());
+  if (d === shownDay) return;
+  shownDay = d;
+  renderHead(S.me); renderTermine(); renderGeburtstage(); renderKalender();
+}, 60000);
+
+const RENDER = { news: renderNews, termine: renderTermine, kontakte: renderKontakte, dokumente: renderDokumente,
+  wiki: () => { renderWiki(); renderDocWiki(); }, wikiDrafts: renderWiki, benefits: renderBenefits,
+  geburtstage: () => { renderGeburtstage(); renderKalender(); renderHead(S.me); } };
+const SOURCES = { wikiDrafts: "wikiEntwurf" };
+function subscribe(name) {
+  S.db.collection(SOURCES[name] || name).onSnapshot((snap) => {
+    S[name] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    S.ready[name] = true;
+    RENDER[name]();
+    if (name === "news") maybeMarkSeen();
+  }, (e) => {
+    if (e && e.code === "revoked") goOffline("Der Zugriff auf die Inhalte wurde beendet. Bitte die Seite neu laden.");
+    else if (e && e.code === "unavailable") setTimeout(() => subscribe(name), 3000);
+  });
+}
+
+(async () => {
+  const c = window.claude;
+  if (!c || typeof c.use !== "function") { goOffline("Diese Seite zeigt ihre Inhalte nur, wenn sie über claude.ai mit dem Firmenkonto geöffnet wird."); return; }
+  const [db, user, assets] = await Promise.all([c.use("db"), c.use("user"), c.use("assets")].map((p) => p.catch(() => null)));
+  S.user = user; S.assets = assets;
+  let me = null;
+  if (user) { try { me = await user.me(); } catch (e) { me = null; } }
+  S.uid = me && me.id || null;
+  S.canEdit = !!(me && me.canEdit);
+  S.me = me;
+  renderHead(me);
+  if (!db) { goOffline("Die Inhalte sind nur für angemeldete Mitarbeiterinnen und Mitarbeiter sichtbar. Bitte über claude.ai mit dem Firmenkonto anmelden."); return; }
+  S.db = db;
+  renderAll();
+  ["news", "termine", "geburtstage", "kontakte", "dokumente", "wiki", "benefits"].forEach(subscribe);
+  if (S.canEdit) subscribe("wikiDrafts");
+  if (S.uid) {
+    try {
+      const snap = await db.doc(`data/users/${S.uid}/state`).get();
+      S.seenAt = snap.exists ? (snap.data().newsSeenAt || null) : null;
+    } catch (e) { S.seenAt = null; }
+    S.visitSeenAt = S.seenAt; S.seenLoaded = true;
+    renderNews(); maybeMarkSeen();
+  }
+})();
+})();
+</script>

@@ -239,9 +239,9 @@ const PORTRAIT: Layout = {
   // (x − 535)·k, y = 760 + (y − 760)·k).
   regions: [
     { text: "Iran", at: [700, 480], delay: 8 },
-    { text: "Persischer Golf", at: [350, 840], delay: 12 },
+    { text: "Persischer Golf", at: [320, 856], delay: 12 },
     { text: "Golf von Oman", at: [703, 1010], delay: 16 },
-    { text: "Oman", at: [490, 905], delay: 20 },
+    { text: "Oman", at: [521, 827], delay: 20 },
   ],
   regionSize: 26,
   strait: (mx, my, leaderIn) => {

@@ -36,6 +36,32 @@ export const breakAfterDash = (text: string): string[] => {
   return m ? [m[1], m[2]] : [text];
 };
 
+/**
+ * Splits a headline into two lines of about equal length at a word gap.
+ * A number stays with the word after it ("110 Dollar" never breaks).
+ */
+export const splitBalanced = (text: string): string[] => {
+  const words = text
+    .trim()
+    .replace(/(\d)\s+(?=\S)/g, "$1 ")
+    .split(/\s+/);
+  if (words.length < 2) {
+    return [text];
+  }
+  let best = 1;
+  let bestDiff = Infinity;
+  for (let i = 1; i < words.length; i++) {
+    const diff = Math.abs(
+      words.slice(0, i).join(" ").length - words.slice(i).join(" ").length,
+    );
+    if (diff < bestDiff) {
+      best = i;
+      bestDiff = diff;
+    }
+  }
+  return [words.slice(0, best).join(" "), words.slice(best).join(" ")];
+};
+
 /** Type scale for 1920×1080 (Filson Pro: Bold titles 1.15, Medium body 1.5, Regular side 1.3). */
 export const TYPE = {
   display: 132,

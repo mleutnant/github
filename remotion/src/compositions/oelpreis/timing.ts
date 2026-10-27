@@ -1,4 +1,5 @@
-// Ölpreis / Straße von Hormus — headline wall, 18,5 s @ 30 fps, 1920×1080.
+// Ölpreis / Straße von Hormus — headline wall, 18,5 s @ 30 fps,
+// 1920×1080 (16:9) and 1080×1920 (9:16, same timing, own layouts).
 // Same scene grid as the QuinLine® film: scenes overlap by one pane-slide
 // transition (TRANSITION frames) and every scene starts on a 15-frame beat.
 

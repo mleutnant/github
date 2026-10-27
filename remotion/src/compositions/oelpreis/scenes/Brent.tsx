@@ -22,6 +22,7 @@ import {
   YellowFoot,
   clamp,
   fmt,
+  splitBalanced,
   type OelpreisProps,
 } from "../kit";
 
@@ -122,32 +123,6 @@ const DRIFT_FROM = 80; // calm hold until the pane covers the scene
 // Helpers
 // ---------------------------------------------------------------------------
 
-/**
- * Splits a headline into two lines of about equal length at a word gap.
- * A number stays with the word after it ("110 Dollar" never breaks).
- */
-const splitTitle = (text: string): string[] => {
-  const words = text
-    .trim()
-    .replace(/(\d)\s+(?=\S)/g, "$1 ")
-    .split(/\s+/);
-  if (words.length < 2) {
-    return [text];
-  }
-  let best = 1;
-  let bestDiff = Infinity;
-  for (let i = 1; i < words.length; i++) {
-    const diff = Math.abs(
-      words.slice(0, i).join(" ").length - words.slice(i).join(" ").length,
-    );
-    if (diff < bestDiff) {
-      best = i;
-      bestDiff = diff;
-    }
-  }
-  return [words.slice(0, best).join(" "), words.slice(best).join(" ")];
-};
-
 /** Decimals the value actually carries (0 for the usual whole-dollar price). */
 const decimalsOf = (value: number) =>
   Number.isInteger(value) ? 0 : Number.isInteger(value * 10) ? 1 : 2;
@@ -162,7 +137,7 @@ const numberEm = (text: string) =>
 
 const Headline: React.FC<{ text: string }> = ({ text }) => {
   const frame = useCurrentFrame();
-  const lines = splitTitle(text);
+  const lines = splitBalanced(text);
   const longest = Math.max(...lines.map((l) => l.length));
   // Guard against a longer headline running into the frame.
   const size = Math.min(TYPE.title, TITLE_MAX_W / (longest * TITLE_CHAR));

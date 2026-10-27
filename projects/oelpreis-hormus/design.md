@@ -1,4 +1,4 @@
-# Ölpreis / Straße von Hormus — Headline Wall (18,5 s, 16:9)
+# Ölpreis / Straße von Hormus — Headline Wall (18,5 s, 16:9 und 9:16)
 
 Kurzer News-Clip im SCHMIDT-Design. Zwei Schlagzeilen tragen den Film:
 
@@ -8,12 +8,15 @@ Kurzer News-Clip im SCHMIDT-Design. Zwei Schlagzeilen tragen den Film:
 Beide sind Props und lassen sich vor jedem Render ändern, ebenso der Wert des Zählers (`brentValue`)
 und die Stand-Zeile (`stand`).
 
-- Composition: `remotion/src/compositions/oelpreis/` (`Oelpreis-Hormus`, Szenen einzeln unter „Oelpreis-Szenen“)
-- Render: `cd remotion && npm run render -- Oelpreis-Hormus oelpreis-hormus Oelpreis_Hormus.mp4`
+- Composition: `remotion/src/compositions/oelpreis/` — `Oelpreis-Hormus` (1920×1080) und `Oelpreis-Hormus-9x16`
+  (1080×1920), gleiche Komponente mit zwei Layouts; Szenen einzeln unter „Oelpreis-Szenen“ / „Oelpreis-Szenen-9x16“
+- Render 16:9: `cd remotion && npm run render -- Oelpreis-Hormus oelpreis-hormus Oelpreis_Hormus.mp4`
+- Render 9:16: `cd remotion && npm run render -- Oelpreis-Hormus-9x16 oelpreis-hormus Oelpreis_Hormus_9x16.mp4`
+- 9:16 hält die Social-Safe-Zone ein: Texte innerhalb x 60–940 / y 220–1560 (rechts Buttons, unten Caption bei Reels/TikTok)
 - Mit anderen Werten: `npm run render -- Oelpreis-Hormus oelpreis-hormus Oelpreis_Hormus.mp4 --props='{"brentHeadline":"Brent über 110 Dollar","brentValue":110,"hormusHeadline":"Ölpreis steigt – Straße von Hormus im Fokus","stand":"Stand: 27. Oktober 2026"}'`
-- Karte: `remotion/src/compositions/oelpreis/geo.ts`, erzeugt mit `assets/make-geo.mjs` aus Natural Earth 10m
-  (world-atlas@2.0.2, gemeinfrei). Neu erzeugen: `node assets/make-geo.mjs <world-atlas-Ordner> <ziel.ts>`
-  (braucht `d3-geo` und `topojson-client`).
+- Karte: `remotion/src/compositions/oelpreis/geo.ts` (16:9) und `geoPortrait.ts` (9:16), erzeugt mit
+  `assets/make-geo.mjs` aus Natural Earth 10m (world-atlas@2.0.2, gemeinfrei). Neu erzeugen:
+  `node assets/make-geo.mjs <world-atlas-Ordner> <ziel.ts> [landscape|portrait]` (braucht `d3-geo` und `topojson-client`).
 
 ## Ablauf (30 fps, Szenenwechsel per „Pane Slide“ aus dem QuinLine®-Film)
 

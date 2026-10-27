@@ -17,6 +17,7 @@ import {
   TYPE,
   TitleRule,
   YellowFoot,
+  breakAfterDash,
   clamp,
   type OelpreisProps,
 } from "../kit";
@@ -48,15 +49,6 @@ const BRACKET = [
 // Text block: left-aligned, vertically centred in frame A.
 const TEXT_LEFT = 400;
 const RULE_W = 200;
-
-/**
- * Sets a headline as two deliberate lines after its dash
- * ("A – B" → ["A –", "B"]); without a dash it stays on one line.
- */
-const breakAfterDash = (text: string): string[] => {
-  const m = text.match(/^(.+?\s[–—-])\s+(.+)$/);
-  return m ? [m[1], m[2]] : [text];
-};
 
 export const AbschlussScene: React.FC<OelpreisProps> = ({
   brentHeadline,

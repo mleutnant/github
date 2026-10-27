@@ -27,6 +27,15 @@ export const OELPREIS_DEFAULTS: OelpreisProps = {
   stand: "Stand: 27. Oktober 2026",
 };
 
+/**
+ * Sets a headline as two deliberate lines after its dash
+ * ("A – B" → ["A –", "B"]); without a dash it stays on one line.
+ */
+export const breakAfterDash = (text: string): string[] => {
+  const m = text.match(/^(.+?\s[–—-])\s+(.+)$/);
+  return m ? [m[1], m[2]] : [text];
+};
+
 /** Type scale for 1920×1080 (Filson Pro: Bold titles 1.15, Medium body 1.5, Regular side 1.3). */
 export const TYPE = {
   display: 132,

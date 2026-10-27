@@ -9,7 +9,14 @@ import { interpolate, useCurrentFrame } from "remotion";
 import { colors, ease } from "../../../brand/tokens";
 import { BORDERS_D, LAND_D, ROUTE, STRAIT } from "../geo";
 import type { OelpreisProps } from "../kit";
-import { RiseText, SceneBg, TitleRule, YellowFoot, clamp } from "../kit";
+import {
+  RiseText,
+  SceneBg,
+  TitleRule,
+  YellowFoot,
+  breakAfterDash,
+  clamp,
+} from "../kit";
 
 type Pt = readonly [number, number];
 
@@ -29,7 +36,10 @@ const toScreen = ([x, y]: Pt, k: number): Pt => [
 const SEG = ROUTE.slice(1).map((p, i) =>
   Math.hypot(p[0] - ROUTE[i][0], p[1] - ROUTE[i][1]),
 );
-const CUM = SEG.reduce<number[]>((acc, l) => [...acc, acc[acc.length - 1] + l], [0]);
+const CUM = SEG.reduce<number[]>(
+  (acc, l) => [...acc, acc[acc.length - 1] + l],
+  [0],
+);
 const ROUTE_LEN = CUM[CUM.length - 1];
 
 // Route point closest to the strait (STRAIT itself sits on the Musandam tip,
@@ -41,7 +51,10 @@ const NEAREST = SEG.reduce(
     const [bx, by] = ROUTE[i + 1];
     const t = Math.max(
       0,
-      Math.min(1, ((SX - ax) * (bx - ax) + (SY - ay) * (by - ay)) / (len * len)),
+      Math.min(
+        1,
+        ((SX - ax) * (bx - ax) + (SY - ay) * (by - ay)) / (len * len),
+      ),
     );
     const at: Pt = [ax + (bx - ax) * t, ay + (by - ay) * t];
     const d = Math.hypot(at[0] - SX, at[1] - SY);
@@ -107,7 +120,7 @@ const markerPoints = (() => {
 })();
 
 // Headline field (bottom-left).
-const PANEL = { bottom: 90, width: 1020, padX: 64, padY: 44 };
+const PANEL = { bottom: 90, width: 1080, padX: 64, padY: 44 };
 
 export const HormusScene: React.FC<OelpreisProps> = ({ hormusHeadline }) => {
   const frame = useCurrentFrame();
@@ -270,7 +283,9 @@ export const HormusScene: React.FC<OelpreisProps> = ({ hormusHeadline }) => {
           fontSize: 38,
         }}
       >
-        <div style={{ fontWeight: 700, lineHeight: 1.15, whiteSpace: "nowrap" }}>
+        <div
+          style={{ fontWeight: 700, lineHeight: 1.15, whiteSpace: "nowrap" }}
+        >
           Straße von Hormus
         </div>
       </RiseText>
@@ -294,10 +309,12 @@ export const HormusScene: React.FC<OelpreisProps> = ({ hormusHeadline }) => {
               fontWeight: 700,
               lineHeight: 1.15,
               letterSpacing: "-0.01em",
-              textWrap: "balance",
+              whiteSpace: "nowrap",
             }}
           >
-            {hormusHeadline}
+            {breakAfterDash(hormusHeadline).map((line) => (
+              <div key={line}>{line}</div>
+            ))}
           </div>
         </RiseText>
         <TitleRule progress={ruleIn} width={120} style={{ marginTop: 18 }} />

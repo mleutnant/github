@@ -110,7 +110,7 @@ const TARGET_SIZE = 150;
 /** … unless the headline would get wider than this. */
 const TARGET_MAX_W = 1600;
 /** Unterlinie position under the target, em below the line top. */
-const RULE_TOP_EM = BASELINE + 0.28;
+const RULE_TOP_EM = BASELINE + 0.33;
 /** Unterlinie weight in wall px: the 4 px title rule, scaled to the type. */
 const RULE_W = (RULE.title * ROWS[TARGET_ROW].size) / TYPE.title;
 /** Focus point: middle between the target's cap top and its rule. */
@@ -120,9 +120,10 @@ const FOCUS_EM =
 const key = (row: number, j: number) => `${row}:${j}`;
 
 // Appearance frame of every headline. Three hand-picked leads open the wall
-// (fully in frame; the third is the later push target, so the camera returns to
-// a headline the viewer has already read), then the rest follow in a seeded order (centre of each row first), with the
-// interval shrinking — the news piling up.
+// (fully in frame; the third is the later push target, so the camera returns
+// to a headline the viewer has already read). The rest follow in a seeded
+// order (centre of each row first) with the interval shrinking — the news
+// piling up.
 const LEADS = [key(3, 0), key(6, 0), key(TARGET_ROW, 0)];
 const APPEAR: Record<string, number> = (() => {
   const items: Array<{ id: string; order: number }> = [];

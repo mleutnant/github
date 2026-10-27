@@ -24,6 +24,9 @@ und die Stand-Zeile (`stand`).
 | 9,5–15 s | Hormus | Karte Persischer Golf / Golf von Oman, Tankerroute stockt an der Meerenge, Schlagzeile im Panel |
 | 15–18,5 s | Abschluss | Beide Schlagzeilen, Stand-Zeile, Bildmarken-Rahmen |
 
+Ohne Ton. Selbstkontrolle nach dem Render: `python3 video-use/helpers/timeline_view.py projects/oelpreis-hormus/renders/Oelpreis_Hormus.mp4 0 9.25`
+(und `9.25 18.45`).
+
 ## Fakten (Stand 27.10.2026)
 
 - Brent am 27.10. vormittags rund 111 US-Dollar je Barrel (comdirect, 10:20 Uhr), Vortagesschluss 110,19.

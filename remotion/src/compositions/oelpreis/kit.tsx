@@ -44,7 +44,7 @@ export const splitBalanced = (text: string): string[] => {
   const words = text
     .trim()
     .replace(/(\d)\s+(?=\S)/g, "$1 ")
-    .split(/\s+/);
+    .split(/[ \t\n]+/);
   if (words.length < 2) {
     return [text];
   }

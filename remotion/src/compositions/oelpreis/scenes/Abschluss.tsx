@@ -7,8 +7,16 @@
 // offset down-right and sharing the frame's bottom edge. Only the part of that
 // pane outside the frame shows: a bracket that slides out from behind the
 // frame, its stroke broken where it passes behind the first.
+//
+// One component, two layouts: 16:9 (wide frame, title on one line) and 9:16
+// (tall frame inside the social safe zone, title in two balanced lines).
 import type React from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+import {
+  AbsoluteFill,
+  interpolate,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 import { colors, ease } from "../../../brand/tokens";
 import {
   OpenFrame,
@@ -19,36 +27,119 @@ import {
   YellowFoot,
   breakAfterDash,
   clamp,
+  splitBalanced,
   type OelpreisProps,
 } from "../kit";
 
 // ---------------------------------------------------------------------------
-// Frame geometry (screen px, outer edges). A = open frame, B = pane behind it.
+// Layouts. Frame geometry is in screen px, outer edges: a = open frame,
+// b = pane behind it (only its top and right edge matter, it shares a's
+// bottom edge).
+type Layout = {
+  a: { left: number; top: number; right: number; bottom: number };
+  b: { top: number; right: number };
+  /** Left edge of the text block (vertically centred in frame a). */
+  textLeft: number;
+  /** Widest a text line may run before it is split or set smaller. */
+  textMaxW: number;
+  /** Set the title in two balanced lines. */
+  twoLineTitle: boolean;
+  type: { title: number; subtitle: number; side: number };
+  rule: { width: number; above: number; below: number };
+  standGap: number;
+};
+
+const LANDSCAPE: Layout = {
+  a: { left: 190, top: 180, right: 1570, bottom: 880 },
+  b: { top: 310, right: 1730 },
+  textLeft: 400,
+  textMaxW: Infinity,
+  twoLineTitle: false,
+  type: { title: TYPE.title, subtitle: TYPE.subtitle, side: TYPE.side },
+  rule: { width: 200, above: 18, below: 34 },
+  standGap: 30,
+};
+
+// 9:16: text stays inside x 60–940 / y 220–1560 (Reels/TikTok UI); the frame
+// and bracket keep equal 80 px side margins, centred a little above the middle.
+const PORTRAIT: Layout = {
+  a: { left: 80, top: 420, right: 880, bottom: 1420 },
+  b: { top: 590, right: 1000 },
+  textLeft: 180,
+  textMaxW: 650,
+  twoLineTitle: true,
+  type: { title: 116, subtitle: 60, side: 32 },
+  rule: { width: 240, above: 22, below: 42 },
+  standGap: 38,
+};
+
 const STROKE = 10;
 const GAP = 30;
 const H = STROKE / 2;
-const A = { left: 190, top: 180, right: 1570, bottom: 880 };
-const B = { top: 310, right: 1730 };
-/** The bracket is cut off one gap right of frame A's outer edge. */
-const CUT = A.right + GAP;
-/** How far the bracket travels while sliding out from behind A (px). */
-const BRACKET_TRAVEL = B.right - CUT;
 
-// The detached bracket of pane B (the Bildmarke's small "]"): top arm, right
-// side, bottom arm on A's bottom line.
-const BRACKET = [
-  [CUT, B.top + H],
-  [B.right - H, B.top + H],
-  [B.right - H, A.bottom - H],
-  [CUT, A.bottom - H],
-]
-  .map(([x, y]) => `${x},${y}`)
-  .join(" ");
+/**
+ * The detached bracket of pane b (the Bildmarke's small "]"): top arm, right
+ * side, bottom arm on a's bottom line. It is cut off one gap right of frame
+ * a's outer edge and slides out over `travel` px from behind it.
+ */
+const bracketOf = ({ a, b }: Layout) => {
+  const cut = a.right + GAP;
+  return {
+    cut,
+    travel: b.right - cut,
+    points: [
+      [cut, b.top + H],
+      [b.right - H, b.top + H],
+      [b.right - H, a.bottom - H],
+      [cut, a.bottom - H],
+    ]
+      .map(([x, y]) => `${x},${y}`)
+      .join(" "),
+  };
+};
+
+const BRACKET = {
+  landscape: bracketOf(LANDSCAPE),
+  portrait: bracketOf(PORTRAIT),
+};
 
 // ---------------------------------------------------------------------------
-// Text block: left-aligned, vertically centred in frame A.
-const TEXT_LEFT = 400;
-const RULE_W = 200;
+// Line fitting (only bites in the narrow portrait column).
+
+/** Generous average Filson Pro glyph width in em, for a width estimate. */
+const CHAR_EM = 0.55;
+const estWidth = (line: string, size: number) => line.length * CHAR_EM * size;
+
+/** Font size at which the longest line fits `maxW` (never above `size`). */
+const fitSize = (lines: string[], size: number, maxW: number) =>
+  Math.min(size, ...lines.map((l) => maxW / (l.length * CHAR_EM)));
+
+/**
+ * Splits a line at the most balanced word gap that does not leave a short
+ * word ("von", "im", a number) dangling at a line end, so names like
+ * "Straße von Hormus" stay together.
+ */
+const splitLine = (text: string): string[] => {
+  const words = text.trim().split(/ +/);
+  if (words.length < 2) {
+    return [text];
+  }
+  let best = 1;
+  let bestScore = Infinity;
+  for (let i = 1; i < words.length; i++) {
+    const head = words.slice(0, i).join(" ");
+    const tail = words.slice(i).join(" ");
+    const dangling = /^[\p{Ll}\d]{1,3}$/u.test(words[i - 1]);
+    const score = Math.abs(head.length - tail.length) + (dangling ? 1000 : 0);
+    if (score < bestScore) {
+      best = i;
+      bestScore = score;
+    }
+  }
+  return [words.slice(0, best).join(" "), words.slice(best).join(" ")];
+};
+
+// ---------------------------------------------------------------------------
 
 export const AbschlussScene: React.FC<OelpreisProps> = ({
   brentHeadline,
@@ -56,16 +147,33 @@ export const AbschlussScene: React.FC<OelpreisProps> = ({
   stand,
 }) => {
   const frame = useCurrentFrame();
+  const { width, height } = useVideoConfig();
+  const portrait = height > width;
+  const L = portrait ? PORTRAIT : LANDSCAPE;
+  const bracket = portrait ? BRACKET.portrait : BRACKET.landscape;
+
   const p = (start: number, end: number, easing: (t: number) => number) =>
     interpolate(frame, [start, end], [0, 1], { ...clamp, easing });
 
+  const titleLines = L.twoLineTitle
+    ? splitBalanced(brentHeadline)
+    : [brentHeadline];
+  const titleSize = fitSize(titleLines, L.type.title, L.textMaxW);
+  const hormusLines = breakAfterDash(hormusHeadline).flatMap((line) =>
+    estWidth(line, L.type.subtitle) > L.textMaxW ? splitLine(line) : [line],
+  );
+  const subtitleSize = fitSize(hormusLines, L.type.subtitle, L.textMaxW);
+
   // f8–45: frame A draws itself as one line, starting at its top gap.
   const frameDraw = p(8, 45, ease.reveal);
-  // f10–46: title, red Unterlinie, both lines of the cause and the date rise
-  // out of their masks in a stagger.
-  const titleIn = p(10, 28, ease.reveal);
+  // f10–46: title, red Unterlinie, the lines of the cause and the date rise
+  // out of their masks in a stagger. The cause's lines share the 16:9
+  // window (first line from f22, last line from f27) however many there are.
+  const titleIn = (i: number) => p(10 + i * 3, 28 + i * 3, ease.reveal);
   const ruleIn = p(20, 36, ease.snap);
-  const hormusIn = (i: number) => p(22 + i * 5, 40 + i * 5, ease.reveal);
+  const hormusStep = hormusLines.length > 1 ? 5 / (hormusLines.length - 1) : 0;
+  const hormusIn = (i: number) =>
+    p(22 + i * hormusStep, 40 + i * hormusStep, ease.reveal);
   const standIn = p(32, 50, ease.reveal);
   // f28–52: the rear pane's bracket slides out from behind the frame like a
   // sash and stops on its gap.
@@ -78,16 +186,16 @@ export const AbschlussScene: React.FC<OelpreisProps> = ({
     easing: ease.loop,
   });
 
-  const hormusLines = breakAfterDash(hormusHeadline);
+  const { a } = L;
 
   return (
     <SceneBg>
       <AbsoluteFill style={{ translate: `0 ${lift}px` }}>
         <OpenFrame
-          left={A.left}
-          top={A.top}
-          width={A.right - A.left}
-          height={A.bottom - A.top}
+          left={a.left}
+          top={a.top}
+          width={a.right - a.left}
+          height={a.bottom - a.top}
           progress={frameDraw}
           gap={GAP}
           stroke={STROKE}
@@ -97,7 +205,7 @@ export const AbschlussScene: React.FC<OelpreisProps> = ({
         <div
           style={{
             position: "absolute",
-            left: CUT,
+            left: bracket.cut,
             top: 0,
             right: 0,
             bottom: 0,
@@ -105,17 +213,17 @@ export const AbschlussScene: React.FC<OelpreisProps> = ({
           }}
         >
           <svg
-            width={1920}
-            height={1080}
+            width={width}
+            height={height}
             style={{
               position: "absolute",
-              left: -CUT,
+              left: -bracket.cut,
               top: 0,
-              translate: `${-(1 - bracketOut) * BRACKET_TRAVEL}px 0`,
+              translate: `${-(1 - bracketOut) * bracket.travel}px 0`,
             }}
           >
             <polyline
-              points={BRACKET}
+              points={bracket.points}
               fill="none"
               stroke={colors.red}
               strokeWidth={STROKE}
@@ -128,9 +236,9 @@ export const AbschlussScene: React.FC<OelpreisProps> = ({
         <div
           style={{
             position: "absolute",
-            left: TEXT_LEFT,
-            top: A.top,
-            height: A.bottom - A.top,
+            left: L.textLeft,
+            top: a.top,
+            height: a.bottom - a.top,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -138,31 +246,41 @@ export const AbschlussScene: React.FC<OelpreisProps> = ({
             whiteSpace: "nowrap",
           }}
         >
-          <RiseText progress={titleIn} style={{ fontSize: TYPE.title }}>
-            <div
+          {titleLines.map((line, i) => (
+            <RiseText
+              key={i}
+              progress={titleIn(i)}
+              // Cancel the mask's descender padding between the lines.
               style={{
-                fontWeight: 700,
-                lineHeight: 1.15,
-                letterSpacing: "-0.01em",
+                fontSize: titleSize,
+                marginTop: i === 0 ? 0 : "-0.12em",
               }}
             >
-              {brentHeadline}
-            </div>
-          </RiseText>
+              <div
+                style={{
+                  fontWeight: 700,
+                  lineHeight: 1.15,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                {line}
+              </div>
+            </RiseText>
+          ))}
 
           <TitleRule
             progress={ruleIn}
-            width={RULE_W}
-            style={{ marginTop: 18, marginBottom: 34 }}
+            width={L.rule.width}
+            style={{ marginTop: L.rule.above, marginBottom: L.rule.below }}
           />
 
           {hormusLines.map((line, i) => (
             <RiseText
               key={i}
               progress={hormusIn(i)}
-              // Cancel the mask's descender padding between the two lines.
+              // Cancel the mask's descender padding between the lines.
               style={{
-                fontSize: TYPE.subtitle,
+                fontSize: subtitleSize,
                 marginTop: i === 0 ? 0 : "-0.12em",
               }}
             >
@@ -172,7 +290,7 @@ export const AbschlussScene: React.FC<OelpreisProps> = ({
 
           <RiseText
             progress={standIn}
-            style={{ fontSize: TYPE.side, marginTop: 30 }}
+            style={{ fontSize: L.type.side, marginTop: L.standGap }}
           >
             <div style={{ fontWeight: 400, lineHeight: 1.3, opacity: 0.9 }}>
               {stand}

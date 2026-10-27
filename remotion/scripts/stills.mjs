@@ -43,6 +43,9 @@ for (const f of frameArgs.map(Number)) {
 }
 
 // Contact sheet: frames in a grid, 3 per row, with the frame number burned in.
+// Tiles keep the composition's aspect ratio (640 px wide, or 360 px for portrait).
+const tileW = composition.width >= composition.height ? 640 : 360;
+const tileH = Math.round((tileW * composition.height) / composition.width / 2) * 2;
 const cols = Math.min(3, files.length);
 const rows = Math.ceil(files.length / cols);
 const sheet = resolve(outDir, `${compId}_sheet.jpg`);
@@ -50,12 +53,12 @@ const inputs = files.flatMap((p) => ["-i", p]);
 const labelled = files
   .map(
     (p, i) =>
-      `[${i}:v]scale=640:-2,drawbox=x=0:y=0:w=110:h=34:color=black@0.7:t=fill,` +
+      `[${i}:v]scale=${tileW}:${tileH},drawbox=x=0:y=0:w=110:h=34:color=black@0.7:t=fill,` +
       `drawtext=text='${frameArgs[i]}':x=8:y=6:fontsize=22:fontcolor=white[v${i}]`,
   )
   .join(";");
 const pads = files.length < cols * rows
-  ? Array.from({ length: cols * rows - files.length }, (_, k) => `color=c=gray:s=640x360:d=1[e${k}]`).join(";") + ";"
+  ? Array.from({ length: cols * rows - files.length }, (_, k) => `color=c=gray:s=${tileW}x${tileH}:d=1[e${k}]`).join(";") + ";"
   : "";
 const all = [
   ...files.map((_, i) => `[v${i}]`),
@@ -64,12 +67,14 @@ const all = [
 const layout = Array.from({ length: cols * rows }, (_, i) => {
   const c = i % cols;
   const r = Math.floor(i / cols);
-  return `${c * 640}_${r * 360}`;
+  return `${c * tileW}_${r * tileH}`;
 }).join("|");
-execFileSync("ffmpeg", [
-  "-loglevel", "error", "-y", ...inputs,
-  "-filter_complex",
-  `${labelled};${pads}${all}xstack=inputs=${cols * rows}:layout=${layout}:fill=gray`,
-  "-frames:v", "1", "-q:v", "3", sheet,
-]);
-console.log(sheet);
+if (files.length > 1) {
+  execFileSync("ffmpeg", [
+    "-loglevel", "error", "-y", ...inputs,
+    "-filter_complex",
+    `${labelled};${pads}${all}xstack=inputs=${cols * rows}:layout=${layout}:fill=gray`,
+    "-frames:v", "1", "-q:v", "3", sheet,
+  ]);
+  console.log(sheet);
+}

@@ -2,15 +2,26 @@
 // the next one covers it during 135–150, so every move lands by f72 and the
 // scene then holds with a slow drift.
 //
-// Brand "Prinzip Rahmen und Fläche" on the full blue field: the headline sits
-// left; on the right an open red frame (its gap on the top edge, like the
-// Bildmarke, right above the bar) holds the counter and a single-value gauge.
-// The gauge is honest: one bar on a fixed scale 85–125, no invented price
-// history. The counter's cap height spans both title lines and shares their
-// baselines, and the unit shares the description's first baseline, so the two
-// columns read on one grid.
+// Brand "Prinzip Rahmen und Fläche" on the full blue field: an open red frame
+// (its gap on the top edge, like the Bildmarke, right above the bar) holds the
+// counter and a single-value gauge. The gauge is honest: one bar on a fixed
+// scale 85–125, no invented price history.
+//
+// One component, two layouts (useVideoConfig decides):
+// - 16:9: headline left, frame right. The counter's cap height spans both
+//   title lines and shares their baselines, and the unit shares the
+//   description's first baseline, so the two columns read on one grid.
+// - 9:16: stacked for social. Headline, rule and description on top, the
+//   frame below at almost full width, the date line under it. Every text sits
+//   inside the social safe zone (x 60–940, y 220–1560); only the frame's right
+//   stroke and the yellow foot reach beyond it.
 import type React from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+import {
+  AbsoluteFill,
+  interpolate,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 import { colors, ease } from "../../../brand/tokens";
 import {
   OpenFrame,
@@ -41,66 +52,152 @@ const TITLE_CHAR = 0.58;
 const boxTop = (baseline: number, size: number, lineHeight: number) =>
   baseline - ((lineHeight - ASC - DESC) * size) / 2 - ASC * size;
 
-// ---------------------------------------------------------------------------
-// Geometry (absolute px)
-// ---------------------------------------------------------------------------
-const LEFT_X = 140;
-const TITLE_MAX_W = 780;
-const TITLE_LINE = TYPE.title * 1.15;
-/** Shared cap line of title line 1 and the counter. */
-const CAP_TOP = 372;
-const BASE_1 = CAP_TOP + CAP * TYPE.title;
-/** Title line 2 and the counter share this baseline. */
-const BASE_2 = BASE_1 + TITLE_LINE;
-const RULE_TOP = BASE_2 + 32;
-const RULE_W = 200;
-/** Description line 1 and the unit share this baseline. */
-const DESC_BASE = RULE_TOP + RULE.title + 32 + CAP * TYPE.body;
-const DESC_W = 640;
-const STAND_SIZE = Math.round(TYPE.side * 0.9);
-
-// Open frame (outer edges). Its left edge follows from the counter below.
-const FRAME_TOP = 170;
-const FRAME_BOTTOM = 890;
-const FRAME_RIGHT = 1780;
-const STROKE = 10;
-
 // Gauge: fixed scale, so any value between 85 and 125 fits.
 const SCALE = { min: 85, max: 125 } as const;
-const SCALE_TOP = FRAME_TOP + 90; // y of 125
-const SCALE_BOTTOM = FRAME_BOTTOM - 90; // y of 85
-const PX_PER_USD = (SCALE_BOTTOM - SCALE_TOP) / (SCALE.max - SCALE.min);
 const MAJOR = [90, 100, 110, 120];
 const MINOR = [85, 95, 105, 115, 125];
-const LABEL_SIZE = 26;
-const LABEL_W = 48;
-const LABEL_X = FRAME_RIGHT - STROKE - 52 - LABEL_W;
-const TICK_MAJOR = 20;
-const TICK_MINOR = 10;
-const AXIS_X = LABEL_X - 12 - TICK_MAJOR;
-const BAR_W = 24;
-const BAR_RIGHT = AXIS_X - 6;
-const BAR_LEFT = BAR_RIGHT - BAR_W;
-const MARKER_LEFT = BAR_LEFT - 12;
-const MARKER_RIGHT = AXIS_X + TICK_MAJOR;
-const MARKER_H = 4;
 
-// Counter: cap height = title line 1 cap top → title line 2 baseline.
-const COUNTER_SIZE = (BASE_2 - CAP_TOP) / CAP;
-/** Box for three tabular figures; right-aligned, so it never jitters. */
-const COUNTER_W = Math.ceil(3 * TNUM * COUNTER_SIZE);
-const COUNTER_RIGHT = MARKER_LEFT - 48;
-const FRAME_LEFT = COUNTER_RIGHT - COUNTER_W - 44;
-const UNIT_W = 320;
+// ---------------------------------------------------------------------------
+// Geometry (absolute px), one set per orientation
+// ---------------------------------------------------------------------------
+const makeLayout = (portrait: boolean) => {
+  // Text column: headline, rule, description.
+  const LEFT_X = portrait ? 80 : 140;
+  const TITLE_SIZE = portrait ? 120 : TYPE.title;
+  const TITLE_MAX_W = portrait ? 820 : 780;
+  const TITLE_LINE = TITLE_SIZE * 1.15;
+  /** Cap line of title line 1 (16:9: shared with the counter). */
+  const CAP_TOP = portrait ? 282 : 372;
+  const BASE_1 = CAP_TOP + CAP * TITLE_SIZE;
+  /** Baseline of title line 2 (16:9: shared with the counter). */
+  const BASE_2 = BASE_1 + TITLE_LINE;
+  const RULE_GAP = portrait ? 36 : 32;
+  const RULE_TOP = BASE_2 + RULE_GAP;
+  const RULE_W = portrait ? 220 : 200;
+  const DESC_SIZE = portrait ? 42 : TYPE.body;
+  /** Description line 1 (16:9: shared with the unit). */
+  const DESC_BASE = RULE_TOP + RULE.title + RULE_GAP + CAP * DESC_SIZE;
+  const DESC_W = portrait ? 820 : 640;
+  const STAND_SIZE = portrait ? TYPE.side : Math.round(TYPE.side * 0.9);
 
-/** Gap on the top edge sits right above the bar (OpenFrame's gapAt, 0–1). */
-const GAP_AT =
-  ((BAR_LEFT + BAR_RIGHT) / 2 - (FRAME_LEFT + STROKE / 2)) /
-  (FRAME_RIGHT - FRAME_LEFT - STROKE);
+  // Open frame (outer edges). In 16:9 its left edge follows from the counter.
+  const FRAME_TOP = portrait ? 780 : 170;
+  const FRAME_BOTTOM = portrait ? 1440 : 890;
+  const FRAME_RIGHT = portrait ? 1000 : 1780;
+  const STROKE = 10;
 
-const levelY = (value: number) =>
-  SCALE_BOTTOM -
-  (Math.min(Math.max(value, SCALE.min), SCALE.max) - SCALE.min) * PX_PER_USD;
+  // Gauge.
+  const SCALE_PAD = portrait ? 80 : 90;
+  const SCALE_TOP = FRAME_TOP + SCALE_PAD; // y of 125
+  const SCALE_BOTTOM = FRAME_BOTTOM - SCALE_PAD; // y of 85
+  const PX_PER_USD = (SCALE_BOTTOM - SCALE_TOP) / (SCALE.max - SCALE.min);
+  const LABEL_SIZE = portrait ? 28 : 26;
+  const LABEL_W = portrait ? 50 : 48;
+  // 9:16: labels end left of x 940 (safe zone), the stroke may run past it.
+  const LABEL_PAD = portrait ? 62 : 52;
+  const LABEL_X = FRAME_RIGHT - STROKE - LABEL_PAD - LABEL_W;
+  const TICK_MAJOR = 20;
+  const TICK_MINOR = 10;
+  const AXIS_X = LABEL_X - 12 - TICK_MAJOR;
+  const BAR_W = 24;
+  const BAR_RIGHT = AXIS_X - 6;
+  const BAR_LEFT = BAR_RIGHT - BAR_W;
+  const MARKER_LEFT = BAR_LEFT - 12;
+  const MARKER_RIGHT = AXIS_X + TICK_MAJOR;
+  const MARKER_H = 4;
+
+  const levelY = (value: number) =>
+    SCALE_BOTTOM -
+    (Math.min(Math.max(value, SCALE.min), SCALE.max) - SCALE.min) * PX_PER_USD;
+
+  // Counter. Its box holds three tabular figures; right-aligned, so it never
+  // jitters.
+  const COUNTER_RIGHT = MARKER_LEFT - 48;
+  const COUNTER_PAD = 44;
+  let COUNTER_SIZE: number;
+  let COUNTER_W: number;
+  let FRAME_LEFT: number;
+  let COUNTER_BASE: number;
+  let UNIT_SIZE: number;
+  let UNIT_BASE: number;
+  let STAND_BASE: number;
+  if (portrait) {
+    // The frame is set (centred, 80 px margins); the counter fills it up to
+    // the gauge, and its cap height is centred on the scale's 110 tick.
+    FRAME_LEFT = 80;
+    COUNTER_W = COUNTER_RIGHT - COUNTER_PAD - FRAME_LEFT;
+    COUNTER_SIZE = COUNTER_W / (3 * TNUM);
+    COUNTER_BASE = levelY(110) + (CAP * COUNTER_SIZE) / 2;
+    UNIT_SIZE = DESC_SIZE;
+    UNIT_BASE = COUNTER_BASE + 96;
+    STAND_BASE = FRAME_BOTTOM + 90;
+  } else {
+    // Cap height = title line 1 cap top → title line 2 baseline.
+    COUNTER_SIZE = (BASE_2 - CAP_TOP) / CAP;
+    COUNTER_W = Math.ceil(3 * TNUM * COUNTER_SIZE);
+    FRAME_LEFT = COUNTER_RIGHT - COUNTER_W - COUNTER_PAD;
+    COUNTER_BASE = BASE_2;
+    UNIT_SIZE = TYPE.body;
+    UNIT_BASE = DESC_BASE;
+    // The date line's baseline sits on the frame's foot.
+    STAND_BASE = FRAME_BOTTOM;
+  }
+  const UNIT_W = 320;
+
+  /** Gap on the top edge sits right above the bar (OpenFrame's gapAt, 0–1). */
+  const GAP_AT =
+    ((BAR_LEFT + BAR_RIGHT) / 2 - (FRAME_LEFT + STROKE / 2)) /
+    (FRAME_RIGHT - FRAME_LEFT - STROKE);
+
+  return {
+    LEFT_X,
+    TITLE_SIZE,
+    TITLE_MAX_W,
+    TITLE_LINE,
+    BASE_1,
+    RULE_TOP,
+    RULE_W,
+    DESC_SIZE,
+    DESC_BASE,
+    DESC_W,
+    STAND_SIZE,
+    STAND_BASE,
+    FRAME_TOP,
+    FRAME_BOTTOM,
+    FRAME_LEFT,
+    FRAME_RIGHT,
+    STROKE,
+    GAP_AT,
+    SCALE_TOP,
+    SCALE_BOTTOM,
+    LABEL_SIZE,
+    LABEL_X,
+    TICK_MAJOR,
+    TICK_MINOR,
+    AXIS_X,
+    BAR_W,
+    BAR_LEFT,
+    MARKER_LEFT,
+    MARKER_RIGHT,
+    MARKER_H,
+    levelY,
+    COUNTER_SIZE,
+    COUNTER_W,
+    COUNTER_RIGHT,
+    COUNTER_BASE,
+    UNIT_SIZE,
+    UNIT_BASE,
+    UNIT_W,
+  };
+};
+
+const LANDSCAPE = makeLayout(false);
+const PORTRAIT = makeLayout(true);
+
+const useLayout = () => {
+  const { width, height } = useVideoConfig();
+  return height > width ? PORTRAIT : LANDSCAPE;
+};
 
 // ---------------------------------------------------------------------------
 // Beats (local frames, one beat = 15)
@@ -132,15 +229,16 @@ const numberEm = (text: string) =>
   [...text].reduce((sum, c) => sum + (/\d/.test(c) ? TNUM : 0.27), 0);
 
 // ---------------------------------------------------------------------------
-// Left column: headline, rule, description, date line
+// Text column: headline, rule, description, date line
 // ---------------------------------------------------------------------------
 
 const Headline: React.FC<{ text: string }> = ({ text }) => {
   const frame = useCurrentFrame();
+  const L = useLayout();
   const lines = splitBalanced(text);
   const longest = Math.max(...lines.map((l) => l.length));
-  // Guard against a longer headline running into the frame.
-  const size = Math.min(TYPE.title, TITLE_MAX_W / (longest * TITLE_CHAR));
+  // Guard against a longer headline running into the frame / safe zone.
+  const size = Math.min(L.TITLE_SIZE, L.TITLE_MAX_W / (longest * TITLE_CHAR));
   const rule = interpolate(frame, [RULE_IN, RULE_IN + 14], [0, 1], {
     ...clamp,
     easing: ease.snap,
@@ -160,8 +258,8 @@ const Headline: React.FC<{ text: string }> = ({ text }) => {
             progress={rise}
             style={{
               position: "absolute",
-              left: LEFT_X,
-              top: boxTop(BASE_1 + i * TITLE_LINE, size, 1.15),
+              left: L.LEFT_X,
+              top: boxTop(L.BASE_1 + i * L.TITLE_LINE, size, 1.15),
               fontSize: size,
             }}
           >
@@ -175,8 +273,8 @@ const Headline: React.FC<{ text: string }> = ({ text }) => {
       })}
       <TitleRule
         progress={rule}
-        width={RULE_W}
-        style={{ position: "absolute", left: LEFT_X, top: RULE_TOP }}
+        width={L.RULE_W}
+        style={{ position: "absolute", left: L.LEFT_X, top: L.RULE_TOP }}
       />
     </>
   );
@@ -184,6 +282,7 @@ const Headline: React.FC<{ text: string }> = ({ text }) => {
 
 const Description: React.FC = () => {
   const frame = useCurrentFrame();
+  const L = useLayout();
   const rise = interpolate(frame, [DESC_IN, DESC_IN + 16], [0, 1], {
     ...clamp,
     easing: ease.reveal,
@@ -193,10 +292,10 @@ const Description: React.FC = () => {
       progress={rise}
       style={{
         position: "absolute",
-        left: LEFT_X,
-        top: boxTop(DESC_BASE, TYPE.body, 1.5),
-        width: DESC_W,
-        fontSize: TYPE.body,
+        left: L.LEFT_X,
+        top: boxTop(L.DESC_BASE, L.DESC_SIZE, 1.5),
+        width: L.DESC_W,
+        fontSize: L.DESC_SIZE,
       }}
     >
       <div
@@ -213,9 +312,10 @@ const Description: React.FC = () => {
   );
 };
 
-/** Date line, bottom-left; its baseline sits on the frame's foot. */
+/** Date line, bottom-left (16:9: its baseline sits on the frame's foot). */
 const Stand: React.FC<{ text: string }> = ({ text }) => {
   const frame = useCurrentFrame();
+  const L = useLayout();
   const rise = interpolate(frame, [STAND_IN, STAND_IN + 14], [0, 1], {
     ...clamp,
     easing: ease.reveal,
@@ -225,9 +325,9 @@ const Stand: React.FC<{ text: string }> = ({ text }) => {
       progress={rise}
       style={{
         position: "absolute",
-        left: LEFT_X,
-        top: boxTop(FRAME_BOTTOM, STAND_SIZE, 1.3),
-        fontSize: STAND_SIZE,
+        left: L.LEFT_X,
+        top: boxTop(L.STAND_BASE, L.STAND_SIZE, 1.3),
+        fontSize: L.STAND_SIZE,
       }}
     >
       <div
@@ -245,7 +345,7 @@ const Stand: React.FC<{ text: string }> = ({ text }) => {
 };
 
 // ---------------------------------------------------------------------------
-// Right group: counter + gauge
+// Frame content: counter + gauge
 // ---------------------------------------------------------------------------
 
 /** Continuous price value: scale floor (or lower) → brentValue, 20–72. */
@@ -260,6 +360,7 @@ const usePrice = (value: number) => {
 
 const Counter: React.FC<{ value: number }> = ({ value }) => {
   const frame = useCurrentFrame();
+  const L = useLayout();
   const price = usePrice(value);
   const decimals = decimalsOf(value);
   const f = 10 ** decimals;
@@ -267,8 +368,8 @@ const Counter: React.FC<{ value: number }> = ({ value }) => {
   const shown = frame >= COUNT_TO ? value : Math.round(price * f) / f;
   // Scale down only if the final number is wider than three figures.
   const size = Math.min(
-    COUNTER_SIZE,
-    COUNTER_W / numberEm(fmt(value, decimals)),
+    L.COUNTER_SIZE,
+    L.COUNTER_W / numberEm(fmt(value, decimals)),
   );
   const rise = interpolate(frame, [COUNTER_IN, COUNTER_IN + 12], [0, 1], {
     ...clamp,
@@ -284,9 +385,9 @@ const Counter: React.FC<{ value: number }> = ({ value }) => {
         progress={rise}
         style={{
           position: "absolute",
-          left: COUNTER_RIGHT - COUNTER_W,
-          width: COUNTER_W,
-          top: boxTop(BASE_2, size, 1),
+          left: L.COUNTER_RIGHT - L.COUNTER_W,
+          width: L.COUNTER_W,
+          top: boxTop(L.COUNTER_BASE, size, 1),
           fontSize: size,
         }}
       >
@@ -306,10 +407,10 @@ const Counter: React.FC<{ value: number }> = ({ value }) => {
         progress={unitRise}
         style={{
           position: "absolute",
-          left: COUNTER_RIGHT - UNIT_W,
-          width: UNIT_W,
-          top: boxTop(DESC_BASE, TYPE.body, 1.5),
-          fontSize: TYPE.body,
+          left: L.COUNTER_RIGHT - L.UNIT_W,
+          width: L.UNIT_W,
+          top: boxTop(L.UNIT_BASE, L.UNIT_SIZE, 1.5),
+          fontSize: L.UNIT_SIZE,
         }}
       >
         <div
@@ -329,15 +430,16 @@ const Counter: React.FC<{ value: number }> = ({ value }) => {
 
 /** Horizontal tick on the scale, drawn out from the axis. */
 const Tick: React.FC<{
+  x: number;
   y: number;
   length: number;
   progress: number;
   color: string;
-}> = ({ y, length, progress, color }) => (
+}> = ({ x, y, length, progress, color }) => (
   <div
     style={{
       position: "absolute",
-      left: AXIS_X,
+      left: x,
       top: y - 1,
       width: length * progress,
       height: 2,
@@ -352,6 +454,7 @@ const Tick: React.FC<{
  */
 const Gauge: React.FC<{ value: number }> = ({ value }) => {
   const frame = useCurrentFrame();
+  const L = useLayout();
   const price = usePrice(value);
   const axis = interpolate(frame, [GAUGE_IN, GAUGE_IN + 18], [0, 1], {
     ...clamp,
@@ -369,17 +472,17 @@ const Gauge: React.FC<{ value: number }> = ({ value }) => {
       easing: ease.snap,
     });
   };
-  const span = SCALE_BOTTOM - SCALE_TOP;
-  const barTop = levelY(price);
+  const span = L.SCALE_BOTTOM - L.SCALE_TOP;
+  const barTop = L.levelY(price);
   return (
     <>
       {/* Track: the full scale range, so the bar reads against it */}
       <div
         style={{
           position: "absolute",
-          left: BAR_LEFT,
-          top: SCALE_BOTTOM - span * axis,
-          width: BAR_W,
+          left: L.BAR_LEFT,
+          top: L.SCALE_BOTTOM - span * axis,
+          width: L.BAR_W,
           height: span * axis,
           backgroundColor: colors.blue90,
         }}
@@ -388,8 +491,8 @@ const Gauge: React.FC<{ value: number }> = ({ value }) => {
       <div
         style={{
           position: "absolute",
-          left: AXIS_X - 1,
-          top: SCALE_BOTTOM - span * axis,
+          left: L.AXIS_X - 1,
+          top: L.SCALE_BOTTOM - span * axis,
           width: 2,
           height: span * axis,
           backgroundColor: colors.blue20,
@@ -398,8 +501,9 @@ const Gauge: React.FC<{ value: number }> = ({ value }) => {
       {MINOR.map((v) => (
         <Tick
           key={v}
-          y={levelY(v)}
-          length={TICK_MINOR}
+          x={L.AXIS_X}
+          y={L.levelY(v)}
+          length={L.TICK_MINOR}
           progress={tickIn(v)}
           color={colors.blue70}
         />
@@ -409,17 +513,22 @@ const Gauge: React.FC<{ value: number }> = ({ value }) => {
         return (
           <div key={v}>
             <Tick
-              y={levelY(v)}
-              length={TICK_MAJOR}
+              x={L.AXIS_X}
+              y={L.levelY(v)}
+              length={L.TICK_MAJOR}
               progress={t}
               color={colors.blue20}
             />
             <div
               style={{
                 position: "absolute",
-                left: LABEL_X,
-                top: boxTop(levelY(v) + (CAP * LABEL_SIZE) / 2, LABEL_SIZE, 1.3),
-                fontSize: LABEL_SIZE,
+                left: L.LABEL_X,
+                top: boxTop(
+                  L.levelY(v) + (CAP * L.LABEL_SIZE) / 2,
+                  L.LABEL_SIZE,
+                  1.3,
+                ),
+                fontSize: L.LABEL_SIZE,
                 fontWeight: 400,
                 lineHeight: 1.3,
                 whiteSpace: "nowrap",
@@ -437,10 +546,10 @@ const Gauge: React.FC<{ value: number }> = ({ value }) => {
       <div
         style={{
           position: "absolute",
-          left: BAR_LEFT,
+          left: L.BAR_LEFT,
           top: barTop,
-          width: BAR_W,
-          height: SCALE_BOTTOM - barTop,
+          width: L.BAR_W,
+          height: L.SCALE_BOTTOM - barTop,
           backgroundColor: colors.red,
         }}
       />
@@ -448,13 +557,13 @@ const Gauge: React.FC<{ value: number }> = ({ value }) => {
       <div
         style={{
           position: "absolute",
-          left: MARKER_LEFT,
-          top: barTop - MARKER_H / 2,
-          width: MARKER_RIGHT - MARKER_LEFT,
-          height: MARKER_H,
+          left: L.MARKER_LEFT,
+          top: barTop - L.MARKER_H / 2,
+          width: L.MARKER_RIGHT - L.MARKER_LEFT,
+          height: L.MARKER_H,
           backgroundColor: colors.white,
           scale: `${marker} 1`,
-          transformOrigin: `${BAR_LEFT + BAR_W / 2 - MARKER_LEFT}px 50%`,
+          transformOrigin: `${L.BAR_LEFT + L.BAR_W / 2 - L.MARKER_LEFT}px 50%`,
         }}
       />
     </>
@@ -471,6 +580,7 @@ export const BrentScene: React.FC<OelpreisProps> = ({
   stand,
 }) => {
   const frame = useCurrentFrame();
+  const L = useLayout();
   const frameDraw = interpolate(frame, [FRAME_IN, FRAME_IN + 35], [0, 1], {
     ...clamp,
     easing: ease.reveal,
@@ -493,13 +603,13 @@ export const BrentScene: React.FC<OelpreisProps> = ({
         <Stand text={stand} />
 
         <OpenFrame
-          left={FRAME_LEFT}
-          top={FRAME_TOP}
-          width={FRAME_RIGHT - FRAME_LEFT}
-          height={FRAME_BOTTOM - FRAME_TOP}
+          left={L.FRAME_LEFT}
+          top={L.FRAME_TOP}
+          width={L.FRAME_RIGHT - L.FRAME_LEFT}
+          height={L.FRAME_BOTTOM - L.FRAME_TOP}
           progress={frameDraw}
-          gapAt={GAP_AT}
-          stroke={STROKE}
+          gapAt={L.GAP_AT}
+          stroke={L.STROKE}
         />
         <Gauge value={brentValue} />
         <Counter value={brentValue} />

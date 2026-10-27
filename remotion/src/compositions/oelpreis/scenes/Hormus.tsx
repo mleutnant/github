@@ -222,7 +222,7 @@ const LANDSCAPE: Layout = {
 // name would pass the social safe edge (x 940), left of it lies the incoming
 // route, so the name stands above the marker on the Iranian coast, its leader
 // rising out of the frame's gap. Text stays inside x 60–940 / y 220–1560.
-const PORTRAIT_LEADER = 64;
+const PORTRAIT_LEADER = 90;
 /** Box height of the name: Bold 115 % plus RiseText's 0.12em foot padding. */
 const STRAIT_LABEL_BOX = STRAIT_LABEL * (1.15 + 0.12);
 
@@ -240,8 +240,8 @@ const PORTRAIT: Layout = {
   regions: [
     { text: "Iran", at: [700, 480], delay: 8 },
     { text: "Persischer Golf", at: [350, 840], delay: 12 },
-    { text: "Golf von Oman", at: [708, 1008], delay: 16 },
-    { text: "Oman", at: [513, 880], delay: 20 },
+    { text: "Golf von Oman", at: [703, 1010], delay: 16 },
+    { text: "Oman", at: [490, 905], delay: 20 },
   ],
   regionSize: 26,
   strait: (mx, my, leaderIn) => {

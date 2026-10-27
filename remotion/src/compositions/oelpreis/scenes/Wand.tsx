@@ -74,6 +74,8 @@ type LayoutSpec = {
   /** Where the focus point lands at the end of the push (frame px). */
   focusX: number;
   focusY: number;
+  /** Tone everything but the target sinks to during the push. */
+  dimTone: string;
 };
 
 // 16:9 — approved layout, keep every value as it is.
@@ -102,6 +104,7 @@ const LANDSCAPE: LayoutSpec = {
   targetMaxW: 1600,
   focusX: 960,
   focusY: 540,
+  dimTone: colors.blue70,
 };
 
 // 9:16 — sixteen rows fill the tall frame. The leads stay fully in frame while
@@ -140,6 +143,9 @@ const PORTRAIT: LayoutSpec = {
   targetMaxW: 760,
   focusX: 540,
   focusY: 930,
+  // The portrait push stays small (the target must fit 760 px), so larger
+  // rows end up bigger than the target: sink them further to keep the focus.
+  dimTone: colors.blue90,
 };
 
 // Beats (local frames) — shared by both layouts.
@@ -344,7 +350,7 @@ export const WandScene: React.FC<OelpreisProps> = ({
     return pivotIsBrent === same ? brentHeadline : hormusHeadline;
   };
 
-  // Focus: everything but the target sinks to blue 70.
+  // Focus: everything but the target sinks to the layout's dim tone.
   const dim = interpolate(frame, [B.dim, B.dimEnd], [0, 1], {
     ...clamp,
     easing: ease.move,
@@ -352,7 +358,7 @@ export const WandScene: React.FC<OelpreisProps> = ({
   const barColor = interpolateColors(
     frame,
     [B.dim, B.barsDimEnd],
-    [colors.red, colors.blue70],
+    [colors.red, L.dimTone],
     { easing: ease.move },
   );
 
@@ -397,7 +403,7 @@ export const WandScene: React.FC<OelpreisProps> = ({
       >
         {L.rows.map((row, r) => {
           const gap = row.size * GAP_EM;
-          const color = interpolateColors(dim, [0, 1], [row.tone, colors.blue70]);
+          const color = interpolateColors(dim, [0, 1], [row.tone, L.dimTone]);
           const isTarget = r === L.targetRow;
           const item = (j: number) => (
             <Headline

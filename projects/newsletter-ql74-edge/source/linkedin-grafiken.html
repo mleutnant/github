@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>LinkedIn-Grafiken QuinLine® 74 Edge</title>
+<!-- Ersatz für die Tabellen im LinkedIn-Newsletter (der Artikel-Editor kennt keine Tabellen).
+     Jede .card wird von build-linkedin.mjs als eigenes PNG gespeichert (1200 px breit, 2x). -->
+<style>
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProRegular.otf") format("opentype");font-weight:400}
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProMedium.otf") format("opentype");font-weight:500}
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProBold.otf") format("opentype");font-weight:700}
+:root{--blue:#123442;--red:#e3002c;--yellow:#f6a206;--hair:#4b656f;--soft:#e7ebec;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:#888;font-family:"Filson Pro",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.card{width:1200px;background:var(--blue);color:var(--white);padding:84px 96px 0;margin:0 0 40px;position:relative}
+.eyebrow{font-weight:700;font-size:26px;letter-spacing:.01em;color:var(--white);opacity:.92;margin:0 0 16px}
+h1{font-weight:700;font-size:58px;line-height:1.1;letter-spacing:-.01em;margin:0}
+.rule{width:96px;height:6px;background:var(--yellow);margin:30px 0 48px}
+table{width:100%;border-collapse:collapse;border-top:2px solid var(--hair)}
+td{font-size:30px;line-height:1.35;padding:22px 0;border-bottom:2px solid var(--hair);vertical-align:top}
+td.k{font-weight:700;width:330px;padding-right:32px}
+td.v{font-weight:500;color:var(--soft)}
+tr.hi td{color:var(--white)}
+tr.hi td.v{font-weight:700}
+.note{font-weight:500;font-size:26px;color:var(--soft);margin:28px 0 0}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:64px;padding-bottom:56px}
+.foot img{height:44px;display:block}
+.foot span{font-weight:500;font-size:22px;color:var(--soft)}
+.bar{position:absolute;left:0;right:0;bottom:0;height:12px;background:var(--yellow)}
+</style>
+</head>
+<body>
+
+<div class="card" id="systemdaten">
+  <div class="eyebrow">QuinLine® 74 Edge</div>
+  <h1>Die wichtigsten Systemdaten<br>auf einen Blick</h1>
+  <div class="rule"></div>
+  <table>
+    <tr><td class="k">Zargenprofil</td><td class="v">5 Kammern, Bautiefe 174 mm, Ansicht 63 mm</td></tr>
+    <tr><td class="k">Flügelprofil</td><td class="v">5 Kammern, Bautiefe 74 mm, Ansicht 92 mm</td></tr>
+    <tr><td class="k">Profilüberschlag</td><td class="v">geradlinig und schlank, 25 mm Höhe</td></tr>
+    <tr><td class="k">Design</td><td class="v">kantige Glasleisten und Mitteldichtleisten</td></tr>
+    <tr><td class="k">Glasdicken</td><td class="v">bis 50 mm</td></tr>
+    <tr><td class="k">Getriebe</td><td class="v">mit Riegelbolzen- oder Hakenriegelgetriebe lieferbar</td></tr>
+    <tr><td class="k">Sicherheit</td><td class="v">Sicherheitspakete ohne Einschränkungen einsetzbar</td></tr>
+    <tr><td class="k">Systemtechnik</td><td class="v">bewährte Merkmale analog Basis-System QuinLine® 74</td></tr>
+  </table>
+  <div class="foot"><img src="../renders/images/logo-schmidt-negativ.png" alt="SCHMIDT"><span>schmidt-boke.de</span></div>
+  <div class="bar"></div>
+</div>
+
+<div class="card" id="glasleisten">
+  <div class="eyebrow">QuinLine® 74 Edge</div>
+  <h1>Glasleisten-Sortiment</h1>
+  <div class="rule"></div>
+  <table>
+    <tr><td class="k">20–27 mm</td><td class="v">auftragsbezogen</td></tr>
+    <tr><td class="k">28–31 mm</td><td class="v">weiß ab Lager, Dekor auftragsbezogen</td></tr>
+    <tr><td class="k">32–35 mm</td><td class="v">auftragsbezogen</td></tr>
+    <tr class="hi"><td class="k">36–50 mm</td><td class="v">ab Lager</td></tr>
+  </table>
+  <p class="note">Eckausführung: auf Gehrung gestoßen</p>
+  <div class="foot"><img src="../renders/images/logo-schmidt-negativ.png" alt="SCHMIDT"><span>schmidt-boke.de</span></div>
+  <div class="bar"></div>
+</div>
+
+</body>
+</html>

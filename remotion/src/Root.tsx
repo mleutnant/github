@@ -7,6 +7,19 @@ import {
   HISTORIE_FPS,
   SchmidtHistorie,
 } from "./compositions/SchmidtHistorie";
+import { OELPREIS_DEFAULTS, oelpreisSchema } from "./compositions/oelpreis/kit";
+import { Oelpreis } from "./compositions/oelpreis/Oelpreis";
+import { AbschlussScene } from "./compositions/oelpreis/scenes/Abschluss";
+import { BrentScene } from "./compositions/oelpreis/scenes/Brent";
+import { HormusScene } from "./compositions/oelpreis/scenes/Hormus";
+import { WandScene } from "./compositions/oelpreis/scenes/Wand";
+import {
+  OP_DURATION,
+  OP_FPS,
+  OP_HEIGHT,
+  OP_WIDTH,
+  SCENE_DURATION as OP_SCENE_DURATION,
+} from "./compositions/oelpreis/timing";
 import { QuinLineVergleich } from "./compositions/quinline/QuinLineVergleich";
 import { AntriebScene } from "./compositions/quinline/scenes/Antrieb";
 import { BautiefeScene } from "./compositions/quinline/scenes/Bautiefe";
@@ -149,6 +162,110 @@ export const RemotionRoot: React.FC = () => {
           fps={QL_FPS}
           width={QL_WIDTH}
           height={QL_HEIGHT}
+        />
+      </Folder>
+      <Composition
+        id="Oelpreis-Hormus"
+        component={Oelpreis}
+        schema={oelpreisSchema}
+        durationInFrames={OP_DURATION}
+        fps={OP_FPS}
+        width={OP_WIDTH}
+        height={OP_HEIGHT}
+        defaultProps={OELPREIS_DEFAULTS}
+      />
+      <Composition
+        id="Oelpreis-Hormus-9x16"
+        component={Oelpreis}
+        schema={oelpreisSchema}
+        durationInFrames={OP_DURATION}
+        fps={OP_FPS}
+        width={OP_HEIGHT}
+        height={OP_WIDTH}
+        defaultProps={OELPREIS_DEFAULTS}
+      />
+      <Folder name="Oelpreis-Szenen">
+        <Composition
+          id="OP-Wand"
+          component={WandScene}
+          schema={oelpreisSchema}
+          durationInFrames={OP_SCENE_DURATION.wand}
+          fps={OP_FPS}
+          width={OP_WIDTH}
+          height={OP_HEIGHT}
+          defaultProps={OELPREIS_DEFAULTS}
+        />
+        <Composition
+          id="OP-Brent"
+          component={BrentScene}
+          schema={oelpreisSchema}
+          durationInFrames={OP_SCENE_DURATION.brent}
+          fps={OP_FPS}
+          width={OP_WIDTH}
+          height={OP_HEIGHT}
+          defaultProps={OELPREIS_DEFAULTS}
+        />
+        <Composition
+          id="OP-Hormus"
+          component={HormusScene}
+          schema={oelpreisSchema}
+          durationInFrames={OP_SCENE_DURATION.hormus}
+          fps={OP_FPS}
+          width={OP_WIDTH}
+          height={OP_HEIGHT}
+          defaultProps={OELPREIS_DEFAULTS}
+        />
+        <Composition
+          id="OP-Abschluss"
+          component={AbschlussScene}
+          schema={oelpreisSchema}
+          durationInFrames={OP_SCENE_DURATION.abschluss}
+          fps={OP_FPS}
+          width={OP_WIDTH}
+          height={OP_HEIGHT}
+          defaultProps={OELPREIS_DEFAULTS}
+        />
+      </Folder>
+      <Folder name="Oelpreis-Szenen-9x16">
+        <Composition
+          id="OP-Wand-9x16"
+          component={WandScene}
+          schema={oelpreisSchema}
+          durationInFrames={OP_SCENE_DURATION.wand}
+          fps={OP_FPS}
+          width={OP_HEIGHT}
+          height={OP_WIDTH}
+          defaultProps={OELPREIS_DEFAULTS}
+        />
+        <Composition
+          id="OP-Brent-9x16"
+          component={BrentScene}
+          schema={oelpreisSchema}
+          durationInFrames={OP_SCENE_DURATION.brent}
+          fps={OP_FPS}
+          width={OP_HEIGHT}
+          height={OP_WIDTH}
+          defaultProps={OELPREIS_DEFAULTS}
+        />
+        <Composition
+          id="OP-Hormus-9x16"
+          component={HormusScene}
+          schema={oelpreisSchema}
+          durationInFrames={OP_SCENE_DURATION.hormus}
+          fps={OP_FPS}
+          width={OP_HEIGHT}
+          height={OP_WIDTH}
+          defaultProps={OELPREIS_DEFAULTS}
+        />
+        <Composition
+          id="OP-Abschluss-9x16"
+          component={AbschlussScene}
+          schema={oelpreisSchema}
+          durationInFrames={OP_SCENE_DURATION.abschluss}
+          fps={OP_FPS}
+          width={OP_HEIGHT}
+          height={OP_WIDTH}
+          defaultProps={OELPREIS_DEFAULTS}
         />
       </Folder>
     </>

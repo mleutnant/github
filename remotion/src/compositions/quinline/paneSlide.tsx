@@ -5,17 +5,17 @@ import type {
   TransitionPresentation,
   TransitionPresentationComponentProps,
 } from "@remotion/transitions";
-import { AbsoluteFill } from "remotion";
+import { AbsoluteFill, useVideoConfig } from "remotion";
 import { colors } from "../../brand/tokens";
 
 type PaneSlideProps = Record<string, never>;
 
-const W = 1920;
 const PROFILE = 26;
 
 const PaneSlidePresentation: React.FC<
   TransitionPresentationComponentProps<PaneSlideProps>
 > = ({ children, presentationDirection, presentationProgress: p }) => {
+  const { width } = useVideoConfig();
   if (presentationDirection === "exiting") {
     return (
       <AbsoluteFill style={{ translate: `${-p * 260}px 0` }}>
@@ -24,7 +24,7 @@ const PaneSlidePresentation: React.FC<
     );
   }
 
-  const edge = (1 - p) * (W + PROFILE);
+  const edge = (1 - p) * (width + PROFILE);
   return (
     <AbsoluteFill>
       <AbsoluteFill style={{ clipPath: `inset(0 0 0 ${edge}px)` }}>

@@ -77,7 +77,7 @@ export function render({ cr }) {
     text(WHITE, `
 ${p('{SALUTATION[std:Sehr geehrte Damen und Herren][salutation:formal|de]} {LASTNAME},', { mb: 20 })}
 ${p('im September haben wir Sie zu unseren QuinLine® Seminaren im November eingeladen. Für das <strong style="color:' + BLUE + ';">Seminar für Montage und Technik</strong> sind an beiden Terminen noch vereinzelt Plätze frei.', { mb: 20 })}
-${p('Neu dabei ist ein Gastbeitrag der Firma Knelsen, mit Vortrag und gemeinsamer Montage an einer Muster-Hebeschiebetür. Wenn Ihre Monteure und Techniker dabei sein sollen, melden Sie sie am besten jetzt an.')}
+${p('Neu dabei ist ein Gastbeitrag der Firma Knelsen, mit Vortrag und gemeinsamer Montage an Musterecken. Wenn Ihre Monteure und Techniker dabei sein sollen, melden Sie sie am besten jetzt an.')}
 `),
     spacer(48, WHITE),
   ]);
@@ -133,7 +133,7 @@ ${p(body)}
     row(WHITE, `${T('width="100%"')}<tr>
 ${teil('Teil 1', 'Theorie', 'Knelsen stellt sichere Befestigungssysteme vor und zeigt, worauf es bei der fachgerechten Montage der Hebeschiebetür ankommt.')}
 <td class="stack-spacer" width="24" bgcolor="${WHITE}" style="padding:0; width:24px; background:${WHITE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>
-${teil('Teil 2', 'Praxis', 'An einer Muster-Hebeschiebetür zeigen wir gemeinsam, wie die Montage in der Praxis abläuft. Jeder Teilnehmer wirkt mit und testet selbst.')}
+${teil('Teil 2', 'Praxis', 'An Musterecken zeigen wir gemeinsam, wie die Montage in der Praxis abläuft. Jeder Teilnehmer wirkt mit und testet selbst.')}
 </tr></table>`),
     spacer(24, WHITE),
     row(WHITE, image(`<img src="${src('montage-praxis.jpg')}" width="504" height="336" class="img-fluid" alt="Montage einer Hebeschiebetür in der Praxis" style="display:block; width:504px; max-width:100%; height:auto; border:0; ${F} font-size:14px; color:#6e7478;">`), { attrs: 'align="center"' }),

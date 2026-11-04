@@ -84,7 +84,7 @@ ${p('Neu dabei ist ein Gastbeitrag der Firma Knelsen, mit Vortrag und gemeinsame
 
   // Restplätze: zwei Termine nebeneinander (mobil untereinander), darunter Ort und Knopf
   const termin = (tag, datum) =>
-    `<td class="stack" width="240" valign="top" bgcolor="${BLUE}" style="padding:16px 0 0 0; background:${BLUE}; border-top:1px solid ${HAIR_BLUE}; ${F} font-size:14px; line-height:20px; ${X} color:${ON_BLUE};">${html(`
+    `<td class="stack" width="48%" valign="top" bgcolor="${BLUE}" style="padding:16px 0 0 0; background:${BLUE}; border-top:1px solid ${HAIR_BLUE}; ${F} font-size:14px; line-height:20px; ${X} color:${ON_BLUE};">${html(`
 ${p(tag, { size: 14, lh: 20, color: ON_BLUE, mb: 4 })}
 ${p(datum, { size: 20, lh: 26, color: WHITE, mb: 4, extra: 'font-weight:700;' })}
 ${p('09:00 bis 16:15 Uhr', { size: 14, lh: 20, color: ON_BLUE })}
@@ -96,9 +96,9 @@ ${p('09:00 bis 16:15 Uhr', { size: 14, lh: 20, color: ON_BLUE })}
     spacer(16, BLUE),
     row(BLUE, rule(YELLOW, BLUE)),
     spacer(32, BLUE),
-    row(BLUE, `${T('width="100%"')}<tr>
+    row(BLUE, `${T('width="100%" style="table-layout:fixed;"')}<tr>
 ${termin('Donnerstag', '12.11.2026')}
-<td class="stack-spacer" width="24" bgcolor="${BLUE}" style="padding:0; width:24px; background:${BLUE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>
+<td class="stack-spacer" width="4%" bgcolor="${BLUE}" style="padding:0; width:4%; background:${BLUE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>
 ${termin('Donnerstag', '19.11.2026')}
 </tr></table>`),
     spacer(32, BLUE),
@@ -116,7 +116,7 @@ ${p('SCHMIDT GmbH, Töllen Linde 3, 33129&nbsp;Delbrück-Boke', { color: ON_BLUE
 
   // Gastbeitrag Knelsen: Einleitung, Foto, zwei Teile (Theorie | Praxis)
   const teil = (nr, titel, body) =>
-    `<td class="stack" width="240" valign="top" bgcolor="${GREY}" style="padding:20px 20px 22px 20px; background:${GREY}; border-top:4px solid ${BLUE}; ${F} font-size:16px; line-height:24px; ${X} color:#000000;">${html(`
+    `<td class="stack" width="48%" valign="top" bgcolor="${GREY}" style="padding:20px 20px 22px 20px; background:${GREY}; border-top:4px solid ${BLUE}; ${F} font-size:16px; line-height:24px; ${X} color:#000000;">${html(`
 ${p(nr, { size: 12, lh: 16, color: '#6e7478', mb: 4, extra: 'font-weight:700; letter-spacing:1.4px; text-transform:uppercase;' })}
 ${p(titel, { size: 20, lh: 26, color: BLUE, mb: 10, extra: 'font-weight:700;' })}
 ${p(body)}
@@ -130,9 +130,9 @@ ${p(body)}
     spacer(24, WHITE),
     text(WHITE, `Für einen praxisnahen Gastbeitrag konnten wir die Firma Knelsen (<a href="https://www.knelsen.de" style="color:${RED}; text-decoration:none; font-weight:700;">www.knelsen.de</a>) gewinnen. Das Unternehmen ist auf die Entwicklung und Herstellung von Fensterbefestigungen für energetisch hochwertige Fenstersysteme spezialisiert. Der Gastbeitrag besteht aus zwei Teilen:`),
     spacer(24, WHITE),
-    row(WHITE, `${T('width="100%"')}<tr>
+    row(WHITE, `${T('width="100%" style="table-layout:fixed;"')}<tr>
 ${teil('Teil 1', 'Theorie', 'Knelsen stellt sichere Befestigungssysteme vor und zeigt, worauf es bei der fachgerechten Montage der Hebeschiebetür ankommt.')}
-<td class="stack-spacer" width="24" bgcolor="${WHITE}" style="padding:0; width:24px; background:${WHITE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>
+<td class="stack-spacer" width="4%" bgcolor="${WHITE}" style="padding:0; width:4%; background:${WHITE}; font-size:1px; line-height:1px; ${X}">&nbsp;</td>
 ${teil('Teil 2', 'Praxis', 'An Musterecken zeigen wir gemeinsam, wie die Montage in der Praxis abläuft. Jeder Teilnehmer wirkt mit und testet selbst.')}
 </tr></table>`),
     spacer(24, WHITE),

@@ -15,36 +15,37 @@ body{background:#555;font-family:"Filson Pro",Arial,sans-serif;-webkit-font-smoo
 .story{position:relative;width:1080px;height:1920px;background:var(--blue);color:var(--white);overflow:hidden}
 .content{position:absolute;left:72px;right:72px;top:236px}
 .eyebrow{font-weight:700;font-size:28px;letter-spacing:.08em;text-transform:uppercase;opacity:.92}
-h1{margin:14px 0 0;font-weight:700;font-size:86px;line-height:1.04;letter-spacing:-.01em}
+h1{margin:14px 0 0;font-weight:700;font-size:92px;line-height:1.04;letter-spacing:-.01em;white-space:nowrap}
+h1 sup{font-size:.42em;line-height:0;vertical-align:.95em;margin-left:.04em;letter-spacing:0}
+.claim{margin:14px 0 0;font-weight:500;font-size:48px;line-height:1.15;color:var(--soft)}
 .rule{width:128px;height:8px;margin-top:28px;background:var(--red)}
 /* Rendering freigestellt (transparenter Hintergrund), vollständig sichtbar */
-.render{display:block;height:var(--render-h,600px);width:auto;margin:30px auto 0}
+.render{display:block;height:var(--render-h,614px);width:auto;margin:30px auto 0}
 .text{margin:30px 0 0;font-weight:500;font-size:33px;line-height:1.36;color:var(--soft)}
 ul{margin:24px 0 0;padding:0;list-style:none}
 li{position:relative;padding-left:28px;margin:0 0 12px;font-weight:700;font-size:36px;line-height:1.25;color:var(--white)}
 li:last-child{margin-bottom:0}
-li::before{content:"";position:absolute;left:0;top:.12em;width:5px;height:1em;background:var(--yellow)}
+li::before{content:"";position:absolute;left:0;top:.12em;width:5px;height:1em;background:var(--white)}
 .cta{position:absolute;left:72px;top:1526px;font-weight:700;font-size:44px;line-height:1.2}
-.bar{position:absolute;left:0;right:0;bottom:0;height:16px;background:var(--yellow)}
 </style>
 </head>
 <body>
 <div class="story" id="story">
   <div class="content">
     <div class="eyebrow">Neu im LinkedIn-Newsletter</div>
-    <h1>Geradlinig bis<br>ins Detail.</h1>
+    <h1>QuinLine<sup>®</sup> 74 Edge</h1>
+    <p class="claim">Geradlinig bis ins Detail.</p>
     <div class="rule"></div>
     <img class="render" src="../renders/images/render-ql74-edge-freigestellt.png" alt="Schnittmodell der QuinLine® 74 Edge">
     <p class="text">Die neue QuinLine®&nbsp;74 Edge verbindet einen schmalen, eckigen Flügelüberschlag und kantige Glasleisten mit der bewährten Technik der QuinLine®&nbsp;74.</p>
     <ul>
       <li>Kantige Glasleisten</li>
       <li>Glasdicken bis 50&nbsp;mm</li>
-      <li>Schmaler Flügelüberschlag</li>
+      <li>Schmaler Flügelüberschlag, 25&nbsp;mm</li>
     </ul>
   </div>
   <div class="cta">Alle Details im Newsletter</div>
   <!-- frei für den Link-Sticker: ca. y 1600–1700 -->
-  <div class="bar"></div>
 </div>
 </body>
 </html>

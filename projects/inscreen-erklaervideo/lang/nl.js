@@ -72,6 +72,10 @@ window.I18N = {
     "Integriert": "Volledig geïntegreerd", "Schnell montiert": "Snel gemonteerd", "Darum ist": "Daarom is de",
     "für": "voor",
   },
+  // Bilder: Länder-Logo „Schmidt bv – Dé hefschuifdeur“ statt des deutschen SCHMIDT-Logos
+  assets: { "assets/brand/logo-schmidt-color.svg": "assets/brand/logo-schmidt-bv-nl.png" },
+  // Das NL-Logo ist eng beschnitten (das SVG hat Innenabstand) — Größe/Lage je Format nachführen
+  css: "#root .s11-logo { width: 430px; } @media (max-width: 1200px) { #root .s11-logo { left: 96px; top: 250px; width: 520px; } }",
   // Untertitel: abweichende Schreibweise nur in der Anzeige
   captionDisplay: { s03: { "insectenhorren:": "insectenhorren?" }, s09: { "Nul": "0%", "procent": "" } },
 };

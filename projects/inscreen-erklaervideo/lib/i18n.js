@@ -19,6 +19,11 @@
       return;
     }
     if (skip(node)) return;
+    // Bilder der Sprachfassung (z. B. Länder-Logo): src-Pfad austauschen
+    if (node.nodeName === "IMG" && I.assets && I.assets[node.getAttribute("src")]) {
+      node.setAttribute("src", I.assets[node.getAttribute("src")]);
+      return;
+    }
     for (const c of node.childNodes) walk(c);
   }
   const ih = Object.getOwnPropertyDescriptor(Element.prototype, "innerHTML");
@@ -31,6 +36,12 @@
     configurable: true, get: tc.get,
     set(v) { tc.set.call(this, v); if (!skip(this)) walk(this); },
   });
+  // zusätzliche Stile der Sprachfassung (#root-Selektoren schlagen die Szenen-Stile)
+  if (I.css) {
+    const st = document.createElement("style");
+    st.textContent = I.css;
+    document.head.appendChild(st);
+  }
   I.tr = tr;
   I.phrase = (s) => (I.phrases && I.phrases[s]) || s;
 })();

@@ -179,6 +179,58 @@ def main():
             starts[kk + 1] = t
     ends[-1] = t_last
 
+    # Feinabgleich je Abschnitt: Phrasengrenzen (Komma, Doppelpunkt, Punkt) an die tatsächlichen — auch kurzen —
+    # Atempausen innerhalb des Abschnitts legen. Erwartung lokal über den Zeichenanteil im Abschnitt (nicht über das
+    # globale Sprechtempo), längere Pausen werden bevorzugt, nicht jede Pause muss eine Grenze sein.
+    fine = silences(edb, thr + 4, 0.05)
+    SIG, BETA, UNASSIGNED = 0.6, 1.2, 1.6
+    for si in range(len(segs)):
+        ks = [k for k in range(len(ph)) if seg_of[k] == si]
+        if len(ks) < 2:
+            continue
+        s_a, s_b = starts[ks[0]], ends[ks[-1]]
+        cand = [(a, b) for a, b in fine if a > s_a + 0.15 and b < s_b - 0.15]
+        ch = chars[ks]
+        exp_b = s_a + (s_b - s_a) * np.cumsum(ch)[:-1] / ch.sum()  # Grenze nach Phrase ks[i]
+        n, J = len(exp_b), len(cand)
+        def c_as(i, j):
+            a, b = cand[j]
+            return (((a + b) / 2 - exp_b[i]) / SIG) ** 2 - BETA * min(b - a, 0.4) / 0.4
+        f = np.full((n + 1, J + 1), np.inf)
+        how = np.zeros((n + 1, J + 1), dtype=int)  # 0 = Pause übersprungen, 1 = Grenze ohne Pause, 2 = zugeordnet
+        f[0, :] = 0.0
+        for i in range(1, n + 1):
+            f[i, 0] = f[i - 1, 0] + UNASSIGNED
+            how[i, 0] = 1
+            for j in range(1, J + 1):
+                opts = [(f[i, j - 1], 0), (f[i - 1, j] + UNASSIGNED, 1), (f[i - 1, j - 1] + c_as(i - 1, j - 1), 2)]
+                f[i, j], how[i, j] = min(opts, key=lambda o: o[0])
+        asg, i, j = {}, n, J
+        while i > 0:
+            h = how[i, j]
+            if h == 0:
+                j -= 1
+            elif h == 1:
+                i -= 1
+            else:
+                asg[i - 1] = cand[j - 1]
+                i -= 1
+                j -= 1
+        # Grenzzeiten setzen; Grenzen ohne Pause zwischen bekannten Punkten nach Zeichenanteil verteilen
+        known = [(-1, s_a, s_a)] + [(i, asg[i][0], asg[i][1]) for i in sorted(asg)] + [(n, s_b, s_b)]
+        for (i0, _, t_from), (i1, t_to, _) in zip(known[:-1], known[1:]):
+            if 0 <= i1 < n:
+                ends[ks[i1]], starts[ks[i1] + 1] = asg[i1]
+            mid = list(range(i0 + 1, min(i1, n)))
+            if mid:
+                span = ch[i0 + 1: i1 + 1]
+                acc = 0.0
+                for i in mid:
+                    acc += ch[i]
+                    t = t_from + (t_to - t_from) * acc / span.sum()
+                    ends[ks[i]] = t
+                    starts[ks[i] + 1] = t
+
     # Wörter innerhalb jeder Phrase verteilen (Sprechzeit ohne interne Kurzpausen)
     short_sil = silences(edb, thr, 0.07)
     def words_in(phrase, a, b):

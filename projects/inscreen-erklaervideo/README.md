@@ -67,9 +67,12 @@ uv run projects/inscreen-erklaervideo/scripts/audio/synth.py --timing script/tim
 node projects/inscreen-erklaervideo/scripts/dev/cues.mjs index_nl.html script/sfx_cues_nl.json
 uv run projects/inscreen-erklaervideo/scripts/audio/mix.py --cues script/sfx_cues_nl.json --timing script/timing_nl.json \
   --music assets/audio/music_nl.wav --out assets/audio/mix_nl.wav --no-vo
-npx hyperframes render -c index_nl.html --quality high --output renders/nl/inscreen_nl_16x9_high.mp4 --variables '{"captions":false}'
+PRODUCER_DISABLE_GPU=true npx hyperframes render -c index_nl.html --quality high --output renders/nl/inscreen_nl_16x9_high.mp4 --variables '{"captions":false}'
 python3 projects/inscreen-erklaervideo/scripts/sprechertext_export.py --lang nl   # Anlege-/Schnittpunkte der NL-Aufnahme
 ```
+
+**Render-Hinweis:** Immer mit `PRODUCER_DISABLE_GPU=true` rendern (`build_all.sh` setzt das selbst). Mit der
+Software-GPU des Browsers erscheinen sonst in manchen Szenen dunkle Rechtecke über Figuren und Tür.
 
 ## Vorschau
 

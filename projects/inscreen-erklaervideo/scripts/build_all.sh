@@ -7,6 +7,9 @@
 # Voraussetzung: VO-Dateien in assets/audio/vo/ (scripts/vo_elevenlabs.py oder vo_from_single.py),
 # Node 22, FFmpeg, uv (oder python3 mit numpy+scipy).
 set -euo pipefail
+# Chromium mit Software-GPU (SwiftShader) zeichnet in neueren Builds einzelne SVG-Flächen als dunkle Rechtecke —
+# darum ohne GPU rendern (mit PRODUCER_DISABLE_GPU=false wieder einschaltbar).
+export PRODUCER_DISABLE_GPU="${PRODUCER_DISABLE_GPU:-true}"
 P="$(cd "$(dirname "$0")/.." && pwd)"
 Q="${1:-high}"
 FMT="${2:-beide}"

@@ -1,1093 +1,1009 @@
 {
  "fps": 30,
- "total": 79.9,
+ "total": 73.733,
  "source": "elevenlabs",
  "segments": [
   {
    "id": "s01",
    "scene": "Sommerabend",
-   "text": "Zomeravond. De hefschuifdeur staat wijd open – heerlijk.",
-   "file": "assets/audio/vo/s01.wav",
-   "clipStart": 0.84,
-   "fileDur": 4.5,
+   "text": "Zomeravond, de hefschuifdeur staat wijd open. Genieten!",
+   "file": "assets/audio/vo_nl/s01.wav",
+   "clipStart": 0.86,
+   "fileDur": 4.33,
    "start": 0.9,
-   "end": 5.2,
+   "end": 5.05,
    "words": [
     {
-     "w": "Zomeravond.",
+     "w": "Zomeravond,",
      "k": "zomeravond",
      "s": 0.9,
-     "e": 1.89
+     "e": 1.774
     },
     {
-     "w": "De",
+     "w": "de",
      "k": "de",
-     "s": 2.19,
-     "e": 2.374
+     "s": 1.794,
+     "e": 2.158
     },
     {
      "w": "hefschuifdeur",
      "k": "hefschuifdeur",
-     "s": 2.394,
-     "e": 3.219
+     "s": 2.178,
+     "e": 3.045
     },
     {
      "w": "staat",
      "k": "staat",
-     "s": 3.239,
-     "e": 3.598
+     "s": 3.065,
+     "e": 3.442
     },
     {
      "w": "wijd",
      "k": "wijd",
-     "s": 3.618,
-     "e": 3.919
+     "s": 3.462,
+     "e": 3.779
     },
     {
-     "w": "open",
+     "w": "open.",
      "k": "open",
-     "s": 3.939,
-     "e": 4.439
+     "s": 3.799,
+     "e": 4.305
     },
     {
-     "w": "–",
-     "k": "",
-     "s": 4.459,
-     "e": 4.527
-    },
-    {
-     "w": "heerlijk.",
-     "k": "heerlijk",
-     "s": 4.547,
-     "e": 5.2
+     "w": "Genieten!",
+     "k": "genieten",
+     "s": 4.325,
+     "e": 5.05
     }
    ],
    "winStart": 0.0,
-   "winEnd": 5.37
+   "winEnd": 5.24
   },
   {
    "id": "s02",
    "scene": "Mücken",
-   "text": "Maar dan zijn er die ongenode gasten.",
-   "file": "assets/audio/vo/s02.wav",
-   "clipStart": 5.61,
-   "fileDur": 2.28,
-   "start": 5.67,
-   "end": 7.75,
+   "text": "Maar dan zijn er ongenode gasten.",
+   "file": "assets/audio/vo_nl/s02.wav",
+   "clipStart": 5.48,
+   "fileDur": 2.23,
+   "start": 5.54,
+   "end": 7.57,
    "words": [
     {
      "w": "Maar",
      "k": "maar",
-     "s": 5.67,
-     "e": 5.922
+     "s": 5.54,
+     "e": 5.816
     },
     {
      "w": "dan",
      "k": "dan",
-     "s": 5.942,
-     "e": 6.144
+     "s": 5.836,
+     "e": 6.059
     },
     {
      "w": "zijn",
      "k": "zijn",
-     "s": 6.164,
-     "e": 6.415
+     "s": 6.079,
+     "e": 6.355
     },
     {
      "w": "er",
      "k": "er",
-     "s": 6.435,
-     "e": 6.688
-    },
-    {
-     "w": "die",
-     "k": "die",
-     "s": 6.708,
-     "e": 6.91
+     "s": 6.375,
+     "e": 6.654
     },
     {
      "w": "ongenode",
      "k": "ongenode",
-     "s": 6.93,
-     "e": 7.38
+     "s": 6.674,
+     "e": 7.166
     },
     {
      "w": "gasten.",
      "k": "gasten",
-     "s": 7.4,
-     "e": 7.75
+     "s": 7.186,
+     "e": 7.57
     }
    ],
-   "winStart": 5.37,
-   "winEnd": 7.87
+   "winStart": 5.24,
+   "winEnd": 7.63
   },
   {
    "id": "s03",
    "scene": "Problem",
-   "text": "Klassieke vliegenhorren: opgebouwd, opvallend, met struikelrand – en boren moet ook nog.",
-   "file": "assets/audio/vo/s03.wav",
-   "clipStart": 8.11,
-   "fileDur": 4.51,
-   "start": 8.17,
-   "end": 12.48,
+   "text": "Klassieke insectenhorren: optisch niet fraai, storend geluid, afwijkende kleur en montagegaten boren.",
+   "file": "assets/audio/vo_nl/s03.wav",
+   "clipStart": 7.87,
+   "fileDur": 6.97,
+   "start": 7.93,
+   "end": 14.7,
    "words": [
     {
      "w": "Klassieke",
      "k": "klassieke",
-     "s": 8.17,
-     "e": 8.661
+     "s": 7.93,
+     "e": 8.218
     },
     {
-     "w": "vliegenhorren:",
-     "k": "vliegenhorren",
-     "s": 8.681,
-     "e": 9.366
+     "w": "insectenhorren:",
+     "k": "insectenhorren",
+     "s": 8.238,
+     "e": 8.673
     },
     {
-     "w": "opgebouwd,",
-     "k": "opgebouwd",
-     "s": 9.386,
-     "e": 9.901
+     "w": "optisch",
+     "k": "optisch",
+     "s": 8.693,
+     "e": 8.916
     },
     {
-     "w": "opvallend,",
-     "k": "opvallend",
-     "s": 9.921,
-     "e": 10.437
+     "w": "niet",
+     "k": "niet",
+     "s": 8.936,
+     "e": 9.074
     },
     {
-     "w": "met",
-     "k": "met",
-     "s": 10.457,
-     "e": 10.773
+     "w": "fraai,",
+     "k": "fraai",
+     "s": 9.094,
+     "e": 9.26
     },
     {
-     "w": "struikelrand",
-     "k": "struikelrand",
-     "s": 10.793,
-     "e": 11.302
+     "w": "storend",
+     "k": "storend",
+     "s": 9.6,
+     "e": 10.309
     },
     {
-     "w": "–",
-     "k": "",
-     "s": 11.322,
-     "e": 11.361
+     "w": "geluid,",
+     "k": "geluid",
+     "s": 10.329,
+     "e": 11.043
     },
     {
-     "w": "en",
-     "k": "en",
-     "s": 11.381,
-     "e": 11.521
-    },
-    {
-     "w": "boren",
-     "k": "boren",
-     "s": 11.541,
-     "e": 11.818
-    },
-    {
-     "w": "moet",
-     "k": "moet",
-     "s": 11.838,
-     "e": 12.069
-    },
-    {
-     "w": "ook",
-     "k": "ook",
-     "s": 12.089,
-     "e": 12.274
-    },
-    {
-     "w": "nog.",
-     "k": "nog",
-     "s": 12.294,
-     "e": 12.48
-    }
-   ],
-   "winStart": 7.87,
-   "winEnd": 12.52
-  },
-  {
-   "id": "s04",
-   "scene": "Auftritt InScreen",
-   "text": "Hier komt InScreen: de insectenhor, geïntegreerd in de QuinLine-hefschuifdeur.",
-   "file": "assets/audio/vo/s04.wav",
-   "clipStart": 12.76,
-   "fileDur": 7.02,
-   "start": 12.82,
-   "end": 19.64,
-   "words": [
-    {
-     "w": "Hier",
-     "k": "hier",
-     "s": 12.82,
-     "e": 13.127
-    },
-    {
-     "w": "komt",
-     "k": "komt",
-     "s": 13.147,
-     "e": 13.455
-    },
-    {
-     "w": "InScreen:",
-     "k": "inscreen",
-     "s": 13.475,
-     "e": 14.02
-    },
-    {
-     "w": "de",
-     "k": "de",
-     "s": 14.57,
-     "e": 14.83
-    },
-    {
-     "w": "insectenhor,",
-     "k": "insectenhor",
-     "s": 14.85,
-     "e": 15.93
-    },
-    {
-     "w": "geïntegreerd",
-     "k": "geïntegreerd",
-     "s": 15.95,
-     "e": 17.051
-    },
-    {
-     "w": "in",
-     "k": "in",
-     "s": 17.071,
-     "e": 17.482
-    },
-    {
-     "w": "de",
-     "k": "de",
-     "s": 17.502,
-     "e": 17.772
-    },
-    {
-     "w": "QuinLine-hefschuifdeur.",
-     "k": "quinline-hefschuifdeur",
-     "s": 17.792,
-     "e": 19.64
-    }
-   ],
-   "winStart": 12.52,
-   "winEnd": 19.76
-  },
-  {
-   "id": "s05",
-   "scene": "Integration",
-   "text": "Het plissé is via een integratieprofiel in de vaste vleugel ingebouwd – en de onderste geleiderail in de drempelconstructie.",
-   "file": "assets/audio/vo/s05.wav",
-   "clipStart": 20.0,
-   "fileDur": 6.99,
-   "start": 20.06,
-   "end": 26.85,
-   "words": [
-    {
-     "w": "Het",
-     "k": "het",
-     "s": 20.06,
-     "e": 20.271
-    },
-    {
-     "w": "plissé",
-     "k": "plissé",
-     "s": 20.291,
-     "e": 20.656
-    },
-    {
-     "w": "is",
-     "k": "is",
-     "s": 20.676,
-     "e": 20.835
-    },
-    {
-     "w": "via",
-     "k": "via",
-     "s": 20.855,
-     "e": 21.066
-    },
-    {
-     "w": "een",
-     "k": "een",
-     "s": 21.086,
-     "e": 21.297
-    },
-    {
-     "w": "integratieprofiel",
-     "k": "integratieprofiel",
-     "s": 21.317,
-     "e": 22.246
-    },
-    {
-     "w": "in",
-     "k": "in",
-     "s": 22.266,
-     "e": 22.425
-    },
-    {
-     "w": "de",
-     "k": "de",
-     "s": 22.445,
-     "e": 22.605
-    },
-    {
-     "w": "vaste",
-     "k": "vaste",
-     "s": 22.625,
-     "e": 22.938
-    },
-    {
-     "w": "vleugel",
-     "k": "vleugel",
-     "s": 22.958,
-     "e": 23.374
-    },
-    {
-     "w": "ingebouwd",
-     "k": "ingebouwd",
-     "s": 23.394,
-     "e": 23.913
-    },
-    {
-     "w": "–",
-     "k": "",
-     "s": 23.933,
-     "e": 23.99
-    },
-    {
-     "w": "en",
-     "k": "en",
-     "s": 24.28,
-     "e": 24.423
-    },
-    {
-     "w": "de",
-     "k": "de",
-     "s": 24.443,
-     "e": 24.587
-    },
-    {
-     "w": "onderste",
-     "k": "onderste",
-     "s": 24.607,
-     "e": 25.03
-    },
-    {
-     "w": "geleiderail",
-     "k": "geleiderail",
-     "s": 25.05,
-     "e": 25.613
-    },
-    {
-     "w": "in",
-     "k": "in",
-     "s": 25.633,
-     "e": 25.777
-    },
-    {
-     "w": "de",
-     "k": "de",
-     "s": 25.797,
-     "e": 25.94
-    },
-    {
-     "w": "drempelconstructie.",
-     "k": "drempelconstructie",
-     "s": 25.96,
-     "e": 26.85
-    }
-   ],
-   "winStart": 19.76,
-   "winEnd": 30.5
-  },
-  {
-   "id": "s06",
-   "scene": "Unsichtbar & farbgleich",
-   "text": "Teruggeschoven verdwijnt het plissé bijna onzichtbaar in het profiel. De greeplijst en het frame van de plissé-cassette zijn in een passende kleur leverbaar, met folie of poedercoating.",
-   "file": "assets/audio/vo/s06.wav",
-   "clipStart": 30.74,
-   "fileDur": 10.31,
-   "start": 30.8,
-   "end": 40.91,
-   "words": [
-    {
-     "w": "Teruggeschoven",
-     "k": "teruggeschoven",
-     "s": 30.8,
-     "e": 31.562
-    },
-    {
-     "w": "verdwijnt",
-     "k": "verdwijnt",
-     "s": 31.582,
-     "e": 32.092
-    },
-    {
-     "w": "het",
-     "k": "het",
-     "s": 32.112,
-     "e": 32.32
-    },
-    {
-     "w": "plissé",
-     "k": "plissé",
-     "s": 32.34,
-     "e": 32.698
-    },
-    {
-     "w": "bijna",
-     "k": "bijna",
-     "s": 32.718,
-     "e": 33.026
-    },
-    {
-     "w": "onzichtbaar",
-     "k": "onzichtbaar",
-     "s": 33.046,
-     "e": 33.657
-    },
-    {
-     "w": "in",
-     "k": "in",
-     "s": 33.677,
-     "e": 33.834
-    },
-    {
-     "w": "het",
-     "k": "het",
-     "s": 33.854,
-     "e": 34.061
-    },
-    {
-     "w": "profiel.",
-     "k": "profiel",
-     "s": 34.081,
-     "e": 34.49
-    },
-    {
-     "w": "De",
-     "k": "de",
-     "s": 34.95,
-     "e": 35.09
-    },
-    {
-     "w": "greeplijst",
-     "k": "greeplijst",
-     "s": 35.11,
-     "e": 35.617
-    },
-    {
-     "w": "en",
-     "k": "en",
-     "s": 35.637,
-     "e": 35.777
-    },
-    {
-     "w": "het",
-     "k": "het",
-     "s": 35.797,
-     "e": 35.983
-    },
-    {
-     "w": "frame",
-     "k": "frame",
-     "s": 36.003,
-     "e": 36.28
-    },
-    {
-     "w": "van",
-     "k": "van",
-     "s": 36.3,
-     "e": 36.486
-    },
-    {
-     "w": "de",
-     "k": "de",
-     "s": 36.506,
-     "e": 36.646
-    },
-    {
-     "w": "plissé-cassette",
-     "k": "plissé-cassette",
-     "s": 36.666,
-     "e": 37.356
-    },
-    {
-     "w": "zijn",
-     "k": "zijn",
-     "s": 37.376,
-     "e": 37.608
-    },
-    {
-     "w": "in",
-     "k": "in",
-     "s": 37.628,
-     "e": 37.768
-    },
-    {
-     "w": "een",
-     "k": "een",
-     "s": 37.788,
-     "e": 38.054
-    },
-    {
-     "w": "passende",
-     "k": "passende",
-     "s": 38.074,
-     "e": 38.488
+     "w": "afwijkende",
+     "k": "afwijkende",
+     "s": 11.063,
+     "e": 12.134
     },
     {
      "w": "kleur",
      "k": "kleur",
-     "s": 38.508,
-     "e": 38.786
+     "s": 12.154,
+     "e": 12.666
     },
     {
-     "w": "leverbaar,",
-     "k": "leverbaar",
-     "s": 38.806,
-     "e": 39.467
+     "w": "en",
+     "k": "en",
+     "s": 12.686,
+     "e": 12.953
+    },
+    {
+     "w": "montagegaten",
+     "k": "montagegaten",
+     "s": 12.973,
+     "e": 14.168
+    },
+    {
+     "w": "boren.",
+     "k": "boren",
+     "s": 14.188,
+     "e": 14.7
+    }
+   ],
+   "winStart": 7.63,
+   "winEnd": 14.92
+  },
+  {
+   "id": "s04",
+   "scene": "Auftritt InScreen",
+   "text": "Dan onze InScreen insectenhor: geïntegreerd met de QuinLine-hefschuifdeur.",
+   "file": "assets/audio/vo_nl/s04.wav",
+   "clipStart": 15.16,
+   "fileDur": 4.84,
+   "start": 15.22,
+   "end": 19.86,
+   "words": [
+    {
+     "w": "Dan",
+     "k": "dan",
+     "s": 15.22,
+     "e": 15.484
+    },
+    {
+     "w": "onze",
+     "k": "onze",
+     "s": 15.504,
+     "e": 15.831
+    },
+    {
+     "w": "InScreen",
+     "k": "inscreen",
+     "s": 15.851,
+     "e": 16.521
+    },
+    {
+     "w": "insectenhor:",
+     "k": "insectenhor",
+     "s": 16.541,
+     "e": 17.31
+    },
+    {
+     "w": "geïntegreerd",
+     "k": "geïntegreerd",
+     "s": 17.58,
+     "e": 18.266
     },
     {
      "w": "met",
      "k": "met",
-     "s": 39.487,
-     "e": 39.675
-    },
-    {
-     "w": "folie",
-     "k": "folie",
-     "s": 39.695,
-     "e": 40.076
-    },
-    {
-     "w": "of",
-     "k": "of",
-     "s": 40.096,
-     "e": 40.238
-    },
-    {
-     "w": "poedercoating.",
-     "k": "poedercoating",
-     "s": 40.258,
-     "e": 40.91
-    }
-   ],
-   "winStart": 30.5,
-   "winEnd": 44.03
-  },
-  {
-   "id": "s07",
-   "scene": "Keine Stolperkante",
-   "text": "Geen struikelgevaar in de doorgang: comfortabel voor kinderen, grootouders – en het volle dienblad.",
-   "file": "assets/audio/vo/s07.wav",
-   "clipStart": 44.27,
-   "fileDur": 6.06,
-   "start": 44.33,
-   "end": 50.19,
-   "words": [
-    {
-     "w": "Geen",
-     "k": "geen",
-     "s": 44.33,
-     "e": 44.584
-    },
-    {
-     "w": "struikelgevaar",
-     "k": "struikelgevaar",
-     "s": 44.604,
-     "e": 45.357
-    },
-    {
-     "w": "in",
-     "k": "in",
-     "s": 45.377,
-     "e": 45.532
+     "s": 18.286,
+     "e": 18.501
     },
     {
      "w": "de",
      "k": "de",
-     "s": 45.552,
-     "e": 45.706
+     "s": 18.521,
+     "e": 18.684
     },
     {
-     "w": "doorgang:",
-     "k": "doorgang",
-     "s": 45.726,
-     "e": 46.18
-    },
-    {
-     "w": "comfortabel",
-     "k": "comfortabel",
-     "s": 46.43,
-     "e": 47.08
-    },
-    {
-     "w": "voor",
-     "k": "voor",
-     "s": 47.1,
-     "e": 47.375
-    },
-    {
-     "w": "kinderen,",
-     "k": "kinderen",
-     "s": 47.395,
-     "e": 48.005
-    },
-    {
-     "w": "grootouders",
-     "k": "grootouders",
-     "s": 48.025,
-     "e": 48.743
-    },
-    {
-     "w": "–",
-     "k": "",
-     "s": 48.763,
-     "e": 48.832
-    },
-    {
-     "w": "en",
-     "k": "en",
-     "s": 48.852,
-     "e": 49.03
-    },
-    {
-     "w": "het",
-     "k": "het",
-     "s": 49.05,
-     "e": 49.284
-    },
-    {
-     "w": "volle",
-     "k": "volle",
-     "s": 49.304,
-     "e": 49.652
-    },
-    {
-     "w": "dienblad.",
-     "k": "dienblad",
-     "s": 49.672,
-     "e": 50.19
+     "w": "QuinLine-hefschuifdeur.",
+     "k": "quinline-hefschuifdeur",
+     "s": 18.704,
+     "e": 19.86
     }
    ],
-   "winStart": 44.03,
-   "winEnd": 50.29
+   "winStart": 14.92,
+   "winEnd": 19.94
   },
   {
-   "id": "s08",
-   "scene": "Bedienung",
-   "text": "Het glasvezelplissé glijdt traploos open en dicht. De muggen? Blijven buiten.",
-   "file": "assets/audio/vo/s08.wav",
-   "clipStart": 50.53,
-   "fileDur": 5.23,
-   "start": 50.59,
-   "end": 55.62,
+   "id": "s05",
+   "scene": "Integration",
+   "text": "De hor is met een profiel in de vaste vleugel ingebouwd. Het aandrijfsysteem geïntegreerd in de aluminium onderdorpel.",
+   "file": "assets/audio/vo_nl/s05.wav",
+   "clipStart": 20.18,
+   "fileDur": 6.87,
+   "start": 20.24,
+   "end": 26.91,
    "words": [
-    {
-     "w": "Het",
-     "k": "het",
-     "s": 50.59,
-     "e": 50.822
-    },
-    {
-     "w": "glasvezelplissé",
-     "k": "glasvezelplissé",
-     "s": 50.842,
-     "e": 51.748
-    },
-    {
-     "w": "glijdt",
-     "k": "glijdt",
-     "s": 51.768,
-     "e": 52.268
-    },
-    {
-     "w": "traploos",
-     "k": "traploos",
-     "s": 52.288,
-     "e": 52.801
-    },
-    {
-     "w": "open",
-     "k": "open",
-     "s": 52.821,
-     "e": 53.109
-    },
-    {
-     "w": "en",
-     "k": "en",
-     "s": 53.129,
-     "e": 53.306
-    },
-    {
-     "w": "dicht.",
-     "k": "dicht",
-     "s": 53.326,
-     "e": 53.67
-    },
     {
      "w": "De",
      "k": "de",
-     "s": 54.03,
-     "e": 54.166
+     "s": 20.24,
+     "e": 20.392
     },
     {
-     "w": "muggen?",
-     "k": "muggen",
-     "s": 54.186,
-     "e": 54.5
-    },
-    {
-     "w": "Blijven",
-     "k": "blijven",
-     "s": 54.88,
-     "e": 55.264
-    },
-    {
-     "w": "buiten.",
-     "k": "buiten",
-     "s": 55.284,
-     "e": 55.62
-    }
-   ],
-   "winStart": 50.29,
-   "winEnd": 55.75
-  },
-  {
-   "id": "s09",
-   "scene": "Bestellung",
-   "text": "Voor u als vakpartner: u bestelt alles bij één adres, de maten zijn al bekend.",
-   "file": "assets/audio/vo/s09.wav",
-   "clipStart": 55.99,
-   "fileDur": 5.03,
-   "start": 56.05,
-   "end": 60.88,
-   "words": [
-    {
-     "w": "Voor",
-     "k": "voor",
-     "s": 56.05,
-     "e": 56.31
-    },
-    {
-     "w": "u",
-     "k": "u",
-     "s": 56.33,
-     "e": 56.437
-    },
-    {
-     "w": "als",
-     "k": "als",
-     "s": 56.457,
-     "e": 56.665
-    },
-    {
-     "w": "vakpartner:",
-     "k": "vakpartner",
-     "s": 56.685,
-     "e": 57.25
-    },
-    {
-     "w": "u",
-     "k": "u",
-     "s": 57.55,
-     "e": 57.664
-    },
-    {
-     "w": "bestelt",
-     "k": "bestelt",
-     "s": 57.684,
-     "e": 58.118
-    },
-    {
-     "w": "alles",
-     "k": "alles",
-     "s": 58.138,
-     "e": 58.466
-    },
-    {
-     "w": "bij",
-     "k": "bij",
-     "s": 58.486,
-     "e": 58.796
-    },
-    {
-     "w": "één",
-     "k": "één",
-     "s": 58.816,
-     "e": 59.037
-    },
-    {
-     "w": "adres,",
-     "k": "adres",
-     "s": 59.057,
-     "e": 59.384
-    },
-    {
-     "w": "de",
-     "k": "de",
-     "s": 59.404,
-     "e": 59.747
-    },
-    {
-     "w": "maten",
-     "k": "maten",
-     "s": 59.767,
-     "e": 60.067
-    },
-    {
-     "w": "zijn",
-     "k": "zijn",
-     "s": 60.087,
-     "e": 60.338
-    },
-    {
-     "w": "al",
-     "k": "al",
-     "s": 60.358,
-     "e": 60.511
-    },
-    {
-     "w": "bekend.",
-     "k": "bekend",
-     "s": 60.531,
-     "e": 60.88
-    }
-   ],
-   "winStart": 55.75,
-   "winEnd": 61.01
-  },
-  {
-   "id": "s10",
-   "scene": "Plug & Play",
-   "text": "Af fabriek komt InScreen als plug-and-play-set: vastklikken, klaar – zonder boren en schroeven. Achteraf monteren? Ook eenvoudig.",
-   "file": "assets/audio/vo/s10.wav",
-   "clipStart": 61.25,
-   "fileDur": 8.38,
-   "start": 61.31,
-   "end": 69.49,
-   "words": [
-    {
-     "w": "Af",
-     "k": "af",
-     "s": 61.31,
-     "e": 61.492
-    },
-    {
-     "w": "fabriek",
-     "k": "fabriek",
-     "s": 61.512,
-     "e": 61.984
-    },
-    {
-     "w": "komt",
-     "k": "komt",
-     "s": 62.004,
-     "e": 62.302
-    },
-    {
-     "w": "InScreen",
-     "k": "inscreen",
-     "s": 62.322,
-     "e": 62.852
-    },
-    {
-     "w": "als",
-     "k": "als",
-     "s": 62.872,
-     "e": 63.202
-    },
-    {
-     "w": "plug-and-play-set:",
-     "k": "plug-and-play-set",
-     "s": 63.222,
-     "e": 64.099
-    },
-    {
-     "w": "vastklikken,",
-     "k": "vastklikken",
-     "s": 64.119,
-     "e": 64.86
-    },
-    {
-     "w": "klaar",
-     "k": "klaar",
-     "s": 65.13,
-     "e": 65.394
-    },
-    {
-     "w": "–",
-     "k": "",
-     "s": 65.414,
-     "e": 65.46
-    },
-    {
-     "w": "zonder",
-     "k": "zonder",
-     "s": 65.72,
-     "e": 66.048
-    },
-    {
-     "w": "boren",
-     "k": "boren",
-     "s": 66.068,
-     "e": 66.35
-    },
-    {
-     "w": "en",
-     "k": "en",
-     "s": 66.37,
-     "e": 66.513
-    },
-    {
-     "w": "schroeven.",
-     "k": "schroeven",
-     "s": 66.533,
-     "e": 67.0
-    },
-    {
-     "w": "Achteraf",
-     "k": "achteraf",
-     "s": 67.41,
-     "e": 67.865
-    },
-    {
-     "w": "monteren?",
-     "k": "monteren",
-     "s": 67.885,
-     "e": 68.34
-    },
-    {
-     "w": "Ook",
-     "k": "ook",
-     "s": 68.63,
-     "e": 68.923
-    },
-    {
-     "w": "eenvoudig.",
-     "k": "eenvoudig",
-     "s": 68.943,
-     "e": 69.49
-    }
-   ],
-   "winStart": 61.01,
-   "winEnd": 69.54
-  },
-  {
-   "id": "s11",
-   "scene": "Abschluss",
-   "text": "Geïntegreerd, in passende kleur, snel gemonteerd: daarom is InScreen de beste insectenhor voor hefschuifdeuren.",
-   "file": "assets/audio/vo/s11.wav",
-   "clipStart": 69.78,
-   "fileDur": 7.36,
-   "start": 69.84,
-   "end": 77.0,
-   "words": [
-    {
-     "w": "Geïntegreerd,",
-     "k": "geïntegreerd",
-     "s": 69.84,
-     "e": 70.724
-    },
-    {
-     "w": "in",
-     "k": "in",
-     "s": 70.744,
-     "e": 70.93
-    },
-    {
-     "w": "passende",
-     "k": "passende",
-     "s": 70.95,
-     "e": 71.569
-    },
-    {
-     "w": "kleur,",
-     "k": "kleur",
-     "s": 71.589,
-     "e": 71.952
-    },
-    {
-     "w": "snel",
-     "k": "snel",
-     "s": 71.972,
-     "e": 72.307
-    },
-    {
-     "w": "gemonteerd:",
-     "k": "gemonteerd",
-     "s": 72.327,
-     "e": 73.05
-    },
-    {
-     "w": "daarom",
-     "k": "daarom",
-     "s": 73.4,
-     "e": 73.788
+     "w": "hor",
+     "k": "hor",
+     "s": 20.412,
+     "e": 20.613
     },
     {
      "w": "is",
      "k": "is",
-     "s": 73.808,
-     "e": 73.979
+     "s": 20.633,
+     "e": 20.785
     },
     {
-     "w": "InScreen",
-     "k": "inscreen",
-     "s": 73.999,
-     "e": 74.576
+     "w": "met",
+     "k": "met",
+     "s": 20.805,
+     "e": 21.006
+    },
+    {
+     "w": "een",
+     "k": "een",
+     "s": 21.026,
+     "e": 21.227
+    },
+    {
+     "w": "profiel",
+     "k": "profiel",
+     "s": 21.247,
+     "e": 21.644
+    },
+    {
+     "w": "in",
+     "k": "in",
+     "s": 21.664,
+     "e": 21.816
     },
     {
      "w": "de",
      "k": "de",
-     "s": 74.596,
-     "e": 74.767
+     "s": 21.836,
+     "e": 21.988
+    },
+    {
+     "w": "vaste",
+     "k": "vaste",
+     "s": 22.008,
+     "e": 22.307
+    },
+    {
+     "w": "vleugel",
+     "k": "vleugel",
+     "s": 22.327,
+     "e": 22.724
+    },
+    {
+     "w": "ingebouwd.",
+     "k": "ingebouwd",
+     "s": 22.744,
+     "e": 23.24
+    },
+    {
+     "w": "Het",
+     "k": "het",
+     "s": 23.56,
+     "e": 23.775
+    },
+    {
+     "w": "aandrijfsysteem",
+     "k": "aandrijfsysteem",
+     "s": 23.795,
+     "e": 24.637
+    },
+    {
+     "w": "geïntegreerd",
+     "k": "geïntegreerd",
+     "s": 24.657,
+     "e": 25.343
+    },
+    {
+     "w": "in",
+     "k": "in",
+     "s": 25.363,
+     "e": 25.525
+    },
+    {
+     "w": "de",
+     "k": "de",
+     "s": 25.545,
+     "e": 25.708
+    },
+    {
+     "w": "aluminium",
+     "k": "aluminium",
+     "s": 25.728,
+     "e": 26.257
+    },
+    {
+     "w": "onderdorpel.",
+     "k": "onderdorpel",
+     "s": 26.277,
+     "e": 26.91
+    }
+   ],
+   "winStart": 19.94,
+   "winEnd": 30.47
+  },
+  {
+   "id": "s06",
+   "scene": "Unsichtbar & farbgleich",
+   "text": "Eenmaal teruggeschoven matcht het plissé volledig met de QuinLine-hefschuifdeur. Het frame van de hor is in dezelfde folie leverbaar als de hefschuifpui.",
+   "file": "assets/audio/vo_nl/s06.wav",
+   "clipStart": 30.71,
+   "fileDur": 8.48,
+   "start": 30.77,
+   "end": 39.05,
+   "words": [
+    {
+     "w": "Eenmaal",
+     "k": "eenmaal",
+     "s": 30.77,
+     "e": 31.174
+    },
+    {
+     "w": "teruggeschoven",
+     "k": "teruggeschoven",
+     "s": 31.194,
+     "e": 31.949
+    },
+    {
+     "w": "matcht",
+     "k": "matcht",
+     "s": 31.969,
+     "e": 32.323
+    },
+    {
+     "w": "het",
+     "k": "het",
+     "s": 32.343,
+     "e": 32.548
+    },
+    {
+     "w": "plissé",
+     "k": "plissé",
+     "s": 32.568,
+     "e": 32.922
+    },
+    {
+     "w": "volledig",
+     "k": "volledig",
+     "s": 32.942,
+     "e": 33.397
+    },
+    {
+     "w": "met",
+     "k": "met",
+     "s": 33.417,
+     "e": 33.622
+    },
+    {
+     "w": "de",
+     "k": "de",
+     "s": 33.642,
+     "e": 33.796
+    },
+    {
+     "w": "QuinLine-hefschuifdeur.",
+     "k": "quinline-hefschuifdeur",
+     "s": 33.816,
+     "e": 34.92
+    },
+    {
+     "w": "Het",
+     "k": "het",
+     "s": 35.29,
+     "e": 35.487
+    },
+    {
+     "w": "frame",
+     "k": "frame",
+     "s": 35.507,
+     "e": 35.8
+    },
+    {
+     "w": "van",
+     "k": "van",
+     "s": 35.82,
+     "e": 36.016
+    },
+    {
+     "w": "de",
+     "k": "de",
+     "s": 36.036,
+     "e": 36.185
+    },
+    {
+     "w": "hor",
+     "k": "hor",
+     "s": 36.205,
+     "e": 36.402
+    },
+    {
+     "w": "is",
+     "k": "is",
+     "s": 36.422,
+     "e": 36.57
+    },
+    {
+     "w": "in",
+     "k": "in",
+     "s": 36.59,
+     "e": 36.739
+    },
+    {
+     "w": "dezelfde",
+     "k": "dezelfde",
+     "s": 36.759,
+     "e": 37.196
+    },
+    {
+     "w": "folie",
+     "k": "folie",
+     "s": 37.216,
+     "e": 37.509
+    },
+    {
+     "w": "leverbaar",
+     "k": "leverbaar",
+     "s": 37.529,
+     "e": 38.015
+    },
+    {
+     "w": "als",
+     "k": "als",
+     "s": 38.035,
+     "e": 38.231
+    },
+    {
+     "w": "de",
+     "k": "de",
+     "s": 38.251,
+     "e": 38.4
+    },
+    {
+     "w": "hefschuifpui.",
+     "k": "hefschuifpui",
+     "s": 38.42,
+     "e": 39.05
+    }
+   ],
+   "winStart": 30.47,
+   "winEnd": 42.12
+  },
+  {
+   "id": "s07",
+   "scene": "Keine Stolperkante",
+   "text": "Geen drempel in doorgang. Geen kans op struikelen.",
+   "file": "assets/audio/vo_nl/s07.wav",
+   "clipStart": 42.36,
+   "fileDur": 2.9,
+   "start": 42.42,
+   "end": 45.12,
+   "words": [
+    {
+     "w": "Geen",
+     "k": "geen",
+     "s": 42.42,
+     "e": 42.682
+    },
+    {
+     "w": "drempel",
+     "k": "drempel",
+     "s": 42.702,
+     "e": 43.119
+    },
+    {
+     "w": "in",
+     "k": "in",
+     "s": 43.139,
+     "e": 43.299
+    },
+    {
+     "w": "doorgang.",
+     "k": "doorgang",
+     "s": 43.319,
+     "e": 43.787
+    },
+    {
+     "w": "Geen",
+     "k": "geen",
+     "s": 43.807,
+     "e": 44.069
+    },
+    {
+     "w": "kans",
+     "k": "kans",
+     "s": 44.089,
+     "e": 44.351
+    },
+    {
+     "w": "op",
+     "k": "op",
+     "s": 44.371,
+     "e": 44.53
+    },
+    {
+     "w": "struikelen.",
+     "k": "struikelen",
+     "s": 44.55,
+     "e": 45.12
+    }
+   ],
+   "winStart": 42.12,
+   "winEnd": 45.19
+  },
+  {
+   "id": "s08",
+   "scene": "Bedienung",
+   "text": "Het glasvezelplissé glijdt moeiteloos open en dicht. En de muggen? Die blijven buiten!",
+   "file": "assets/audio/vo_nl/s08.wav",
+   "clipStart": 45.43,
+   "fileDur": 5.53,
+   "start": 45.49,
+   "end": 50.82,
+   "words": [
+    {
+     "w": "Het",
+     "k": "het",
+     "s": 45.49,
+     "e": 45.716
+    },
+    {
+     "w": "glasvezelplissé",
+     "k": "glasvezelplissé",
+     "s": 45.736,
+     "e": 46.62
+    },
+    {
+     "w": "glijdt",
+     "k": "glijdt",
+     "s": 46.64,
+     "e": 47.031
+    },
+    {
+     "w": "moeiteloos",
+     "k": "moeiteloos",
+     "s": 47.051,
+     "e": 47.661
+    },
+    {
+     "w": "open",
+     "k": "open",
+     "s": 47.681,
+     "e": 47.962
+    },
+    {
+     "w": "en",
+     "k": "en",
+     "s": 47.982,
+     "e": 48.154
+    },
+    {
+     "w": "dicht.",
+     "k": "dicht",
+     "s": 48.174,
+     "e": 48.51
+    },
+    {
+     "w": "En",
+     "k": "en",
+     "s": 48.92,
+     "e": 49.091
+    },
+    {
+     "w": "de",
+     "k": "de",
+     "s": 49.111,
+     "e": 49.282
+    },
+    {
+     "w": "muggen?",
+     "k": "muggen",
+     "s": 49.302,
+     "e": 49.691
+    },
+    {
+     "w": "Die",
+     "k": "die",
+     "s": 49.711,
+     "e": 49.939
+    },
+    {
+     "w": "blijven",
+     "k": "blijven",
+     "s": 49.959,
+     "e": 50.407
+    },
+    {
+     "w": "buiten!",
+     "k": "buiten",
+     "s": 50.427,
+     "e": 50.82
+    }
+   ],
+   "winStart": 45.19,
+   "winEnd": 50.96
+  },
+  {
+   "id": "s09",
+   "scene": "Bestellung",
+   "text": "Voor u als vakpartner: ook via Configurator met één klik besteld. Nul procent foutmarge!",
+   "file": "assets/audio/vo_nl/s09.wav",
+   "clipStart": 51.2,
+   "fileDur": 5.91,
+   "start": 51.26,
+   "end": 56.97,
+   "words": [
+    {
+     "w": "Voor",
+     "k": "voor",
+     "s": 51.26,
+     "e": 51.579
+    },
+    {
+     "w": "u",
+     "k": "u",
+     "s": 51.599,
+     "e": 51.734
+    },
+    {
+     "w": "als",
+     "k": "als",
+     "s": 51.754,
+     "e": 52.011
+    },
+    {
+     "w": "vakpartner:",
+     "k": "vakpartner",
+     "s": 52.031,
+     "e": 52.721
+    },
+    {
+     "w": "ook",
+     "k": "ook",
+     "s": 52.741,
+     "e": 52.987
+    },
+    {
+     "w": "via",
+     "k": "via",
+     "s": 53.007,
+     "e": 53.253
+    },
+    {
+     "w": "Configurator",
+     "k": "configurator",
+     "s": 53.273,
+     "e": 54.05
+    },
+    {
+     "w": "met",
+     "k": "met",
+     "s": 54.07,
+     "e": 54.396
+    },
+    {
+     "w": "één",
+     "k": "één",
+     "s": 54.416,
+     "e": 54.662
+    },
+    {
+     "w": "klik",
+     "k": "klik",
+     "s": 54.682,
+     "e": 54.987
+    },
+    {
+     "w": "besteld.",
+     "k": "besteld",
+     "s": 55.007,
+     "e": 55.489
+    },
+    {
+     "w": "Nul",
+     "k": "nul",
+     "s": 55.509,
+     "e": 55.773
+    },
+    {
+     "w": "procent",
+     "k": "procent",
+     "s": 55.793,
+     "e": 56.308
+    },
+    {
+     "w": "foutmarge!",
+     "k": "foutmarge",
+     "s": 56.328,
+     "e": 56.97
+    }
+   ],
+   "winStart": 50.96,
+   "winEnd": 57.1
+  },
+  {
+   "id": "s10",
+   "scene": "Plug & Play",
+   "text": "Af fabriek komt InScreen als plug-and-play-set: vastklikken en klaar – zonder boren en schroeven.",
+   "file": "assets/audio/vo_nl/s10.wav",
+   "clipStart": 57.34,
+   "fileDur": 5.71,
+   "start": 57.4,
+   "end": 62.91,
+   "words": [
+    {
+     "w": "Af",
+     "k": "af",
+     "s": 57.4,
+     "e": 57.576
+    },
+    {
+     "w": "fabriek",
+     "k": "fabriek",
+     "s": 57.596,
+     "e": 58.054
+    },
+    {
+     "w": "komt",
+     "k": "komt",
+     "s": 58.074,
+     "e": 58.362
+    },
+    {
+     "w": "InScreen",
+     "k": "inscreen",
+     "s": 58.382,
+     "e": 58.896
+    },
+    {
+     "w": "als",
+     "k": "als",
+     "s": 58.916,
+     "e": 59.218
+    },
+    {
+     "w": "plug-and-play-set:",
+     "k": "plug-and-play-set",
+     "s": 59.238,
+     "e": 60.089
+    },
+    {
+     "w": "vastklikken",
+     "k": "vastklikken",
+     "s": 60.109,
+     "e": 60.697
+    },
+    {
+     "w": "en",
+     "k": "en",
+     "s": 60.717,
+     "e": 60.997
+    },
+    {
+     "w": "klaar",
+     "k": "klaar",
+     "s": 61.017,
+     "e": 61.313
+    },
+    {
+     "w": "–",
+     "k": "",
+     "s": 61.333,
+     "e": 61.386
+    },
+    {
+     "w": "zonder",
+     "k": "zonder",
+     "s": 61.406,
+     "e": 61.919
+    },
+    {
+     "w": "boren",
+     "k": "boren",
+     "s": 61.939,
+     "e": 62.233
+    },
+    {
+     "w": "en",
+     "k": "en",
+     "s": 62.253,
+     "e": 62.402
+    },
+    {
+     "w": "schroeven.",
+     "k": "schroeven",
+     "s": 62.422,
+     "e": 62.91
+    }
+   ],
+   "winStart": 57.1,
+   "winEnd": 62.9
+  },
+  {
+   "id": "s11",
+   "scene": "Abschluss",
+   "text": "Volledig geïntegreerd, in bijpassende kleur en snel gemonteerd. Daarom is de InScreen de beste insectenhor voor hefschuifdeuren.",
+   "file": "assets/audio/vo_nl/s11.wav",
+   "clipStart": 63.14,
+   "fileDur": 7.83,
+   "start": 63.2,
+   "end": 70.83,
+   "words": [
+    {
+     "w": "Volledig",
+     "k": "volledig",
+     "s": 63.2,
+     "e": 63.732
+    },
+    {
+     "w": "geïntegreerd,",
+     "k": "geïntegreerd",
+     "s": 63.752,
+     "e": 64.517
+    },
+    {
+     "w": "in",
+     "k": "in",
+     "s": 64.537,
+     "e": 64.704
+    },
+    {
+     "w": "bijpassende",
+     "k": "bijpassende",
+     "s": 64.724,
+     "e": 65.374
+    },
+    {
+     "w": "kleur",
+     "k": "kleur",
+     "s": 65.394,
+     "e": 65.802
+    },
+    {
+     "w": "en",
+     "k": "en",
+     "s": 65.822,
+     "e": 65.989
+    },
+    {
+     "w": "snel",
+     "k": "snel",
+     "s": 66.009,
+     "e": 66.284
+    },
+    {
+     "w": "gemonteerd.",
+     "k": "gemonteerd",
+     "s": 66.304,
+     "e": 66.9
+    },
+    {
+     "w": "Daarom",
+     "k": "daarom",
+     "s": 67.26,
+     "e": 67.633
+    },
+    {
+     "w": "is",
+     "k": "is",
+     "s": 67.653,
+     "e": 67.816
+    },
+    {
+     "w": "de",
+     "k": "de",
+     "s": 67.836,
+     "e": 68.0
+    },
+    {
+     "w": "InScreen",
+     "k": "inscreen",
+     "s": 68.02,
+     "e": 68.498
+    },
+    {
+     "w": "de",
+     "k": "de",
+     "s": 68.518,
+     "e": 68.681
     },
     {
      "w": "beste",
      "k": "beste",
-     "s": 74.787,
-     "e": 75.121
+     "s": 68.701,
+     "e": 69.022
     },
     {
      "w": "insectenhor",
      "k": "insectenhor",
-     "s": 75.141,
-     "e": 75.802
+     "s": 69.042,
+     "e": 69.677
     },
     {
      "w": "voor",
      "k": "voor",
-     "s": 75.822,
-     "e": 76.101
+     "s": 69.697,
+     "e": 69.965
     },
     {
      "w": "hefschuifdeuren.",
      "k": "hefschuifdeuren",
-     "s": 76.121,
-     "e": 77.0
+     "s": 69.985,
+     "e": 70.83
     }
    ],
-   "winStart": 69.54,
-   "winEnd": 79.9
+   "winStart": 62.9,
+   "winEnd": 73.733
   }
  ],
  "voSync": {
-  "source": "ElevenLabs_2026-11-09T07_49_56_Emile_-_Warm_Authentic__Professional_pvc_s50_sim75_v4.mp3",
-  "offset": 0.84,
+  "source": "ElevenLabs_2026-11-09T09_52_54_Emile_-_Warm_Authentic__Professional_pvc_s50_sim75_v4.mp3",
+  "offset": 0.86,
   "cuts": [
    {
     "after": "s05",
-    "source_t": 26.235,
+    "source_t": 26.23,
     "insert": 3.5
    },
    {
     "after": "s06",
-    "source_t": 36.78,
+    "source_t": 34.875,
     "insert": 3.0
    }
   ]

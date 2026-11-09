@@ -1,61 +1,61 @@
 {
-  "voice_name": "ElevenLabs Emile – Warm, Authentic, Professional (Website, v4)",
+  "voice_name": "ElevenLabs Emile – Warm, Authentic, Professional (Website, v4) — Text nach Feedback NL-Kollegen",
   "language_code": "nl",
   "segments": [
     {
       "id": "s01",
       "scene": "Sommerabend",
-      "text": "Zomeravond. De hefschuifdeur staat wijd open – heerlijk."
+      "text": "Zomeravond, de hefschuifdeur staat wijd open. Genieten!"
     },
     {
       "id": "s02",
       "scene": "Mücken",
-      "text": "Maar dan zijn er die ongenode gasten."
+      "text": "Maar dan zijn er ongenode gasten."
     },
     {
       "id": "s03",
       "scene": "Problem",
-      "text": "Klassieke vliegenhorren: opgebouwd, opvallend, met struikelrand – en boren moet ook nog."
+      "text": "Klassieke insectenhorren: optisch niet fraai, storend geluid, afwijkende kleur en montagegaten boren."
     },
     {
       "id": "s04",
       "scene": "Auftritt InScreen",
-      "text": "Hier komt InScreen: de insectenhor, geïntegreerd in de QuinLine-hefschuifdeur."
+      "text": "Dan onze InScreen insectenhor: geïntegreerd met de QuinLine-hefschuifdeur."
     },
     {
       "id": "s05",
       "scene": "Integration",
-      "text": "Het plissé is via een integratieprofiel in de vaste vleugel ingebouwd – en de onderste geleiderail in de drempelconstructie."
+      "text": "De hor is met een profiel in de vaste vleugel ingebouwd. Het aandrijfsysteem geïntegreerd in de aluminium onderdorpel."
     },
     {
       "id": "s06",
       "scene": "Unsichtbar & farbgleich",
-      "text": "Teruggeschoven verdwijnt het plissé bijna onzichtbaar in het profiel. De greeplijst en het frame van de plissé-cassette zijn in een passende kleur leverbaar, met folie of poedercoating."
+      "text": "Eenmaal teruggeschoven matcht het plissé volledig met de QuinLine-hefschuifdeur. Het frame van de hor is in dezelfde folie leverbaar als de hefschuifpui."
     },
     {
       "id": "s07",
       "scene": "Keine Stolperkante",
-      "text": "Geen struikelgevaar in de doorgang: comfortabel voor kinderen, grootouders – en het volle dienblad."
+      "text": "Geen drempel in doorgang. Geen kans op struikelen."
     },
     {
       "id": "s08",
       "scene": "Bedienung",
-      "text": "Het glasvezelplissé glijdt traploos open en dicht. De muggen? Blijven buiten."
+      "text": "Het glasvezelplissé glijdt moeiteloos open en dicht. En de muggen? Die blijven buiten!"
     },
     {
       "id": "s09",
       "scene": "Bestellung",
-      "text": "Voor u als vakpartner: u bestelt alles bij één adres, de maten zijn al bekend."
+      "text": "Voor u als vakpartner: ook via Configurator met één klik besteld. Nul procent foutmarge!"
     },
     {
       "id": "s10",
       "scene": "Plug & Play",
-      "text": "Af fabriek komt InScreen als plug-and-play-set: vastklikken, klaar – zonder boren en schroeven. Achteraf monteren? Ook eenvoudig."
+      "text": "Af fabriek komt InScreen als plug-and-play-set: vastklikken en klaar – zonder boren en schroeven."
     },
     {
       "id": "s11",
       "scene": "Abschluss",
-      "text": "Geïntegreerd, in passende kleur, snel gemonteerd: daarom is InScreen de beste insectenhor voor hefschuifdeuren."
+      "text": "Volledig geïntegreerd, in bijpassende kleur en snel gemonteerd. Daarom is de InScreen de beste insectenhor voor hefschuifdeuren."
     }
   ]
 }

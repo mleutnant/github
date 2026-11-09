@@ -152,7 +152,12 @@ def main():
     import argparse
     ap = argparse.ArgumentParser()
     ap.add_argument("--lang", default="de", help="Sprachfassung (de, nl …)")
-    suf = set_lang(ap.parse_args().lang)
+    ap.add_argument("--schaetzen", action="store_true", help="vorhandene Aufnahme ignorieren, Timing aus dem Text schätzen")
+    args = ap.parse_args()
+    suf = set_lang(args.lang)
+    if args.schaetzen:
+        global VO_DIR
+        VO_DIR = VO_DIR.parent / "_keine_aufnahme"
     cfg = json.loads(SEGMENTS.read_text(encoding="utf-8"))
     t = INTRO
     segs, source = [], "estimated"
@@ -166,7 +171,7 @@ def main():
             data = json.loads(meta.read_text(encoding="utf-8"))
             words = words_from_alignment(seg["text"], data["alignment"])
             file_dur = audio_duration(mp3)
-            file = f"assets/audio/vo/{mp3.name}"
+            file = mp3.relative_to(PROJECT).as_posix()  # je Sprachfassung eigener Ordner (vo/, vo_nl/ …)
         else:
             words = [{"w": w["w"], "s": round(w["s"] * pace, 3), "e": round(w["e"] * pace, 3)} for w in words_estimated(seg["text"])]
             file_dur = words[-1]["e"] + 0.05

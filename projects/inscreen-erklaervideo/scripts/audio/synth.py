@@ -544,7 +544,29 @@ def sfx_scribble():
     return bp(noise(n), 1200, 4500) * am * adsr(n, 0.01, 0.08)
 
 
+def sfx_rattle(dur=0.8):
+    """Klappernder, loser Gitterrahmen: unregelmäßige Blech-Klicks mit kurzem Nachklang (eigener Zufall,
+    damit die übrigen Geräusche unverändert bleiben)."""
+    rg = np.random.default_rng(4711)
+    x = np.zeros(int((dur + 0.12) * SR))
+    t = 0.0
+    while t < dur:
+        m = int(0.07 * SR)
+        tt = np.arange(m) / SR
+        a = 0.5 + 0.5 * rg.random()
+        hit = bp(rg.standard_normal(m), 2200, 6500) * env_exp(m, 0.003)
+        ring = 0.35 * np.sin(2 * np.pi * (1400 + 900 * rg.random()) * tt) * env_exp(m, 0.012)
+        body = 0.3 * np.sin(2 * np.pi * (140 + 60 * rg.random()) * tt) * env_exp(m, 0.02)
+        i = int(t * SR)
+        x[i:i + m] += a * (hit + ring + body)
+        t += 0.04 + 0.05 * rg.random()
+    n = len(x)
+    x *= np.minimum(1, np.linspace(0, n / SR, n) / 0.03)  # weicher Einsatz
+    return x
+
+
 SFX = {
+    "rattle": sfx_rattle,
     "whoosh": lambda: sfx_whoosh(0.55, 260, 3400, 800),
     "whooshSoft": lambda: sfx_whoosh(0.8, 200, 1800, 500) * 0.8,
     "swish": lambda: sfx_whoosh(0.22, 900, 5200, 2400),
@@ -556,7 +578,7 @@ SFX = {
     "box": sfx_box, "scribble": sfx_scribble, "stars": sfx_stars,
 }
 # Längen-variable Klänge (bekommen {dur} aus dem Cue)
-VARIABLE = {"slide": sfx_slide, "zip": sfx_zip, "drill": sfx_drill, "buzzIn": sfx_buzzIn, "robot": sfx_robot, "roll": sfx_roll, "breeze": sfx_breeze}
+VARIABLE = {"rattle": sfx_rattle, "slide": sfx_slide, "zip": sfx_zip, "drill": sfx_drill, "buzzIn": sfx_buzzIn, "robot": sfx_robot, "roll": sfx_roll, "breeze": sfx_breeze}
 
 
 def magnet():

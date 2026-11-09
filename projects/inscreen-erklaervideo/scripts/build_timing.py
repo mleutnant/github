@@ -137,7 +137,22 @@ def source_sync(cfg: dict) -> dict | None:
             "starts": [m["source_start"] for m in metas], "shifts": shifts, "cuts": cuts}
 
 
+def set_lang(lang: str) -> str:
+    """Sprachfassung wählen: de (Standard) oder z. B. nl → *_nl-Dateien (Text, Aufnahme, Timing, Seiten)."""
+    global SEGMENTS, VO_DIR, OUT_JS, OUT_JSON
+    suf = "" if lang == "de" else f"_{lang}"
+    SEGMENTS = PROJECT / "script" / f"vo_segments{suf}.json"
+    VO_DIR = PROJECT / "assets" / "audio" / f"vo{suf}"
+    OUT_JS = PROJECT / f"timing{suf}.js"
+    OUT_JSON = PROJECT / "script" / f"timing{suf}.json"
+    return suf
+
+
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--lang", default="de", help="Sprachfassung (de, nl …)")
+    suf = set_lang(ap.parse_args().lang)
     cfg = json.loads(SEGMENTS.read_text(encoding="utf-8"))
     t = INTRO
     segs, source = [], "estimated"
@@ -194,7 +209,7 @@ def main():
         encoding="utf-8",
     )
     # Gesamtdauer statisch ins HTML schreiben (der HyperFrames-Compiler liest data-duration statisch)
-    for html in (PROJECT / "index.html", PROJECT / "vertical.html"):
+    for html in (PROJECT / f"index{suf}.html", PROJECT / f"vertical{suf}.html"):
       if html.exists():
         h = html.read_text(encoding="utf-8")
         h = re.sub(r'data-start="0" data-duration="[\d.]+"', f'data-start="0" data-duration="{total}"', h, count=1)

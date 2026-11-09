@@ -25,7 +25,7 @@
 
   const MAXC = F.portrait ? 20 : 34;
   // Schreibweise in den Untertiteln abweichend vom Sprechertext (nur Anzeige, Timing bleibt)
-  const DISPLAY = { s03: { "Fliegengitter:": "Fliegengitter?" } };
+  const DISPLAY = (window.I18N && window.I18N.captionDisplay) || { s03: { "Fliegengitter:": "Fliegengitter?" } };
   // Wörter, die trotz Zeilenlänge beim vorherigen Wort bleiben ("Segment:Wortindex")
   const KEEP = new Set(["s03:1"]);
   const groups = [];

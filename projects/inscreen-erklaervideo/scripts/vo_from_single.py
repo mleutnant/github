@@ -72,10 +72,12 @@ def main():
     ap.add_argument("file")
     ap.add_argument("--tempo", type=float, default=1.0, help="Zeitstreckung (1.05 = 5 %% schneller, Tonhöhe bleibt)")
     ap.add_argument("--max-pause", type=float, default=0.0, help="Pausen innerhalb eines Abschnitts auf diese Länge kürzen (0 = aus)")
-    ap.add_argument("--out", default=None, help="Zielordner (Standard: assets/audio/vo)")
+    ap.add_argument("--out", default=None, help="Zielordner (Standard: assets/audio/vo bzw. vo_<lang>)")
+    ap.add_argument("--lang", default="de", help="Sprachfassung: liest script/vo_segments_<lang>.json (de: vo_segments.json)")
     args = ap.parse_args()
-    out = Path(args.out) if args.out else VO
-    cfg = json.loads((PROJECT / "script" / "vo_segments.json").read_text(encoding="utf-8"))
+    suf = "" if args.lang == "de" else f"_{args.lang}"
+    out = Path(args.out) if args.out else VO.parent / f"vo{suf}"
+    cfg = json.loads((PROJECT / "script" / f"vo_segments{suf}.json").read_text(encoding="utf-8"))
     segs = cfg["segments"]
 
     x = decode(args.file, args.tempo)

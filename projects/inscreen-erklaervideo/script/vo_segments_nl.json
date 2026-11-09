@@ -1,0 +1,61 @@
+{
+  "voice_name": "ElevenLabs Emile – Warm, Authentic, Professional (Website, v4)",
+  "language_code": "nl",
+  "segments": [
+    {
+      "id": "s01",
+      "scene": "Sommerabend",
+      "text": "Zomeravond. De hefschuifdeur staat wijd open – heerlijk."
+    },
+    {
+      "id": "s02",
+      "scene": "Mücken",
+      "text": "Maar dan zijn er die ongenode gasten."
+    },
+    {
+      "id": "s03",
+      "scene": "Problem",
+      "text": "Klassieke vliegenhorren: opgebouwd, opvallend, met struikelrand – en boren moet ook nog."
+    },
+    {
+      "id": "s04",
+      "scene": "Auftritt InScreen",
+      "text": "Hier komt InScreen: de insectenhor, geïntegreerd in de QuinLine-hefschuifdeur."
+    },
+    {
+      "id": "s05",
+      "scene": "Integration",
+      "text": "Het plissé is via een integratieprofiel in de vaste vleugel ingebouwd – en de onderste geleiderail in de drempelconstructie."
+    },
+    {
+      "id": "s06",
+      "scene": "Unsichtbar & farbgleich",
+      "text": "Teruggeschoven verdwijnt het plissé bijna onzichtbaar in het profiel. De greeplijst en het frame van de plissé-cassette zijn in een passende kleur leverbaar, met folie of poedercoating."
+    },
+    {
+      "id": "s07",
+      "scene": "Keine Stolperkante",
+      "text": "Geen struikelgevaar in de doorgang: comfortabel voor kinderen, grootouders – en het volle dienblad."
+    },
+    {
+      "id": "s08",
+      "scene": "Bedienung",
+      "text": "Het glasvezelplissé glijdt traploos open en dicht. De muggen? Blijven buiten."
+    },
+    {
+      "id": "s09",
+      "scene": "Bestellung",
+      "text": "Voor u als vakpartner: u bestelt alles bij één adres, de maten zijn al bekend."
+    },
+    {
+      "id": "s10",
+      "scene": "Plug & Play",
+      "text": "Af fabriek komt InScreen als plug-and-play-set: vastklikken, klaar – zonder boren en schroeven. Achteraf monteren? Ook eenvoudig."
+    },
+    {
+      "id": "s11",
+      "scene": "Abschluss",
+      "text": "Geïntegreerd, in passende kleur, snel gemonteerd: daarom is InScreen de beste insectenhor voor hefschuifdeuren."
+    }
+  ]
+}

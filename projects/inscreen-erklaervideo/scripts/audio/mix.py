@@ -109,11 +109,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cues", default="script/sfx_cues.json")
     ap.add_argument("--out", default="assets/audio/mix.wav")
+    ap.add_argument("--timing", default="script/timing.json")
+    ap.add_argument("--music", default="assets/audio/music.wav")
     ap.add_argument("--no-vo", action="store_true",
                     help="nur Musik + Geräusche (ohne Sprecher, ohne Ducking) — Pegel bleiben so, dass eine eigene Stimme "
                          "mit -14 LUFS darüber passt")
     args = ap.parse_args()
-    timing = json.loads((PROJECT / "script" / "timing.json").read_text(encoding="utf-8"))
+    timing = json.loads((PROJECT / args.timing).read_text(encoding="utf-8"))
     total = timing["total"]
     N = int(round(total * SR))
     cues_path = PROJECT / args.cues
@@ -128,7 +130,7 @@ def main():
             synth.place(vo, x, s["clipStart"], 1.0, 0.0)
             have_vo = True
     # ---- Musik mit Ducking unter der Stimme
-    sr_m, music = wavfile.read(str(AUD / "music.wav"))
+    sr_m, music = wavfile.read(str(PROJECT / args.music))
     music = music.T.astype(np.float64)[:, :N]
     if music.shape[1] < N:
         music = np.pad(music, ((0, 0), (0, N - music.shape[1])))

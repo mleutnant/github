@@ -48,6 +48,29 @@ python3 projects/inscreen-erklaervideo/scripts/sprechertext_export.py  # Spreche
 Die Animation hängt an den Wort-Zeitstempeln: Mit der echten Stimme verschieben sich alle Szenen
 automatisch, Schlüsselbewegungen landen weiterhin auf ihren Anker-Wörtern.
 
+## Sprachfassungen (z. B. Niederländisch)
+
+Die deutsche Fassung bleibt die Quelle. Eine Sprachfassung besteht aus:
+
+| Pfad | Inhalt |
+|---|---|
+| `script/vo_segments_nl.json` | Sprechertext NL (11 Abschnitte, gleiche IDs) |
+| `lang/nl.js` | Wort-Anker (deutscher Schlüssel → NL-Wort), Bildtexte (DE → NL), Phrasen, Untertitel-Schreibweise |
+| `lib/i18n.js` | übersetzt Bildtexte beim Setzen (innerHTML/textContent); `ctx.w()` übersetzt Anker in `lib/main.js` |
+| `index_nl.html`, `vertical_nl.html` | erzeugt mit `scripts/make_lang_html.py nl` (nach Änderungen an den deutschen Seiten neu erzeugen) |
+| `assets/audio/vo_nl/`, `timing_nl.js` | Aufnahme + Timing der Sprachfassung |
+
+```bash
+uv run projects/inscreen-erklaervideo/scripts/vo_from_single.py <nl.mp3> --lang nl --tempo 1.0 --max-pause 0
+python3 projects/inscreen-erklaervideo/scripts/build_timing.py --lang nl
+uv run projects/inscreen-erklaervideo/scripts/audio/synth.py --timing script/timing_nl.json --music assets/audio/music_nl.wav
+node projects/inscreen-erklaervideo/scripts/dev/cues.mjs index_nl.html script/sfx_cues_nl.json
+uv run projects/inscreen-erklaervideo/scripts/audio/mix.py --cues script/sfx_cues_nl.json --timing script/timing_nl.json \
+  --music assets/audio/music_nl.wav --out assets/audio/mix_nl.wav --no-vo
+npx hyperframes render -c index_nl.html --quality high --output renders/nl/inscreen_nl_16x9_high.mp4 --variables '{"captions":false}'
+python3 projects/inscreen-erklaervideo/scripts/sprechertext_export.py --lang nl   # Anlege-/Schnittpunkte der NL-Aufnahme
+```
+
 ## Vorschau
 
 ```bash

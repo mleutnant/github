@@ -14,13 +14,14 @@
   T.segments.forEach((s) => (byId[s.id] = s));
   function ctxFor(id) {
     const s = byId[id];
-    const norm = (x) => x.toLowerCase().replace(/[^a-zäöüß0-9-]/g, "");
+    const norm = (x) => x.toLowerCase().replace(/[^\p{L}\p{N}-]/gu, "");
+    const amap = (window.I18N && window.I18N.anchors && window.I18N.anchors[id]) || {};
     return {
       id, seg: s, t0: s.winStart, t1: s.winEnd, dur: s.winEnd - s.winStart,
       vo0: s.start, vo1: s.end,
       // Wortzeit: w("stolperkante") -> Start des ersten Worts, das den Schlüssel enthält
       w(key, edge, nth) {
-        const k = norm(key);
+        const k = norm(amap[norm(key)] || key);
         const hits = s.words.filter((w) => w.k.includes(k));
         const hit = hits[nth || 0];
         if (!hit) { console.warn(`[${id}] Wort nicht gefunden: ${key}`); return s.start; }

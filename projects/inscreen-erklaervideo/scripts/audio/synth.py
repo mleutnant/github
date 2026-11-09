@@ -581,10 +581,15 @@ def write(path, x):
 
 
 def main():
-    timing = json.loads((PROJECT / "script" / "timing.json").read_text(encoding="utf-8"))
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--timing", default="script/timing.json")
+    ap.add_argument("--music", default="assets/audio/music.wav")
+    args = ap.parse_args()
+    timing = json.loads((PROJECT / args.timing).read_text(encoding="utf-8"))
     total = timing["total"]
     music = compose(total, timing)
-    write(OUT / "music.wav", music)
+    write(PROJECT / args.music, music)
     for name, fn in SFX.items():
         x = fn()
         x = norm_peak(x, 0.9)

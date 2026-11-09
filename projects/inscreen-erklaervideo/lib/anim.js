@@ -72,6 +72,7 @@
 
   // Wort-für-Wort-Reveal (deterministisch, ohne SplitText-Abhängigkeit)
   function words(container, text, wordCls) {
+    if (window.I18N && window.I18N.phrase) text = window.I18N.phrase(text);
     container.innerHTML = "";
     return text.split(" ").map((w, i, arr) => {
       const sp = document.createElement("span");

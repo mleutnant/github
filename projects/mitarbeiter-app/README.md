@@ -14,6 +14,8 @@ https://claude.ai/artifact/95L3bzmEWkuLJ9gDAspXuH
   Entwürfe sieht nur die Redaktion, Text in [eckigen Klammern] wird als offener Platzhalter markiert
 - **Benefits:** Zusatzleistungen als Karten mit Wert (z. B. „bis 100 € im Monat“), Detailseite mit Schritten,
   Ansprechpartner und Link zum Angebot (`#benefit-<id>`); pflegt die Redaktion
+- **Ideen** (Ideenmanagement): Ideen einreichen (Titel, Idee, Bereich; Felder noch vorläufig), „Meine Ideen“ mit Status und
+  Rückmeldung; Eingang mit Status-Filter für die Redaktion. Diktieren über das Mikrofon der Handy-Tastatur bzw. Windows-Taste + H
 - **Telefonbuch:** Suche, Abteilungs-Filter, Klick kopiert die volle Nummer (Zentrale +49 5250 9845 plus Durchwahl), Import einer Liste aus Excel/CSV
 - **Dokumente:** Dateien (PDF, Bild, Video, Text bis 20 MB) oder Links, Kategorien, Suche, dazu die neuesten Wiki-Artikel
 
@@ -27,7 +29,8 @@ https://claude.ai/artifact/95L3bzmEWkuLJ9gDAspXuH
 
 Die Regeln liegen in der Datenablage der Seite (`news`, `termine`, `kontakte`, `dokumente`, `wiki`, `benefits` schreibt nur die Redaktion,
 `wikiEntwurf` liest und schreibt nur die Redaktion;
-`geburtstage/<person>` schreibt jede Person selbst, Geburtstage lesen nur Mitwirkende und höher
+`ideen/<person>` liest und schreibt nur die Person selbst und die Redaktion, `ideenStatus/<person>` schreibt nur die Redaktion
+und liest die Person selbst; `geburtstage/<person>` schreibt jede Person selbst, Geburtstage lesen nur Mitwirkende und höher
 (also keine Besucher von außerhalb der Organisation); `data/users/<person>/state` merkt sich, was jemand gelesen hat).
 
 ## Bauen
@@ -46,6 +49,6 @@ Danach die Datei erneut auf dieselbe Adresse veröffentlichen; die Inhalte in de
 node projects/mitarbeiter-app/source/vorstellung/build.cjs
 ```
 
-Schreibt `renders/schmidt-intern-vorstellung.pdf` (9 Folien, 16:9). Die Abbildungen entstehen aus der gebauten App,
+Schreibt `renders/schmidt-intern-vorstellung.pdf` (10 Folien, 16:9). Die Abbildungen entstehen aus der gebauten App,
 angemeldet als Mitarbeiter aus der Produktion ohne Redaktionsrechte, mit erfundenen Beispielinhalten.
 Braucht Playwright und Python mit `segno` (QR-Code).

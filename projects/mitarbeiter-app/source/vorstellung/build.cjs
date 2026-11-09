@@ -77,10 +77,22 @@ const MOCK = `<script>
     ],
   };
   const people = { u_me: "Jonas Beispiel", u_erika: "Erika Mustermann", u_max: "Max Mustermann" };
+  const meIdeas = [
+    { id: "i1", title: "Ablage für Handschuhe an Linie 3", bereich: "Produktion", createdAt: iso(12),
+      text: "An Linie 3 liegen die Handschuhe auf dem Rollwagen und fallen oft herunter. Ein kleiner Haken an der Säule neben der Maschine würde reichen." },
+    { id: "i2", title: "Speiseplan der Kantine in der App", bereich: "Allgemein", createdAt: iso(1),
+      text: "Den Wochenplan der Kantine hier unter Aktuelles anzeigen, dann muss niemand extra zum Aushang laufen." },
+  ];
+  const meStatus = { i1: { status: "pruefung", antwort: "Danke für die Idee! Wir schauen uns das in dieser Woche mit der Schichtleitung an Linie 3 an.", at: iso(3) } };
+  data.ideen = [{ id: "u_me", ideas: meIdeas }, { id: "u_erika", ideas: [{ id: "i3", title: "Urlaubsantrag digital", bereich: "Personal", createdAt: iso(30), text: "Urlaubsanträge als Formular in der App statt auf Papier." }] }];
+  data.ideenStatus = [{ id: "u_me", status: meStatus }, { id: "u_erika", status: { i3: { status: "umgesetzt", antwort: "Ist umgesetzt, siehe Dokumente.", at: iso(10) } } }];
+  const docs = { "ideen/u_me": { ideas: meIdeas }, "ideenStatus/u_me": { status: meStatus } };
+  const docSnap = (path) => ({ id: path.split("/").pop(), exists: !!docs[path], data: () => docs[path] });
   const snap = (arr) => ({ docs: arr.map((o) => ({ id: o.id, exists: true, data: () => { const { id, ...r } = o; return r; } })) });
   const db = {
     collection: (n) => ({ onSnapshot: (cb) => { setTimeout(() => cb(snap(data[n] || [])), 30); return () => {}; }, doc: () => ({ set: async () => {} }) }),
-    doc: () => ({ get: async () => ({ exists: true, data: () => ({ newsSeenAt: iso(1) }) }), set: async () => {}, update: async () => {}, delete: async () => {} }),
+    doc: (path) => ({ get: async () => ({ exists: true, data: () => ({ newsSeenAt: iso(1) }) }), set: async () => {}, update: async () => {}, delete: async () => {},
+      onSnapshot: (cb) => { setTimeout(() => cb(docSnap(path)), 30); return () => {}; } }),
   };
   const user = {
     me: async () => ({ id: "u_me", name: "Jonas Beispiel", canEdit: false, isOwner: false }),
@@ -103,6 +115,14 @@ const SHOTS = [
   { name: "artikel", hash: "#wiki-krankmeldung" },
   { name: "benefits", hash: "#benefits" },
   { name: "kita", hash: "#benefit-kita-zuschuss" },
+  { name: "ideen", hash: "#ideen" },
+  { name: "ideeform", hash: "#ideen", act: async (p) => {
+    await p.click("#ideenTools button");
+    await p.fill("#f-title", "Rutschfeste Matte an der Säge");
+    await p.fill("#f-text", "Vor der Säge in Halle 2 ist der Boden oft glatt. Eine rutschfeste Matte würde Stürze verhindern.");
+    await p.fill("#f-bereich", "Produktion");
+    await p.evaluate(() => document.activeElement && document.activeElement.blur());
+  } },
   { name: "telefonbuch", hash: "#telefonbuch", scrollTo: "#h-pb", offset: 70, act: async (p) => {
     await p.click("button.dw >> text=410");
   } },
@@ -188,13 +208,14 @@ function slides(img) {
   ${LOGO("left")}
   <div class="head">
     <div class="kicker">Überblick</div>
-    <h2>Fünf Bereiche, eine App</h2>
+    <h2>Sechs Bereiche, eine App</h2>
     <div class="rrule"></div>
   </div>
   <div class="cols">
     <div><h3>Aktuelles</h3>${bullets(["Mitteilungen aus Geschäftsführung, Personal und Produktion", "Termine der nächsten Wochen", "Geburtstage, immer der nächste im Blick"])}</div>
     <div><h3>Wiki</h3>${bullets(["Antworten auf Alltagsfragen", "Von der Krankmeldung bis zum Arbeitsunfall", "Mit Ansprechpartner"])}</div>
     <div><h3>Benefits</h3>${bullets(["Zuschüsse wie der Kita-Beitrag", "Rabatte über Corporate Benefits", "So bekommen Sie es, Schritt für Schritt"])}</div>
+    <div><h3>Ideen</h3>${bullets(["Verbesserungen einfach einreichen", "Auch per Diktat am Handy", "Rückmeldung direkt in der App"])}</div>
     <div><h3>Telefonbuch</h3>${bullets(["Alle Kolleginnen und Kollegen", "Suche nach Name, Abteilung oder Durchwahl", "Antippen kopiert die Nummer"])}</div>
     <div><h3>Dokumente</h3>${bullets(["Formulare wie der Urlaubsantrag", "Anleitungen und Arbeitsschutz", "Immer die aktuelle Fassung"])}</div>
   </div>
@@ -223,7 +244,12 @@ function slides(img) {
       "Der Wert steht groß dabei, darunter Schritt für Schritt, wie Sie ihn bekommen",
       "Mit Ansprechpartner, damit Fragen schnell geklärt sind",
     ], [phone(img.benefits, "Benefits-Übersicht am Handy"), phone(img.kita, "Kita-Zuschuss im Detail")]),
-    featureSlide(7, "Telefonbuch und Dokumente", "Jede Durchwahl, jedes Formular", [
+    featureSlide(7, "Ideenmanagement", "Ihre Idee zählt", [
+      "Verbesserungen in zwei Minuten einreichen, am Handy oder am PC",
+      "Lieber sprechen als tippen: mit dem Mikrofon der Handy-Tastatur diktieren",
+      "Stand und Rückmeldung des Ideenmanagements direkt unter „Meine Ideen“",
+    ], [phone(img.ideen, "Meine Ideen am Handy"), phone(img.ideeform, "Idee einreichen am Handy")]),
+    featureSlide(8, "Telefonbuch und Dokumente", "Jede Durchwahl, jedes Formular", [
       "Suchen nach Name, Abteilung oder Durchwahl",
       "Durchwahl antippen: Die ganze Nummer mit Vorwahl ist kopiert",
       "Formulare, Anleitungen und Arbeitsschutz zum Öffnen am Handy",
@@ -238,7 +264,7 @@ function slides(img) {
   </div>
   <div class="field"></div><div class="field-rule"></div>
   <figure class="browser"><div class="bar"><span></span></div><img src="${img.pc}" alt="Startseite der App am PC"></figure>
-  ${note}${foot(8)}
+  ${note}${foot(9)}
 </section>`,
     `<section class="slide closing">
   <div class="blue-full">
@@ -251,7 +277,7 @@ function slides(img) {
     <div class="qr-box">${qr}<p>Zur App</p></div>
   </div>
   <div class="yfoot"></div>
-  ${foot(9)}
+  ${foot(10)}
 </section>`,
   ].join("\n");
 }
@@ -293,7 +319,9 @@ ul.b li::before{content:"";position:absolute;left:0;top:5px;width:2px;height:18p
 .phone{margin:0;width:278px;padding:10px;background:#0b1418;border-radius:40px;box-shadow:0 18px 44px rgba(18,52,66,.28)}
 .phone img{display:block;width:258px;height:558px;border-radius:30px;object-fit:cover;object-position:top}
 .overview .head{position:absolute;left:56px;top:120px}
-.overview .cols{position:absolute;left:56px;right:56px;top:262px;display:grid;grid-template-columns:repeat(5,1fr);gap:32px}
+.overview .cols{position:absolute;left:56px;right:56px;top:262px;display:grid;grid-template-columns:repeat(6,1fr);gap:24px}
+.overview .cols ul.b{font-size:14px}
+.overview .cols h3{font-size:20px}
 .overview ul.b{font-size:16px}
 .overview ul.b li{margin-bottom:10px}
 .overview ul.b li::before{top:3px;height:17px}

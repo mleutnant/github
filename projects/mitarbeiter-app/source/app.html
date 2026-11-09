@@ -71,6 +71,8 @@ h1,h2,h3{text-wrap:balance}
 .tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
 .tabs-inner{display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
 .tabs-inner::-webkit-scrollbar{display:none}
+/* Mehr Reiter als Platz: rechten Rand ausblenden, damit man sieht, dass man wischen kann */
+.tabs-inner.more-right{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 56px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 56px),transparent)}
 .tab{display:inline-flex;align-items:center;gap:8px;padding:16px 0 12px;border-bottom:4px solid transparent;color:var(--muted);text-decoration:none;font-size:16px;white-space:nowrap;transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
 .tab:hover{color:var(--accent-ink)}
 .tab[aria-current="page"]{color:var(--ink);border-bottom-color:var(--red)}
@@ -282,6 +284,26 @@ mark.ph{background:var(--yellow);color:#000;padding:0 3px}
 .article .b-value{font-size:44px;margin-top:20px}
 .offer-box{display:grid;gap:12px;justify-items:start}
 
+/* Ideenmanagement */
+.ideen-block+.ideen-block{margin-top:48px}
+.block-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px;margin:0 0 14px}
+.block-head h3{margin:0;font-size:21px;line-height:1.2;color:var(--heading)}
+.block-head span{font-size:14px;color:var(--muted);font-weight:400}
+.idea{padding:20px 0;border-top:1px solid var(--line)}
+.idea:first-child{border-top:0;padding-top:4px}
+.idea h4{margin:8px 0 6px;font-size:18px;line-height:1.25;color:var(--heading);text-wrap:balance}
+.idea .actions{margin-top:10px}
+.istatus{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 7px;line-height:1;border:1px solid var(--heading);color:var(--heading)}
+.istatus.pruefung{background:var(--yellow);border-color:var(--yellow);color:#000}
+.istatus.umgesetzt{background:var(--chip-on);border-color:var(--chip-on);color:#fff}
+.istatus.abgelehnt{border-color:var(--line-strong);color:var(--muted)}
+.answer-box{background:var(--tint);padding:12px 16px;margin-top:12px;font-size:15px;max-width:62ch}
+.answer-box .eyebrow{display:block;margin-bottom:4px}
+.inbox{border:2px solid var(--heading);padding:20px 22px;margin-bottom:48px}
+.dictate-box{border:2px solid var(--heading);padding:18px 20px;display:grid;gap:8px}
+.dictate-box p{margin:0;font-size:15px}
+.dictate-box strong{color:var(--heading)}
+
 /* Leere Zustände */
 .empty{padding:24px;border:1px dashed var(--line-strong);display:grid;gap:10px;justify-items:start}
 .empty strong{color:var(--heading);font-size:17px;line-height:1.3}
@@ -353,6 +375,7 @@ dialog#sheet::backdrop{background:var(--backdrop)}
       <a class="tab" href="#aktuelles" data-view="aktuelles">Aktuelles <span class="badge" id="newsBadge" hidden></span></a>
       <a class="tab" href="#wiki" data-view="wiki">Wiki</a>
       <a class="tab" href="#benefits" data-view="benefits">Benefits</a>
+      <a class="tab" href="#ideen" data-view="ideen">Ideen <span class="badge" id="ideenBadge" hidden></span></a>
       <a class="tab" href="#telefonbuch" data-view="telefonbuch" aria-label="Telefonbuch"><span class="t-long">Telefonbuch</span><span class="t-short">Telefon</span></a>
       <a class="tab" href="#dokumente" data-view="dokumente">Dokumente</a>
     </div>
@@ -446,6 +469,37 @@ dialog#sheet::backdrop{background:var(--backdrop)}
       <div id="benDetail" hidden></div>
     </section>
 
+    <section id="view-ideen" class="view" aria-labelledby="h-ideen" hidden>
+      <div class="layout">
+        <div class="main">
+          <div class="sec-head">
+            <div>
+              <h2 id="h-ideen">Ideenmanagement</h2>
+              <p class="sec-sub">Wie können wir besser, sicherer oder einfacher arbeiten? Ihre Idee zählt.</p>
+            </div>
+            <div class="actions" id="ideenTools"></div>
+          </div>
+          <div id="ideenInbox"></div>
+          <div id="ideenMine"><p class="loading">Ideen werden geladen …</p></div>
+        </div>
+        <aside class="aside" aria-label="Ablauf und Diktieren">
+          <div>
+            <div class="sec-head"><h2>So läuft es ab</h2></div>
+            <div class="prose"><ol>
+              <li>Sie reichen Ihre Idee hier ein. Sehen können sie nur Sie und das Ideenmanagement.</li>
+              <li>Das Ideenmanagement prüft die Idee und meldet sich bei Ihnen.</li>
+              <li>Stand und Rückmeldung sehen Sie jederzeit unter „Meine Ideen“.</li>
+            </ol></div>
+          </div>
+          <div class="dictate-box">
+            <span class="eyebrow">Lieber sprechen als tippen?</span>
+            <p><strong>Am Handy:</strong> Im Textfeld auf das Mikrofon der Tastatur tippen und die Idee einsprechen.</p>
+            <p><strong>Am Windows-PC:</strong> Ins Textfeld klicken und Windows-Taste + H drücken.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
     <section id="view-telefonbuch" class="view" aria-labelledby="h-pb" hidden>
       <div class="pb-top">
         <div>
@@ -519,12 +573,12 @@ const MON3 = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "O
 const S = {
   db: null, user: null, assets: null, uid: null, canEdit: false, offline: false,
   view: "aktuelles",
-  news: [], termine: [], kontakte: [], dokumente: [], wiki: [], wikiDrafts: [], geburtstage: [], benefits: [],
-  ready: { news: false, termine: false, kontakte: false, dokumente: false, wiki: false, wikiDrafts: false, geburtstage: false, benefits: false },
+  news: [], termine: [], kontakte: [], dokumente: [], wiki: [], wikiDrafts: [], geburtstage: [], benefits: [], myIdeen: [], myIdeenStatus: {}, ideenAll: [], ideenStatusAll: {},
+  ready: { news: false, termine: false, kontakte: false, dokumente: false, wiki: false, wikiDrafts: false, geburtstage: false, benefits: false, myIdeen: false, ideenAll: false },
   me: null, gbReadonly: false,
   seenAt: null, visitSeenAt: null, seenLoaded: false, marking: false,
   newsCat: "Alle", dept: "Alle", docCat: "Alle", pbQuery: "", docQuery: "",
-  wikiCat: "Alle", wikiQuery: "", wikiId: null, benCat: "Alle", benefitId: null,
+  wikiCat: "Alle", wikiQuery: "", wikiId: null, benCat: "Alle", benefitId: null, ideenFilter: "offen", ideenReadonly: false,
   expanded: new Set(),
 };
 
@@ -705,7 +759,7 @@ async function fillPeople(root) {
 }
 
 /* ---------- Formular-Fenster ---------- */
-function openSheet({ title, intro, fields, values = {}, submitLabel = "Speichern", onSubmit, extra }) {
+function openSheet({ title, intro, fields, values = {}, submitLabel = "Speichern", onSubmit, extra, doneMsg }) {
   const dlg = $("#sheet"), body = $("#sheetBody");
   $("#sheetTitle").textContent = title;
   body.replaceChildren();
@@ -763,7 +817,7 @@ function openSheet({ title, intro, fields, values = {}, submitLabel = "Speichern
     }
     submit.disabled = true; cancel.disabled = true;
     const label = submit.textContent; submit.textContent = "Wird gespeichert …"; err.hidden = true;
-    try { await onSubmit(v, (msg) => { submit.textContent = msg; }); dlg.close(); toast("Gespeichert"); }
+    try { await onSubmit(v, (msg) => { submit.textContent = msg; }); dlg.close(); toast(doneMsg || "Gespeichert"); }
     catch (e) { err.textContent = (e && e.userMessage) || errText(e); err.hidden = false; }
     finally { submit.disabled = false; cancel.disabled = false; submit.textContent = label; }
   });
@@ -1686,8 +1740,132 @@ function renderBenefitDetail() {
           h("strong", null, o.title), o.highlight ? h("span", null, [o.highlight, o.highlightSub].filter(Boolean).join(" ")) : null)))) : null)));
 }
 
+/* ---------- Ideenmanagement ---------- */
+/* Ideen liegen je Person unter ideen/<id> (nur die Person selbst und die Redaktion lesen),
+   Status und Rückmeldung unter ideenStatus/<id> (schreibt nur die Redaktion, die Person liest). */
+const IDEA_STATUS = { eingereicht: "Eingereicht", pruefung: "In Prüfung", umgesetzt: "Umgesetzt", abgelehnt: "Nicht umgesetzt" };
+const IDEA_FILTERS = [["offen", "Offen"], ["umgesetzt", "Umgesetzt"], ["abgelehnt", "Nicht umgesetzt"], ["alle", "Alle"]];
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const ideaStatus = (map, ideaId) => (map && map[ideaId]) || { status: "eingereicht" };
+function statusChip(st) { return h("span", { class: "istatus " + st.status }, IDEA_STATUS[st.status] || IDEA_STATUS.eingereicht); }
+function canSubmitIdea() { return !!(S.db && S.uid && !S.ideenReadonly); }
+function ideaForm() {
+  openSheet({
+    title: "Idee einreichen",
+    intro: "Tipp: Statt zu tippen, können Sie auch diktieren. Tippen Sie dazu im Textfeld auf das Mikrofon Ihrer Tastatur, am Windows-PC Windows-Taste + H.",
+    fields: [
+      { name: "title", label: "Worum geht es?", required: true, max: 120, placeholder: "z. B. Ablage für Handschuhe an Linie 3" },
+      { name: "text", label: "Ihre Idee", type: "textarea", required: true, max: 4000, hint: "Was ist heute das Problem, und was schlagen Sie vor?" },
+      { name: "bereich", label: "Bereich oder Abteilung", max: 80, list: departments() },
+    ],
+    submitLabel: "Idee einreichen",
+    doneMsg: "Danke! Ihre Idee ist eingereicht.",
+    onSubmit: async (v) => {
+      const ideas = S.myIdeen.map((i) => ({ ...i }));
+      ideas.push({ id: newId(), title: v.title, text: v.text, bereich: v.bereich, createdAt: nowIso() });
+      try { await withRetry(() => S.db.doc("ideen/" + S.uid).set({ ideas: ideas.slice(-100), updatedAt: nowIso() })); }
+      catch (e) {
+        if (e && e.code === "invalid_argument") { S.ideenReadonly = true; renderIdeen(); e.userMessage = "Sie haben für diese App nur Leserechte. Bitte die Redaktion um Zugriff als Mitwirkende bitten."; }
+        throw e;
+      }
+    },
+  });
+}
+function ideaStatusForm(ownerId, idea) {
+  const cur = ideaStatus((S.ideenStatusAll[ownerId] || {}).status, idea.id);
+  const labels = Object.values(IDEA_STATUS);
+  openSheet({
+    title: "Idee bearbeiten",
+    intro: `„${idea.title}“`,
+    fields: [
+      { name: "status", label: "Status", type: "select", options: labels, required: true },
+      { name: "antwort", label: "Rückmeldung an die einreichende Person", type: "textarea", max: 3000, hint: "Sieht nur die Person, die die Idee eingereicht hat." },
+    ],
+    values: { status: IDEA_STATUS[cur.status] || labels[0], antwort: cur.antwort || "" },
+    onSubmit: async (v) => {
+      const key = Object.keys(IDEA_STATUS).find((k) => IDEA_STATUS[k] === v.status) || "eingereicht";
+      const map = { ...((S.ideenStatusAll[ownerId] || {}).status || {}) };
+      map[idea.id] = { status: key, antwort: v.antwort, at: nowIso(), by: S.uid };
+      await withRetry(() => S.db.doc("ideenStatus/" + ownerId).set({ status: map, updatedAt: nowIso() }));
+    },
+  });
+}
+async function removeIdea(ownerId, ideaId) {
+  const doc = ownerId === S.uid && !S.canEdit ? { ideas: S.myIdeen } : (S.ideenAll.find((d) => d.id === ownerId) || { ideas: [] });
+  const ideas = (Array.isArray(doc.ideas) ? doc.ideas : []).filter((i) => i.id !== ideaId);
+  await S.db.doc("ideen/" + ownerId).set({ ideas, updatedAt: nowIso() });
+  const st = (S.ideenStatusAll[ownerId] || {}).status;
+  if (S.canEdit && st && st[ideaId]) { const map = { ...st }; delete map[ideaId]; await S.db.doc("ideenStatus/" + ownerId).set({ status: map, updatedAt: nowIso() }); }
+}
+function ideaEl(idea, st, opts) {
+  const long = String(idea.text || "").length > 420;
+  return h("article", { class: "idea" },
+    h("div", { class: "meta" }, statusChip(st), h("span", null, "Eingereicht " + fmtStamp(idea.createdAt)), idea.bereich ? h("span", null, idea.bereich) : null),
+    h("h4", null, idea.title || "Ohne Titel"),
+    h("div", { class: "prose" + (long && !opts.full ? " clamped" : "") }, richText(idea.text)),
+    st.antwort ? h("div", { class: "answer-box" }, h("span", { class: "eyebrow" }, "Rückmeldung vom Ideenmanagement"), richText(st.antwort)) : null,
+    opts.owner ? h("div", { class: "byline" }, h("span", null, "Von"), personEls(opts.owner)) : null,
+    opts.actions && opts.actions.length ? h("div", { class: "actions" }, opts.actions) : null);
+}
+function openIdeaCount() {
+  let n = 0;
+  for (const d of S.ideenAll) for (const i of (Array.isArray(d.ideas) ? d.ideas : [])) if (ideaStatus((S.ideenStatusAll[d.id] || {}).status, i.id).status === "eingereicht") n++;
+  return n;
+}
+function updateIdeenBadge() {
+  const b = $("#ideenBadge"), n = S.canEdit ? openIdeaCount() : 0;
+  b.hidden = !n; b.textContent = n; b.setAttribute("aria-label", `${n} neue Ideen`);
+}
+function renderIdeen() {
+  updateIdeenBadge();
+  const tools = $("#ideenTools"); tools.replaceChildren();
+  if (canSubmitIdea()) tools.append(h("button", { type: "button", class: "btn btn-primary", onclick: ideaForm }, "Idee einreichen"));
+
+  /* Eingang für Redaktion und Ideenmanagement */
+  const inbox = $("#ideenInbox"); inbox.replaceChildren();
+  if (S.canEdit && S.db) {
+    const all = [];
+    for (const d of S.ideenAll) for (const i of (Array.isArray(d.ideas) ? d.ideas : [])) all.push({ owner: d.id, idea: i, st: ideaStatus((S.ideenStatusAll[d.id] || {}).status, i.id) });
+    all.sort((a, b) => String(b.idea.createdAt).localeCompare(String(a.idea.createdAt)));
+    const f = S.ideenFilter;
+    const shown = all.filter((x) => f === "alle" || (f === "offen" ? ["eingereicht", "pruefung"].includes(x.st.status) : x.st.status === f));
+    const chips = h("div", { class: "chips", role: "group", "aria-label": "Ideen filtern" }, IDEA_FILTERS.map(([k, label]) =>
+      h("button", { type: "button", class: "chip", "aria-pressed": String(f === k), onclick: () => { S.ideenFilter = k; renderIdeen(); } }, label)));
+    const newCount = all.filter((x) => x.st.status === "eingereicht").length;
+    inbox.append(h("section", { class: "ideen-block inbox" },
+      h("div", { class: "block-head" }, h("h3", null, "Eingang Ideenmanagement"), h("span", null, `${all.length} Ideen, davon ${newCount} neu · nur für die Redaktion sichtbar`)),
+      all.length ? chips : null,
+      !S.ready.ideenAll ? h("p", { class: "loading" }, "Ideen werden geladen …")
+        : !all.length ? h("p", { class: "gb-none" }, "Noch keine Ideen eingegangen.")
+        : !shown.length ? h("p", { class: "gb-none" }, "Keine Ideen in dieser Auswahl.")
+        : h("div", null, shown.map((x) => ideaEl(x.idea, x.st, { owner: x.owner, full: true, actions: [
+            h("button", { type: "button", class: "btn-text", onclick: () => ideaStatusForm(x.owner, x.idea) }, "Status und Rückmeldung"),
+            confirmBtn("Löschen", () => removeIdea(x.owner, x.idea.id)),
+          ] })))));
+    fillPeople(inbox);
+  }
+
+  /* Meine Ideen */
+  const mine = $("#ideenMine");
+  if (!S.uid || !S.db) {
+    mine.replaceChildren(emptyState("Ideen einreichen", S.offline ? "Bitte die App mit Ihrem Firmenkonto öffnen, um eine Idee einzureichen." : "Ideen kann einreichen, wer in der App angemeldet ist."));
+    return;
+  }
+  if (!S.ready.myIdeen) { mine.replaceChildren(h("p", { class: "loading" }, "Ideen werden geladen …")); return; }
+  const own = [...S.myIdeen].sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  mine.replaceChildren(h("section", { class: "ideen-block" },
+    h("div", { class: "block-head" }, h("h3", null, "Meine Ideen"), own.length ? h("span", null, own.length === 1 ? "1 Idee" : `${own.length} Ideen`) : null),
+    own.length ? h("div", null, own.map((i) => {
+      const st = ideaStatus(S.myIdeenStatus, i.id);
+      return ideaEl(i, st, { actions: st.status === "eingereicht" && canSubmitIdea()
+        ? [confirmBtn("Zurückziehen", () => removeIdea(S.uid, i.id), { armed: "Wirklich zurückziehen?", busy: "Wird zurückgezogen …", done: "Zurückgezogen" })] : [] });
+    }))
+    : emptyState("Noch keine Idee eingereicht", "Ob große Verbesserung oder kleiner Handgriff: Jede Idee hilft. Ihre Idee sehen nur Sie und das Ideenmanagement.",
+        canSubmitIdea() ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: ideaForm }, "Erste Idee einreichen") : null)));
+}
+
 /* ---------- Navigation ---------- */
-const VIEWS = ["aktuelles", "geburtstage", "wiki", "benefits", "telefonbuch", "dokumente"];
+const VIEWS = ["aktuelles", "geburtstage", "wiki", "benefits", "ideen", "telefonbuch", "dokumente"];
 function route() {
   const raw = (location.hash || "").slice(1);
   let next = raw, wikiId = null, benefitId = null;
@@ -1698,6 +1876,7 @@ function route() {
   S.view = next; S.wikiId = wikiId; S.benefitId = benefitId;
   if (next === "wiki") renderWiki();
   if (next === "benefits") renderBenefits();
+  if (next === "ideen") renderIdeen();
   for (const name of VIEWS) $("#view-" + name).hidden = name !== next;
   const tabView = next === "geburtstage" ? "aktuelles" : next;
   document.querySelectorAll(".tab").forEach((t) => { if (t.dataset.view === tabView) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
@@ -1708,9 +1887,16 @@ function route() {
     const left = active.offsetLeft - bar.offsetLeft, right = left + active.offsetWidth;
     if (left < bar.scrollLeft || right > bar.scrollLeft + bar.clientWidth) bar.scrollLeft = Math.max(0, left - 16);
   }
+  updateTabFade();
   updateBadge();
   maybeMarkSeen();
 }
+function updateTabFade() {
+  const bar = $(".tabs-inner");
+  bar.classList.toggle("more-right", bar.scrollLeft + bar.clientWidth < bar.scrollWidth - 2);
+}
+$(".tabs-inner").addEventListener("scroll", updateTabFade, { passive: true });
+window.addEventListener("resize", updateTabFade);
 window.addEventListener("hashchange", route);
 
 let pbTimer, docTimer;
@@ -1720,7 +1906,7 @@ $("#wikiSearch").addEventListener("input", (e) => { clearTimeout(wikiTimer); wik
 $("#docSearch").addEventListener("input", (e) => { clearTimeout(docTimer); docTimer = setTimeout(() => { S.docQuery = e.target.value; renderDokumente(); }, 120); });
 document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copyText(b.dataset.copy)));
 
-function renderAll() { renderNews(); renderTermine(); renderGeburtstage(); renderKalender(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); renderBenefits(); }
+function renderAll() { renderNews(); renderTermine(); renderGeburtstage(); renderKalender(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); renderBenefits(); renderIdeen(); }
 
 function goOffline(msg) {
   S.offline = true;
@@ -1772,6 +1958,24 @@ function subscribe(name) {
   renderAll();
   ["news", "termine", "geburtstage", "kontakte", "dokumente", "wiki", "benefits"].forEach(subscribe);
   if (S.canEdit) subscribe("wikiDrafts");
+  if (S.uid) {
+    db.doc("ideen/" + S.uid).onSnapshot((snap) => {
+      const d = snap.exists ? snap.data() : null;
+      S.myIdeen = d && Array.isArray(d.ideas) ? d.ideas : []; S.ready.myIdeen = true; renderIdeen();
+    }, () => { S.ready.myIdeen = true; renderIdeen(); });
+    db.doc("ideenStatus/" + S.uid).onSnapshot((snap) => {
+      const d = snap.exists ? snap.data() : null;
+      S.myIdeenStatus = (d && d.status) || {}; renderIdeen();
+    }, () => {});
+  }
+  if (S.canEdit) {
+    db.collection("ideen").onSnapshot((snap) => {
+      S.ideenAll = snap.docs.map((d) => ({ id: d.id, ...d.data() })); S.ready.ideenAll = true; renderIdeen();
+    }, () => { S.ready.ideenAll = true; renderIdeen(); });
+    db.collection("ideenStatus").onSnapshot((snap) => {
+      S.ideenStatusAll = Object.fromEntries(snap.docs.map((d) => [d.id, d.data()])); renderIdeen();
+    }, () => {});
+  }
   if (S.uid) {
     try {
       const snap = await db.doc(`data/users/${S.uid}/state`).get();

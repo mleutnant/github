@@ -123,17 +123,19 @@ def source_sync(cfg: dict) -> dict | None:
         return None
     first = metas[0]["source_start"] + metas[0]["alignment"]["character_start_times_seconds"][0]
     # Schnittpunkte in der Aufnahme: Mitte der Pause zwischen Abschnitt und Nachfolger
+    # „direkt“ (in vo_segments*.json): Aufnahme unverändert ab 0:00 — keine Extra-Pausen, kein Versatz
+    direkt = bool(cfg.get("direkt"))
     cuts, extra, shifts = [], 0.0, []
     for i, (seg, m) in enumerate(zip(cfg["segments"], metas)):
         shifts.append(extra)
-        add = SYNC_EXTRA.get(seg["id"], 0.0)
+        add = 0.0 if direkt else SYNC_EXTRA.get(seg["id"], 0.0)
         if add and i + 1 < len(metas):
             end_src = m["source_start"] + m["alignment"]["character_end_times_seconds"][-1]
             nxt = metas[i + 1]
             start_src = nxt["source_start"] + nxt["alignment"]["character_start_times_seconds"][0]
             cuts.append({"after": seg["id"], "source_t": round((end_src + start_src) / 2, 3), "insert": add})
             extra += add
-    return {"source": metas[0]["source"], "offset": round(max(0.0, INTRO - first), 3),
+    return {"source": metas[0]["source"], "offset": 0.0 if direkt else round(max(0.0, INTRO - first), 3),
             "starts": [m["source_start"] for m in metas], "shifts": shifts, "cuts": cuts}
 
 

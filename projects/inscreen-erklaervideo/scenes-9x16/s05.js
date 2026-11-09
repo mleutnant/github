@@ -412,7 +412,9 @@
       tl.to(q.lens, { scale: 1, opacity: 1, duration: 0.48, ease: "back.out(1.5)", svgOrigin: "0 0" }, tSch - 0.08);
       // Einbau in der Lupe (verlängertes Fenster): Schiene senkt sich bündig in die Schwelle,
       // Niveau-Linie innen = außen, dann fährt das Plissee von oben in die Schiene, zum Schluss Detail-Zoom.
-      const tClk = Math.max(tSch + 1.1, tSkE + 0.1), tIn = tClk - 0.6; // Schiene rastet am Ende von „Schwellenkonstruktion“ ein
+      // Schiene rastet am Ende von „Schwellenkonstruktion“ ein — ohne verlängertes Fenster (NL, Aufnahme ohne Schnitte)
+      // früher, damit Einbau, Plissee und Detail-Zoom noch vor dem Szenenende fertig sind
+      const tClk = Math.max(tSch + 0.9, Math.min(Math.max(tSch + 1.1, tSkE + 0.1), ctx.t1 - 2.4)), tIn = tClk - 0.6;
       tl.fromTo(q.rail, { y: -64, opacity: 0.5 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.inOut" }, tIn);
       ANIM.sfx(tIn, "whooshSoft", -14);
       ANIM.sfx(tClk, "click", -3);

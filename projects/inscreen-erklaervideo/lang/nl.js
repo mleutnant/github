@@ -11,8 +11,9 @@ window.I18N = {
     s04: { hier: "dan", kommt: "onze", inscreen: "inscreen", insektenschutz: "insectenhor", integriert: "geïntegreerd", quinline: "quinline" },
     s05: { plissee: "hor", integrationsprofil: "profiel", festflügel: "vleugel", führungsschiene: "aandrijfsysteem",
       schwellenkonstruktion: "onderdorpel" },
-    s06: { zurückgeschoben: "teruggeschoven", verschwindet: "matcht", fast: "volledig", griffleiste: "frame", rahmen: "hor",
-      farblich: "folie", passend: "leverbaar", foliert: "hefschuifpui" },
+    // s06 ohne verlängertes Fenster: Greeplijst/Frame noch im ersten Satz, Farben über den ganzen zweiten Satz
+    s06: { zurückgeschoben: "teruggeschoven", verschwindet: "matcht", fast: "volledig", griffleiste: { w: "quinline", d: 0.5 },
+      rahmen: { w: "quinline", e: true, d: 0.25 }, farblich: "van", passend: "dezelfde", foliert: "folie" },
     s07: { keine: "geen", stolperkante: "drempel", durchgangsbereich: "doorgang", kinder: { w: "geen", n: 1 }, großeltern: "kans",
       tablett: "struikelen" },
     s08: { fiberglas: "glasvezelplissé", gleitet: "glijdt", stufenlos: "moeiteloos", auf: "open", zu: "dicht", mücken: "muggen",
@@ -29,7 +30,8 @@ window.I18N = {
   // Szenen mit eigener NL-Choreografie (Text der NL-Kollegen weicht inhaltlich ab)
   //   s03: optisch niet fraai / storend geluid / afwijkende kleur / montagegaten boren (statt Stolpern)
   //   s10: ohne „Nachrüsten“-Teil
-  variant: { s03: true, s10: true },
+  //   s06: Farbwechsel gleichmäßig über das (nicht verlängerte) Fenster
+  variant: { s03: true, s06: true, s10: true },
   // Ganze Zeilen, die wortweise erscheinen (ANIM.words)
   phrases: {
     "die beste Insektenschutzlösung für Hebeschiebetüren.": "de beste insectenhor voor hefschuifdeuren.",

@@ -162,7 +162,8 @@
     const shineG = S("g", { "clip-path": "url(#s06v-doorclip)" }, lr.fgLayer);
     // Drei Farbvarianten gleichmäßig über das (verlängerte) Fenster verteilt — jede gut sichtbar
     // (letzte Farbe ~1 s vor dem Übergang, der ~0,3 s vor Fensterende beginnt).
-    const tW = tFarb + 0.3, tLast = Math.max(tW + 1.2, ctx.t1 - 1.3);
+    const kurz = !!(window.I18N && window.I18N.variant && window.I18N.variant.s06); // NL: Fenster ohne Verlängerung
+    const tW = tFarb + 0.3, tLast = Math.max(tW + 1.2, ctx.t1 - (kurz ? 1.0 : 1.3));
     const steps = [
       ["weiss", tW],
       ["oak", (tW + tLast) / 2],

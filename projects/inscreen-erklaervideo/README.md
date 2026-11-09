@@ -60,6 +60,9 @@ Die deutsche Fassung bleibt die Quelle. Eine Sprachfassung besteht aus:
 | `index_nl.html`, `vertical_nl.html` | erzeugt mit `scripts/make_lang_html.py nl` (nach Änderungen an den deutschen Seiten neu erzeugen) |
 | `assets/audio/vo_nl/`, `timing_nl.js` | Aufnahme + Timing der Sprachfassung |
 
+`"direkt": true` in `script/vo_segments_nl.json`: Das Video folgt der Aufnahme ohne Extra-Pausen — die MP3
+wird unverändert ab 0:00 daruntergelegt, keine Schnitte (Schwellen- und Farbszene laufen dann im gesprochenen Text).
+
 ```bash
 uv run projects/inscreen-erklaervideo/scripts/vo_from_single.py <nl.mp3> --lang nl --tempo 1.0 --max-pause 0
 python3 projects/inscreen-erklaervideo/scripts/build_timing.py --lang nl

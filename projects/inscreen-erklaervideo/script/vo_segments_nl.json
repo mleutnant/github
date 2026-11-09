@@ -1,6 +1,7 @@
 {
   "voice_name": "ElevenLabs Emile – Warm, Authentic, Professional (Website, v4) — Text nach Feedback NL-Kollegen",
   "language_code": "nl",
+  "direkt": true,
   "segments": [
     {
       "id": "s01",

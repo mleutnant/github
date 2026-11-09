@@ -69,7 +69,7 @@ python3 projects/inscreen-erklaervideo/scripts/build_timing.py --lang nl
 uv run projects/inscreen-erklaervideo/scripts/audio/synth.py --timing script/timing_nl.json --music assets/audio/music_nl.wav
 node projects/inscreen-erklaervideo/scripts/dev/cues.mjs index_nl.html script/sfx_cues_nl.json
 uv run projects/inscreen-erklaervideo/scripts/audio/mix.py --cues script/sfx_cues_nl.json --timing script/timing_nl.json \
-  --music assets/audio/music_nl.wav --out assets/audio/mix_nl.wav --no-vo
+  --music assets/audio/music_nl.wav --out assets/audio/mix_nl.wav --no-vo --sfx-lufs -31   # Geräusche in NL 6 dB leiser
 PRODUCER_DISABLE_GPU=true npx hyperframes render -c index_nl.html --quality high --output renders/nl/inscreen_nl_16x9_high.mp4 --variables '{"captions":false}'
 python3 projects/inscreen-erklaervideo/scripts/sprechertext_export.py --lang nl   # Anlege-/Schnittpunkte der NL-Aufnahme
 ```

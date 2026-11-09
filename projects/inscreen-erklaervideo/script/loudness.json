@@ -3,10 +3,10 @@
  "stems": {
   "vo": -14.0,
   "music": -36.0,
-  "sfx": -25.0
+  "sfx": -31.0
  },
  "mix": {
-  "lufs": -12.2,
+  "lufs": -12.3,
   "true_peak_dbtp": -1.8,
   "with_vo": true
  }

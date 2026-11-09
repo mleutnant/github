@@ -111,6 +111,8 @@ def main():
     ap.add_argument("--out", default="assets/audio/mix.wav")
     ap.add_argument("--timing", default="script/timing.json")
     ap.add_argument("--music", default="assets/audio/music.wav")
+    ap.add_argument("--sfx-lufs", type=float, default=TARGET_SFX,
+                    help="Lautheit der Geräusch-Spur (Standard -25; NL -31, weil dort als zu laut empfunden)")
     ap.add_argument("--no-vo", action="store_true",
                     help="nur Musik + Geräusche (ohne Sprecher, ohne Ducking) — Pegel bleiben so, dass eine eigene Stimme "
                          "mit -14 LUFS darüber passt")
@@ -169,7 +171,7 @@ def main():
     music *= db(TARGET_MUSIC - lm)
     ls, _ = measure(sfx) if np.any(sfx) else (-120, None)
     if ls > -100:
-        sfx *= db(TARGET_SFX - ls)
+        sfx *= db(args.sfx_lufs - ls)
     # Kontrolle der Stems
     report["stems"] = {
         "vo": measure(vo)[0] if have_vo else None,

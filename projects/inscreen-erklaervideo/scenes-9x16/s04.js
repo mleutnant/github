@@ -32,7 +32,7 @@
         .s04-lr { right:-30px; bottom:-28px; width:250px; height:200px; border-right:14px solid var(--sch-red); border-bottom:14px solid var(--sch-red); }
         .s04-eyebrow { font-weight:700; font-size:40px; line-height:1.1; white-space:nowrap; color:var(--sch-blue); letter-spacing:0; }
         .s04-title { font-weight:900; font-size:164px; line-height:.92; color:var(--sch-blue); margin-top:8px; letter-spacing:-.02em; }
-        .s04-sub { font-weight:700; font-size:58px; line-height:1.1; color:var(--sch-blue); margin-top:12px; }
+        .s04-sub { font-weight:700; font-size:${window.I18N && window.I18N.lang === "nl" ? 52 : 58}px; line-height:1.1; color:var(--sch-blue); margin-top:12px; }
         .s04-hl { position:relative; }
         .s04-hl::after { content:""; position:absolute; left:-4px; right:-4px; bottom:4px; height:18px; background:var(--sch-yellow); opacity:.55; z-index:-1; transform-origin:left center; transform:scaleX(var(--hl,0)); }
         .s04-row { display:flex; align-items:center; gap:18px; margin-top:10px; }

@@ -7,7 +7,7 @@
     const h = R.huds[ctx.id];
     const css = document.createElement("style");
     css.textContent = `
-      .s11-panel { position:absolute; left:64px; top:190px; width:650px; padding:34px 40px 30px 40px; background:#fff; box-shadow:0 20px 56px rgba(18,52,66,.25); }
+      .s11-panel { position:absolute; left:64px; top:190px; width:auto; min-width:650px; padding:34px 40px 30px 40px; background:#fff; box-shadow:0 20px 56px rgba(18,52,66,.25); }
       .s11-row { display:flex; align-items:center; gap:22px; padding:16px 0; }
       .s11-row img { width:76px; height:76px; }
       .s11-row b { font-weight:900; font-size:52px; color:var(--sch-blue); white-space:nowrap; letter-spacing:-.01em; }

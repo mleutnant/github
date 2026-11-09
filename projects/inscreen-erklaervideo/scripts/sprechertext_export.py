@@ -57,10 +57,15 @@ def phrases(words):
 
 
 def main():
-    T = json.loads((PROJECT / "script" / "timing.json").read_text(encoding="utf-8"))
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--lang", default="de", help="Sprachfassung (de, nl …)")
+    lang = ap.parse_args().lang
+    suf = "" if lang == "de" else f"_{lang}"
+    T = json.loads((PROJECT / "script" / f"timing{suf}.json").read_text(encoding="utf-8"))
     segs = T["segments"]
-    out = PROJECT / "renders"
-    out.mkdir(exist_ok=True)
+    out = PROJECT / "renders" / (lang if suf else "")
+    out.mkdir(parents=True, exist_ok=True)
 
     md = [
         "# Sprechertext mit Zeitmarken — InScreen-Erklärvideo",

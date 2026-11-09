@@ -25,7 +25,7 @@
 
   const MAXC = F.portrait ? 20 : 34;
   // Schreibweise in den Untertiteln abweichend vom Sprechertext (nur Anzeige, Timing bleibt)
-  const DISPLAY = { s03: { "Fliegengitter:": "Fliegengitter?" } };
+  const DISPLAY = (window.I18N && window.I18N.captionDisplay) || { s03: { "Fliegengitter:": "Fliegengitter?" } };
   // Wörter, die trotz Zeilenlänge beim vorherigen Wort bleiben ("Segment:Wortindex")
   const KEEP = new Set(["s03:1"]);
   const groups = [];
@@ -34,6 +34,8 @@
     let len = 0;
     s.words.forEach((w, i) => {
       if (/^[–-]$/.test(w.w)) return; // Gedankenstrich wird nicht gesprochen
+      // Anzeige "" = Wort mit dem vorigen zusammenfassen (z. B. „nul procent“ -> „0%“)
+      if ((DISPLAY[s.id] || {})[w.w] === "" && cur.length) { cur[cur.length - 1].e = w.e; return; }
       const add = w.w.length + (cur.length ? 1 : 0);
       if (cur.length && len + add > MAXC && !KEEP.has(`${s.id}:${i}`)) { groups.push(cur); cur = []; len = 0; }
       cur.push(Object.assign({ sid: s.id }, w));
@@ -55,7 +57,8 @@
     const spans = g.map((w) => {
       const sp = document.createElement("span");
       sp.className = "cw";
-      sp.textContent = (DISPLAY[w.sid] || {})[w.w] || w.w;
+      // Textknoten direkt anlegen: der gesprochene Text wird nicht durch die Bildtext-Übersetzung (lib/i18n.js) geschickt
+      sp.appendChild(document.createTextNode((DISPLAY[w.sid] || {})[w.w] || w.w));
       el.appendChild(sp);
       return sp;
     });

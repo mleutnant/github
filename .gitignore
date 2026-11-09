@@ -45,3 +45,6 @@ projects/inscreen-erklaervideo/assets/audio/music.wav
 projects/inscreen-erklaervideo/renders/
 projects/inscreen-erklaervideo/assets/audio/mix.wav
 projects/inscreen-erklaervideo/assets/audio/mix-9x16.wav
+projects/inscreen-erklaervideo/assets/audio/music_*.wav
+projects/inscreen-erklaervideo/assets/audio/mix_*.wav
+projects/inscreen-erklaervideo/assets/audio/mix-9x16_*.wav

@@ -72,10 +72,12 @@ def main():
     ap.add_argument("file")
     ap.add_argument("--tempo", type=float, default=1.0, help="Zeitstreckung (1.05 = 5 %% schneller, Tonhöhe bleibt)")
     ap.add_argument("--max-pause", type=float, default=0.0, help="Pausen innerhalb eines Abschnitts auf diese Länge kürzen (0 = aus)")
-    ap.add_argument("--out", default=None, help="Zielordner (Standard: assets/audio/vo)")
+    ap.add_argument("--out", default=None, help="Zielordner (Standard: assets/audio/vo bzw. vo_<lang>)")
+    ap.add_argument("--lang", default="de", help="Sprachfassung: liest script/vo_segments_<lang>.json (de: vo_segments.json)")
     args = ap.parse_args()
-    out = Path(args.out) if args.out else VO
-    cfg = json.loads((PROJECT / "script" / "vo_segments.json").read_text(encoding="utf-8"))
+    suf = "" if args.lang == "de" else f"_{args.lang}"
+    out = Path(args.out) if args.out else VO.parent / f"vo{suf}"
+    cfg = json.loads((PROJECT / "script" / f"vo_segments{suf}.json").read_text(encoding="utf-8"))
     segs = cfg["segments"]
 
     x = decode(args.file, args.tempo)
@@ -121,19 +123,23 @@ def main():
     exp_t = cum[:-1] * rate
     cost = np.full((J + 1, K + 1), INF)
     back = np.zeros((J + 1, K + 1), dtype=int)
-    cost[0, :] = 0.0
+    # Übersprungene Segment-Enden (Grenze ohne Pause) kosten SEG_PEN — sonst rutscht bei kurzen Abschnitten
+    # leicht eine Grenze auf eine Atempause im Satz. segcum[k] = Anzahl Segment-Enden unter den Grenzen 0..k-1.
+    SEG_PEN = 2.0
+    segcum = np.concatenate([[0], np.cumsum(np.array(is_seg_end[:K], dtype=float))])
+    cost[0, :] = SEG_PEN * segcum
     for j in range(1, J + 1):
         pj, a, b = P[j - 1]
         d = b - a
         for k in range(1, K + 1):
             bonus = -0.15 * min(d, 0.8) if is_seg_end[k - 1] else 0.0
             c_here = (pj - exp_t[k - 1]) ** 2 + bonus
-            best = cost[j - 1, :k].min()
-            arg = int(cost[j - 1, :k].argmin())
-            cost[j, k] = best + c_here
+            prev = cost[j - 1, :k] - SEG_PEN * segcum[:k]  # von Grenze k' nach k: k'..k-2 übersprungen
+            arg = int(prev.argmin())
+            cost[j, k] = prev[arg] + SEG_PEN * segcum[k - 1] + c_here
             back[j, k] = arg
-    # Segment-Enden, die keine Pause bekommen, bestrafen
-    k_end = int(np.argmin(cost[J, :]))
+    # Segment-Enden nach der letzten zugeordneten Pause ebenfalls bestrafen
+    k_end = int(np.argmin(cost[J, :] + SEG_PEN * (segcum[K] - segcum)))
     assign = {}
     k = k_end
     for j in range(J, 0, -1):

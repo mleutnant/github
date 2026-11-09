@@ -4,6 +4,8 @@
 // Ben hebt die Plissee-Kassette heraus, clipst sie ins Profil (Klick), Plissee gleitet zu, Daumen hoch.
 // Bohrmaschine + Schrauben werden durchgestrichen, Chips „Ab Werk“ | „Nachrüstung“, Ben zwinkert.
 (function () {
+  // NL-Fassung: ohne „Nachrüsten? Auch unkompliziert.“ — nur Chip „Af fabriek“ während Karton/Einclipsen
+  const NLV = !!(window.I18N && window.I18N.variant && window.I18N.variant.s10);
   const SC = (window.SCENES = window.SCENES || {});
 
   // Plissee-Kassette (senkrecht, Ursprung = Mitte der Griffleiste), Weltmaße
@@ -168,7 +170,7 @@
     const h = R.huds[ctx.id];
     const row = ANIM.el("div", "p10-chips", h);
     row.style.cssText = "position:absolute;left:0;top:56px;width:1920px;display:flex;justify-content:center;gap:34px;";
-    P.chips = ["Ab Werk", "Nachrüstung"].map((t) => {
+    P.chips = (NLV ? ["Ab Werk"] : ["Ab Werk", "Nachrüstung"]).map((t) => {
       const c = ANIM.el("div", "chip", row, `<div class="bar"></div>${t}`);
       c.style.position = "relative";
       c.style.opacity = "0";
@@ -357,6 +359,13 @@
     tl.to(ben.lean, { y: -6, duration: 0.12, ease: "power2.out", yoyo: true, repeat: 3 }, tOff + 0.05);
 
     // ---- „Nachrüsten?“: Chips ----
+    if (NLV) {
+      // „Af fabriek“: Chip oben, bevor Bohrmaschine + Schrauben ins Bild kommen wieder weg
+      const tc = Math.max(t0 + 0.3, w("fabriek") + 0.05);
+      tl.fromTo(P.chips[0], { opacity: 0, scale: 0.6, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.42, ease: "back.out(1.9)" }, tc);
+      ANIM.sfx(tc, "pop", -6);
+      tl.to(P.chips[0], { opacity: 0, y: -14, duration: 0.3, ease: "power1.in" }, Math.max(tc + 1.2, tOhne - 0.4));
+    } else {
     P.chips.forEach((c, i) => {
       tl.fromTo(c, { opacity: 0, scale: 0.6, y: 24 }, { opacity: 1, scale: 1, y: 0, duration: 0.42, ease: "back.out(1.9)" }, tNach + 0.02 + i * 0.2);
       ANIM.sfx(tNach + 0.02 + i * 0.2, "pop", -6);
@@ -365,11 +374,13 @@
     P.armTo(tl, tNach - 0.02, "armR", chin, 0.38, "power2.inOut", { bend: 1 });
     ben.look(tl, tNach + 0.05, 4, -8, 0.2).brows(tl, tNach + 0.05, "surprised", 0.2).mouth(tl, tNach + 0.1, "o");
     tl.to(ben.head, Object.assign({ rotation: -5, duration: 0.35, ease: "power2.inOut" }, O0), tNach + 0.05);
+    }
 
     cam.to(tl, tNach - 0.1, { x: Cx - 50, y: 548, z: 1.09 }, t1 - (tNach - 0.1), "sine.inOut");
 
     // ---- „unkompliziert“: Zwinkern + Funkeln ----
-    const tWink = tUnk + 0.02;
+    const tWink = NLV ? tOff + 0.5 : tUnk + 0.02;
+    if (!NLV || tWink < t1 - 0.4) {
     P.armTo(tl, tWink - 0.06, "armR", [-58, -62], 0.36, "back.out(1.8)");
     tl.set(ben.face.eyes[1], { opacity: 0 }, tWink);
     tl.set(ben.face.closed[1], { opacity: 1 }, tWink);
@@ -383,9 +394,10 @@
       tl.to(g, Object.assign({ scale: 0, rotation: 110, duration: 0.3, ease: "power2.in" }, O0), ts + 0.34);
     });
     ANIM.sfx(tWink + 0.04, "sparkle", -4);
-    tl.to(P.chips[1], { scale: 1.08, duration: 0.14, ease: "power2.out" }, tWink);
-    tl.to(P.chips[1], { scale: 1, duration: 0.4, ease: "back.out(2)" }, tWink + 0.14);
+    if (P.chips[1]) tl.to(P.chips[1], { scale: 1.08, duration: 0.14, ease: "power2.out" }, tWink);
+    if (P.chips[1]) tl.to(P.chips[1], { scale: 1, duration: 0.4, ease: "back.out(2)" }, tWink + 0.14);
     ben.mouth(tl, tWink + 0.75, "smile").brows(tl, tWink + 0.75, "happy", 0.25);
+    }
 
     // Blinzeln (nicht während Lachen/Zwinkern)
     ben.blinks(tl, t0 + 0.5, tCr, 31);

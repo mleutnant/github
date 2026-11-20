@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Produktinformation QuinLine® 74 Edge</title>
+<!-- Produktinformation QuinLine® 74 Edge, A4, 2 Seiten – als Anhang für Mails (z. B. Außendienst).
+     Inhalt aus dem Edge-Newsletter, ohne Kunden-Login/Kompendium; Elementgrößen und Flügelgewicht aus dem
+     Kompendium HST 2400 QuinLine® 74 Edge (Nov. 2026). Gestaltung nach brand-guidelines/default.
+     PDF erzeugen: NODE_PATH=/opt/node22/lib/node_modules node projects/newsletter-ql74-edge/source/build-produktinfo.mjs -->
+<style>
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProRegular.otf") format("opentype");font-weight:400}
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProMedium.otf") format("opentype");font-weight:500}
+@font-face{font-family:"Filson Pro";src:url("../../../brand-guidelines/default/assets/fonts/FilsonProBold.otf") format("opentype");font-weight:700}
+:root{--white:#fff;--black:#000;--blue:#123442;--red:#e3002c;--yellow:#f6a206;--hair:#c9c9c9;--grey:#6e7478;--on-blue:rgba(255,255,255,.92)}
+@page{size:A4;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Filson Pro",Arial,Helvetica,sans-serif;font-weight:500;font-size:9.4pt;line-height:1.5;color:var(--black);
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;hyphens:auto;-webkit-hyphens:auto;font-kerning:normal}
+.page{position:relative;width:210mm;height:297mm;overflow:hidden;break-after:page;background:var(--white)}
+.page:last-child{break-after:auto}
+p{margin:0 0 2.4mm}
+b,strong{font-weight:700}
+.nb{white-space:nowrap}
+
+/* Kopf */
+.logo{position:absolute;left:18mm;top:12mm;height:13mm}
+.meta{position:absolute;right:18mm;top:15.5mm;font-weight:400;font-size:7.8pt;line-height:1.3;color:var(--grey);text-align:right}
+.meta b{color:var(--blue);font-weight:700}
+
+/* Seite 1: blaue Fläche, Rendering, roter Strich (wie im Key Visual) */
+.field{position:absolute;left:0;top:34mm;width:134mm;height:104mm;background:var(--blue);border-bottom:2.1mm solid var(--yellow)}
+.field .eyebrow{position:absolute;left:18mm;top:15mm;font-weight:700;font-size:7.8pt;letter-spacing:.08em;text-transform:uppercase;color:var(--on-blue)}
+.field .ql{position:absolute;left:18mm;top:31mm;font-weight:500;font-size:17pt;line-height:1;color:var(--white)}
+.field .ql sup{font-size:.5em;vertical-align:.8em;line-height:0}
+.field .edge{position:absolute;left:17mm;top:39mm;font-weight:700;font-size:56pt;line-height:1;letter-spacing:-.01em;color:var(--white)}
+.field .sub{position:absolute;left:18mm;top:74mm;font-weight:500;font-size:12pt;line-height:1.3;color:var(--on-blue)}
+.redline{position:absolute;left:70mm;top:86mm;width:60mm;height:1.8mm;background:var(--red);z-index:1}
+.render{position:absolute;left:104mm;top:27mm;width:98mm;height:auto;z-index:2}
+
+/* Inhalt */
+.content{position:absolute;left:18mm;right:18mm}
+h2{font-weight:700;font-size:15pt;line-height:1.15;letter-spacing:-.01em;color:var(--blue);margin:0 0 2.2mm;hyphens:manual}
+.rule{width:24mm;height:1.1mm;background:var(--red);margin:0 0 5mm}
+.cols{column-count:2;column-gap:9mm}
+.cols p{break-inside:avoid}
+
+.features{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7mm;margin-top:3mm}
+.feature{border-top:1px solid var(--black);padding-top:3.2mm}
+.feature .n{font-weight:700;font-size:8pt;color:var(--red);letter-spacing:.06em;margin-bottom:1.6mm}
+.feature h3{font-weight:700;font-size:10.5pt;line-height:1.2;color:var(--blue);margin:0 0 1.8mm;hyphens:manual}
+.feature p{font-size:8.8pt;line-height:1.45;margin:0}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6mm}
+.stat{border-top:1px solid var(--hair);padding-top:3mm}
+.stat .v{font-weight:700;font-size:21pt;line-height:1.05;color:var(--blue);white-space:nowrap}
+.stat .l{font-weight:400;font-size:8pt;line-height:1.3;color:var(--black);margin-top:1.4mm}
+
+/* Seite 2 */
+.mini{position:absolute;left:18mm;top:13mm;height:8mm}
+table{border-collapse:collapse;width:100%;font-size:9pt;line-height:1.4}
+td,th{padding:2.3mm 0;border-bottom:1px solid var(--hair);vertical-align:top;text-align:left}
+td.k{width:46mm;padding-right:4mm;font-weight:700;color:var(--blue)}
+table.spec{border-top:2px solid var(--blue)}
+th{font-weight:700;font-size:7.4pt;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);padding-top:0;border-bottom:2px solid var(--blue)}
+table.glas td:first-child{width:28mm;font-weight:700}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10mm}
+ul.bar{list-style:none;margin:0;padding:0}
+ul.bar li{position:relative;padding-left:4.4mm;margin:0 0 2.6mm;font-size:9pt;line-height:1.42}
+ul.bar li::before{content:"";position:absolute;left:0;top:.28em;width:2px;height:1.05em;background:var(--black)}
+ul.bar li b{display:block;color:var(--blue)}
+.small{font-size:8pt;line-height:1.35;color:var(--grey);margin-top:2.4mm}
+
+.muster{position:absolute;left:18mm;right:0;top:233mm;height:38mm;background:var(--blue);border-bottom:2.1mm solid var(--yellow);color:var(--white);padding:8mm 18mm 0 10mm}
+.muster h3{font-weight:700;font-size:13pt;line-height:1.2;margin:0 0 2.4mm;hyphens:manual}
+.muster p{font-size:9.2pt;line-height:1.45;color:var(--on-blue);margin:0 0 2.4mm;max-width:132mm}
+.muster .kontakt{font-weight:700;color:var(--white)}
+
+.footer{position:absolute;left:18mm;right:18mm;bottom:10mm;display:flex;justify-content:space-between;align-items:flex-end;font-weight:400;font-size:7pt;line-height:1.4;color:var(--grey)}
+.footer b{color:var(--black);font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- ============================ SEITE 1 ============================ -->
+<section class="page">
+  <img class="logo" src="../../../brand-guidelines/default/assets/logo-schmidt.svg" alt="SCHMIDT">
+  <div class="meta"><b>Produktinformation</b><br>Stand 11/2026</div>
+
+  <div class="field">
+    <div class="eyebrow">Neu im Programm</div>
+    <div class="ql">QuinLine<sup>®</sup> 74</div>
+    <div class="edge">Edge</div>
+    <div class="sub">Die geradlinige Hebeschiebetür</div>
+  </div>
+  <div class="redline"></div>
+  <img class="render" src="../renders/images/render-ql74-edge-freigestellt.png" alt="Schnittmodell der QuinLine® 74 Edge">
+
+  <div class="content" style="top:150mm">
+    <h2>Konsequent geradlinig</h2>
+    <div class="rule"></div>
+    <div class="cols">
+      <p>Mit dem Profilsystem QuinLine®&nbsp;74 Edge erweitern wir unser Hebeschiebetür-Programm um eine konsequent geradlinige Variante. Der schmale Flügelüberschlag und die eckigen Glasleisten verzichten bewusst auf Rundungen.</p>
+      <p>So entsteht eine markante, nahezu rechtwinklige Kontur, die sich nahtlos in Objekte mit eckigen Fensterprofilen einfügt. Gleichzeitig nimmt das System Glasdicken bis 50&nbsp;mm auf und ist damit bestens gerüstet für Dreifachverglasung, Schall- und Sicherheitsglas.</p>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <div class="n">01</div>
+        <h3>Schmaler Flügel&shy;überschlag</h3>
+        <p>Geradlinig und schlank, mit 25&nbsp;mm Höhe. Die klare Linie prägt die gesamte Ansicht des Elements.</p>
+      </div>
+      <div class="feature">
+        <div class="n">02</div>
+        <h3>Kantige Glas- und Mitteldichtleisten</h3>
+        <p>Eckig statt gerundet, die Ecken auf Gehrung gestoßen. So bleibt die Kontur bis ins Detail rechtwinklig.</p>
+      </div>
+      <div class="feature">
+        <div class="n">03</div>
+        <h3>Bewährte Technik der QuinLine®&nbsp;74</h3>
+        <p>Die Edge basiert auf der QuinLine®&nbsp;74 und übernimmt ihre wichtigsten Systemmerkmale. Für die Verarbeitung bedeutet das vertraute Abläufe.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content" style="top:249mm">
+    <div class="stats">
+      <div class="stat"><div class="v">25 mm</div><div class="l">schmaler, geradliniger Flügelüberschlag</div></div>
+      <div class="stat"><div class="v">50 mm</div><div class="l">maximale Glasdicke</div></div>
+      <div class="stat"><div class="v">7 m</div><div class="l">Elementbreite bis</div></div>
+      <div class="stat"><div class="v">2,50 m</div><div class="l">Elementhöhe bis</div></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span><b>SCHMIDT GmbH</b> · Töllen Linde 3 · 33129 Delbrück-Boke · +49 5250 9845-0 · kontakt@schmidt-boke.de · www.schmidt-boke.de</span>
+    <span>1/2</span>
+  </div>
+</section>
+
+<!-- ============================ SEITE 2 ============================ -->
+<section class="page">
+  <img class="mini" src="../../../brand-guidelines/default/assets/logo-schmidt.svg" alt="SCHMIDT">
+  <div class="meta"><b>QuinLine® 74 Edge</b><br>Produktinformation</div>
+
+  <div class="content" style="top:34mm">
+    <h2>Systemdaten</h2>
+    <div class="rule"></div>
+    <table class="spec">
+      <tr><td class="k">Zargenprofil</td><td>5 Kammern, Bautiefe 174&nbsp;mm, Ansicht 63&nbsp;mm</td></tr>
+      <tr><td class="k">Flügelprofil</td><td>5 Kammern, Bautiefe 74&nbsp;mm, Ansicht 92&nbsp;mm</td></tr>
+      <tr><td class="k">Profilüberschlag</td><td>geradlinig und schlank, 25&nbsp;mm Höhe</td></tr>
+      <tr><td class="k">Design</td><td>kantige Glasleisten und Mitteldichtleisten</td></tr>
+      <tr><td class="k">Glasdicken</td><td>20 bis 50&nbsp;mm</td></tr>
+      <tr><td class="k">Elementgrößen</td><td>bis 7&nbsp;m Breite (4-teilig) und 2,50&nbsp;m Höhe</td></tr>
+      <tr><td class="k">Flügelgewicht</td><td>bis 300&nbsp;kg, mit Zusatzmaßnahmen bis 400&nbsp;kg</td></tr>
+      <tr><td class="k">Getriebe</td><td>Riegelbolzen- oder Hakenriegelgetriebe</td></tr>
+      <tr><td class="k">Sicherheit</td><td>Sicherheitspakete ohne Einschränkungen einsetzbar</td></tr>
+      <tr><td class="k">Systemtechnik</td><td>bewährte Merkmale analog Basis-System QuinLine®&nbsp;74</td></tr>
+    </table>
+  </div>
+
+  <div class="content" style="top:160mm">
+    <div class="two">
+      <div>
+        <h2>Verfügbarkeit und Farben</h2>
+        <div class="rule"></div>
+        <ul class="bar">
+          <li><b>Schwelle</b>mit Standardschwelle ab sofort bestellbar</li>
+          <li><b>Farbsortiment</b>weiß und cremeweiß durchgefärbt sowie Standard- und Sonderdekore</li>
+          <li><b>Verglasungsdichtungen</b>schwarz und grau</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Glasleisten-Sortiment</h2>
+        <div class="rule"></div>
+        <table class="glas">
+          <tr><th>Glasdicke</th><th>Verfügbarkeit</th></tr>
+          <tr><td>20–27&nbsp;mm</td><td>auftragsbezogen</td></tr>
+          <tr><td>28–31&nbsp;mm</td><td>weiß ab Lager, Dekor auftragsbezogen</td></tr>
+          <tr><td>32–35&nbsp;mm</td><td>auftragsbezogen</td></tr>
+          <tr><td>36–50&nbsp;mm</td><td>ab Lager</td></tr>
+        </table>
+        <p class="small">Eckausführung: auf Gehrung gestoßen</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="muster">
+    <h3>Flügelmuster für Ihre Ausstellung</h3>
+    <p>Überzeugen Sie sich selbst von der geradlinigen Optik: Gern senden wir Ihnen kostenlos ein Muster einer Flügelecke mit dem Edge-Profil.</p>
+    <p class="kontakt">verkauf@schmidt-boke.de · +49 5250 9845-0</p>
+  </div>
+
+  <div class="footer">
+    <span><b>SCHMIDT GmbH</b> · Töllen Linde 3 · 33129 Delbrück-Boke · www.schmidt-boke.de<br>Stand 11/2026. Technische Änderungen vorbehalten.</span>
+    <span>2/2</span>
+  </div>
+</section>
+
+</body>
+</html>

@@ -52,7 +52,7 @@ def html(img_src):
 <p style="{P}">Mit Standardschwelle ist die Edge ab sofort bestellbar.</p>
 <p style="{P}"><img src="{img_src}" width="280" height="{round(280 * h / w)}" alt="QuinLine® 74 Edge mit kantigen Glasleisten und schmalem Flügelüberschlag" style="display:block;border:0;width:280px;height:auto"></p>
 <p style="{P}">Am besten überzeugt die Optik in der Hand: Gern schicke ich Ihnen kostenlos ein Muster der Flügelecke, zum Beispiel für Ihre Ausstellung. Eine kurze Antwort auf diese Mail genügt.</p>
-<p style="{P}">Weitere Informationen finden Sie auf unserer Website: <a href="{LINK}" style="color:#e3002c;font-weight:bold">QuinLine®&nbsp;74 Edge</a></p>
+<p style="{P}">Alle Daten finden Sie in der Produktinformation im Anhang, weitere Informationen auf unserer Website: <a href="{LINK}" style="color:#e3002c;font-weight:bold">QuinLine®&nbsp;74 Edge</a></p>
 <p style="{P}">Bei Fragen bin ich gern für Sie da.</p>
 <p style="{P}">Viele Grüße</p>
 <p style="{P}"><span style="{HL}">[Hier Signatur einfügen: Nachricht → Signatur]</span></p>
@@ -76,7 +76,7 @@ Mit Standardschwelle ist die Edge ab sofort bestellbar.
 
 Am besten überzeugt die Optik in der Hand: Gern schicke ich Ihnen kostenlos ein Muster der Flügelecke, zum Beispiel für Ihre Ausstellung. Eine kurze Antwort auf diese Mail genügt.
 
-Weitere Informationen finden Sie auf unserer Website:
+Alle Daten finden Sie in der Produktinformation im Anhang, weitere Informationen auf unserer Website:
 {LINK}
 
 Bei Fragen bin ich gern für Sie da.
@@ -95,5 +95,9 @@ msg.set_content(TEXT)
 msg.add_alternative(html('cid:' + CID), subtype='html')
 msg.get_payload()[1].add_related(img, 'image', 'jpeg', cid='<' + CID + '>',
                                  disposition='inline', filename='quinline-74-edge.jpg')
+# PDF-Produktinformation anhängen (falls vorhanden; erzeugt mit build-produktinfo.mjs)
+pdf = here.parent / 'renders' / 'SCHMIDT_Produktinfo_QuinLine74_Edge.pdf'
+if pdf.exists():
+    msg.add_attachment(pdf.read_bytes(), maintype='application', subtype='pdf', filename=pdf.name)
 (out / 'edge-mail-aussendienst.eml').write_bytes(bytes(msg))
 print(out)

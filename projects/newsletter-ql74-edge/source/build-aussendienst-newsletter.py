@@ -208,7 +208,7 @@ def document(src):
 </head>
 <body style="margin:0; padding:0; background:#ffffff;">
 <p style="{MAIL}">Guten Tag <span style="{HL}">Frau/Herr [Name]</span>,</p>
-<p style="{MAIL}">vielen Dank für das nette Telefonat. Wie besprochen schicke ich Ihnen hier die wichtigsten Infos zu unserer neuen QuinLine®&nbsp;74 Edge.</p>
+<p style="{MAIL}">vielen Dank für das nette Telefonat. Wie besprochen schicke ich Ihnen hier die wichtigsten Infos zu unserer neuen QuinLine®&nbsp;74 Edge. Alle Daten finden Sie zusätzlich in der Produktinformation im Anhang.</p>
 <p style="margin:0 0 6pt 0; font-size:1px; line-height:1px;">&nbsp;</p>
 {card(src)}
 <p style="margin:0 0 6pt 0; font-size:1px; line-height:1px;">&nbsp;</p>
@@ -222,7 +222,7 @@ def document(src):
 
 TEXT = f'''Guten Tag Frau/Herr [Name],
 
-vielen Dank für das nette Telefonat. Wie besprochen schicke ich Ihnen hier die wichtigsten Infos zu unserer neuen QuinLine® 74 Edge.
+vielen Dank für das nette Telefonat. Wie besprochen schicke ich Ihnen hier die wichtigsten Infos zu unserer neuen QuinLine® 74 Edge. Alle Daten finden Sie zusätzlich in der Produktinformation im Anhang.
 
 Mit dem Profilsystem QuinLine® 74 Edge erweitern wir unser Hebeschiebetür-Programm um eine konsequent geradlinige Variante: schmaler Flügelüberschlag (25 mm), kantige Glas- und Mitteldichtleisten, Glasdicken bis 50 mm. Die Technik entspricht der bewährten QuinLine® 74. Mit Standardschwelle ist die Edge ab sofort bestellbar.
 
@@ -249,5 +249,9 @@ for f, cid in IMAGES.items():
     data = (renders / 'images' / f).read_bytes()
     sub = 'png' if f.endswith('.png') else 'jpeg'
     html_part.add_related(data, 'image', sub, cid='<' + cid + '>', disposition='inline', filename=f)
+# PDF-Produktinformation anhängen (falls vorhanden; erzeugt mit build-produktinfo.mjs)
+pdf = here.parent / 'renders' / 'SCHMIDT_Produktinfo_QuinLine74_Edge.pdf'
+if pdf.exists():
+    msg.add_attachment(pdf.read_bytes(), maintype='application', subtype='pdf', filename=pdf.name)
 (out / 'edge-newsletter-aussendienst.eml').write_bytes(bytes(msg))
 print(out)

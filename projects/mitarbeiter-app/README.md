@@ -28,7 +28,7 @@ Bildschirm-Ansicht der App unter `#monitor`: feste Bühne 1920 × 1080, die auf 
   mit „Wichtig“ und „Anzeigen bis“; Platz für drei
 - **Termine:** nur Termine mit dem Häkchen „Auch auf dem Infoboard zeigen“; die nächsten drei
 - **Produzierte Stück pro Monat:** laufendes Jahr im Vergleich zu den beiden Vorjahren (`produktion/<jahr>`),
-  dazu Summe seit Januar und Veränderung zum gleichen Zeitraum der Vorjahre
+  darunter eine Wertetabelle mit jeder Monatszahl, dazu Summe seit Januar und Veränderung zum gleichen Zeitraum der Vorjahre
 - **Wichtige Ansprechpartner:** die ersten vier mit Bild und Telefonnummer (`ansprechpartner`), dazu Notruf 112
 
 Gepflegt wird alles von der Redaktion unter `#infoboard` (Link „Infoboard“ im Kopf der App). Der PC am Bildschirm braucht

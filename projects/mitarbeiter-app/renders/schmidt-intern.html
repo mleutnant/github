@@ -352,18 +352,16 @@ body.is-monitor{overflow:hidden}
 .mon-h{margin:0;font-size:34px;line-height:1.1;font-weight:700;color:#123442}
 .mon-small .mon-h{font-size:27px}
 .mon-small .mon-phead{margin-bottom:14px;padding-bottom:8px;height:58px}
-.mon-legend{display:flex;gap:22px;font-size:20px;color:#3d474c}
-.mon-key{display:inline-flex;align-items:center;gap:8px}
-.mon-key i{display:block;width:18px;height:18px}
 .mon-pbody{flex:1;min-height:0;display:flex;flex-direction:column}
 .mon-kpis{display:flex;gap:56px;align-items:flex-end;margin-bottom:6px;flex:none}
-.mon-hero{font-size:76px;font-weight:700;line-height:.95;color:#123442;letter-spacing:-.01em}
+.mon-hero{font-size:68px;font-weight:700;line-height:.95;color:#123442;letter-spacing:-.01em}
 .mon-delta{font-size:34px;font-weight:700;line-height:1;color:#123442}
 .mon-sub{font-size:19px;color:#5b656b;margin-top:8px;font-weight:400}
 .mon-chart-wrap{flex:1;min-height:0}
 .mon-chart{display:block;width:100%;height:100%}
 .mon-chart .tick{font-size:19px;fill:#5b656b;font-family:var(--font);font-variant-numeric:tabular-nums}
-.mon-chart .val{font-size:22px;font-weight:700;fill:#000;font-family:var(--font)}
+.mon-chart .yr,.mon-chart .cell{font-size:19px;fill:#3d474c;font-family:var(--font);font-variant-numeric:tabular-nums}
+.mon-chart .cur{font-weight:700;fill:#000}
 .mon-empty{font-size:23px;line-height:1.35;color:#5b656b;margin:0}
 .mon-info{padding:16px 0;border-top:1px solid #d0d7db}
 .mon-info:first-child{border-top:0;padding-top:0}
@@ -686,7 +684,7 @@ dialog#sheet::backdrop{background:var(--backdrop)}
           <div id="monInfos"></div>
         </section>
         <section class="mon-panel mon-prod" aria-labelledby="mh-prod">
-          <div class="mon-phead"><h2 class="mon-h" id="mh-prod">Produzierte Stück pro Monat</h2><div class="mon-legend" id="monProdLegend"></div></div>
+          <div class="mon-phead"><h2 class="mon-h" id="mh-prod">Produzierte Stück pro Monat</h2></div>
           <div class="mon-pbody" id="monProd"></div>
         </section>
         <section class="mon-panel mon-small mon-term" aria-labelledby="mh-term">
@@ -2050,15 +2048,18 @@ function niceMax(v) {
   const p = Math.pow(10, Math.floor(Math.log10(v))), n = v / p;
   return [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((k) => n <= k) * p;
 }
+/* Balken je Monat und Jahr, darunter eine Wertetabelle an denselben Spalten: jede Stückzahl ist direkt lesbar.
+   Die Jahreszeilen mit Farbfeld sind zugleich die Legende. */
 function prodChartSvg(W, H) {
   const { byYear, years } = prodYears();
   const all = years.flatMap((y) => (byYear[y] || []).filter((v) => typeof v === "number"));
   if (!all.length) return null;
-  const max = niceMax(Math.max(...all) * 1.1), ticks = 4;
-  const padL = 84, padR = 8, padT = 36, padB = 40, pw = W - padL - padR, ph = H - padT - padB;
+  const max = niceMax(Math.max(...all) * 1.05), ticks = 2;
+  const padL = 96, padR = 8, padT = 14, monthH = 34, rowH = 30, tableH = monthH + rowH * years.length;
+  const pw = W - padL - padR, ph = H - padT - tableH - 6;
   const gw = pw / 12, bw = Math.min(24, (gw - 18) / 3), gap = 2, gwid = bw * 3 + gap * 2;
-  const y = (v) => padT + ph - (v / max) * ph;
-  let s = `<svg viewBox="0 0 ${W} ${H}" class="mon-chart" role="img" aria-label="Produzierte Stück pro Monat, ${years.join(", ")}">`;
+  const y = (v) => padT + ph - (v / max) * ph, base = padT + ph, cx = (k) => padL + k * gw + gw / 2;
+  let s = `<svg viewBox="0 0 ${W} ${H}" class="mon-chart" role="img" aria-label="Produzierte Stück pro Monat, ${years.join(", ")}, mit Werten je Monat">`;
   for (let i = 0; i <= ticks; i++) {
     const v = (max / ticks) * i, yy = y(v);
     s += `<line x1="${padL}" x2="${W - padR}" y1="${yy}" y2="${yy}" stroke="${i === 0 ? "#8f9ea5" : "#e1e7ea"}" stroke-width="1"/>`;
@@ -2070,15 +2071,20 @@ function prodChartSvg(W, H) {
       const v = (byYear[yr] || [])[k];
       if (typeof v !== "number" || v <= 0) return;
       const yy = y(v);
-      s += `<rect x="${x0 + j * (bw + gap)}" y="${yy}" width="${bw}" height="${padT + ph - yy}" fill="${MON_COLORS[j]}"><title>${MONTHS[k]} ${yr}: ${fmtInt(v)} Stück</title></rect>`;
+      s += `<rect x="${x0 + j * (bw + gap)}" y="${yy}" width="${bw}" height="${base - yy}" fill="${MON_COLORS[j]}"><title>${MONTHS[k]} ${yr}: ${fmtInt(v)} Stück</title></rect>`;
     });
-    s += `<text x="${padL + k * gw + gw / 2}" y="${H - 10}" text-anchor="middle" class="tick">${m}</text>`;
+    s += `<text x="${cx(k)}" y="${base + 26}" text-anchor="middle" class="tick">${m}</text>`;
   });
-  const cur = byYear[years[2]] || [], li = lastIndex(cur);
-  if (li >= 0) {
-    const top = Math.min(...years.map((yr) => (byYear[yr] || [])[li]).filter((v) => typeof v === "number").map(y));
-    s += `<text x="${padL + li * gw + (gw - gwid) / 2 + 2 * (bw + gap) + bw / 2}" y="${top - 10}" text-anchor="middle" class="val">${fmtInt(cur[li])}</text>`;
-  }
+  years.forEach((yr, j) => {
+    const top = base + monthH + rowH * j, bl = top + 21, cur = j === years.length - 1;
+    s += `<line x1="0" x2="${W - padR}" y1="${top}" y2="${top}" stroke="#e1e7ea" stroke-width="1"/>`;
+    s += `<rect x="0" y="${bl - 14}" width="14" height="14" fill="${MON_COLORS[j]}"/>`;
+    s += `<text x="22" y="${bl}" class="${cur ? "yr cur" : "yr"}">${yr}</text>`;
+    MON3.forEach((_, k) => {
+      const v = (byYear[yr] || [])[k];
+      if (typeof v === "number") s += `<text x="${cx(k)}" y="${bl}" text-anchor="middle" class="${cur ? "cell cur" : "cell"}">${fmtInt(v)}</text>`;
+    });
+  });
   return s + "</svg>";
 }
 function monitorOn() { return document.body.classList.contains("is-monitor"); }
@@ -2110,9 +2116,7 @@ function renderMonInfos() {
     i.text ? h("p", null, clip(plain(i.text), 220)) : null)) : [h("p", { class: "mon-empty" }, "Zurzeit keine Infos.")]));
 }
 function renderMonProd() {
-  const { years } = prodYears();
-  $("#monProdLegend").replaceChildren(...years.map((y, j) => h("span", { class: "mon-key" }, h("i", { style: `background:${MON_COLORS[j]}` }), String(y))));
-  const box = $("#monProd"), chart = prodChartSvg(1040, 330), sum = prodSummary();
+  const box = $("#monProd"), chart = prodChartSvg(1040, 350), sum = prodSummary();
   if (!chart) { box.replaceChildren(h("p", { class: "mon-empty" }, "Die Stückzahlen erscheinen hier, sobald die Redaktion sie eingetragen hat.")); return; }
   const kpis = sum ? h("div", { class: "mon-kpis" },
     h("div", null, h("div", { class: "mon-hero" }, fmtInt(sum.ytd)), h("div", { class: "mon-sub" }, sum.li === 0 ? `Stück im Januar ${sum.year}` : `Stück ${MON3[0]}–${MON3[sum.li]} ${sum.year}`)),

@@ -25,7 +25,8 @@ Bildschirm-Ansicht der App unter `#monitor`: feste Bühne 1920 × 1080, die auf 
 (Vollbild-Knopf, Bildschirm bleibt wach, Schaltflächen und Mauszeiger verschwinden nach 4 Sekunden). Sie zeigt nur:
 
 - **Aktuelle Infos:** eigene Einträge fürs Infoboard (`boardInfos`), getrennt von den Neuigkeiten der App,
-  mit „Wichtig“ und „Anzeigen bis“; Platz für drei
+  mit „Wichtig“ und „Anzeigen bis“. Die drei vordersten laufen durch: Übersicht (12 s), dann jede Info groß (je 10 s),
+  dann wieder die Übersicht; Fortschrittsbalken oben rechts, ohne Animation bei „Bewegung reduzieren“
 - **Termine:** nur Termine mit dem Häkchen „Auch auf dem Infoboard zeigen“; die nächsten drei
 - **Produzierte Stück pro Monat:** laufendes Jahr im Vergleich zu den beiden Vorjahren (`produktion/<jahr>`),
   darunter eine Wertetabelle mit jeder Monatszahl, dazu Summe seit Januar und Veränderung zum gleichen Zeitraum der Vorjahre

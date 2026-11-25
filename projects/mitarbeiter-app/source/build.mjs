@@ -1,5 +1,6 @@
 // Baut SCHMIDT Intern zu einer einzelnen HTML-Datei:
-// Filson Pro (Latin-Subset, woff2) und der Logo-Pfad aus brand-guidelines/default werden eingebettet.
+// Filson Pro (Latin-Subset, woff2), der Logo-Pfad aus brand-guidelines/default und der QR-Code zur App
+// (source/qr-app.svg, mit segno erzeugt) werden eingebettet.
 // Aufruf: node projects/mitarbeiter-app/source/build.mjs
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -18,7 +19,8 @@ const html = readFileSync(join(here, "app.html"), "utf8")
   .replace("__FONT_400__", font("Regular"))
   .replace("__FONT_500__", font("Medium"))
   .replace("__FONT_700__", font("Bold"))
-  .replace("__LOGO_PATH__", logoPath);
+  .replaceAll("__LOGO_PATH__", logoPath)
+  .replace("__QR_SVG__", readFileSync(join(here, "qr-app.svg"), "utf8").trim());
 
 mkdirSync(dirname(out), { recursive: true });
 writeFileSync(out, html);

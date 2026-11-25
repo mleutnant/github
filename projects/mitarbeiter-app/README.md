@@ -19,6 +19,21 @@ https://claude.ai/artifact/95L3bzmEWkuLJ9gDAspXuH
 - **Telefonbuch:** Suche, Abteilungs-Filter, Klick kopiert die volle Nummer (Zentrale +49 5250 9845 plus Durchwahl), Import einer Liste aus Excel/CSV
 - **Dokumente:** Dateien (PDF, Bild, Video, Text bis 20 MB) oder Links, Kategorien, Suche, dazu die neuesten Wiki-Artikel
 
+## Infoboard (großer Bildschirm)
+
+Bildschirm-Ansicht der App unter `#monitor`: feste Bühne 1920 × 1080, die auf jeden Bildschirm skaliert wird
+(Vollbild-Knopf, Bildschirm bleibt wach, Schaltflächen und Mauszeiger verschwinden nach 4 Sekunden). Sie zeigt nur:
+
+- **Aktuelle Infos:** eigene Einträge fürs Infoboard (`boardInfos`), getrennt von den Neuigkeiten der App,
+  mit „Wichtig“ und „Anzeigen bis“; Platz für drei
+- **Termine:** nur Termine mit dem Häkchen „Auch auf dem Infoboard zeigen“; die nächsten drei
+- **Produzierte Stück pro Monat:** laufendes Jahr im Vergleich zu den beiden Vorjahren (`produktion/<jahr>`),
+  dazu Summe seit Januar und Veränderung zum gleichen Zeitraum der Vorjahre
+- **Wichtige Ansprechpartner:** die ersten vier mit Bild und Telefonnummer (`ansprechpartner`), dazu Notruf 112
+
+Gepflegt wird alles von der Redaktion unter `#infoboard` (Link „Infoboard“ im Kopf der App). Der PC am Bildschirm braucht
+ein Konto mit mindestens Mitwirkenden-Rechten, sonst bleiben Infos, Stückzahlen und Ansprechpartner leer.
+
 ## Rechte
 
 | Wer (Freigabe-Menü) | darf |
@@ -28,7 +43,8 @@ https://claude.ai/artifact/95L3bzmEWkuLJ9gDAspXuH
 | Betrachter | nur lesen |
 
 Die Regeln liegen in der Datenablage der Seite (`news`, `termine`, `kontakte`, `dokumente`, `wiki`, `benefits` schreibt nur die Redaktion,
-`wikiEntwurf` liest und schreibt nur die Redaktion;
+`wikiEntwurf` liest und schreibt nur die Redaktion; `produktion`, `ansprechpartner` und `boardInfos` schreibt die Redaktion,
+lesen nur Mitwirkende und höher;
 `ideen/<person>` liest und schreibt nur die Person selbst und die Redaktion, `ideenStatus/<person>` schreibt nur die Redaktion
 und liest die Person selbst; `geburtstage/<person>` schreibt jede Person selbst, Geburtstage lesen nur Mitwirkende und höher
 (also keine Besucher von außerhalb der Organisation); `data/users/<person>/state` merkt sich, was jemand gelesen hat).

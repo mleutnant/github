@@ -304,6 +304,93 @@ mark.ph{background:var(--yellow);color:#000;padding:0 3px}
 .dictate-box p{margin:0;font-size:15px}
 .dictate-box strong{color:var(--heading)}
 
+/* Infoboard verwalten */
+.mast-right{display:flex;align-items:center;gap:10px}
+.role-link{color:var(--field-ink);text-decoration:none}
+.role-link:hover{background:rgba(255,255,255,.12)}
+.ib-block{margin-bottom:56px}
+.ib-scroll{overflow-x:auto;max-width:680px}
+.ib-table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+.ib-table th,.ib-table td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+.ib-table thead th{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.ib-table thead th:not(:first-child){text-align:right}
+.ib-table tbody th{font-weight:500;white-space:nowrap}
+.num-in{font:inherit;width:100%;min-width:84px;padding:8px 10px;border:1px solid var(--line-strong);border-radius:0;background:var(--bg);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.ib-row{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;margin-top:16px}
+.ib-row .field{flex:1 1 220px}
+.ib-row input{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line-strong);border-radius:0;background:var(--bg);color:var(--ink);width:100%}
+.ib-saved{font-size:14px;color:var(--muted);font-weight:400}
+.ib-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;padding:14px 0;border-top:1px solid var(--line);align-items:center}
+.ib-item:first-child{border-top:0}
+.ib-item .actions{grid-row:1/span 4;grid-column:2}
+.ib-person{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:2px 16px;padding:14px 0;border-top:1px solid var(--line);align-items:center}
+.ib-person:first-child{border-top:0}
+.ib-person .pic{grid-row:1/span 3;width:64px;height:64px;object-fit:cover;background:var(--tint);display:grid;place-items:center;font-weight:700;color:var(--heading)}
+.ib-person .actions{grid-row:1/span 3;grid-column:3}
+
+/* Infoboard für den großen Bildschirm: feste Bühne 1920 × 1080, die auf den Bildschirm skaliert wird.
+   Bewusst nur hell, damit es im Hallenlicht immer gleich aussieht. */
+body.is-monitor{overflow:hidden}
+.is-monitor .app > :not(#monitor){display:none!important}
+.mon{position:fixed;inset:0;z-index:100;background:#0b1c23;overflow:hidden;color-scheme:light}
+.mon.idle{cursor:none}
+.mon-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:#fff;color:#000;display:grid;grid-template-rows:136px minmax(0,1fr);font-family:var(--font);font-weight:500}
+.mon-head{background:#123442;color:#fff;border-bottom:8px solid #f6a206;display:flex;align-items:center;gap:40px;padding:0 48px}
+.mon-head .logo{height:44px;width:auto;color:#fff}
+.mon-brand{display:flex;align-items:center;gap:22px}
+.mon-tag{font-size:22px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;padding-left:22px;border-left:1px solid rgba(255,255,255,.4);line-height:1.1}
+.mon-time{margin-left:auto;display:flex;align-items:center;gap:28px}
+.mon-clock{font-size:84px;font-weight:700;line-height:1;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.mon-date{display:grid;gap:6px;font-size:24px;line-height:1.1;color:rgba(255,255,255,.86)}
+.mon-qr{display:flex;align-items:center;gap:16px;font-size:17px;line-height:1.3;color:rgba(255,255,255,.86);padding-left:36px;border-left:1px solid rgba(255,255,255,.25)}
+.mon-qr svg{width:96px;height:96px;background:#fff;padding:7px;display:block}
+.mon-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:520px minmax(0,1fr);gap:32px 44px;padding:32px 48px;min-height:0}
+.mon-panel{min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.mon-infos{grid-column:1/6}.mon-prod{grid-column:6/13}
+.mon-term{grid-column:1/6}.mon-contact{grid-column:6/13}
+.mon-phead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;border-bottom:2px solid #123442;padding-bottom:10px;margin-bottom:18px;flex:none}
+.mon-h{margin:0;font-size:34px;line-height:1.1;font-weight:700;color:#123442}
+.mon-small .mon-h{font-size:27px}
+.mon-small .mon-phead{margin-bottom:14px;padding-bottom:8px;height:58px}
+.mon-legend{display:flex;gap:22px;font-size:20px;color:#3d474c}
+.mon-key{display:inline-flex;align-items:center;gap:8px}
+.mon-key i{display:block;width:18px;height:18px}
+.mon-pbody{flex:1;min-height:0;display:flex;flex-direction:column}
+.mon-kpis{display:flex;gap:56px;align-items:flex-end;margin-bottom:6px;flex:none}
+.mon-hero{font-size:76px;font-weight:700;line-height:.95;color:#123442;letter-spacing:-.01em}
+.mon-delta{font-size:34px;font-weight:700;line-height:1;color:#123442}
+.mon-sub{font-size:19px;color:#5b656b;margin-top:8px;font-weight:400}
+.mon-chart-wrap{flex:1;min-height:0}
+.mon-chart{display:block;width:100%;height:100%}
+.mon-chart .tick{font-size:19px;fill:#5b656b;font-family:var(--font);font-variant-numeric:tabular-nums}
+.mon-chart .val{font-size:22px;font-weight:700;fill:#000;font-family:var(--font)}
+.mon-empty{font-size:23px;line-height:1.35;color:#5b656b;margin:0}
+.mon-info{padding:16px 0;border-top:1px solid #d0d7db}
+.mon-info:first-child{border-top:0;padding-top:0}
+.mon-flag{display:inline-block;background:#f6a206;color:#000;font-size:15px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:4px 8px;margin-bottom:8px;line-height:1}
+.mon-info h3{margin:0 0 6px;font-size:30px;line-height:1.15;color:#123442;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mon-info p{margin:0;font-size:22px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.mon-ev{display:grid;grid-template-columns:72px minmax(0,1fr);gap:18px;align-items:center;padding:7px 0}
+.mon-evd{border:3px solid #123442;color:#123442;text-align:center;padding:6px 0 5px;line-height:1}
+.mon-evd b{display:block;font-size:30px}
+.mon-evd span{display:block;font-size:15px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-top:3px}
+.mon-evd.is-today{background:#123442;color:#fff}
+.mon-evt{font-size:24px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mon-evm{font-size:19px;color:#5b656b;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mon-sos{border:3px solid #e3002c;padding:4px 12px;font-size:19px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;line-height:1.2}
+.mon-sos b{font-size:26px;letter-spacing:0;margin-left:6px}
+.mon-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}
+.mon-card{min-width:0}
+.mon-photo,.mon-initials{width:124px;height:124px;display:block;background:#eef1f2}
+.mon-photo{object-fit:cover}
+.mon-initials{display:grid;place-items:center;color:#123442;font-size:46px;font-weight:700}
+.mon-card-n{font-size:23px;font-weight:700;line-height:1.2;margin-top:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mon-card-r{font-size:17px;line-height:1.3;min-height:2.6em;color:#5b656b;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mon-card-t{font-size:23px;font-weight:700;color:#123442;margin-top:6px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mon-controls{position:absolute;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;z-index:2;transition:opacity var(--dur) var(--ease)}
+.mon-controls a,.mon-controls button{font:inherit;font-size:14px;font-weight:700;background:#123442;color:#fff;border:1px solid rgba(255,255,255,.45);padding:9px 14px;text-decoration:none;cursor:pointer;border-radius:0}
+.mon.idle .mon-controls{opacity:0;pointer-events:none}
+
 /* Leere Zustände */
 .empty{padding:24px;border:1px dashed var(--line-strong);display:grid;gap:10px;justify-items:start}
 .empty strong{color:var(--heading);font-size:17px;line-height:1.3}
@@ -361,7 +448,7 @@ dialog#sheet::backdrop{background:var(--backdrop)}
           </svg>
           <span class="brand-tag">Intern</span>
         </a>
-        <span class="role" id="roleChip" hidden>Redaktion</span>
+        <div class="mast-right"><a class="role role-link" id="ibLink" href="#infoboard" hidden>Infoboard</a><span class="role" id="roleChip" hidden>Redaktion</span></div>
       </div>
       <div>
         <h1 class="greet" id="greet">Guten Tag.</h1>
@@ -500,6 +587,35 @@ dialog#sheet::backdrop{background:var(--backdrop)}
       </div>
     </section>
 
+    <section id="view-infoboard" class="view" aria-labelledby="h-ib" hidden>
+      <a class="back" href="#aktuelles">Aktuelles</a>
+      <div class="sec-head">
+        <div>
+          <h2 id="h-ib">Infoboard verwalten</h2>
+          <p class="sec-sub">Auf dem großen Bildschirm erscheint nur, was hier eingestellt oder fürs Infoboard markiert ist.</p>
+        </div>
+        <div class="actions"><a class="btn btn-primary btn-sm" href="#monitor">Infoboard öffnen</a></div>
+      </div>
+      <div class="layout">
+        <div class="main">
+          <div id="ibInfos"></div>
+          <div id="ibTermine"></div>
+          <div id="ibProd"></div>
+          <div id="ibContacts"></div>
+        </div>
+        <aside class="aside" aria-label="Infoboard einrichten">
+          <div>
+            <div class="sec-head"><h2>So kommt es auf den Bildschirm</h2></div>
+            <div class="prose"><ol>
+              <li>Am PC des Bildschirms die App öffnen, mit einem Konto, das mindestens Mitwirkende ist.</li>
+              <li>Hier oder über die Adresse mit #monitor am Ende das Infoboard öffnen.</li>
+              <li>Unten rechts auf „Vollbild“ klicken. Die Schaltflächen verschwinden nach ein paar Sekunden.</li>
+            </ol></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
     <section id="view-telefonbuch" class="view" aria-labelledby="h-pb" hidden>
       <div class="pb-top">
         <div>
@@ -548,6 +664,44 @@ dialog#sheet::backdrop{background:var(--backdrop)}
     <div class="wrap"><span>SCHMIDT GmbH · Delbrück-Boke</span><span>Nur für Mitarbeiterinnen und Mitarbeiter</span></div>
   </footer>
 
+  <div id="monitor" class="mon" hidden>
+    <div class="mon-stage" id="monStage">
+      <header class="mon-head">
+        <div class="mon-brand">
+          <svg class="logo" viewBox="62 62 398 65" role="img" aria-label="SCHMIDT" focusable="false">
+            <g class="bm">
+              <polygon points="142.83,75.14 142.83,83.44 151.26,83.44 151.26,116.95 142.83,116.95 142.83,125.25 159.56,125.25 159.56,75.14"/>
+              <polygon points="62.62,62.62 62.62,125.25 79.31,125.25 79.31,116.95 70.92,116.95 70.92,70.92 130.32,70.92 130.33,116.92 91.81,116.92 91.81,83.44 126.11,83.44 126.11,75.14 83.51,75.14 83.51,125.22 138.63,125.22 138.62,62.62"/>
+            </g>
+            <path class="wm" d="M444.22,77.62h-7.06l-1.64,10.03h-6.32v6.99h5.87v18.43c0,10.33,6.17,13,12.41,13c8.1,0,11.89-4.9,11.89-10.4 c0-0.67-0.15-2.82-0.82-4.24h-7.5c0.37,0.82,0.52,2.3,0.52,3.12c0,2.3-1.49,3.86-3.71,3.86c-2.68,0-3.64-1.78-3.64-4.09V94.64 h11.22v-6.99h-11.22V77.62z M415.76,71.53v21.7c-3.12-4.31-7.8-6.39-12.85-6.39c-11.52,0-18.43,8.84-18.43,19.47 c0,11,7.28,19.76,18.35,19.76c5.5,0,10.18-2.38,12.93-6.46v5.65h9.14V71.53H415.76z M393.69,106.38c0-6.46,3.86-11.89,10.77-11.89 c6.84,0,11.44,4.98,11.44,12.26c0,7.43-4.9,11.67-11.15,11.67C397.93,118.41,393.69,113.06,393.69,106.38z M369.33,76.5 c0,3.27,2.53,5.72,5.95,5.72s6.09-2.45,6.09-5.72c0-3.27-2.67-5.8-6.09-5.8S369.33,73.24,369.33,76.5z M379.81,87.65h-9.14v37.6 h9.14V87.65z M331.76,125.25h9.07V106c0.22-8.25,4.31-11.44,8.47-11.44c4.38,0,6.99,3.42,6.99,9.96v20.73h9.14v-20.81 c0-10.85-4.23-17.61-13.97-17.61c-4.09,0-9.36,1.04-12.33,7.06c-2.45-5.2-7.06-7.06-11.74-7.06c-4.83,0-9.07,2.53-11.07,7.13 v-6.32h-9.14v37.6h9.14V106c0.22-8.25,4.31-11.44,8.47-11.44c4.38,0,6.99,3.42,6.99,9.96V125.25z M266.69,125.25h9.14v-18.8 c0-8.55,5.13-11.89,9.59-11.89c4.53,0,7.36,3.42,7.36,9.96v20.73h9.14v-20.81c0-10.85-4.61-17.61-13.97-17.61 c-5.35,0-9.73,2.23-12.11,7.13V71.53h-9.14V125.25z M226.3,106.67c0,10.92,8.1,19.39,21.18,19.39c3.64,0,8.69-0.82,14.49-5.13 l-4.24-6.47c-3.86,3.12-8.4,3.42-9.81,3.42c-7.28,0-12.41-4.76-12.41-11.44c0-6.76,5.13-11.44,12.41-11.44 c1.41,0,5.94,0.22,9.81,3.42l4.24-6.54c-5.8-4.24-10.85-5.05-14.49-5.05C234.18,86.83,226.3,95.53,226.3,106.67z M184.48,111.95 c1.41,8.4,9.44,14.12,19.62,14.12c10.03,0,18.58-5.35,18.58-15.38c-0.07-5.13-3.27-11.52-13.38-14.71l-6.69-2.45 c-5.65-2.01-6.17-4.68-6.17-6.47c0-4.09,3.49-6.17,7.73-6.17c3.79,0,7.43,1.49,9.21,6.76l8.03-3.34 c-2.38-7.36-8.55-11.89-17.24-11.89c-9.51,0-17.24,5.65-17.24,14.79c0,4.38,1.86,11,12.78,14.64l6.69,2.3 c4.61,1.63,6.84,3.86,6.84,6.91c0,4.16-3.94,6.61-9.36,6.61c-5.65,0-9.66-3.2-10.77-7.65L184.48,111.95z"/>
+          </svg>
+          <span class="mon-tag">Infoboard</span>
+        </div>
+        <div class="mon-time"><span class="mon-clock" id="monClock">00:00</span><span class="mon-date"><span id="monDay"></span><span id="monKw"></span></span></div>
+        <div class="mon-qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="segno"><path class="qrline" stroke="#123442" d="M0 0.5h7m3 0h1m1 0h1m1 0h2m2 0h1m2 0h2m3 0h7m-33 1h1m5 0h1m1 0h7m1 0h2m3 0h1m2 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m2 0h2m1 0h4m1 0h3m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m11 0h1m4 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m2 0h2m1 0h2m1 0h1m1 0h2m2 0h3m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m5 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h3m1 0h1m9 0h1m1 0h1m-25 1h1m5 0h1m1 0h2m3 0h1m1 0h3m2 0h1m3 0h3m2 0h3m-30 1h1m1 0h1m3 0h4m3 0h2m1 0h2m2 0h2m4 0h3m-31 1h5m1 0h1m3 0h1m1 0h1m2 0h2m1 0h1m2 0h1m3 0h2m1 0h1m1 0h2m-30 1h1m1 0h2m1 0h1m3 0h1m2 0h1m4 0h1m7 0h4m1 0h1m-33 1h4m2 0h1m1 0h1m4 0h2m1 0h6m1 0h2m1 0h3m2 0h1m-32 1h1m3 0h1m3 0h1m2 0h1m2 0h1m1 0h1m3 0h3m4 0h1m1 0h1m1 0h2m-31 1h1m2 0h3m2 0h1m1 0h2m3 0h1m1 0h1m2 0h1m1 0h3m2 0h3m-31 1h1m3 0h1m3 0h1m3 0h1m1 0h1m2 0h2m2 0h1m2 0h1m1 0h4m1 0h1m-32 1h1m2 0h3m2 0h1m2 0h1m1 0h1m1 0h2m1 0h2m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m-33 1h5m3 0h1m1 0h1m4 0h1m1 0h5m1 0h1m2 0h1m2 0h4m-33 1h1m1 0h1m1 0h5m2 0h2m2 0h1m3 0h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m-33 1h1m1 0h2m1 0h1m5 0h2m2 0h4m5 0h1m1 0h1m1 0h3m1 0h1m-33 1h3m3 0h8m2 0h1m5 0h1m1 0h1m3 0h2m-30 1h1m2 0h3m1 0h2m1 0h2m1 0h1m2 0h1m1 0h1m1 0h1m4 0h1m1 0h4m-31 1h1m2 0h4m1 0h2m2 0h1m2 0h2m1 0h1m2 0h1m6 0h4m-32 1h1m1 0h1m1 0h2m3 0h2m1 0h1m1 0h1m7 0h2m1 0h2m1 0h4m-32 1h2m2 0h3m1 0h2m1 0h3m1 0h2m2 0h2m2 0h6m1 0h3m-25 1h1m1 0h1m4 0h1m2 0h3m3 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m4 0h1m3 0h1m2 0h1m1 0h5m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m2 0h1m3 0h2m4 0h1m3 0h2m3 0h4m-32 1h1m1 0h3m1 0h1m2 0h1m2 0h2m1 0h1m2 0h2m1 0h2m1 0h6m-30 1h1m1 0h3m1 0h1m4 0h4m1 0h1m4 0h1m2 0h2m1 0h6m-33 1h1m1 0h3m1 0h1m3 0h3m3 0h1m1 0h5m2 0h1m1 0h2m2 0h2m-33 1h1m5 0h1m2 0h1m2 0h2m1 0h2m5 0h1m3 0h5m-31 1h7m1 0h1m4 0h1m2 0h2m1 0h1m3 0h3m1 0h1m3 0h1"/></svg><span>SCHMIDT Intern<br>am Handy öffnen</span></div>
+      </header>
+      <div class="mon-grid">
+        <section class="mon-panel mon-infos" aria-labelledby="mh-infos">
+          <div class="mon-phead"><h2 class="mon-h" id="mh-infos">Aktuelle Infos</h2></div>
+          <div id="monInfos"></div>
+        </section>
+        <section class="mon-panel mon-prod" aria-labelledby="mh-prod">
+          <div class="mon-phead"><h2 class="mon-h" id="mh-prod">Produzierte Stück pro Monat</h2><div class="mon-legend" id="monProdLegend"></div></div>
+          <div class="mon-pbody" id="monProd"></div>
+        </section>
+        <section class="mon-panel mon-small mon-term" aria-labelledby="mh-term">
+          <div class="mon-phead"><h2 class="mon-h" id="mh-term">Termine</h2></div>
+          <div id="monTerm"></div>
+        </section>
+        <section class="mon-panel mon-small mon-contact" aria-labelledby="mh-contact">
+          <div class="mon-phead"><h2 class="mon-h" id="mh-contact">Wichtige Ansprechpartner</h2><span class="mon-sos">Notruf <b>112</b></span></div>
+          <div id="monContact"></div>
+        </section>
+      </div>
+    </div>
+    <div class="mon-controls" id="monControls"><a href="#aktuelles">Zur App</a><button type="button" id="monFull">Vollbild</button></div>
+  </div>
+
   <dialog id="sheet" aria-labelledby="sheetTitle">
     <div class="sheet-head"><h2 id="sheetTitle">Bearbeiten</h2><button type="button" class="sheet-close" id="sheetClose">Schließen</button></div>
     <div id="sheetBody"></div>
@@ -573,8 +727,8 @@ const MON3 = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "O
 const S = {
   db: null, user: null, assets: null, uid: null, canEdit: false, offline: false,
   view: "aktuelles",
-  news: [], termine: [], kontakte: [], dokumente: [], wiki: [], wikiDrafts: [], geburtstage: [], benefits: [], myIdeen: [], myIdeenStatus: {}, ideenAll: [], ideenStatusAll: {},
-  ready: { news: false, termine: false, kontakte: false, dokumente: false, wiki: false, wikiDrafts: false, geburtstage: false, benefits: false, myIdeen: false, ideenAll: false },
+  news: [], termine: [], kontakte: [], dokumente: [], wiki: [], wikiDrafts: [], geburtstage: [], benefits: [], produktion: [], ansprechpartner: [], boardInfos: [], myIdeen: [], myIdeenStatus: {}, ideenAll: [], ideenStatusAll: {},
+  ready: { news: false, termine: false, kontakte: false, dokumente: false, wiki: false, wikiDrafts: false, geburtstage: false, benefits: false, produktion: false, ansprechpartner: false, boardInfos: false, myIdeen: false, ideenAll: false },
   me: null, gbReadonly: false,
   seenAt: null, visitSeenAt: null, seenLoaded: false, marking: false,
   newsCat: "Alle", dept: "Alle", docCat: "Alle", pbQuery: "", docQuery: "",
@@ -843,15 +997,16 @@ function renderHead(me) {
   const greeting = isBirthday ? "Alles Gute zum Geburtstag" : hello;
   $("#greet").textContent = first ? `${greeting}, ${first}.` : `${greeting}.`;
   $("#roleChip").hidden = !S.canEdit;
+  $("#ibLink").hidden = !S.canEdit;
 }
 
 /* ---------- Bilder ---------- */
 const imgUrl = (id) => "/_blob/" + id;
-async function prepareImage(file) {
+async function prepareImage(file, maxSide = 1800) {
   if (file.type === "image/gif" || file.type === "image/svg+xml") return { blob: file };
   try {
     const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
-    const scale = Math.min(1, 1800 / Math.max(bmp.width, bmp.height));
+    const scale = Math.min(1, maxSide / Math.max(bmp.width, bmp.height));
     const w = Math.round(bmp.width * scale), hgt = Math.round(bmp.height * scale);
     const c = document.createElement("canvas"); c.width = w; c.height = hgt;
     const ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, hgt); ctx.drawImage(bmp, 0, 0, w, hgt);
@@ -1003,7 +1158,7 @@ function renderNews() {
 }
 
 /* ---------- Termine ---------- */
-function termForm(item) {
+function termForm(item, preset) {
   openSheet({
     title: item ? "Termin bearbeiten" : "Neuer Termin",
     fields: [
@@ -1012,10 +1167,11 @@ function termForm(item) {
       { name: "time", label: "Uhrzeit", type: "time", pairEnd: true },
       { name: "place", label: "Ort", max: 120, placeholder: "z. B. Kantine, Halle 2" },
       { name: "note", label: "Hinweis", type: "textarea", max: 600 },
+      { name: "board", label: "Auch auf dem Infoboard zeigen", type: "checkbox", hint: "Erscheint dann zusätzlich auf dem großen Bildschirm." },
     ],
-    values: item || {},
+    values: item || preset || {},
     onSubmit: async (v) => {
-      const data = { title: v.title, date: v.date, time: v.time, place: v.place, note: v.note };
+      const data = { title: v.title, date: v.date, time: v.time, place: v.place, note: v.note, board: !!v.board };
       if (item) await withRetry(() => S.db.doc("termine/" + item.id).update(data));
       else { const ref = S.db.collection("termine").doc(); await withRetry(() => ref.set({ ...data, createdAt: nowIso() })); }
     },
@@ -1036,7 +1192,7 @@ function renderTermine() {
   const ul = h("ul", { class: "list" });
   for (const t of items) {
     const d = parseDay(t.date);
-    const meta = [WEEKDAYS[d.getDay()].slice(0, 2), t.time ? t.time + " Uhr" : null, t.place || null].filter(Boolean).join(" · ");
+    const meta = [WEEKDAYS[d.getDay()].slice(0, 2), t.time ? t.time + " Uhr" : null, t.place || null, S.canEdit && t.board ? "Infoboard" : null].filter(Boolean).join(" · ");
     ul.append(h("li", { class: "event" },
       h("div", { class: "ev-date" + (t.date === today ? " is-today" : ""), "aria-hidden": "true" },
         h("span", { class: "ev-day" }, d.getDate()), h("span", { class: "ev-mon" }, MON3[d.getMonth()])),
@@ -1864,10 +2020,326 @@ function renderIdeen() {
         canSubmitIdea() ? h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: ideaForm }, "Erste Idee einreichen") : null)));
 }
 
+/* ---------- Infoboard ---------- */
+/* Drei Jahre als eine Farbreihe von hell nach dunkel (vorvorletztes, letztes, laufendes Jahr),
+   geprüft auf Abstufung und Kontrast; das laufende Jahr ist SCHMIDT-Blau. */
+const MON_COLORS = ["#93a8b3", "#4f6f7e", "#123442"];
+const CONTACT_ROLES = ["Brandschutzbeauftragter", "Brandschutzhelfer", "Ersthelfer", "Fachkraft für Arbeitssicherheit", "Betriebsrat", "Personalabteilung", "Schichtleitung"];
+const fmtInt = (n) => Number(n).toLocaleString("de-DE");
+const fmtPct = (p) => (p >= 0 ? "+" : "−") + Math.abs(p).toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " %";
+function prodYears() {
+  const byYear = {};
+  for (const d of S.produktion) byYear[Number(d.jahr || d.id)] = Array.isArray(d.monate) ? d.monate : [];
+  const now = new Date().getFullYear();
+  const has = (y) => (byYear[y] || []).some((v) => typeof v === "number");
+  const main = has(now) || !has(now - 1) ? now : now - 1;
+  return { byYear, years: [main - 2, main - 1, main] };
+}
+function lastIndex(arr) { let i = -1; (arr || []).forEach((v, k) => { if (typeof v === "number") i = k; }); return i; }
+function prodSummary() {
+  const { byYear, years } = prodYears();
+  const cur = byYear[years[2]] || [], li = lastIndex(cur);
+  if (li < 0) return null;
+  const sum = (arr) => { let t = 0; for (let k = 0; k <= li; k++) { if (typeof arr[k] !== "number") return null; t += arr[k]; } return t; };
+  const ytd = sum(cur);
+  const deltas = [years[1], years[0]].map((y) => { const p = sum(byYear[y] || []); return p ? { year: y, pct: (ytd / p - 1) * 100 } : null; }).filter(Boolean);
+  return { year: years[2], li, ytd, last: cur[li], deltas };
+}
+function niceMax(v) {
+  if (v <= 0) return 1000;
+  const p = Math.pow(10, Math.floor(Math.log10(v))), n = v / p;
+  return [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((k) => n <= k) * p;
+}
+function prodChartSvg(W, H) {
+  const { byYear, years } = prodYears();
+  const all = years.flatMap((y) => (byYear[y] || []).filter((v) => typeof v === "number"));
+  if (!all.length) return null;
+  const max = niceMax(Math.max(...all) * 1.1), ticks = 4;
+  const padL = 84, padR = 8, padT = 36, padB = 40, pw = W - padL - padR, ph = H - padT - padB;
+  const gw = pw / 12, bw = Math.min(24, (gw - 18) / 3), gap = 2, gwid = bw * 3 + gap * 2;
+  const y = (v) => padT + ph - (v / max) * ph;
+  let s = `<svg viewBox="0 0 ${W} ${H}" class="mon-chart" role="img" aria-label="Produzierte Stück pro Monat, ${years.join(", ")}">`;
+  for (let i = 0; i <= ticks; i++) {
+    const v = (max / ticks) * i, yy = y(v);
+    s += `<line x1="${padL}" x2="${W - padR}" y1="${yy}" y2="${yy}" stroke="${i === 0 ? "#8f9ea5" : "#e1e7ea"}" stroke-width="1"/>`;
+    s += `<text x="${padL - 14}" y="${yy + 7}" text-anchor="end" class="tick">${fmtInt(v)}</text>`;
+  }
+  MON3.forEach((m, k) => {
+    const x0 = padL + k * gw + (gw - gwid) / 2;
+    years.forEach((yr, j) => {
+      const v = (byYear[yr] || [])[k];
+      if (typeof v !== "number" || v <= 0) return;
+      const yy = y(v);
+      s += `<rect x="${x0 + j * (bw + gap)}" y="${yy}" width="${bw}" height="${padT + ph - yy}" fill="${MON_COLORS[j]}"><title>${MONTHS[k]} ${yr}: ${fmtInt(v)} Stück</title></rect>`;
+    });
+    s += `<text x="${padL + k * gw + gw / 2}" y="${H - 10}" text-anchor="middle" class="tick">${m}</text>`;
+  });
+  const cur = byYear[years[2]] || [], li = lastIndex(cur);
+  if (li >= 0) {
+    const top = Math.min(...years.map((yr) => (byYear[yr] || [])[li]).filter((v) => typeof v === "number").map(y));
+    s += `<text x="${padL + li * gw + (gw - gwid) / 2 + 2 * (bw + gap) + bw / 2}" y="${top - 10}" text-anchor="middle" class="val">${fmtInt(cur[li])}</text>`;
+  }
+  return s + "</svg>";
+}
+function monitorOn() { return document.body.classList.contains("is-monitor"); }
+function fitMonitor() {
+  const st = $("#monStage"), vw = window.innerWidth, vh = window.innerHeight, sc = Math.min(vw / 1920, vh / 1080);
+  st.style.transform = `translate(${(vw - 1920 * sc) / 2}px, ${(vh - 1080 * sc) / 2}px) scale(${sc})`;
+}
+function updateMonClock() {
+  const d = new Date();
+  $("#monClock").textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  $("#monDay").textContent = `${WEEKDAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  $("#monKw").textContent = `KW ${isoWeek(d)}`;
+}
+function renderMonitor() {
+  if (!monitorOn()) return;
+  updateMonClock();
+  renderMonInfos(); renderMonProd(); renderMonTerm(); renderMonContact();
+}
+function activeBoardInfos() {
+  const today = localDay(new Date());
+  return S.boardInfos.filter((i) => !i.bis || i.bis >= today)
+    .sort((a, b) => (b.wichtig === true) - (a.wichtig === true) || String(b.createdAt).localeCompare(String(a.createdAt)));
+}
+function renderMonInfos() {
+  const items = activeBoardInfos().slice(0, 3);
+  $("#monInfos").replaceChildren(...(items.length ? items.map((i) => h("article", { class: "mon-info" },
+    i.wichtig ? h("span", { class: "mon-flag" }, "Wichtig") : null,
+    h("h3", null, i.title || ""),
+    i.text ? h("p", null, clip(plain(i.text), 220)) : null)) : [h("p", { class: "mon-empty" }, "Zurzeit keine Infos.")]));
+}
+function renderMonProd() {
+  const { years } = prodYears();
+  $("#monProdLegend").replaceChildren(...years.map((y, j) => h("span", { class: "mon-key" }, h("i", { style: `background:${MON_COLORS[j]}` }), String(y))));
+  const box = $("#monProd"), chart = prodChartSvg(1040, 330), sum = prodSummary();
+  if (!chart) { box.replaceChildren(h("p", { class: "mon-empty" }, "Die Stückzahlen erscheinen hier, sobald die Redaktion sie eingetragen hat.")); return; }
+  const kpis = sum ? h("div", { class: "mon-kpis" },
+    h("div", null, h("div", { class: "mon-hero" }, fmtInt(sum.ytd)), h("div", { class: "mon-sub" }, sum.li === 0 ? `Stück im Januar ${sum.year}` : `Stück ${MON3[0]}–${MON3[sum.li]} ${sum.year}`)),
+    sum.deltas.map((x) => h("div", null, h("div", { class: "mon-delta" }, fmtPct(x.pct)), h("div", { class: "mon-sub" }, sum.li === 0 ? `zu Januar ${x.year}` : `zu ${MON3[0]}–${MON3[sum.li]} ${x.year}`))),
+    h("div", null, h("div", { class: "mon-delta" }, fmtInt(sum.last)), h("div", { class: "mon-sub" }, `Stück im ${MONTHS[sum.li]}`))) : null;
+  const wrap = h("div", { class: "mon-chart-wrap" });
+  wrap.innerHTML = chart;
+  box.replaceChildren(...[kpis, wrap].filter(Boolean));
+}
+function boardTermine() {
+  const today = localDay(new Date());
+  return S.termine.filter((t) => t.board && t.date && t.date >= today).sort((a, b) => (a.date + (a.time || "")).localeCompare(b.date + (b.time || "")));
+}
+function renderMonTerm() {
+  const today = localDay(new Date()), items = boardTermine().slice(0, 3);
+  $("#monTerm").replaceChildren(...(items.length ? items.map((t) => {
+    const d = parseDay(t.date);
+    const meta = [t.date === today ? "Heute" : WEEKDAYS[d.getDay()], t.time ? t.time + " Uhr" : null, t.place || null].filter(Boolean).join(" · ");
+    return h("div", { class: "mon-ev" },
+      h("div", { class: "mon-evd" + (t.date === today ? " is-today" : "") }, h("b", null, d.getDate()), h("span", null, MON3[d.getMonth()])),
+      h("div", { style: "min-width:0" }, h("div", { class: "mon-evt" }, t.title), h("div", { class: "mon-evm" }, meta)));
+  }) : [h("p", { class: "mon-empty" }, "Keine anstehenden Termine.")]));
+}
+const byOrderName = (a, b) => (a.order ?? 100) - (b.order ?? 100) || String(a.name).localeCompare(String(b.name), "de");
+function contactPhone(t) { const v = String(t || "").trim(); return /^\d{1,5}$/.test(v) ? "Durchwahl " + v : v; }
+const initials = (n) => String(n || "").trim().split(/\s+/).filter(Boolean).map((w) => w[0]).filter((c, i, a) => i === 0 || i === a.length - 1).join("").toUpperCase();
+function personPic(c, cls, initialsCls) {
+  return c.photoId && /^[A-Za-z0-9_-]+$/.test(c.photoId)
+    ? h("img", { class: cls, src: imgUrl(c.photoId), alt: "" })
+    : h("span", { class: initialsCls, "aria-hidden": "true" }, initials(c.name));
+}
+function renderMonContact() {
+  const list = [...S.ansprechpartner].sort(byOrderName).slice(0, 4);
+  $("#monContact").replaceChildren(list.length ? h("div", { class: "mon-cards" }, list.map((c) => h("div", { class: "mon-card" },
+    personPic(c, "mon-photo", "mon-initials"),
+    h("div", { class: "mon-card-n" }, c.name || ""),
+    c.rolle ? h("div", { class: "mon-card-r" }, c.rolle) : null,
+    c.telefon ? h("div", { class: "mon-card-t" }, contactPhone(c.telefon)) : null)))
+    : h("p", { class: "mon-empty" }, "Ansprechpartner folgen."));
+}
+let wakeLock = null, monIdle = null;
+async function requestWakeLock() {
+  try {
+    if (navigator.wakeLock && !wakeLock) {
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", () => { wakeLock = null; });
+    }
+  } catch (e) { wakeLock = null; }
+}
+function monActivity() {
+  const m = $("#monitor");
+  m.classList.remove("idle");
+  clearTimeout(monIdle);
+  monIdle = setTimeout(() => m.classList.add("idle"), 4000);
+}
+function enterMonitor() { window.scrollTo(0, 0); fitMonitor(); renderMonitor(); requestWakeLock(); monActivity(); }
+function leaveMonitor() { if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; } }
+$("#monitor").addEventListener("mousemove", monActivity);
+$("#monitor").addEventListener("touchstart", monActivity, { passive: true });
+$("#monFull").addEventListener("click", () => {
+  try {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else { const r = document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); if (r && r.catch) r.catch(() => {}); }
+  } catch (e) { /* Vollbild nicht erlaubt: das Infoboard läuft auch im Fenster */ }
+  requestWakeLock();
+});
+window.addEventListener("resize", () => { if (monitorOn()) fitMonitor(); });
+document.addEventListener("fullscreenchange", () => { if (monitorOn()) fitMonitor(); });
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && monitorOn()) requestWakeLock(); });
+setInterval(() => { if (monitorOn()) updateMonClock(); }, 10000);
+
+/* Pflegeseite für die Redaktion */
+function boardInfoForm(item) {
+  openSheet({
+    title: item ? "Info bearbeiten" : "Info fürs Infoboard",
+    intro: "Kurz und gut lesbar aus ein paar Metern Abstand: eine Überschrift, ein, zwei Sätze.",
+    fields: [
+      { name: "title", label: "Überschrift", required: true, max: 80, placeholder: "z. B. Überstunden am Samstag" },
+      { name: "text", label: "Text", type: "textarea", max: 400, placeholder: "z. B. Am 29. November arbeiten Halle 2 und 3 von 6 bis 12 Uhr." },
+      { name: "wichtig", label: "Als wichtig markieren", type: "checkbox", hint: "Steht dann ganz oben, mit gelber Markierung.", pair: true },
+      { name: "bis", label: "Anzeigen bis", type: "date", hint: "Danach verschwindet die Info vom Bildschirm.", pairEnd: true },
+    ],
+    values: item || {},
+    onSubmit: async (v) => {
+      const data = { title: v.title, text: v.text, wichtig: !!v.wichtig, bis: v.bis, updatedAt: nowIso() };
+      if (item) await withRetry(() => S.db.doc("boardInfos/" + item.id).update(data));
+      else { const ref = S.db.collection("boardInfos").doc(); await withRetry(() => ref.set({ ...data, createdAt: nowIso() })); }
+    },
+  });
+}
+function contactForm(item) {
+  let fileIn = null, removePhoto = false, extra = null;
+  if (S.assets) {
+    fileIn = h("input", { id: "f-photo", type: "file", accept: "image/jpeg,image/png,image/webp,image/heic,image/heif" });
+    const rm = item && item.photoId ? h("button", { type: "button", class: "btn-text" }, "Bild entfernen") : null;
+    if (rm) rm.addEventListener("click", () => { removePhoto = !removePhoto; rm.textContent = removePhoto ? "Bild behalten" : "Bild entfernen"; });
+    extra = h("div", { class: "field" }, h("label", { for: "f-photo" }, item && item.photoId ? "Neues Bild (optional)" : "Bild (optional)"),
+      item && item.photoId ? h("div", { class: "thumbs" }, h("div", { class: "thumb" }, h("img", { src: imgUrl(item.photoId), alt: "" }), rm)) : null,
+      fileIn, h("span", { class: "hint" }, "Ein Porträtfoto, am besten quadratisch. Bitte nur mit Einverständnis der Person."));
+  }
+  openSheet({
+    title: item ? "Ansprechpartner bearbeiten" : "Ansprechpartner hinzufügen",
+    fields: [
+      { name: "name", label: "Vor- und Nachname", required: true, max: 80 },
+      { name: "rolle", label: "Aufgabe", required: true, max: 60, list: CONTACT_ROLES, placeholder: "z. B. Brandschutzbeauftragter" },
+      { name: "telefon", label: "Durchwahl oder Telefonnummer", max: 40, placeholder: "z. B. 210", pair: true },
+      { name: "order", label: "Reihenfolge", type: "number", max: 4, pairEnd: true, hint: "Die ersten vier erscheinen auf dem Bildschirm." },
+    ],
+    extra,
+    values: item ? { ...item, order: item.order != null ? String(item.order) : "" } : {},
+    onSubmit: async (v, progress) => {
+      const data = { name: v.name, rolle: v.rolle, telefon: v.telefon, order: v.order === "" ? 100 : Number(v.order) || 0, updatedAt: nowIso() };
+      let uploaded = null;
+      const file = fileIn && fileIn.files && fileIn.files[0];
+      if (file) {
+        progress("Bild wird hochgeladen …");
+        const prepared = await prepareImage(file, 800);
+        uploaded = await withRetry(() => S.assets.upload(prepared.blob));
+        data.photoId = uploaded.id;
+      } else if (removePhoto) data.photoId = "";
+      else if (item && item.photoId) data.photoId = item.photoId;
+      const ref = item ? S.db.doc("ansprechpartner/" + item.id) : S.db.collection("ansprechpartner").doc();
+      try { await withRetry(() => ref.set(data)); }
+      catch (e) { if (uploaded) S.assets.delete(uploaded.id).catch(() => {}); throw e; }
+      if (item && item.photoId && item.photoId !== data.photoId && S.assets) S.assets.delete(item.photoId).catch(() => {});
+    },
+  });
+}
+function renderInfoboard() {
+  const infos = $("#ibInfos"), term = $("#ibTermine"), prod = $("#ibProd"), cont = $("#ibContacts");
+  if (!S.canEdit || !S.db) {
+    infos.replaceChildren(emptyState("Nur für die Redaktion", "Hier pflegt die Redaktion die Inhalte des Infoboards."));
+    term.replaceChildren(); prod.replaceChildren(); cont.replaceChildren();
+    return;
+  }
+  const today = localDay(new Date());
+  /* Infos */
+  const active = activeBoardInfos(), shownIds = new Set(active.slice(0, 3).map((i) => i.id));
+  const all = [...S.boardInfos].sort((a, b) => (b.wichtig === true) - (a.wichtig === true) || String(b.createdAt).localeCompare(String(a.createdAt)));
+  infos.replaceChildren(h("section", { class: "ib-block" },
+    h("div", { class: "block-head" }, h("h3", null, "Aktuelle Infos"), h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => boardInfoForm(null) }, "Info hinzufügen")),
+    h("p", { class: "gb-none" }, "Auf dem Bildschirm ist Platz für drei Infos. Wichtige stehen oben, dann die neuesten."),
+    all.length ? h("div", null, all.map((i) => {
+      const state = i.bis && i.bis < today ? `Abgelaufen am ${fmtStamp(i.bis + "T12:00:00")}` : shownIds.has(i.id) ? "Wird angezeigt" : "Kein Platz auf dem Bildschirm";
+      return h("div", { class: "ib-item" },
+        h("span", { class: "eyebrow" }, [i.wichtig ? "Wichtig" : null, state, i.bis && !(i.bis < today) ? `bis ${fmtStamp(i.bis + "T12:00:00")}` : null].filter(Boolean).join(" · ")),
+        h("strong", null, i.title),
+        i.text ? h("span", { class: "hint" }, clip(plain(i.text), 140)) : null,
+        h("div", { class: "actions" }, h("button", { type: "button", class: "btn-text", onclick: () => boardInfoForm(i) }, "Bearbeiten"),
+          confirmBtn("Löschen", () => S.db.doc("boardInfos/" + i.id).delete())));
+    })) : h("p", { class: "gb-none" }, "Noch keine Infos. Zum Beispiel: Überstunden am Samstag, neuer Benefit, geänderte Pausenzeiten.")));
+  /* Termine */
+  const bt = boardTermine();
+  term.replaceChildren(h("section", { class: "ib-block" },
+    h("div", { class: "block-head" }, h("h3", null, "Termine auf dem Infoboard"), h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => termForm(null, { board: true }) }, "Termin hinzufügen")),
+    h("p", { class: "gb-none" }, "Es erscheinen nur Termine mit dem Häkchen „Auch auf dem Infoboard zeigen“, die nächsten drei."),
+    bt.length ? h("div", null, bt.map((t, i) => {
+      const d = parseDay(t.date);
+      return h("div", { class: "ib-item" },
+        h("span", { class: "eyebrow" }, `${WEEKDAYS[d.getDay()].slice(0, 2)}, ${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${t.time ? " · " + t.time + " Uhr" : ""}${i >= 3 ? " · noch nicht auf dem Bildschirm" : ""}`),
+        h("strong", null, t.title),
+        h("div", { class: "actions" }, h("button", { type: "button", class: "btn-text", onclick: () => termForm(t) }, "Bearbeiten")));
+    })) : h("p", { class: "gb-none" }, "Noch kein Termin fürs Infoboard markiert.")));
+  /* Stückzahlen: drei Jahre nebeneinander, Monate untereinander */
+  if (prod.dataset.dirty !== "1") {
+    const now = new Date().getFullYear(), years = [now - 2, now - 1, now], byYear = prodYears().byYear;
+    const status = h("span", { class: "ib-saved", "aria-live": "polite" });
+    const save = h("button", { type: "button", class: "btn btn-primary btn-sm" }, "Stückzahlen speichern");
+    const markDirty = () => { prod.dataset.dirty = "1"; status.textContent = "Nicht gespeichert"; };
+    const rows = MONTHS.map((m, k) => h("tr", null, h("th", { scope: "row" }, m), years.map((y) => {
+      const v = (byYear[y] || [])[k];
+      const input = h("input", { class: "num-in", id: `p-${y}-${k}`, type: "text", inputmode: "numeric", autocomplete: "off", "aria-label": `${m} ${y}`, value: typeof v === "number" ? fmtInt(v) : "" });
+      input.addEventListener("input", markDirty);
+      input.addEventListener("paste", (e) => {
+        const parts = String(e.clipboardData ? e.clipboardData.getData("text") : "").split(/[\r\n\t;]+/).map((x) => x.trim()).filter(Boolean);
+        if (parts.length < 2) return;
+        e.preventDefault();
+        parts.forEach((pv, i) => { const el = $(`#p-${y}-${k + i}`); if (el) el.value = pv.replace(/[^\d.]/g, ""); });
+        markDirty();
+      });
+      return h("td", null, input);
+    })));
+    save.addEventListener("click", async () => {
+      save.disabled = true; status.textContent = "Wird gespeichert …";
+      try {
+        for (const y of years) {
+          const vals = MONTHS.map((_, k) => { const raw = $(`#p-${y}-${k}`).value.replace(/[^\d]/g, ""); return raw === "" ? null : Number(raw); });
+          const old = prodYears().byYear[y] || [];
+          if (vals.every((v, k) => (typeof old[k] === "number" ? old[k] : null) === v)) continue;
+          await withRetry(() => S.db.doc("produktion/" + y).set({ jahr: y, monate: vals, updatedAt: nowIso() }));
+        }
+        prod.dataset.dirty = ""; toast("Stückzahlen gespeichert"); renderInfoboard();
+      } catch (e) { status.textContent = errText(e); save.disabled = false; }
+    });
+    prod.replaceChildren(h("section", { class: "ib-block" },
+      h("div", { class: "block-head" }, h("h3", null, "Produzierte Stück pro Monat"), h("span", null, "Tipp: eine Spalte aus Excel kopieren und in den Januar einfügen")),
+      h("div", { class: "ib-scroll" }, h("table", { class: "ib-table" },
+        h("thead", null, h("tr", null, h("th", null, "Monat"), years.map((y) => h("th", null, String(y))))), h("tbody", null, rows))),
+      h("div", { class: "ib-row" }, save, status)));
+  }
+  /* Ansprechpartner */
+  const list = [...S.ansprechpartner].sort(byOrderName);
+  cont.replaceChildren(h("section", { class: "ib-block" },
+    h("div", { class: "block-head" }, h("h3", null, "Wichtige Ansprechpartner"), h("button", { type: "button", class: "btn btn-outline btn-sm", onclick: () => contactForm(null) }, "Hinzufügen")),
+    h("p", { class: "gb-none" }, "Auf dem Bildschirm stehen die ersten vier, mit Bild und Telefonnummer. Die Notrufnummer 112 steht immer dabei."),
+    list.length ? h("div", null, list.map((c, i) => h("div", { class: "ib-person" },
+      personPic(c, "pic", "pic"),
+      h("span", { class: "eyebrow" }, c.rolle + (i >= 4 ? " · nicht auf dem Bildschirm" : "")),
+      h("strong", null, c.name),
+      c.telefon ? h("span", { class: "hint" }, contactPhone(c.telefon)) : null,
+      h("div", { class: "actions" }, h("button", { type: "button", class: "btn-text", onclick: () => contactForm(c) }, "Bearbeiten"),
+        confirmBtn("Löschen", async () => {
+          await S.db.doc("ansprechpartner/" + c.id).delete();
+          if (c.photoId && S.assets) S.assets.delete(c.photoId).catch(() => {});
+        })))))
+      : h("p", { class: "gb-none" }, "Noch keine Ansprechpartner. Zum Beispiel Brandschutzbeauftragter, Ersthelfer und Fachkraft für Arbeitssicherheit.")));
+}
+
 /* ---------- Navigation ---------- */
-const VIEWS = ["aktuelles", "geburtstage", "wiki", "benefits", "ideen", "telefonbuch", "dokumente"];
+const VIEWS = ["aktuelles", "geburtstage", "wiki", "benefits", "ideen", "telefonbuch", "dokumente", "infoboard"];
 function route() {
   const raw = (location.hash || "").slice(1);
+  const mon = raw === "monitor";
+  document.body.classList.toggle("is-monitor", mon);
+  $("#monitor").hidden = !mon;
+  if (mon) { enterMonitor(); return; }
+  leaveMonitor();
   let next = raw, wikiId = null, benefitId = null;
   if (raw.startsWith("wiki-")) { next = "wiki"; wikiId = raw.slice(5); }
   if (raw.startsWith("benefit-")) { next = "benefits"; benefitId = raw.slice(8); }
@@ -1877,8 +2349,9 @@ function route() {
   if (next === "wiki") renderWiki();
   if (next === "benefits") renderBenefits();
   if (next === "ideen") renderIdeen();
+  if (next === "infoboard") renderInfoboard();
   for (const name of VIEWS) $("#view-" + name).hidden = name !== next;
-  const tabView = next === "geburtstage" ? "aktuelles" : next;
+  const tabView = next === "geburtstage" || next === "infoboard" ? "aktuelles" : next;
   document.querySelectorAll(".tab").forEach((t) => { if (t.dataset.view === tabView) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
   if (changed) window.scrollTo(0, 0);
   /* Auf schmalen Bildschirmen lässt sich die Reiterleiste wischen: aktiven Reiter sichtbar halten */
@@ -1906,7 +2379,7 @@ $("#wikiSearch").addEventListener("input", (e) => { clearTimeout(wikiTimer); wik
 $("#docSearch").addEventListener("input", (e) => { clearTimeout(docTimer); docTimer = setTimeout(() => { S.docQuery = e.target.value; renderDokumente(); }, 120); });
 document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", () => copyText(b.dataset.copy)));
 
-function renderAll() { renderNews(); renderTermine(); renderGeburtstage(); renderKalender(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); renderBenefits(); renderIdeen(); }
+function renderAll() { renderNews(); renderTermine(); renderGeburtstage(); renderKalender(); renderKontakte(); renderDokumente(); renderWiki(); renderDocWiki(); renderBenefits(); renderIdeen(); renderInfoboard(); renderMonitor(); }
 
 function goOffline(msg) {
   S.offline = true;
@@ -1923,18 +2396,20 @@ setInterval(() => {
   const d = localDay(new Date());
   if (d === shownDay) return;
   shownDay = d;
-  renderHead(S.me); renderTermine(); renderGeburtstage(); renderKalender();
+  renderHead(S.me); renderTermine(); renderGeburtstage(); renderKalender(); renderMonitor();
 }, 60000);
 
-const RENDER = { news: renderNews, termine: renderTermine, kontakte: renderKontakte, dokumente: renderDokumente,
+const RENDER = { news: renderNews, termine: () => { renderTermine(); renderInfoboard(); }, kontakte: renderKontakte, dokumente: renderDokumente,
   wiki: () => { renderWiki(); renderDocWiki(); }, wikiDrafts: renderWiki, benefits: renderBenefits,
-  geburtstage: () => { renderGeburtstage(); renderKalender(); renderHead(S.me); } };
+  geburtstage: () => { renderGeburtstage(); renderKalender(); renderHead(S.me); },
+  produktion: renderInfoboard, ansprechpartner: renderInfoboard, boardInfos: renderInfoboard };
 const SOURCES = { wikiDrafts: "wikiEntwurf" };
 function subscribe(name) {
   S.db.collection(SOURCES[name] || name).onSnapshot((snap) => {
     S[name] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     S.ready[name] = true;
     RENDER[name]();
+    renderMonitor();
     if (name === "news") maybeMarkSeen();
   }, (e) => {
     if (e && e.code === "revoked") goOffline("Der Zugriff auf die Inhalte wurde beendet. Bitte die Seite neu laden.");
@@ -1956,7 +2431,7 @@ function subscribe(name) {
   if (!db) { goOffline("Die Inhalte sind nur für angemeldete Mitarbeiterinnen und Mitarbeiter sichtbar. Bitte über claude.ai mit dem Firmenkonto anmelden."); return; }
   S.db = db;
   renderAll();
-  ["news", "termine", "geburtstage", "kontakte", "dokumente", "wiki", "benefits"].forEach(subscribe);
+  ["news", "termine", "geburtstage", "kontakte", "dokumente", "wiki", "benefits", "produktion", "ansprechpartner", "boardInfos"].forEach(subscribe);
   if (S.canEdit) subscribe("wikiDrafts");
   if (S.uid) {
     db.doc("ideen/" + S.uid).onSnapshot((snap) => {
